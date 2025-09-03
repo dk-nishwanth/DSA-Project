@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import TopicDetail from "./pages/TopicDetail";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
+import AdminLogin from "./pages/AdminLogin";
 import Signup from "./pages/Signup";
 import AdminDashboard from "./pages/AdminDashboard";
 import Authorization from "./pages/Authorization";
@@ -32,7 +33,7 @@ const App = () => (
             {/* Authentication Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/admin/login" element={<Login />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/signup" element={<Signup />} />
             <Route path="/authorization" element={<Authorization />} />
             

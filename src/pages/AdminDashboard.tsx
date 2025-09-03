@@ -8,6 +8,8 @@ import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AdminHeader } from '@/components/admin/admin-header';
+import { dsaTopics } from '@/data/dsaTopics';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   Users, 
   BookOpen, 
@@ -93,6 +95,11 @@ const mockStudents: Student[] = [
 export default function AdminDashboard() {
   const [selectedClass, setSelectedClass] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [teachClass, setTeachClass] = useState('1A');
+  const [teachTopicId, setTeachTopicId] = useState<string>(dsaTopics[0]?.id || '');
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const initialTab = (searchParams.get('tab') as 'overview' | 'class-view' | 'analytics' | 'teach') || 'overview';
 
   const filteredStudents = mockStudents.filter(student => {
     const matchesClass = selectedClass === 'all' || student.class === selectedClass;
@@ -210,11 +217,12 @@ export default function AdminDashboard() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
+          <Tabs defaultValue={initialTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="class-view">Class View</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="teach">Teach</TabsTrigger>
             </TabsList>
             
             <TabsContent value="overview" className="space-y-4">
@@ -384,6 +392,68 @@ export default function AdminDashboard() {
                     </div>
                   </CardContent>
                 </Card>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="teach" className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-4 md:col-span-1">
+                  <div>
+                    <div className="text-sm font-medium mb-1">Select Class</div>
+                    <Select value={teachClass} onValueChange={setTeachClass}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Choose class" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {['1A','1B','1C','2A','2B'].map(c => (
+                          <SelectItem key={c} value={c}>{c}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <div className="text-sm font-medium mb-1">Select Topic</div>
+                    <Select value={teachTopicId} onValueChange={setTeachTopicId}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Choose topic" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {dsaTopics.map(t => (
+                          <SelectItem key={t.id} value={t.id}>{t.title}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button className="flex-1" onClick={() => navigate(`/topic/${teachTopicId}`)}>
+                      Start Teaching
+                    </Button>
+                    <Button variant="outline" className="flex-1" onClick={() => window.open(`/topic/${teachTopicId}`, '_blank') }>
+                      Open in New Tab
+                    </Button>
+                  </div>
+                </div>
+                <div className="md:col-span-2">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Session Preview</CardTitle>
+                      <CardDescription>
+                        Topic details that students will see
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        <div className="text-lg font-semibold">{dsaTopics.find(t => t.id === teachTopicId)?.title}</div>
+                        <div className="text-sm text-muted-foreground">
+                          Category: {dsaTopics.find(t => t.id === teachTopicId)?.category} · Difficulty: {dsaTopics.find(t => t.id === teachTopicId)?.difficulty}
+                        </div>
+                        <div className="rounded-md border p-4 text-sm text-muted-foreground bg-muted/30">
+                          This is a preview. Click "Start Teaching" to open the interactive visualization and content for this topic.
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
             </TabsContent>
           </Tabs>

@@ -43,7 +43,8 @@ export function AdminLoginForm({ onSwitchToUser }: AdminLoginFormProps) {
           title: "Admin login successful",
           description: "Welcome to the admin dashboard!",
         });
-        navigate('/admin/dashboard');
+        // Send admin straight to the Teach tab so they can start a session
+        navigate('/admin/dashboard?tab=teach');
       } else {
         toast({
           title: "Login failed",

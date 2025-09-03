@@ -81,6 +81,10 @@ export function LearningProgress({ currentTopicId }: LearningProgressProps) {
     setProgress(updatedProgress);
     localStorage.setItem('dsa-learning-progress', JSON.stringify(updatedProgress));
     checkAchievements(updatedProgress);
+    // Notify other components (e.g., sidebar) that progress has updated
+    try {
+      window.dispatchEvent(new Event('dsa-progress-updated'));
+    } catch {}
   };
 
   const getProgressStats = () => {

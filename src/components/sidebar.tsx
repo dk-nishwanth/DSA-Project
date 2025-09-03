@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
   ChevronDown, 
@@ -19,13 +19,13 @@ import {
   Shuffle,
   User,
   ClipboardList,
-  Check
+  CheckCircle
 } from 'lucide-react';
 import { dsaCategories, dsaTopics } from '@/data/dsaTopics';
 import { SearchBar } from '@/components/search-bar';
 import { ProgressTracker } from '@/components/progress-tracker';
 import { cn } from '@/lib/utils';
-import { SAMPLE_PROFILE } from '@/data/profileData';
+// Removed SAMPLE_PROFILE import; completion state now reflected only at category level
 
 const categoryIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   'Arrays': Database,
@@ -47,8 +47,35 @@ const categoryIcons: Record<string, React.ComponentType<{ className?: string }>>
 export function Sidebar() {
   const [expandedCategories, setExpandedCategories] = useState<string[]>(['Arrays']);
   const [filteredTopics, setFilteredTopics] = useState(dsaTopics);
+  const [completedTopicIds, setCompletedTopicIds] = useState<Set<string>>(new Set());
   
   const progressTracker = ProgressTracker({ topics: dsaTopics });
+
+  const refreshCompletedFromStorage = () => {
+    try {
+      const saved = localStorage.getItem('dsa-learning-progress');
+      if (!saved) {
+        setCompletedTopicIds(new Set());
+        return;
+      }
+      const items = JSON.parse(saved) as Array<{ topicId: string; completed: boolean }>;
+      const completed = new Set(items.filter(i => i.completed).map(i => i.topicId));
+      setCompletedTopicIds(completed);
+    } catch {
+      setCompletedTopicIds(new Set());
+    }
+  };
+
+  useEffect(() => {
+    refreshCompletedFromStorage();
+    const onProgressUpdate = () => refreshCompletedFromStorage();
+    window.addEventListener('dsa-progress-updated', onProgressUpdate as EventListener);
+    window.addEventListener('storage', onProgressUpdate as EventListener);
+    return () => {
+      window.removeEventListener('dsa-progress-updated', onProgressUpdate as EventListener);
+      window.removeEventListener('storage', onProgressUpdate as EventListener);
+    };
+  }, []);
 
   const toggleCategory = (category: string) => {
     setExpandedCategories(prev => 
@@ -127,6 +154,7 @@ export function Sidebar() {
             const categoryTopics = filteredTopics.filter(topic => topic.category === category);
             const isExpanded = expandedCategories.includes(category);
             const IconComponent = categoryIcons[category] || BookOpen;
+            const hasAllCompleted = categoryTopics.length > 0 && categoryTopics.every(t => completedTopicIds.has(t.id));
             
             return (
               <div key={category} className="space-y-1">
@@ -134,23 +162,24 @@ export function Sidebar() {
                   onClick={() => toggleCategory(category)}
                   className="nav-link flex items-center gap-3 w-full group"
                 >
-                  <IconComponent className="h-4 w-4" />
-                  <span className="flex-1 text-left">{category}</span>
                   {isExpanded ? (
                     <ChevronDown className="h-4 w-4 transition-transform" />
                   ) : (
                     <ChevronRight className="h-4 w-4 transition-transform" />
                   )}
-                  <span className="text-xs bg-sidebar-accent text-sidebar-accent-foreground px-2 py-0.5 rounded-full">
-                    {categoryTopics.length}
-                  </span>
+                  <IconComponent className="h-4 w-4" />
+                  <span className="flex-1 text-left">{category}</span>
+                  {hasAllCompleted && (
+                    <CheckCircle
+                      className="h-4 w-4 text-success"
+                      aria-label="All topics complete"
+                    />
+                  )}
                 </button>
                 
                 {isExpanded && (
                   <div className="ml-6 space-y-1 animate-fade-in">
                     {categoryTopics.map(topic => {
-                      const isCompleted = SAMPLE_PROFILE.progress.completedTopics.includes(topic.id);
-                      
                       return (
                         <NavLink
                           key={topic.id}
@@ -160,14 +189,10 @@ export function Sidebar() {
                             "hover:bg-sidebar-accent hover:text-sidebar-primary",
                             isActive && "bg-sidebar-primary text-sidebar-primary-foreground shadow-subtle"
                           )}
-                          onClick={() => progressTracker.markComplete(topic.id)}
+                          
                         >
                           <div className="flex items-center gap-2">
-                            <progressTracker.TopicIcon topicId={topic.id} />
                             <span className="flex-1">{topic.title}</span>
-                            {isCompleted && (
-                              <Check className="h-4 w-4 text-success" />
-                            )}
                             <span className={cn(
                               "text-xs px-2 py-0.5 rounded-full",
                               topic.difficulty === 'beginner' && "bg-success/20 text-success",
