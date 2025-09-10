@@ -1,0 +1,10 @@
+create table;
+student id;
+name ;
+age;
+dep;
+MARKS;
+
+INSERT INTO student VALUES (101,'Raj',20,'CSE',99);
+INSERT INTO student VALUES (102,'Raj',20,'CSE',99);
+DISPLAY student;

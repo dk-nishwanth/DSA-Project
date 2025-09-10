@@ -74,7 +74,7 @@ export function LoginForm({ onSwitchToAdmin }: LoginFormProps) {
       <CardHeader className="space-y-1">
         <div className="flex justify-between items-center">
           <CardTitle className="text-2xl font-bold">Welcome back!</CardTitle>
-          {onSwitchToAdmin && (
+          {/* {onSwitchToAdmin && (
             <Button
               variant="outline"
               size="sm"
@@ -83,7 +83,7 @@ export function LoginForm({ onSwitchToAdmin }: LoginFormProps) {
             >
               Admin Login
             </Button>
-          )}
+          )} */}
         </div>
         <CardDescription>
           Enter your credentials to access your account
