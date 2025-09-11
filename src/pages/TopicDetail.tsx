@@ -1,4 +1,5 @@
 import { useParams, Navigate } from 'react-router-dom';
+import { useState } from 'react';
 import { ArrowLeft, BookOpen, Code2, Lightbulb } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -51,8 +52,14 @@ import { dsaTopics } from '@/data/dsaTopics';
 import { getCodeSnippet } from '@/data/codeSnippets';
 import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { DefinitionBox } from '@/components/definition-box';
+import { VoiceNarrator } from '@/components/voice-narrator';
+import { VisualizerCodeRunner } from '@/components/visualizer/visualizer-code-runner';
+import { VisualizationAutoNarrator } from '@/components/visualizer/visualization-auto-narrator';
+import { TeachingCards } from '@/components/teaching-cards';
 
 export default function TopicDetail() {
+  const [currentExplanationStep, setCurrentExplanationStep] = useState(0);
   const { topicId } = useParams<{ topicId: string }>();
   const topic = dsaTopics.find(t => t.id === topicId);
 
@@ -263,6 +270,146 @@ export default function TopicDetail() {
     ];
   };
 
+  const getExample = (topicId: string) => {
+    const examples: Record<string, string> = {
+      'array-basics': 'Given array A = [2, 5, 7]\nAccess A[1] -> 5\nInsert 9 -> [2, 5, 7, 9]\nDelete last -> [2, 5, 7] \nSearch 7 -> index 2',
+      'binary-search': 'Input: nums = [2, 5, 7, 9, 12], target = 9\nMid checks: 7 -> move right -> 9 -> found at index 3',
+      'bubble-sort': 'Input: [5, 1, 4, 2]\nPass 1: [1, 4, 2, 5]\nPass 2: [1, 2, 4, 5] (sorted)'
+    };
+    return examples[topicId] || '';
+  };
+
+  const getSyntax = (topicId: string) => {
+    const syntaxMap: Record<string, string> = {
+      'array-basics': `// JavaScript
+const arr = [];
+arr.push(5); // insert
+const x = arr[index]; // access
+arr.pop(); // delete
+arr.findIndex(v => v === 7); // search`,
+      'binary-search': `function binarySearch(arr, target) {
+  let left = 0, right = arr.length - 1;
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    if (arr[mid] === target) return mid;
+    if (arr[mid] < target) left = mid + 1; else right = mid - 1;
+  }
+  return -1;
+}`,
+      'bubble-sort': `function bubbleSort(arr) {
+  let n = arr.length;
+  for (let i = 0; i < n - 1; i++) {
+    for (let j = 0; j < n - i - 1; j++) {
+      if (arr[j] > arr[j + 1]) {
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+      }
+    }
+  }
+  return arr;
+}`
+    };
+    return syntaxMap[topicId] || '';
+  };
+
+  const getVisualizationNarration = (topicId: string) => {
+    const map: Record<string, string> = {
+      'array-basics': 'In this visualization, watch how elements are accessed by index, inserted at the end, removed from the end, and searched linearly.',
+      'binary-search': 'The visualization shows two pointers narrowing the search space by comparing the middle element to the target.',
+      'bubble-sort': 'Observe adjacent pairs being compared and swapped, with largest elements bubbling to the end each pass.'
+    };
+    return map[topicId] || 'Follow the animation to see how the data structure changes step by step.';
+  };
+
+  // High-quality per-topic teaching content for the definition box
+  const getTopicContent = (topicId: string) => {
+    const byId: Record<string, {
+      definition?: string;
+      extras?: string[];
+      example?: string;
+      syntax?: string;
+      narration?: string;
+    }> = {
+      'array-basics': {
+        definition: 'An array stores a fixed-length sequence of elements in contiguous memory. Each element has an index, allowing constant-time random access.',
+        extras: [
+          'What it does: keeps items in order and lets you jump directly to any position by index.',
+          'How it works: indexes map to memory offsets; appending at the end is fast, inserting in the middle shifts later elements.',
+          'When to use: fast reads by position, compact storage, building blocks for higher-level structures.'
+        ],
+        example: 'A = [3, 8, 12]\nA[1] -> 8 (O(1))\nA.push(5) -> [3, 8, 12, 5]\nA.pop() -> [3, 8, 12]\nA.indexOf(12) -> 2 (O(n) if unsorted)',
+        syntax: `const A = [3,8,12];\nA[1]; // access\nA.push(5); // append\nA.pop(); // remove last\nA.indexOf(12); // linear search`,
+        narration: 'Arrays store items in a row of boxes. You can jump straight to a box by its number. Appending to the end is quick; inserting in the middle requires shifting boxes.'
+      },
+      'binary-search': {
+        definition: 'Binary search finds a target in a sorted array by repeatedly halving the search interval.',
+        extras: [
+          'What it does: dramatically reduces the number of checks from n to about log2(n).',
+          'How it works: compare target with the middle element, then discard the half that cannot contain the target.',
+          'When to use: data is sorted or you can probe a monotonic condition.'
+        ],
+        example: 'arr = [2, 5, 7, 9, 12], target = 9\nmid=7 -> target is larger -> search right\nmid=9 -> found at index 3',
+        syntax: `function binarySearch(a, t){\n  let l=0, r=a.length-1;\n  while(l<=r){\n    const m=(l+r>>1);\n    if(a[m]===t) return m;\n    if(a[m]<t) l=m+1; else r=m-1;\n  }\n  return -1;\n}`,
+        narration: 'Because the array is sorted, we can jump to the middle and discard half each time. That is why binary search is fast.'
+      },
+      'bubble-sort': {
+        definition: 'Bubble sort repeatedly compares adjacent elements and swaps them if out of order, pushing larger elements to the end each pass.',
+        extras: [
+          'What it does: sorts by repeated local swaps.',
+          'How it works: after pass i, the i largest elements are in their final positions.',
+          'When to use: educational purposes or very small inputs.'
+        ],
+        example: 'Input [5,1,4,2]\nPass 1: swap (5,1) -> [1,5,4,2], swap (5,4) -> [1,4,5,2], swap (5,2) -> [1,4,2,5]\nPass 2: [1,2,4,5] sorted',
+        syntax: `function bubbleSort(a){\n  for(let i=0;i<a.length-1;i++){\n    for(let j=0;j<a.length-1-i;j++){\n      if(a[j]>a[j+1]) [a[j],a[j+1]]=[a[j+1],a[j]];\n    }\n  }\n  return a;\n}`,
+        narration: 'We look at neighbors and swap if needed. Big elements bubble to the right; after each pass, one more element is fixed at the end.'
+      },
+      'linked-list-singly': {
+        definition: 'A singly linked list is a chain of nodes where each node points to the next. It supports efficient insertion and deletion with pointer updates.',
+        extras: [
+          'What it does: stores elements without requiring contiguous memory and grows dynamically.',
+          'How it works: each node has a value and a next pointer; to insert, rewire pointers; to delete, bypass a node.',
+          'Trade-off: accessing the k-th element requires walking from the head.'
+        ],
+        example: 'Head -> 10 -> 20 -> 30\nInsert head 5 -> 5 -> 10 -> 20 -> 30\nDelete 20 -> 5 -> 10 -> 30',
+        syntax: `class Node{constructor(v,n=null){this.v=v;this.n=n;}}\nlet head=null;\nhead=new Node(5,head); // insert at head`,
+        narration: 'Instead of shifting elements, we change pointers. That makes inserts and deletes simple, but random access is slow.'
+      },
+      'stack-operations': {
+        definition: 'A stack is a Last-In, First-Out (LIFO) structure that supports push and pop at the top in constant time.',
+        extras: [
+          'What it does: remembers the most recent items first—like undo history.',
+          'How it works: push places an item on top; pop removes the top; peek reads it.',
+          'Used for: function calls, backtracking, expression evaluation.'
+        ],
+        example: 'Push 10, push 20, push 30 -> top=30\nPop -> returns 30, top=20',
+        syntax: `class Stack{constructor(){this.a=[];} push(x){this.a.push(x);} pop(){return this.a.pop();}}`,
+        narration: 'Think of a stack of plates: last on, first off. Only the top is accessible.'
+      },
+      'queue-operations': {
+        definition: 'A queue is a First-In, First-Out (FIFO) structure that enqueues at the rear and dequeues at the front in constant time.',
+        extras: [
+          'What it does: processes items in arrival order.',
+          'How it works: enqueue appends to the tail; dequeue removes from the head.',
+          'Used for: scheduling, BFS, buffering.'
+        ],
+        example: 'Enqueue 10,20,30 -> front=10, rear=30\nDequeue -> returns 10 -> front=20',
+        syntax: `class Queue{constructor(){this.a=[];} enqueue(x){this.a.push(x);} dequeue(){return this.a.shift();}}`,
+        narration: 'Like a line at a store: first in line is served first.'
+      },
+      'binary-search-tree': {
+        definition: 'A binary search tree (BST) keeps keys in order: left subtree < node < right subtree, enabling efficient search, insert, and delete on average.',
+        extras: [
+          'What it does: organizes data for ordered operations and range queries.',
+          'How it works: comparisons guide you left or right; inorder traversal yields sorted order.',
+          'Caveat: performance degrades if the tree becomes unbalanced.'
+        ],
+        example: 'Insert 8,3,10,1,6,14\nInorder -> [1,3,6,8,10,14]\nSearch 6 -> left of 8, right of 3 -> found',
+        syntax: `class Node{constructor(v){this.v=v;this.l=this.r=null;}}\nfunction insert(t,v){if(!t)return new Node(v); if(v<t.v)t.l=insert(t.l,v); else t.r=insert(t.r,v); return t;}`,
+        narration: 'BSTs steer you by comparisons. Visit inorder to see values in ascending order.'
+      }
+    };
+    return byId[topicId] || {};
+  };
+
   return (
     <div className="p-6 space-y-6 animate-fade-in">
       {/* Header */}
@@ -301,10 +448,31 @@ export default function TopicDetail() {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* Left Column - Visualization */}
         <div className="xl:col-span-2 space-y-6">
+          {/* Topic Definition + Voice Narration */}
+          <div className="space-y-3">
+            {(() => { const c = getTopicContent(topic.id); return null; })()}
+            <DefinitionBox 
+              title={topic.title} 
+              definition={(getTopicContent(topic.id).definition) || topic.extendedDefinition || topic.description}
+              extra={getTopicContent(topic.id).extras || [
+                `Imagine: ${topic.category === 'Arrays' ? 'Think of a row of labeled boxes where each slot has a number—its index. You can jump straight to a box by its number.' : 'Visualize the concept in a real-world analogy to make it concrete.'}`,
+                `Why it matters: ${topic.category === 'Arrays' ? 'Fast direct access and predictable memory layout make arrays the foundation of many other structures.' : 'It helps you solve common problems faster and more reliably.'}`,
+                `How it works: ${topic.category === 'Arrays' ? 'You access elements by index, append at the end, remove from the end, and linearly scan when searching if unsorted.' : 'Start from the basic rule, apply it step by step, and observe how the structure changes.'}`
+              ]}
+              example={(getTopicContent(topic.id).example) || (topic.example || getExample(topic.id))}
+              syntax={(getTopicContent(topic.id).syntax) || (topic.syntax || getSyntax(topic.id))}
+              narrationText={(getTopicContent(topic.id).narration) || `${topic.title}. ${topic.description}. ${getVisualizationNarration(topic.id)}`}
+            />
+          </div>
+
           <div className="bg-card border rounded-xl p-6 shadow-subtle">
             <div className="flex items-center gap-2 mb-4">
               <Lightbulb className="h-5 w-5 text-primary" />
               <h2 className="text-xl font-semibold">Interactive Visualization</h2>
+            </div>
+            <VisualizationAutoNarrator introText={`Let's explore ${topic.title}. ${topic.description}`} />
+            <div className="mb-3 flex items-center justify-between">
+              <VisualizerCodeRunner />
             </div>
 
             {topic.id === 'array-basics' && <EnhancedArrayVisualizer />}
@@ -408,9 +576,48 @@ export default function TopicDetail() {
           </div>
 
           {/* Explanation Steps */}
-          <ExplanationBox
-            steps={getExplanationSteps(topic.id)}
-            title={`How ${topic.title} Works`}
+          <div className="space-y-3">
+            <ExplanationBox
+              steps={getExplanationSteps(topic.id)}
+              title={`How ${topic.title} Works`}
+              currentStep={currentExplanationStep}
+              onStepChange={(step) => setCurrentExplanationStep(step)}
+            />
+          </div>
+
+          {/* Teaching Cards - beginner-friendly summary */}
+          <TeachingCards
+            items={[
+              {
+                icon: 'fast',
+                title: topic.category === 'Arrays' ? 'Fast Access' : 'Core Idea',
+                text:
+                  topic.category === 'Arrays'
+                    ? 'Arrays provide O(1) access to any element using its index.'
+                    : 'Understand the main benefit of this topic in simple terms.'
+              },
+              {
+                icon: 'insert',
+                title: topic.category === 'Arrays' ? 'Easy Insertion' : 'How to Use',
+                text:
+                  topic.category === 'Arrays'
+                    ? 'Adding to the end is O(1); inserting in the middle shifts elements.'
+                    : 'What basic operations look like and what they cost.'
+              },
+              {
+                icon: 'search',
+                title: topic.category === 'Searching' ? 'Linear/Binary Search' : 'When to Use',
+                text:
+                  topic.category === 'Arrays'
+                    ? 'Searching can be O(n) unless data is sorted (then use binary search).'
+                    : 'Typical scenarios where this concept is the right tool.'
+              }
+            ]}
+            mistakes={[
+              topic.category === 'Arrays' ? 'Indexing starts at 0, not 1.' : 'Mind off-by-one errors in loops.',
+              topic.category === 'Arrays' ? 'array[length] is out of bounds.' : 'Check preconditions (sorted? acyclic?).',
+              topic.category === 'Arrays' ? 'Fixed-size arrays cannot grow arbitrarily.' : 'Pick the right data structure for the job.'
+            ]}
           />
 
           {/* Real-world Applications */}

@@ -6,6 +6,9 @@ export interface DSATopic {
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   timeComplexity?: string;
   spaceComplexity?: string;
+  extendedDefinition?: string; // richer content used in DefinitionBox if available
+  example?: string;
+  syntax?: string;
 }
 
 export const dsaCategories = [

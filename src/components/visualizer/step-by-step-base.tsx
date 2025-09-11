@@ -45,6 +45,21 @@ export function StepByStepBase({
     if (onStepChange && currentStep) {
       onStepChange(currentStep, currentStepIndex);
     }
+    if (currentStep) {
+      const description = (currentStep as any)?.description || '';
+      const title = (currentStep as any)?.title || '';
+      const highlight = (currentStep as any)?.highlight || '';
+      const narrationText = [title, description, highlight].filter(Boolean).join('. ') + (highlight ? '.' : '');
+      const event = new CustomEvent('visualization_step', {
+        detail: {
+          description,
+          title,
+          highlight,
+          narrationText
+        }
+      });
+      window.dispatchEvent(event);
+    }
   }, [currentStepIndex, currentStep, onStepChange]);
 
   useEffect(() => {
@@ -77,6 +92,18 @@ export function StepByStepBase({
       setCurrentStepIndex(0);
     }
     setIsPlaying(true);
+    // Announce current step when playback starts (user gesture → allowed to speak)
+    const step = steps[Math.max(0, currentStepIndex)] || steps[0];
+    if (step) {
+      const description = (step as any)?.description || '';
+      const title = (step as any)?.title || '';
+      const highlight = (step as any)?.highlight || '';
+      const narrationText = [title, description, highlight].filter(Boolean).join('. ') + (highlight ? '.' : '');
+      const event = new CustomEvent('visualization_step', {
+        detail: { description, title, highlight, narrationText, play: true }
+      });
+      window.dispatchEvent(event);
+    }
   };
 
   const handlePause = () => {
