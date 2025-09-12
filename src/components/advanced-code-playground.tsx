@@ -27,7 +27,7 @@ import {
   Eye
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { executeCode, formatExecutionResult, testAllServices } from '@/lib/universal-code-executor';
+import { executeCode, formatExecutionResult } from '@/lib/direct-executor';
 
 interface AdvancedCodePlaygroundProps {
   topicId: string;
