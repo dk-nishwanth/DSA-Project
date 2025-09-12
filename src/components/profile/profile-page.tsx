@@ -40,6 +40,7 @@ import {
   checkAchievements
 } from '@/data/profileData';
 import { dsaTopics } from '@/data/dsaTopics';
+import { StudyCalendar } from '@/components/study-calendar';
 
 export function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile>(SAMPLE_PROFILE);
@@ -210,8 +211,9 @@ export function ProfilePage() {
 
       {/* Main Content Tabs */}
       <Tabs defaultValue="progress" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="progress">Progress</TabsTrigger>
+          <TabsTrigger value="calendar">Calendar</TabsTrigger>
           <TabsTrigger value="achievements">Achievements</TabsTrigger>
           <TabsTrigger value="statistics">Statistics</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
@@ -327,6 +329,11 @@ export function ProfilePage() {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* Calendar Tab */}
+        <TabsContent value="calendar" className="space-y-6">
+          <StudyCalendar />
         </TabsContent>
 
         {/* Achievements Tab */}

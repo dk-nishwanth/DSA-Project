@@ -27,7 +27,7 @@ export function VoiceNarrator({
   voiceGender = 'female',
   variant = 'default',
   showLabel = true,
-  autoSpeak = true
+  autoSpeak = false
 }: VoiceNarratorProps) {
   const [isSupported, setIsSupported] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);

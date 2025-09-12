@@ -57,6 +57,8 @@ import { VoiceNarrator } from '@/components/voice-narrator';
 import { VisualizerCodeRunner } from '@/components/visualizer/visualizer-code-runner';
 import { VisualizationAutoNarrator } from '@/components/visualizer/visualization-auto-narrator';
 import { TeachingCards } from '@/components/teaching-cards';
+import { AdvancedCodePlayground } from '@/components/advanced-code-playground';
+import { WebPlayground } from '@/components/web-playground';
 
 export default function TopicDetail() {
   const [currentExplanationStep, setCurrentExplanationStep] = useState(0);
@@ -320,6 +322,137 @@ arr.findIndex(v => v === 7); // search`,
     return map[topicId] || 'Follow the animation to see how the data structure changes step by step.';
   };
 
+  const getTeachingCardItems = (topicId: string, category: string) => {
+    const cardsByTopic: Record<string, Array<{icon: string, title: string, text: string}>> = {
+      'array-basics': [
+        { icon: 'fast', title: 'Fast Access', text: 'Arrays provide O(1) access to any element using its index.' },
+        { icon: 'insert', title: 'Easy Insertion', text: 'Adding to the end is O(1); inserting in the middle shifts elements.' },
+        { icon: 'search', title: 'Linear Search', text: 'Searching can be O(n) unless data is sorted (then use binary search).' }
+      ],
+      'binary-search': [
+        { icon: 'fast', title: 'Logarithmic Time', text: 'Binary search reduces search space by half each step - O(log n).' },
+        { icon: 'insert', title: 'Sorted Requirement', text: 'Only works on sorted arrays - this is the key prerequisite.' },
+        { icon: 'search', title: 'Divide & Conquer', text: 'Compare with middle, then search left or right half.' }
+      ],
+      'bubble-sort': [
+        { icon: 'fast', title: 'Simple Logic', text: 'Compare adjacent elements and swap if out of order.' },
+        { icon: 'insert', title: 'Bubbling Effect', text: 'Largest elements "bubble" to the end after each pass.' },
+        { icon: 'search', title: 'Educational Value', text: 'Great for learning sorting concepts, but inefficient for large data.' }
+      ],
+      'linked-list-singly': [
+        { icon: 'fast', title: 'Dynamic Size', text: 'Grows and shrinks during runtime - no fixed size limit.' },
+        { icon: 'insert', title: 'Efficient Insertion', text: 'Insert/delete at any position by updating pointers - O(1).' },
+        { icon: 'search', title: 'Sequential Access', text: 'Must traverse from head to reach any element - O(n).' }
+      ],
+      'stack-operations': [
+        { icon: 'fast', title: 'LIFO Principle', text: 'Last In, First Out - like a stack of plates.' },
+        { icon: 'insert', title: 'Push & Pop', text: 'Add and remove elements only from the top - O(1).' },
+        { icon: 'search', title: 'Function Calls', text: 'Used for recursion, undo operations, and expression evaluation.' }
+      ],
+      'queue-operations': [
+        { icon: 'fast', title: 'FIFO Principle', text: 'First In, First Out - like a line at a store.' },
+        { icon: 'insert', title: 'Enqueue & Dequeue', text: 'Add to rear, remove from front - both O(1).' },
+        { icon: 'search', title: 'Scheduling', text: 'Used for task scheduling, BFS, and handling requests.' }
+      ],
+      'binary-search-tree': [
+        { icon: 'fast', title: 'Ordered Structure', text: 'Left < Node < Right property enables efficient operations.' },
+        { icon: 'insert', title: 'Balanced Performance', text: 'Search, insert, delete all O(log n) on average.' },
+        { icon: 'search', title: 'Inorder Traversal', text: 'Visit nodes in sorted order - useful for range queries.' }
+      ]
+    };
+
+    // Fallback for categories not specifically defined
+    const categoryDefaults: Record<string, Array<{icon: string, title: string, text: string}>> = {
+      'Sorting': [
+        { icon: 'fast', title: 'Ordering Data', text: 'Arrange elements in ascending or descending order.' },
+        { icon: 'insert', title: 'Time Complexity', text: 'Different algorithms have different performance characteristics.' },
+        { icon: 'search', title: 'Stability', text: 'Some algorithms preserve relative order of equal elements.' }
+      ],
+      'Searching': [
+        { icon: 'fast', title: 'Finding Elements', text: 'Locate specific values efficiently in data structures.' },
+        { icon: 'insert', title: 'Prerequisites', text: 'Some algorithms require sorted data for optimal performance.' },
+        { icon: 'search', title: 'Trade-offs', text: 'Balance between search time and preprocessing requirements.' }
+      ],
+      'Trees': [
+        { icon: 'fast', title: 'Hierarchical Data', text: 'Organize data in parent-child relationships.' },
+        { icon: 'insert', title: 'Tree Operations', text: 'Insert, delete, and traverse nodes efficiently.' },
+        { icon: 'search', title: 'Applications', text: 'File systems, databases, and decision-making structures.' }
+      ],
+      'Graphs': [
+        { icon: 'fast', title: 'Connected Data', text: 'Model relationships between entities using vertices and edges.' },
+        { icon: 'insert', title: 'Graph Algorithms', text: 'Traverse, search, and find optimal paths through networks.' },
+        { icon: 'search', title: 'Real Applications', text: 'Social networks, maps, and network routing protocols.' }
+      ]
+    };
+
+    return cardsByTopic[topicId] || categoryDefaults[category] || [];
+  };
+
+  const getCommonMistakes = (topicId: string, category: string) => {
+    const mistakesByTopic: Record<string, string[]> = {
+      'array-basics': [
+        'Indexing starts at 0, not 1.',
+        'array[length] is out of bounds.',
+        'Fixed-size arrays cannot grow arbitrarily.'
+      ],
+      'binary-search': [
+        'Forgetting the array must be sorted first.',
+        'Off-by-one errors with left/right boundaries.',
+        'Integer overflow when calculating mid = (left + right) / 2.'
+      ],
+      'bubble-sort': [
+        'Not optimizing for already sorted arrays.',
+        'Forgetting to reduce comparison range after each pass.',
+        'Using bubble sort for large datasets (very inefficient).'
+      ],
+      'linked-list-singly': [
+        'Losing reference to nodes when inserting/deleting.',
+        'Not handling edge cases (empty list, single node).',
+        'Memory leaks from not properly deallocating nodes.'
+      ],
+      'stack-operations': [
+        'Trying to pop from an empty stack.',
+        'Not checking stack overflow in fixed-size implementations.',
+        'Confusing stack with queue operations.'
+      ],
+      'queue-operations': [
+        'Trying to dequeue from an empty queue.',
+        'Not handling circular queue wraparound correctly.',
+        'Confusing front and rear pointers.'
+      ],
+      'binary-search-tree': [
+        'Not maintaining BST property during insertions.',
+        'Forgetting to handle duplicate values consistently.',
+        'Not considering tree balance (can degrade to O(n)).'
+      ]
+    };
+
+    const categoryDefaults: Record<string, string[]> = {
+      'Sorting': [
+        'Not considering stability requirements.',
+        'Choosing wrong algorithm for data size.',
+        'Ignoring worst-case time complexity.'
+      ],
+      'Searching': [
+        'Not checking if data is sorted when required.',
+        'Off-by-one errors in boundary conditions.',
+        'Not handling edge cases (empty data, not found).'
+      ],
+      'Trees': [
+        'Not handling null/empty tree cases.',
+        'Confusing different traversal orders.',
+        'Memory leaks from improper node deletion.'
+      ],
+      'Graphs': [
+        'Not handling disconnected components.',
+        'Infinite loops in cyclic graphs.',
+        'Not considering directed vs undirected edges.'
+      ]
+    };
+
+    return mistakesByTopic[topicId] || categoryDefaults[category] || [];
+  };
+
   // High-quality per-topic teaching content for the definition box
   const getTopicContent = (topicId: string) => {
     const byId: Record<string, {
@@ -454,11 +587,7 @@ arr.findIndex(v => v === 7); // search`,
             <DefinitionBox 
               title={topic.title} 
               definition={(getTopicContent(topic.id).definition) || topic.extendedDefinition || topic.description}
-              extra={getTopicContent(topic.id).extras || [
-                `Imagine: ${topic.category === 'Arrays' ? 'Think of a row of labeled boxes where each slot has a number—its index. You can jump straight to a box by its number.' : 'Visualize the concept in a real-world analogy to make it concrete.'}`,
-                `Why it matters: ${topic.category === 'Arrays' ? 'Fast direct access and predictable memory layout make arrays the foundation of many other structures.' : 'It helps you solve common problems faster and more reliably.'}`,
-                `How it works: ${topic.category === 'Arrays' ? 'You access elements by index, append at the end, remove from the end, and linearly scan when searching if unsorted.' : 'Start from the basic rule, apply it step by step, and observe how the structure changes.'}`
-              ]}
+              extra={getTopicContent(topic.id).extras || []}
               example={(getTopicContent(topic.id).example) || (topic.example || getExample(topic.id))}
               syntax={(getTopicContent(topic.id).syntax) || (topic.syntax || getSyntax(topic.id))}
               narrationText={(getTopicContent(topic.id).narration) || `${topic.title}. ${topic.description}. ${getVisualizationNarration(topic.id)}`}
@@ -471,9 +600,7 @@ arr.findIndex(v => v === 7); // search`,
               <h2 className="text-xl font-semibold">Interactive Visualization</h2>
             </div>
             <VisualizationAutoNarrator introText={`Let's explore ${topic.title}. ${topic.description}`} />
-            <div className="mb-3 flex items-center justify-between">
-              <VisualizerCodeRunner />
-            </div>
+            {/* Removed Code & Run Visualization button */}
 
             {topic.id === 'array-basics' && <EnhancedArrayVisualizer />}
             {topic.id === 'linked-list-singly' && <LinkedListVisualizer />}
@@ -585,40 +712,13 @@ arr.findIndex(v => v === 7); // search`,
             />
           </div>
 
-          {/* Teaching Cards - beginner-friendly summary */}
-          <TeachingCards
-            items={[
-              {
-                icon: 'fast',
-                title: topic.category === 'Arrays' ? 'Fast Access' : 'Core Idea',
-                text:
-                  topic.category === 'Arrays'
-                    ? 'Arrays provide O(1) access to any element using its index.'
-                    : 'Understand the main benefit of this topic in simple terms.'
-              },
-              {
-                icon: 'insert',
-                title: topic.category === 'Arrays' ? 'Easy Insertion' : 'How to Use',
-                text:
-                  topic.category === 'Arrays'
-                    ? 'Adding to the end is O(1); inserting in the middle shifts elements.'
-                    : 'What basic operations look like and what they cost.'
-              },
-              {
-                icon: 'search',
-                title: topic.category === 'Searching' ? 'Linear/Binary Search' : 'When to Use',
-                text:
-                  topic.category === 'Arrays'
-                    ? 'Searching can be O(n) unless data is sorted (then use binary search).'
-                    : 'Typical scenarios where this concept is the right tool.'
-              }
-            ]}
-            mistakes={[
-              topic.category === 'Arrays' ? 'Indexing starts at 0, not 1.' : 'Mind off-by-one errors in loops.',
-              topic.category === 'Arrays' ? 'array[length] is out of bounds.' : 'Check preconditions (sorted? acyclic?).',
-              topic.category === 'Arrays' ? 'Fixed-size arrays cannot grow arbitrarily.' : 'Pick the right data structure for the job.'
-            ]}
-          />
+          {/* Teaching Cards - beginner-friendly summary (hidden for array-basics) */}
+          {topic.id !== 'array-basics' && (
+            <TeachingCards
+              items={getTeachingCardItems(topic.id, topic.category)}
+              mistakes={getCommonMistakes(topic.id, topic.category)}
+            />
+          )}
 
           {/* Real-world Applications */}
           <div className="bg-card border rounded-xl p-6 shadow-subtle">
@@ -641,6 +741,26 @@ arr.findIndex(v => v === 7); // search`,
 
           {/* Interactive Quiz */}
           <InteractiveQuiz topicId={topic.id} />
+
+          {/* Advanced Personal Codespace */}
+          <AdvancedCodePlayground 
+            topicId={topic.id} 
+            topicTitle={topic.title}
+            initialCode={{
+              javascript: getCodeSnippet(topic.id, 'javascript'),
+              python: getCodeSnippet(topic.id, 'python'),
+              java: getCodeSnippet(topic.id, 'java'),
+              cpp: getCodeSnippet(topic.id, 'cpp')
+            }}
+          />
+
+          {/* Web Development Playground for web-related topics */}
+          {(topic.category === 'Web Development' || topic.title.toLowerCase().includes('html') || topic.title.toLowerCase().includes('css')) && (
+            <WebPlayground 
+              topicId={topic.id} 
+              topicTitle={topic.title}
+            />
+          )}
         </div>
 
         {/* Right Column - Details */}

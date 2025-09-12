@@ -13,7 +13,7 @@ export interface DSATopic {
 
 export const dsaCategories = [
   'Arrays',
-  'Strings', 
+  'Strings',
   'Linked Lists',
   'Stacks & Queues',
   'Trees',
@@ -61,7 +61,7 @@ export const dsaTopics: DSATopic[] = [
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)'
   },
-  
+
   // Strings
   {
     id: 'string-palindrome',
@@ -117,7 +117,7 @@ export const dsaTopics: DSATopic[] = [
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)'
   },
-  
+
   // Linked Lists
   {
     id: 'linked-list-singly',
@@ -146,7 +146,7 @@ export const dsaTopics: DSATopic[] = [
     timeComplexity: 'O(1) - O(n)',
     spaceComplexity: 'O(1)'
   },
-  
+
   // Stacks & Queues
   {
     id: 'stack-operations',
@@ -166,7 +166,7 @@ export const dsaTopics: DSATopic[] = [
     timeComplexity: 'O(1)',
     spaceComplexity: 'O(n)'
   },
-  
+
   // Trees
   {
     id: 'binary-tree',
@@ -198,7 +198,7 @@ export const dsaTopics: DSATopic[] = [
   {
     id: 'tree-inorder-traversal',
     title: 'Inorder Traversal',
-    description: 'Left-Root-Right traversal: visit left subtree, root, then right subtree',
+    description: 'Process nodes in sorted order for BSTs - essential for retrieving data in ascending sequence',
     category: 'Trees',
     difficulty: 'beginner',
     timeComplexity: 'O(n)',
@@ -207,7 +207,7 @@ export const dsaTopics: DSATopic[] = [
   {
     id: 'tree-preorder-traversal',
     title: 'Preorder Traversal',
-    description: 'Root-Left-Right traversal: visit root first, then left and right subtrees',
+    description: 'Create copies of trees and evaluate expressions - process parent before children',
     category: 'Trees',
     difficulty: 'beginner',
     timeComplexity: 'O(n)',
@@ -216,13 +216,13 @@ export const dsaTopics: DSATopic[] = [
   {
     id: 'tree-postorder-traversal',
     title: 'Postorder Traversal',
-    description: 'Left-Right-Root traversal: visit left and right subtrees, then root',
+    description: 'Delete trees safely and calculate directory sizes - process children before parent',
     category: 'Trees',
     difficulty: 'beginner',
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(h)'
   },
-  
+
   // Graphs
   {
     id: 'graph-dfs',
@@ -272,7 +272,7 @@ export const dsaTopics: DSATopic[] = [
   {
     id: 'kruskal-algorithm',
     title: 'Kruskal\'s Algorithm',
-    description: 'Minimum spanning tree algorithm using edge sorting',
+    description: 'Build MST by adding cheapest edges that don\'t create cycles - edge-focused approach',
     category: 'Graphs',
     difficulty: 'intermediate',
     timeComplexity: 'O(E log E)',
@@ -281,7 +281,7 @@ export const dsaTopics: DSATopic[] = [
   {
     id: 'prim-algorithm',
     title: 'Prim\'s Algorithm',
-    description: 'Minimum spanning tree algorithm using greedy approach',
+    description: 'Grow MST from starting vertex by adding minimum weight edges - vertex-focused approach',
     category: 'Graphs',
     difficulty: 'intermediate',
     timeComplexity: 'O(E log V)',
@@ -296,7 +296,7 @@ export const dsaTopics: DSATopic[] = [
     timeComplexity: 'O(V + E)',
     spaceComplexity: 'O(V)'
   },
-  
+
   // Sorting
   {
     id: 'bubble-sort',
@@ -337,7 +337,7 @@ export const dsaTopics: DSATopic[] = [
   {
     id: 'insertion-sort',
     title: 'Insertion Sort',
-    description: 'Simple sorting by inserting elements into sorted portion',
+    description: 'Build sorted array one element at a time - efficient for small or nearly sorted data',
     category: 'Sorting',
     difficulty: 'beginner',
     timeComplexity: 'O(n²)',
@@ -346,7 +346,7 @@ export const dsaTopics: DSATopic[] = [
   {
     id: 'selection-sort',
     title: 'Selection Sort',
-    description: 'Sorting by repeatedly selecting minimum element',
+    description: 'Find minimum element and swap to correct position - minimizes number of swaps',
     category: 'Sorting',
     difficulty: 'beginner',
     timeComplexity: 'O(n²)',
@@ -373,13 +373,13 @@ export const dsaTopics: DSATopic[] = [
   {
     id: 'bucket-sort',
     title: 'Bucket Sort',
-    description: 'Sorting by distributing elements into buckets',
+    description: 'Distribute elements into buckets, sort individually, then concatenate - great for uniform data',
     category: 'Sorting',
     difficulty: 'intermediate',
     timeComplexity: 'O(n + k)',
     spaceComplexity: 'O(n + k)'
   },
-  
+
   // Searching
   {
     id: 'linear-search',
@@ -408,12 +408,12 @@ export const dsaTopics: DSATopic[] = [
     timeComplexity: 'O(log log n)',
     spaceComplexity: 'O(1)'
   },
-  
+
   // Hashing
   {
     id: 'hash-table',
     title: 'Hash Table',
-    description: 'Key-value storage using hash functions for fast access',
+    description: 'Lightning-fast key-value storage powering databases, caches, and dictionaries',
     category: 'Hashing',
     difficulty: 'intermediate',
     timeComplexity: 'O(1) avg',
@@ -422,7 +422,7 @@ export const dsaTopics: DSATopic[] = [
   {
     id: 'hash-chaining',
     title: 'Separate Chaining',
-    description: 'Collision resolution using linked lists',
+    description: 'Handle hash collisions by storing multiple values in linked lists at each slot',
     category: 'Hashing',
     difficulty: 'intermediate',
     timeComplexity: 'O(1) avg',
@@ -431,13 +431,13 @@ export const dsaTopics: DSATopic[] = [
   {
     id: 'open-addressing',
     title: 'Open Addressing',
-    description: 'Collision resolution using probing sequences',
+    description: 'Resolve collisions by finding alternative slots using linear, quadratic, or double hashing',
     category: 'Hashing',
     difficulty: 'intermediate',
     timeComplexity: 'O(1) avg',
     spaceComplexity: 'O(n)'
   },
-  
+
   // Recursion
   {
     id: 'recursion-basics',
@@ -466,7 +466,7 @@ export const dsaTopics: DSATopic[] = [
     timeComplexity: 'O(2^n)',
     spaceComplexity: 'O(n)'
   },
-  
+
   // Dynamic Programming
   {
     id: 'dp-introduction',
@@ -504,7 +504,7 @@ export const dsaTopics: DSATopic[] = [
     timeComplexity: 'O(n log n)',
     spaceComplexity: 'O(n)'
   },
-  
+
   // Greedy Algorithms
   {
     id: 'activity-selection',
@@ -533,7 +533,7 @@ export const dsaTopics: DSATopic[] = [
     timeComplexity: 'O(n log n)',
     spaceComplexity: 'O(1)'
   },
-  
+
   // Backtracking
   {
     id: 'n-queens',
@@ -562,7 +562,7 @@ export const dsaTopics: DSATopic[] = [
     timeComplexity: 'O(4^(n×m))',
     spaceComplexity: 'O(n×m)'
   },
-  
+
   // Advanced Data Structures
   {
     id: 'trie',
@@ -603,7 +603,7 @@ export const dsaTopics: DSATopic[] = [
   {
     id: 'avl-tree',
     title: 'AVL Tree',
-    description: 'Self-balancing binary search tree with height balancing',
+    description: 'Strictly height-balanced BST ensuring O(log n) operations through rotations',
     category: 'Advanced Data Structures',
     difficulty: 'advanced',
     timeComplexity: 'O(log n)',
@@ -612,7 +612,7 @@ export const dsaTopics: DSATopic[] = [
   {
     id: 'red-black-tree',
     title: 'Red-Black Tree',
-    description: 'Self-balancing BST with color-based balancing rules',
+    description: 'Balanced BST using node colors and rotation rules - used in many standard libraries',
     category: 'Advanced Data Structures',
     difficulty: 'advanced',
     timeComplexity: 'O(log n)',
@@ -621,7 +621,7 @@ export const dsaTopics: DSATopic[] = [
   {
     id: 'b-tree',
     title: 'B-Tree',
-    description: 'Self-balancing tree for databases and file systems',
+    description: 'Multi-way search tree optimized for disk storage and database indexing',
     category: 'Advanced Data Structures',
     difficulty: 'advanced',
     timeComplexity: 'O(log n)',
@@ -630,7 +630,7 @@ export const dsaTopics: DSATopic[] = [
   {
     id: 'splay-tree',
     title: 'Splay Tree',
-    description: 'Self-adjusting BST with splaying operation',
+    description: 'Self-optimizing BST that moves frequently accessed nodes to the root',
     category: 'Advanced Data Structures',
     difficulty: 'advanced',
     timeComplexity: 'O(log n) amortized',
