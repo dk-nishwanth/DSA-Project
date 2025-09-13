@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { MonacoEditor } from './MonacoEditor';
 import { LanguageSelector } from './LanguageSelector';
 import { OutputPanel } from './OutputPanel';
 import { InputPanel } from './InputPanel';
 import { Toolbar } from './Toolbar';
 import { Language, getDefaultLanguage, getLanguageById } from '../../config/languages';
-import { codeExecutionService, ExecutionResult } from '../../services/codeExecutionService';
+import { runOnJudge0, Judge0Result } from '../../lib/judge0';
 import { AlertCircle, Wifi, WifiOff } from 'lucide-react';
 
 interface CodespaceProps {
@@ -14,6 +13,13 @@ interface CodespaceProps {
   initialLanguage?: string;
   initialCode?: string;
   onCodeChange?: (code: string, language: Language) => void;
+}
+
+interface ExecutionResult {
+  success: boolean;
+  output: string;
+  error?: string;
+  executionTime: number;
 }
 
 export const Codespace: React.FC<CodespaceProps> = ({
@@ -37,11 +43,19 @@ export const Codespace: React.FC<CodespaceProps> = ({
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [isOnline, setIsOnline] = useState<boolean>(true);
 
-  // Check backend health on mount
+  // Check Judge0 API health on mount
   useEffect(() => {
     const checkHealth = async () => {
-      const healthy = await codeExecutionService.checkHealth();
-      setIsOnline(healthy);
+      try {
+        // Test with a simple Python code
+        const testResult = await runOnJudge0({
+          languageId: 71, // Python
+          source: 'print("Health check")'
+        });
+        setIsOnline(testResult.status.id !== 0); // 0 means error
+      } catch {
+        setIsOnline(false);
+      }
     };
     
     checkHealth();
@@ -64,7 +78,7 @@ export const Codespace: React.FC<CodespaceProps> = ({
     onCodeChange?.(newCode, selectedLanguage);
   }, [selectedLanguage, onCodeChange]);
 
-  // Execute code
+  // Execute code using Judge0
   const handleRun = useCallback(async () => {
     if (isRunning || !isOnline) return;
 
@@ -72,14 +86,25 @@ export const Codespace: React.FC<CodespaceProps> = ({
     setExecutionResult(null);
 
     try {
-      const result = await codeExecutionService.executeCode({
-        code,
-        language: selectedLanguage,
-        input: selectedLanguage.supportsInput ? input : undefined,
-        filename: `main${selectedLanguage.extension}`,
+      const startTime = Date.now();
+      
+      const result: Judge0Result = await runOnJudge0({
+        languageId: selectedLanguage.judge0LanguageId,
+        source: code,
+        stdin: selectedLanguage.supportsInput ? input : undefined
       });
 
-      setExecutionResult(result);
+      const executionTime = Date.now() - startTime;
+
+      // Convert Judge0 result to our format
+      const executionResult: ExecutionResult = {
+        success: result.status.id === 3, // 3 = Accepted
+        output: result.stdout || result.compile_output || result.stderr || '',
+        error: result.status.id !== 3 ? result.status.description : undefined,
+        executionTime: executionTime
+      };
+
+      setExecutionResult(executionResult);
     } catch (error) {
       setExecutionResult({
         success: false,
@@ -165,22 +190,10 @@ export const Codespace: React.FC<CodespaceProps> = ({
       }
     };
 
-    const handleEditorSave = (e: CustomEvent) => {
-      handleSave();
-    };
-
-    const handleEditorRun = (e: CustomEvent) => {
-      handleRun();
-    };
-
     window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('editor-save', handleEditorSave as EventListener);
-    window.addEventListener('editor-run', handleEditorRun as EventListener);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('editor-save', handleEditorSave as EventListener);
-      window.removeEventListener('editor-run', handleEditorRun as EventListener);
     };
   }, [handleRun, handleSave]);
 
@@ -196,7 +209,7 @@ export const Codespace: React.FC<CodespaceProps> = ({
       {!isOnline && (
         <div className="flex items-center gap-2 px-4 py-2 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300 text-sm border-b border-red-200 dark:border-red-800">
           <WifiOff className="w-4 h-4" />
-          <span>Backend service is offline. Code execution is disabled.</span>
+          <span>Judge0 API is offline. Code execution is disabled.</span>
         </div>
       )}
 
@@ -228,12 +241,17 @@ export const Codespace: React.FC<CodespaceProps> = ({
             <PanelGroup direction="vertical">
               {/* Code Editor */}
               <Panel defaultSize={70} minSize={40}>
-                <MonacoEditor
-                  value={code}
-                  onChange={handleCodeChange}
-                  language={selectedLanguage}
-                  theme="vs-dark"
-                />
+                <div className="h-full p-4 bg-gray-50 dark:bg-gray-800">
+                  <div className="h-full">
+                    <textarea
+                      value={code}
+                      onChange={(e) => handleCodeChange(e.target.value)}
+                      className="w-full h-full p-4 font-mono text-sm border rounded-lg resize-none bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder={`Write your ${selectedLanguage.name} code here...`}
+                      spellCheck={false}
+                    />
+                  </div>
+                </div>
               </Panel>
 
               {/* Input Panel (only show if language supports input) */}

@@ -1,4 +1,5 @@
 import { Language } from '../config/languages';
+import { runOnJudge0, Judge0Result } from '../lib/judge0';
 
 export interface ExecutionRequest {
   code: string;
@@ -16,37 +17,26 @@ export interface ExecutionResult {
 }
 
 class CodeExecutionService {
-  private baseUrl: string;
-
-  constructor() {
-    // Use environment variable or default to localhost
-    this.baseUrl = process.env.REACT_APP_EXECUTION_API_URL || 'http://localhost:3001/api';
-  }
-
   async executeCode(request: ExecutionRequest): Promise<ExecutionResult> {
     try {
-      const response = await fetch(`${this.baseUrl}/execute`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          code: request.code,
-          language: request.language.id,
-          input: request.input || '',
-          filename: request.filename || `main${request.language.extension}`,
-          dockerImage: request.language.dockerImage,
-          compileCommand: request.language.compileCommand,
-          runCommand: request.language.runCommand,
-        }),
+      const startTime = Date.now();
+      
+      const result: Judge0Result = await runOnJudge0({
+        languageId: request.language.judge0LanguageId,
+        source: request.code,
+        stdin: request.input
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      const executionTime = Date.now() - startTime;
 
-      const result = await response.json();
-      return result;
+      // Convert Judge0 result to our format
+      return {
+        success: result.status.id === 3, // 3 = Accepted
+        output: result.stdout || result.compile_output || result.stderr || '',
+        error: result.status.id !== 3 ? result.status.description : undefined,
+        executionTime: executionTime,
+        memoryUsage: result.memory
+      };
     } catch (error) {
       console.error('Code execution error:', error);
       return {
@@ -60,8 +50,12 @@ class CodeExecutionService {
 
   async checkHealth(): Promise<boolean> {
     try {
-      const response = await fetch(`${this.baseUrl}/health`);
-      return response.ok;
+      // Test with a simple Python code
+      const testResult = await runOnJudge0({
+        languageId: 71, // Python
+        source: 'print("Health check")'
+      });
+      return testResult.status.id !== 0; // 0 means error
     } catch {
       return false;
     }

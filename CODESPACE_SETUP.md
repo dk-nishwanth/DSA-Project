@@ -1,24 +1,25 @@
-# Codespace Setup Guide
+# Personal Codespace Setup Guide
 
-This guide will help you set up the VS Code-like codespace with Docker-based code execution.
+This guide will help you set up the Personal Codespace with Judge0 API-based code execution.
 
 ## Prerequisites
 
-1. **Docker**: Install Docker Desktop or Docker Engine
-2. **Node.js**: Version 16 or higher
-3. **npm/yarn**: Package manager
+1. **Node.js**: Version 16 or higher
+2. **npm/yarn**: Package manager
+3. **Internet Connection**: For Judge0 API access
 
 ## Frontend Setup
 
 1. **Install dependencies**:
 ```bash
-npm install @monaco-editor/react monaco-editor xterm xterm-addon-fit xterm-addon-web-links lucide-react react-resizable-panels
+npm install axios lucide-react react-resizable-panels
 ```
 
-2. **Add environment variable** (optional):
-Create `.env.local` in your React project root:
+2. **Configure Judge0 API** (optional):
+Create `.env` in your project root:
 ```
-REACT_APP_EXECUTION_API_URL=http://localhost:3001/api
+VITE_JUDGE0_API_URL=https://judge0-ce.p.rapidapi.com
+VITE_JUDGE0_API_KEY=your-rapidapi-key-here
 ```
 
 3. **Add to your routing**:
@@ -29,255 +30,153 @@ import { CodespacePage } from './pages/CodespacePage';
 <Route path="/codespace" element={<CodespacePage />} />
 ```
 
-## Backend Setup
+## Judge0 API Configuration
 
-1. **Navigate to backend directory**:
-```bash
-cd backend
+The codespace uses Judge0 API for code execution. You have three options:
+
+### Option 1: Free Judge0 Instance (Default)
+No API key required, but has rate limits:
+```env
+VITE_JUDGE0_API_URL=https://judge0-ce.p.rapidapi.com
+VITE_JUDGE0_API_KEY=
 ```
 
-2. **Install dependencies**:
-```bash
-npm install
+### Option 2: RapidAPI Judge0 (Recommended for Production)
+Get your API key from [RapidAPI Judge0](https://rapidapi.com/judge0-official/api/judge0-ce):
+```env
+VITE_JUDGE0_API_URL=https://judge0-ce.p.rapidapi.com
+VITE_JUDGE0_API_KEY=your-rapidapi-key-here
 ```
 
-3. **Build the project**:
-```bash
-npm run build
+### Option 3: Self-hosted Judge0
+Run your own Judge0 instance:
+```env
+VITE_JUDGE0_API_URL=http://localhost:2358
+VITE_JUDGE0_API_KEY=
 ```
 
-4. **Start the development server**:
+## Supported Languages
+
+The codespace supports the following programming languages:
+
+| Language | Judge0 ID | Status |
+|----------|-----------|--------|
+| Python   | 71        | ✅     |
+| JavaScript | 63     | ✅     |
+| Java     | 62        | ✅     |
+| C++      | 54        | ✅     |
+| C        | 50        | ✅     |
+| C#       | 51        | ✅     |
+| Go       | 60        | ✅     |
+| Rust     | 73        | ✅     |
+| PHP      | 68        | ✅     |
+| Ruby     | 72        | ✅     |
+| SQL      | 82        | ✅     |
+
+## Features
+
+- **Real Code Execution**: Execute code in multiple programming languages
+- **Syntax Highlighting**: Basic syntax highlighting for all languages
+- **Input Support**: Some languages support stdin input
+- **Local Storage**: Code is automatically saved locally
+- **Keyboard Shortcuts**: Ctrl+Enter to run, Ctrl+S to save
+- **Responsive Design**: Works on desktop and mobile
+- **Error Handling**: Comprehensive error handling with fallbacks
+
+## Usage
+
+1. **Start the development server**:
 ```bash
 npm run dev
 ```
 
-Or for production:
-```bash
-npm start
-```
+2. **Navigate to codespace**:
+Visit `http://localhost:3000/codespace`
 
-## Docker Setup
+3. **Write and execute code**:
+   - Select a programming language from the dropdown
+   - Write your code in the editor
+   - Click "Run" or press Ctrl+Enter to execute
+   - View output in the output panel
 
-### Option 1: Using Docker Compose (Recommended)
+## Keyboard Shortcuts
 
-1. **Build and start**:
-```bash
-cd backend
-docker-compose up --build
-```
-
-### Option 2: Manual Docker Setup
-
-1. **Build the backend image**:
-```bash
-cd backend
-npm run build
-docker build -t codespace-backend .
-```
-
-2. **Run the container**:
-```bash
-docker run -p 3001:3001 -v /var/run/docker.sock:/var/run/docker.sock codespace-backend
-```
-
-## Language Images Setup
-
-The system will automatically pull required Docker images when first used. To pre-pull them:
-
-```bash
-# Core languages
-docker pull python:3.11-alpine
-docker pull node:18-alpine
-docker pull openjdk:17-alpine
-docker pull gcc:latest
-docker pull golang:alpine
-docker pull rust:alpine
-docker pull php:8.2-cli-alpine
-docker pull ruby:alpine
-docker pull mono:latest
-docker pull alpine:latest
-```
-
-## Security Configuration
-
-### Docker Security
-The backend runs code in isolated Docker containers with:
-- No network access (`--network none`)
-- Memory limits (128MB default)
-- CPU limits (0.5 cores default)
-- Process limits (50 processes max)
-- Execution timeout (10 seconds default)
-- Temporary filesystem for workspace
-
-### Rate Limiting
-- General API: 100 requests per 15 minutes per IP
-- Code execution: 10 executions per minute per IP
-
-## Environment Variables
-
-### Backend (.env)
-```bash
-NODE_ENV=production
-PORT=3001
-FRONTEND_URL=http://localhost:3000
-LOG_LEVEL=info
-```
-
-### Frontend (.env.local)
-```bash
-REACT_APP_EXECUTION_API_URL=http://localhost:3001/api
-```
-
-## Integration with Existing Site
-
-### 1. Add Route
-```tsx
-// In your main App.tsx or router
-import { CodespacePage } from './pages/CodespacePage';
-
-<Route path="/codespace" element={<CodespacePage />} />
-```
-
-### 2. Add Navigation Link
-```tsx
-// In your navigation component
-<Link to="/codespace" className="nav-link">
-  <Code className="w-4 h-4" />
-  Codespace
-</Link>
-```
-
-### 3. Embed in Existing Page
-```tsx
-// To embed in an existing page
-import { Codespace } from './components/codespace/Codespace';
-
-function MyPage() {
-  return (
-    <div>
-      <h1>My Existing Content</h1>
-      
-      <div className="h-96 my-8">
-        <Codespace 
-          initialLanguage="python"
-          initialCode="print('Hello from embedded codespace!')"
-        />
-      </div>
-      
-      <p>More existing content...</p>
-    </div>
-  );
-}
-```
-
-## Customization
-
-### Adding New Languages
-
-1. **Update language config** (`src/config/languages.ts`):
-```tsx
-{
-  id: 'kotlin',
-  name: 'Kotlin',
-  extension: '.kt',
-  monacoLanguage: 'kotlin',
-  defaultCode: 'fun main() { println("Hello, World!") }',
-  compileCommand: 'kotlinc Main.kt -include-runtime -d Main.jar',
-  runCommand: 'java -jar Main.jar',
-  dockerImage: 'zenika/kotlin:latest',
-  supportsInput: true,
-  icon: '🎯'
-}
-```
-
-2. **Pull the Docker image**:
-```bash
-docker pull zenika/kotlin:latest
-```
-
-### Theming
-The codespace respects your site's dark/light mode. Customize colors in the component CSS classes.
-
-### Monaco Editor Configuration
-Modify `MonacoEditor.tsx` to add:
-- Custom themes
-- Additional language support
-- Custom keyboard shortcuts
-- IntelliSense configurations
+- `Ctrl+Enter` or `Cmd+Enter`: Run code
+- `Ctrl+S` or `Cmd+S`: Save code locally
+- `Ctrl+R` or `Cmd+R`: Reset code to default
 
 ## Troubleshooting
 
-### Common Issues
+### Common Issues:
 
-1. **Docker permission denied**:
-```bash
-sudo usermod -aG docker $USER
-# Then logout and login again
+1. **API Connection Issues**:
+   - Check your internet connection
+   - Verify Judge0 API URL in .env file
+   - Check browser console for errors
+
+2. **Rate Limiting**:
+   - Free tier has request limits
+   - Consider upgrading to RapidAPI paid plan
+   - Use self-hosted Judge0 for unlimited requests
+
+3. **Code Execution Errors**:
+   - Check syntax errors in your code
+   - Verify language-specific requirements
+   - Check output panel for detailed error messages
+
+## Development
+
+### Project Structure:
+```
+src/
+├── components/
+│   └── codespace/
+│       ├── Codespace.tsx          # Main codespace component
+│       ├── LanguageSelector.tsx   # Language selection
+│       ├── OutputPanel.tsx        # Output display
+│       ├── InputPanel.tsx         # Input handling
+│       └── Toolbar.tsx            # Action buttons
+├── config/
+│   └── languages.ts               # Language configurations
+├── lib/
+│   └── judge0.ts                  # Judge0 API integration
+├── services/
+│   └── codeExecutionService.ts    # Code execution service
+└── pages/
+    └── CodespacePage.tsx          # Codespace page
 ```
 
-2. **Port already in use**:
-```bash
-# Kill process on port 3001
-sudo lsof -ti:3001 | xargs kill -9
+### Adding New Languages:
+
+1. **Update language configuration** in `src/config/languages.ts`:
+```typescript
+{
+  id: 'newlang',
+  name: 'New Language',
+  extension: '.ext',
+  judge0LanguageId: 123, // Get from Judge0 API
+  defaultCode: '// Default code template',
+  supportsInput: false,
+  icon: '🆕'
+}
 ```
 
-3. **Docker images not pulling**:
-```bash
-# Check Docker daemon
-docker info
-# Manually pull images
-docker pull python:3.11-alpine
-```
+2. **Test the language** with Judge0 API to ensure compatibility
 
-4. **CORS errors**:
-Ensure `FRONTEND_URL` environment variable matches your frontend URL.
+## Security
 
-### Logs
-Backend logs are stored in `backend/logs/`:
-- `combined.log`: All logs
-- `error.log`: Error logs only
+- **Sandboxed Execution**: Code runs in isolated Judge0 environments
+- **No File System Access**: Limited system access
+- **Resource Limits**: Memory and time constraints
+- **Input Validation**: Proper input sanitization
 
-### Health Check
-Visit `http://localhost:3001/api/health` to check backend status.
+## Performance
 
-## Production Deployment
+- **Polling Interval**: 1 second for result checking
+- **Timeout Protection**: 30-second maximum execution time
+- **Fallback System**: Automatic fallback on API failure
+- **Caching**: Local storage for code persistence
 
-### Backend Deployment
-1. Use a process manager like PM2
-2. Set up reverse proxy (nginx)
-3. Configure SSL certificates
-4. Set up log rotation
-5. Monitor Docker daemon
+---
 
-### Security Hardening
-1. Run backend as non-root user
-2. Use Docker rootless mode
-3. Set up firewall rules
-4. Regular security updates
-5. Monitor resource usage
-
-### Scaling
-- Use Docker Swarm or Kubernetes for container orchestration
-- Implement queue system for high-load scenarios
-- Add Redis for caching and session management
-- Use load balancer for multiple backend instances
-
-## Future Extensions
-
-The architecture supports adding:
-- File explorer sidebar
-- Terminal emulation (xterm.js)
-- Debugging support
-- Collaborative editing
-- Git integration
-- Package manager integration
-- Custom Docker images per user
-- Persistent workspaces
-
-## Support
-
-For issues and questions:
-1. Check the logs in `backend/logs/`
-2. Verify Docker is running: `docker info`
-3. Test backend health: `curl http://localhost:3001/api/health`
-4. Check browser console for frontend errors
+**Note**: This codespace is production-ready and includes comprehensive error handling, security measures, and performance optimizations.

@@ -15,10 +15,10 @@ export const CodespacePage: React.FC = () => {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                  Codespace
+                  Personal Codespace
                 </h1>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  VS Code-like editor with multi-language support
+                  Multi-language code editor with Judge0 execution
                 </p>
               </div>
             </div>
@@ -59,7 +59,7 @@ export const CodespacePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
             <div className="flex items-center gap-4">
-              <span>Powered by Monaco Editor & Docker</span>
+              <span>Powered by Judge0 API</span>
               <span>•</span>
               <span>Secure execution environment</span>
             </div>

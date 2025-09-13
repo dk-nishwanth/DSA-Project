@@ -565,7 +565,7 @@ ${webCode.js}
 
   const editorStyle = {
     fontSize: `${fontSize}px`,
-    fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
+    fontFamily: 'Menlo, "Ubuntu Mono", "Courier New", monospace',
     lineHeight: 1.5,
     backgroundColor: theme === 'dark' ? '#1e1e1e' : '#ffffff',
     color: theme === 'dark' ? '#d4d4d4' : '#333333',

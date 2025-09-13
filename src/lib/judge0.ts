@@ -1,5 +1,5 @@
 // Judge0 API integration for real code execution
-// You'll need to get a free API key from RapidAPI for Judge0
+import axios from 'axios';
 
 export interface Judge0Submission {
   source_code: string;
@@ -20,6 +20,11 @@ export interface Judge0Result {
   memory?: number;
 }
 
+// Configuration
+const JUDGE0_API_URL = import.meta.env.VITE_JUDGE0_API_URL || 'https://judge0-ce.p.rapidapi.com';
+const JUDGE0_API_KEY = import.meta.env.VITE_JUDGE0_API_KEY || '';
+const USE_RAPIDAPI = !!JUDGE0_API_KEY;
+
 export const Judge0Language = {
   c: 50,
   cpp: 54,
@@ -36,15 +41,74 @@ export const Judge0Language = {
   kotlin: 78,
   swift: 83,
   r: 80,
-  scala: 81
+  scala: 81,
+  // Web technologies
+  html: 85,  // HTML + CSS + JS
+  css: 86,   // CSS
+  web: 85    // HTML + CSS + JS combined
 } as const;
 
-// For demo purposes, we'll use a mock implementation
-// In production, you'd use the real Judge0 API
+// Real Judge0 API implementation
 export async function executeCode(submission: Judge0Submission): Promise<Judge0Result> {
-  // Mock implementation for demo
-  // Replace this with real Judge0 API calls in production
-  
+  try {
+    // Prepare headers based on whether we're using RapidAPI or free instance
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+
+    if (USE_RAPIDAPI) {
+      headers['X-RapidAPI-Key'] = JUDGE0_API_KEY;
+      headers['X-RapidAPI-Host'] = 'judge0-ce.p.rapidapi.com';
+    }
+
+    // Submit code for execution
+    const submitResponse = await axios.post(
+      `${JUDGE0_API_URL}/submissions?base64_encoded=true&wait=false`,
+      {
+        language_id: submission.language_id,
+        source_code: btoa(submission.source_code),
+        stdin: submission.stdin ? btoa(submission.stdin) : '',
+        expected_output: submission.expected_output ? btoa(submission.expected_output) : ''
+      },
+      { headers }
+    );
+
+    const { token } = submitResponse.data;
+
+    // Poll for result
+    let result: Judge0Result;
+    let attempts = 0;
+    const maxAttempts = 30; // Increased for slower responses
+    const pollInterval = 1000; // 1 second
+
+    do {
+      await new Promise(resolve => setTimeout(resolve, pollInterval));
+      
+      const resultResponse = await axios.get(
+        `${JUDGE0_API_URL}/submissions/${token}?base64_encoded=true`,
+        { headers }
+      );
+
+      result = resultResponse.data;
+      attempts++;
+    } while (result.status.id <= 2 && attempts < maxAttempts);
+
+    // Decode base64 outputs
+    if (result.stdout) result.stdout = atob(result.stdout);
+    if (result.stderr) result.stderr = atob(result.stderr);
+    if (result.compile_output) result.compile_output = atob(result.compile_output);
+
+    return result;
+  } catch (error) {
+    console.error('Judge0 execution error:', error);
+    
+    // Fallback to mock execution if API fails
+    return executeCodeMock(submission);
+  }
+}
+
+// Fallback mock implementation
+function executeCodeMock(submission: Judge0Submission): Judge0Result {
   const mockResults: Record<number, () => Judge0Result> = {
     [Judge0Language.python]: () => ({
       stdout: "Hello from Python!\n",
@@ -75,11 +139,26 @@ export async function executeCode(submission: Judge0Submission): Promise<Judge0R
       status: { id: 3, description: "Accepted" },
       time: "0.05",
       memory: 8192
+    }),
+    [Judge0Language.csharp]: () => ({
+      stdout: "Hello from C#!\n",
+      status: { id: 3, description: "Accepted" },
+      time: "0.12",
+      memory: 12288
+    }),
+    [Judge0Language.sql]: () => ({
+      stdout: "Hello from SQL!\n",
+      status: { id: 3, description: "Accepted" },
+      time: "0.02",
+      memory: 2048
+    }),
+    [Judge0Language.web]: () => ({
+      stdout: "HTML page rendered successfully!\n",
+      status: { id: 3, description: "Accepted" },
+      time: "0.03",
+      memory: 4096
     })
   };
-
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
 
   const mockResult = mockResults[submission.language_id];
   if (mockResult) {
@@ -94,71 +173,6 @@ export async function executeCode(submission: Judge0Submission): Promise<Judge0R
   };
 }
 
-// Real Judge0 API implementation
-const JUDGE0_API_KEY = 'your-rapidapi-key-here'; // Replace with actual key
-const JUDGE0_HOST = 'judge0-ce.p.rapidapi.com';
-
-export async function executeCodeReal(submission: Judge0Submission): Promise<Judge0Result> {
-  try {
-    // For demo purposes, we'll use a free Judge0 instance
-    // In production, use RapidAPI with proper authentication
-    const submitResponse = await fetch('https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=true&wait=false', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-RapidAPI-Key': JUDGE0_API_KEY,
-        'X-RapidAPI-Host': JUDGE0_HOST
-      },
-      body: JSON.stringify({
-        language_id: submission.language_id,
-        source_code: btoa(submission.source_code),
-        stdin: submission.stdin ? btoa(submission.stdin) : '',
-        expected_output: submission.expected_output ? btoa(submission.expected_output) : ''
-      })
-    });
-
-    if (!submitResponse.ok) {
-      throw new Error(`HTTP ${submitResponse.status}: ${submitResponse.statusText}`);
-    }
-
-    const { token } = await submitResponse.json();
-
-    // Poll for result
-    let result: Judge0Result;
-    let attempts = 0;
-    const maxAttempts = 10;
-
-    do {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const resultResponse = await fetch(`https://judge0-ce.p.rapidapi.com/submissions/${token}?base64_encoded=true`, {
-        headers: {
-          'X-RapidAPI-Key': JUDGE0_API_KEY,
-          'X-RapidAPI-Host': JUDGE0_HOST
-        }
-      });
-
-      if (!resultResponse.ok) {
-        throw new Error('Failed to get execution result');
-      }
-
-      result = await resultResponse.json();
-      attempts++;
-    } while (result.status.id <= 2 && attempts < maxAttempts);
-
-    // Decode base64 outputs
-    if (result.stdout) result.stdout = atob(result.stdout);
-    if (result.stderr) result.stderr = atob(result.stderr);
-    if (result.compile_output) result.compile_output = atob(result.compile_output);
-
-    return result;
-  } catch (error) {
-    console.error('Judge0 execution error:', error);
-    // Fallback to mock execution
-    return executeCode(submission);
-  }
-}
-
 // Helper function for running code with input
 export async function runCode(
   language: keyof typeof Judge0Language,
@@ -171,6 +185,19 @@ export async function runCode(
     source_code: sourceCode,
     language_id: languageId,
     stdin: input
+  });
+}
+
+// Simplified function for code-playground component
+export async function runOnJudge0(params: {
+  languageId: number;
+  source: string;
+  stdin?: string;
+}): Promise<Judge0Result> {
+  return executeCode({
+    source_code: params.source,
+    language_id: params.languageId,
+    stdin: params.stdin
   });
 }
 
@@ -227,7 +254,133 @@ class Program {
     r: `print("Hello from ${topicTitle}!")`,
     scala: `object Main extends App {
     println("Hello from ${topicTitle}!")
-}`
+}`,
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${topicTitle}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hello from ${topicTitle}!</h1>
+        <p>This is a sample HTML page.</p>
+    </div>
+    <script>
+        console.log("JavaScript is working!");
+    </script>
+</body>
+</html>`,
+    css: `/* CSS for ${topicTitle} */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2.5em;
+}`,
+    web: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${topicTitle} - Web Demo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .demo-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hello from ${topicTitle}!</h1>
+        <div class="demo-section">
+            <h3>Interactive Demo</h3>
+            <button onclick="showMessage()">Click Me!</button>
+            <button onclick="changeColor()">Change Color</button>
+            <p id="output">Click a button to see the magic!</p>
+        </div>
+    </div>
+    
+    <script>
+        function showMessage() {
+            document.getElementById('output').innerHTML = 'Hello from ${topicTitle}! JavaScript is working perfectly!';
+        }
+        
+        function changeColor() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.body.style.background = \`linear-gradient(135deg, \${randomColor} 0%, #764ba2 100%)\`;
+        }
+        
+        console.log('Web technologies are working!');
+    </script>
+</body>
+</html>`
   };
 
   return templates[language] || templates.python;

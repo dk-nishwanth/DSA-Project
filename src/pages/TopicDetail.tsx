@@ -688,18 +688,7 @@ arr.findIndex(v => v === 7); // search`,
             {topic.id === 'heap-operations' && <HeapVisualizer />}
             {topic.id === 'sliding-window-basics' && <SlidingWindowVisualizer />}
 
-            {/* Placeholder for other visualizers */}
-            {!['array-basics', 'array-rotation', 'array-subarray-problems', 'linked-list-singly', 'linked-list-doubly', 'linked-list-circular', 'stack-operations', 'queue-operations', 'binary-tree', 'binary-search-tree', 'heap-operations', 'graph-dfs', 'graph-bfs', 'dijkstra-algorithm', 'bellman-ford', 'floyd-warshall', 'kruskal-algorithm', 'prim-algorithm', 'topological-sort', 'bubble-sort', 'merge-sort', 'quick-sort', 'heap-sort', 'insertion-sort', 'selection-sort', 'counting-sort', 'radix-sort', 'bucket-sort', 'linear-search', 'binary-search', 'interpolation-search', 'hash-table', 'hash-chaining', 'open-addressing', 'recursion-basics', 'tail-recursion', 'fibonacci', 'dp-introduction', 'longest-common-subsequence', 'knapsack-problem', 'longest-increasing-subsequence', 'activity-selection', 'huffman-coding', 'fractional-knapsack', 'n-queens', 'sudoku-solver', 'maze-solver', 'trie', 'segment-tree', 'fenwick-tree', 'union-find', 'avl-tree', 'red-black-tree', 'b-tree', 'splay-tree', 'two-sum', 'three-sum', 'container-water', 'remove-duplicates', 'sliding-window-basics', 'sliding-window-maximum', 'longest-substring', 'bit-basics', 'count-set-bits', 'power-of-two', 'single-number', 'bit-subset', 'number-theory-basics', 'prime-algorithms', 'fast-exponentiation', 'string-palindrome', 'string-search-kmp', 'rabin-karp', 'z-algorithm', 'manacher-algorithm', 'string-anagram'].includes(topic.id) && (
-              <div className="text-center py-12 bg-gradient-visualization rounded-xl border-2 border-dashed border-border">
-                <Code2 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-foreground mb-2">
-                  Visualization Coming Soon
-                </h3>
-                <p className="text-muted-foreground">
-                  Interactive {topic.title.toLowerCase()} visualization is under development
-                </p>
-              </div>
-            )}
+          
           </div>
 
           {/* Explanation Steps */}
