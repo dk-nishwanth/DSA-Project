@@ -266,6 +266,28 @@ numbers.forEach((num, i) => console.log(\`Index \${i}: \${num}\`));`
     difficulty: 'intermediate',
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
+    extendedDefinition: `Array rotation involves shifting elements of an array to the left or right by a specified number of positions. This fundamental operation is crucial in many algorithms and has applications in circular data structures, string manipulation, and algorithmic problem solving.
+
+**Types of Array Rotation:**
+- **Left Rotation**: Elements move towards the beginning, with elements from the start wrapping to the end
+- **Right Rotation**: Elements move towards the end, with elements from the end wrapping to the start
+- **Circular Rotation**: Treating the array as a circular structure where the last element connects to the first
+
+**Key Concepts:**
+- **Modular Arithmetic**: Use k % n to handle rotations larger than array size
+- **In-place vs Extra Space**: Trade-off between memory usage and implementation complexity
+- **Reversal Algorithm**: Efficient in-place rotation using three array reversals
+- **Cyclic Replacements**: Advanced technique for optimal space complexity
+
+**Algorithm Approaches:**
+1. **Temporary Array**: Simple but uses O(n) extra space
+2. **One by One**: Rotate elements individually, O(1) space but O(n×k) time
+3. **Reversal Algorithm**: Three reversals achieve O(n) time and O(1) space
+4. **Cyclic Replacement**: Handle rotations in cycles for optimal performance
+
+**Mathematical Foundation:**
+For left rotation by k positions: new_index = (old_index - k + n) % n
+For right rotation by k positions: new_index = (old_index + k) % n`,
     example: `// Array Rotation
 function rotateLeft(arr, k) {
     const n = arr.length;
@@ -319,6 +341,33 @@ console.log(rotateRight(nums, 2)); // [4, 5, 1, 2, 3]`,
     difficulty: 'intermediate',
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
+    extendedDefinition: `Subarray problems involve finding contiguous subsequences within an array that satisfy specific conditions. These problems are fundamental in algorithmic problem solving and form the basis for many optimization techniques.
+
+**Core Concepts:**
+- **Subarray**: A contiguous sequence of elements within an array
+- **Subsequence**: Elements in original order but not necessarily contiguous
+- **Subsets**: Any combination of elements from the array
+
+**Common Subarray Problems:**
+1. **Maximum Subarray Sum**: Find contiguous subarray with largest sum (Kadane's Algorithm)
+2. **Subarray with Given Sum**: Find subarray that sums to a target value
+3. **Longest Subarray**: Find longest subarray satisfying certain conditions
+4. **Minimum Subarray**: Find subarray with minimum sum or length
+
+**Kadane's Algorithm Principle:**
+At each position, decide whether to extend the existing subarray or start a new one. The key insight is that if the current sum becomes negative, it's better to start fresh from the current element.
+
+**Sliding Window Technique:**
+For problems involving subarrays of fixed or variable size, the sliding window technique provides an efficient O(n) solution by maintaining a window that slides through the array.
+
+**Dynamic Programming Connection:**
+Many subarray problems can be solved using dynamic programming principles, where the solution at each position depends on the solution at previous positions.
+
+**Applications:**
+- Stock trading algorithms (maximum profit)
+- Signal processing (finding patterns)
+- Data analysis (trend identification)
+- Resource allocation (optimal scheduling)`,
     example: `// Maximum Subarray Sum (Kadane's Algorithm)
 function maxSubarraySum(arr) {
     let maxSoFar = arr[0];
@@ -426,7 +475,107 @@ console.log(isPalindrome("race a car")); // false`,
     category: 'Strings',
     difficulty: 'advanced',
     timeComplexity: 'O(n + m)',
-    spaceComplexity: 'O(m)'
+    spaceComplexity: 'O(m)',
+    extendedDefinition: `The Knuth-Morris-Pratt (KMP) algorithm is an efficient string matching algorithm that avoids redundant character comparisons by utilizing information about the pattern itself. It achieves linear time complexity by preprocessing the pattern to create a failure function.
+
+**Key Innovation:**
+Unlike naive string matching that restarts comparison from the next character after a mismatch, KMP uses the failure function (also called LPS - Longest Proper Prefix which is also Suffix) to determine how far to shift the pattern without missing any potential matches.
+
+**Failure Function (LPS Array):**
+For each position in the pattern, the LPS array stores the length of the longest proper prefix that is also a suffix. This information allows the algorithm to skip characters that are guaranteed not to match.
+
+**Algorithm Phases:**
+1. **Preprocessing**: Build the LPS array in O(m) time
+2. **Searching**: Use the LPS array to efficiently search in O(n) time
+
+**Why It Works:**
+When a mismatch occurs at position j in the pattern, we know that characters 0 to j-1 matched. The LPS array tells us the longest prefix of the pattern that is also a suffix of the matched portion, allowing us to continue matching from that position.
+
+**Advantages:**
+- Linear time complexity O(n + m)
+- No backtracking in the text
+- Optimal for repeated pattern searches
+- Foundation for other advanced string algorithms
+
+**Applications:**
+- Text editors (find and replace)
+- DNA sequence analysis
+- Compiler design (lexical analysis)
+- Network intrusion detection systems`,
+    example: `// KMP Algorithm Implementation
+function kmpSearch(text, pattern) {
+    const lps = buildLPS(pattern);
+    const result = [];
+    let i = 0, j = 0;
+    
+    while (i < text.length) {
+        if (text[i] === pattern[j]) {
+            i++; j++;
+        }
+        
+        if (j === pattern.length) {
+            result.push(i - j);
+            j = lps[j - 1];
+        } else if (i < text.length && text[i] !== pattern[j]) {
+            if (j !== 0) j = lps[j - 1];
+            else i++;
+        }
+    }
+    return result;
+}
+
+function buildLPS(pattern) {
+    const lps = new Array(pattern.length).fill(0);
+    let len = 0, i = 1;
+    
+    while (i < pattern.length) {
+        if (pattern[i] === pattern[len]) {
+            len++;
+            lps[i] = len;
+            i++;
+        } else {
+            if (len !== 0) len = lps[len - 1];
+            else { lps[i] = 0; i++; }
+        }
+    }
+    return lps;
+}`,
+    syntax: `**KMP Algorithm Patterns:**
+
+1. **LPS Array Construction:**
+   \`\`\`javascript
+   function buildLPS(pattern) {
+       const lps = new Array(pattern.length).fill(0);
+       let len = 0, i = 1;
+       while (i < pattern.length) {
+           if (pattern[i] === pattern[len]) {
+               lps[i] = ++len; i++;
+           } else if (len !== 0) {
+               len = lps[len - 1];
+           } else {
+               lps[i] = 0; i++;
+           }
+       }
+       return lps;
+   }
+   \`\`\`
+
+2. **Pattern Matching:**
+   \`\`\`javascript
+   function kmpSearch(text, pattern) {
+       const lps = buildLPS(pattern);
+       let i = 0, j = 0;
+       while (i < text.length) {
+           if (text[i] === pattern[j]) { i++; j++; }
+           if (j === pattern.length) {
+               // Found match at i - j
+               j = lps[j - 1];
+           } else if (i < text.length && text[i] !== pattern[j]) {
+               j !== 0 ? j = lps[j - 1] : i++;
+           }
+       }
+   }
+   \`\`\``
   },
   {
     id: 'rabin-karp',
@@ -435,7 +584,95 @@ console.log(isPalindrome("race a car")); // false`,
     category: 'Strings',
     difficulty: 'intermediate',
     timeComplexity: 'O(n + m)',
-    spaceComplexity: 'O(1)'
+    spaceComplexity: 'O(1)',
+    extendedDefinition: `The Rabin-Karp algorithm uses hashing to find pattern occurrences in text efficiently. It employs a rolling hash function that can be updated in constant time as the window slides through the text, making it particularly effective for multiple pattern searches.
+
+**Core Concept - Rolling Hash:**
+Instead of comparing strings character by character, Rabin-Karp computes hash values for the pattern and text substrings. The "rolling" aspect means that when the window slides by one position, the new hash can be computed from the previous hash in O(1) time.
+
+**Hash Function:**
+Typically uses polynomial rolling hash: hash = (c₁ × base^(m-1) + c₂ × base^(m-2) + ... + cₘ × base^0) mod prime
+
+**Rolling Hash Update:**
+When sliding the window from position i to i+1:
+new_hash = (old_hash - text[i] × base^(m-1)) × base + text[i+m]
+
+**Collision Handling:**
+Since hash collisions can occur, when hash values match, the algorithm performs character-by-character comparison to confirm the match. This is why the worst-case time complexity can be O(nm), but average case is O(n+m).
+
+**Advantages:**
+- Simple to implement and understand
+- Excellent for multiple pattern searches
+- Can be extended to 2D pattern matching
+- Effective average-case performance
+
+**Applications:**
+- Plagiarism detection systems
+- DNA sequence matching
+- Image pattern recognition
+- Duplicate file detection
+- Web crawling and indexing`,
+    example: `// Rabin-Karp Algorithm
+function rabinKarp(text, pattern) {
+    const base = 256, prime = 101;
+    const n = text.length, m = pattern.length;
+    let patternHash = 0, textHash = 0, h = 1;
+    const result = [];
+    
+    // Calculate h = base^(m-1) % prime
+    for (let i = 0; i < m - 1; i++) {
+        h = (h * base) % prime;
+    }
+    
+    // Calculate hash for pattern and first window
+    for (let i = 0; i < m; i++) {
+        patternHash = (base * patternHash + pattern.charCodeAt(i)) % prime;
+        textHash = (base * textHash + text.charCodeAt(i)) % prime;
+    }
+    
+    // Slide pattern over text
+    for (let i = 0; i <= n - m; i++) {
+        if (patternHash === textHash) {
+            // Check character by character
+            let match = true;
+            for (let j = 0; j < m; j++) {
+                if (text[i + j] !== pattern[j]) {
+                    match = false;
+                    break;
+                }
+            }
+            if (match) result.push(i);
+        }
+        
+        // Calculate hash for next window
+        if (i < n - m) {
+            textHash = (base * (textHash - text.charCodeAt(i) * h) + 
+                       text.charCodeAt(i + m)) % prime;
+            if (textHash < 0) textHash += prime;
+        }
+    }
+    return result;
+}`,
+    syntax: `**Rabin-Karp Patterns:**
+
+1. **Rolling Hash Calculation:**
+   \`\`\`javascript
+   function rollingHash(text, start, length, base, prime) {
+       let hash = 0;
+       for (let i = 0; i < length; i++) {
+           hash = (hash * base + text.charCodeAt(start + i)) % prime;
+       }
+       return hash;
+   }
+   \`\`\`
+
+2. **Hash Update (Rolling):**
+   \`\`\`javascript
+   function updateHash(oldHash, oldChar, newChar, base, prime, h) {
+       let newHash = (base * (oldHash - oldChar * h) + newChar) % prime;
+       return newHash < 0 ? newHash + prime : newHash;
+   }
+   \`\`\``
   },
   {
     id: 'z-algorithm',
@@ -444,7 +681,96 @@ console.log(isPalindrome("race a car")); // false`,
     category: 'Strings',
     difficulty: 'advanced',
     timeComplexity: 'O(n + m)',
-    spaceComplexity: 'O(n + m)'
+    spaceComplexity: 'O(n + m)',
+    extendedDefinition: `The Z Algorithm is a linear-time string matching algorithm that constructs a Z array where Z[i] represents the length of the longest substring starting from position i that is also a prefix of the string. This powerful preprocessing enables efficient pattern matching and various string analysis tasks.
+
+**Z Array Definition:**
+For a string S of length n, Z[i] is the length of the longest substring starting from S[i] which is also a prefix of S. By definition, Z[0] is not defined (or can be considered as n).
+
+**Key Insight:**
+The algorithm maintains a "Z-box" [L, R] representing the rightmost segment that matches a prefix. When processing position i:
+- If i ≤ R, we can use previously computed information
+- If i > R, we compute Z[i] from scratch
+
+**Algorithm Efficiency:**
+Despite nested loops, the algorithm runs in O(n) time because each character is examined at most twice - once when extending R and once when it's inside a Z-box.
+
+**Pattern Matching Application:**
+To find pattern P in text T, create string S = P + "$" + T (where "$" is a separator not in the alphabet). Then Z[i] = |P| indicates a match at position i - |P| - 1 in the original text.
+
+**Advantages:**
+- Simple and elegant implementation
+- Linear time complexity with small constants
+- Versatile for various string problems
+- Easy to understand and debug
+
+**Applications:**
+- String matching and searching
+- Longest common prefix problems
+- Palindrome detection algorithms
+- String compression techniques
+- Bioinformatics sequence analysis`,
+    example: `// Z Algorithm Implementation
+function zAlgorithm(s) {
+    const n = s.length;
+    const z = new Array(n).fill(0);
+    let l = 0, r = 0;
+    
+    for (let i = 1; i < n; i++) {
+        if (i <= r) {
+            z[i] = Math.min(r - i + 1, z[i - l]);
+        }
+        
+        while (i + z[i] < n && s[z[i]] === s[i + z[i]]) {
+            z[i]++;
+        }
+        
+        if (i + z[i] - 1 > r) {
+            l = i;
+            r = i + z[i] - 1;
+        }
+    }
+    return z;
+}
+
+// Pattern matching using Z algorithm
+function zSearch(text, pattern) {
+    const combined = pattern + "$" + text;
+    const z = zAlgorithm(combined);
+    const result = [];
+    
+    for (let i = pattern.length + 1; i < combined.length; i++) {
+        if (z[i] === pattern.length) {
+            result.push(i - pattern.length - 1);
+        }
+    }
+    return result;
+}`,
+    syntax: `**Z Algorithm Patterns:**
+
+1. **Z Array Construction:**
+   \`\`\`javascript
+   function buildZArray(s) {
+       const n = s.length, z = new Array(n).fill(0);
+       let l = 0, r = 0;
+       for (let i = 1; i < n; i++) {
+           if (i <= r) z[i] = Math.min(r - i + 1, z[i - l]);
+           while (i + z[i] < n && s[z[i]] === s[i + z[i]]) z[i]++;
+           if (i + z[i] - 1 > r) { l = i; r = i + z[i] - 1; }
+       }
+       return z;
+   }
+   \`\`\`
+
+2. **Pattern Matching:**
+   \`\`\`javascript
+   function zPatternMatch(text, pattern) {
+       const combined = pattern + "$" + text;
+       const z = buildZArray(combined);
+       return z.map((val, i) => val === pattern.length ? 
+                   i - pattern.length - 1 : -1).filter(x => x >= 0);
+   }
+   \`\`\``
   },
   {
     id: 'manacher-algorithm',
@@ -453,7 +779,103 @@ console.log(isPalindrome("race a car")); // false`,
     category: 'Strings',
     difficulty: 'advanced',
     timeComplexity: 'O(n)',
-    spaceComplexity: 'O(n)'
+    spaceComplexity: 'O(n)',
+    extendedDefinition: `Manacher's Algorithm is a sophisticated linear-time algorithm for finding all palindromic substrings in a string. It's particularly famous for solving the "longest palindromic substring" problem optimally, improving upon the naive O(n³) and dynamic programming O(n²) approaches.
+
+**Key Innovation - String Preprocessing:**
+The algorithm transforms the input string to handle even and odd length palindromes uniformly. For example, "abc" becomes "^#a#b#c#$" where ^ and $ are sentinels to avoid boundary checks, and # characters ensure all palindromes have odd length in the transformed string.
+
+**Palindrome Array:**
+The algorithm maintains an array P where P[i] represents the radius of the palindrome centered at position i in the transformed string. This directly gives us the length of palindromes in the original string.
+
+**Mirror Property:**
+The core insight is that palindromes have mirror symmetry. If we're processing position i and we know there's a palindrome centered at position c with right boundary r, and i is within this palindrome, then P[i] is at least min(P[mirror_of_i], r - i).
+
+**Linear Time Guarantee:**
+Although the algorithm has nested loops, it runs in O(n) time because the right boundary r only moves forward, and each character is examined at most twice.
+
+**Applications:**
+- Finding longest palindromic substring
+- Counting all palindromic substrings
+- DNA sequence analysis (finding palindromic sequences)
+- Text processing and pattern recognition
+- Competitive programming problems
+
+**Advantages:**
+- Optimal O(n) time complexity
+- Finds all palindromes, not just the longest
+- Elegant use of symmetry properties
+- Foundation for advanced string algorithms`,
+    example: `// Manacher's Algorithm
+function longestPalindrome(s) {
+    // Preprocess string: "abc" -> "^#a#b#c#$"
+    let processed = "^#";
+    for (let char of s) processed += char + "#";
+    processed += "$";
+    
+    const n = processed.length;
+    const p = new Array(n).fill(0); // palindrome lengths
+    let center = 0, right = 0;
+    let maxLen = 0, centerIndex = 0;
+    
+    for (let i = 1; i < n - 1; i++) {
+        const mirror = 2 * center - i;
+        
+        if (i < right) {
+            p[i] = Math.min(right - i, p[mirror]);
+        }
+        
+        // Try to expand palindrome centered at i
+        while (processed[i + (1 + p[i])] === processed[i - (1 + p[i])]) {
+            p[i]++;
+        }
+        
+        // If palindrome centered at i extends past right, adjust center and right
+        if (i + p[i] > right) {
+            center = i;
+            right = i + p[i];
+        }
+        
+        // Update maximum palindrome
+        if (p[i] > maxLen) {
+            maxLen = p[i];
+            centerIndex = i;
+        }
+    }
+    
+    const start = (centerIndex - maxLen) / 2;
+    return s.substring(start, start + maxLen);
+}`,
+    syntax: `**Manacher's Algorithm Patterns:**
+
+1. **String Preprocessing:**
+   \`\`\`javascript
+   function preprocess(s) {
+       let result = "^#";
+       for (let char of s) result += char + "#";
+       return result + "$";
+   }
+   \`\`\`
+
+2. **Palindrome Length Array:**
+   \`\`\`javascript
+   function manacher(s) {
+       const processed = preprocess(s);
+       const n = processed.length;
+       const p = new Array(n).fill(0);
+       let center = 0, right = 0;
+       
+       for (let i = 1; i < n - 1; i++) {
+           const mirror = 2 * center - i;
+           if (i < right) p[i] = Math.min(right - i, p[mirror]);
+           
+           while (processed[i + p[i] + 1] === processed[i - p[i] - 1]) p[i]++;
+           
+           if (i + p[i] > right) { center = i; right = i + p[i]; }
+       }
+       return p;
+   }
+   \`\`\``
   },
   {
     id: 'string-anagram',
@@ -519,7 +941,150 @@ console.log(isAnagram("hello", "world")); // false`,
     category: 'Linked Lists',
     difficulty: 'beginner',
     timeComplexity: 'O(1) - O(n)',
-    spaceComplexity: 'O(1)'
+    spaceComplexity: 'O(1)',
+    extendedDefinition: `A Singly Linked List is a linear data structure where elements (nodes) are stored in sequence, with each node containing data and a reference (pointer) to the next node. Unlike arrays, linked lists don't require contiguous memory allocation, providing dynamic size capabilities.
+
+**Node Structure:**
+Each node contains two components:
+- **Data**: The actual value stored in the node
+- **Next**: A reference/pointer to the next node in the sequence
+
+**Key Characteristics:**
+- **Dynamic Size**: Can grow or shrink during runtime
+- **Sequential Access**: Must traverse from head to reach any element
+- **Memory Efficiency**: Allocates memory as needed, no wasted space
+- **Insertion/Deletion**: Efficient at any position once the location is known
+
+**Memory Layout:**
+Unlike arrays with contiguous memory, linked list nodes can be scattered throughout memory, connected only by pointers. This provides flexibility but reduces cache locality.
+
+**Common Operations:**
+1. **Insertion**: At head (O(1)), at tail (O(n)), at position (O(n))
+2. **Deletion**: By value (O(n)), by position (O(n)), at head (O(1))
+3. **Traversal**: Visit all nodes sequentially (O(n))
+4. **Search**: Find element by value (O(n))
+5. **Reverse**: Change direction of all pointers (O(n))
+
+**Advantages vs Arrays:**
+- Dynamic size allocation
+- Efficient insertion/deletion at known positions
+- Memory allocated as needed
+
+**Disadvantages vs Arrays:**
+- No random access (must traverse to reach elements)
+- Extra memory overhead for storing pointers
+- Poor cache locality due to non-contiguous memory`,
+    example: `// Singly Linked List Implementation
+class ListNode {
+    constructor(val) {
+        this.val = val;
+        this.next = null;
+    }
+}
+
+class SinglyLinkedList {
+    constructor() {
+        this.head = null;
+    }
+    
+    // Insert at beginning - O(1)
+    insertAtHead(val) {
+        const newNode = new ListNode(val);
+        newNode.next = this.head;
+        this.head = newNode;
+    }
+    
+    // Insert at end - O(n)
+    insertAtTail(val) {
+        const newNode = new ListNode(val);
+        if (!this.head) {
+            this.head = newNode;
+            return;
+        }
+        
+        let current = this.head;
+        while (current.next) {
+            current = current.next;
+        }
+        current.next = newNode;
+    }
+    
+    // Delete by value - O(n)
+    delete(val) {
+        if (!this.head) return;
+        
+        if (this.head.val === val) {
+            this.head = this.head.next;
+            return;
+        }
+        
+        let current = this.head;
+        while (current.next && current.next.val !== val) {
+            current = current.next;
+        }
+        
+        if (current.next) {
+            current.next = current.next.next;
+        }
+    }
+    
+    // Reverse list - O(n)
+    reverse() {
+        let prev = null, current = this.head;
+        
+        while (current) {
+            const next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+        
+        this.head = prev;
+    }
+    
+    // Display list - O(n)
+    display() {
+        const result = [];
+        let current = this.head;
+        while (current) {
+            result.push(current.val);
+            current = current.next;
+        }
+        return result;
+    }
+}`,
+    syntax: `**Singly Linked List Patterns:**
+
+1. **Node Structure:**
+   \`\`\`javascript
+   class ListNode {
+       constructor(val) {
+           this.val = val;
+           this.next = null;
+       }
+   }
+   \`\`\`
+
+2. **Traversal Pattern:**
+   \`\`\`javascript
+   let current = head;
+   while (current) {
+       // Process current node
+       current = current.next;
+   }
+   \`\`\`
+
+3. **Reverse Pattern:**
+   \`\`\`javascript
+   let prev = null, current = head;
+   while (current) {
+       const next = current.next;
+       current.next = prev;
+       prev = current;
+       current = next;
+   }
+   return prev; // new head
+   \`\`\``
   },
   {
     id: 'linked-list-doubly',
@@ -680,7 +1245,112 @@ class CircularLinkedList {
     category: 'Stacks & Queues',
     difficulty: 'beginner',
     timeComplexity: 'O(1)',
-    spaceComplexity: 'O(n)'
+    spaceComplexity: 'O(n)',
+    extendedDefinition: `A Stack is a linear data structure that follows the Last-In-First-Out (LIFO) principle, where elements are added and removed from the same end called the "top" of the stack. Think of it like a stack of plates - you can only add or remove plates from the top.
+
+**Core Principle - LIFO:**
+The last element pushed onto the stack is the first one to be popped off. This ordering constraint makes stacks perfect for scenarios where you need to reverse the order of operations or maintain a "most recent first" access pattern.
+
+**Essential Operations:**
+1. **Push**: Add an element to the top of the stack (O(1))
+2. **Pop**: Remove and return the top element (O(1))
+3. **Peek/Top**: View the top element without removing it (O(1))
+4. **isEmpty**: Check if the stack is empty (O(1))
+5. **Size**: Get the number of elements in the stack (O(1))
+
+**Implementation Approaches:**
+- **Array-based**: Use an array with a top pointer/index
+- **Linked List-based**: Use a singly linked list with head as top
+- **Dynamic Array**: Automatically resize when capacity is exceeded
+
+**Memory Management:**
+Stacks can be implemented with fixed size (static) or dynamic size. Dynamic stacks automatically resize when full, while static stacks have a predetermined maximum capacity.
+
+**Real-World Applications:**
+- **Function Call Management**: Call stack in programming languages
+- **Expression Evaluation**: Converting infix to postfix, evaluating expressions
+- **Undo Operations**: Text editors, image editors, browsers
+- **Backtracking Algorithms**: Maze solving, N-Queens problem
+- **Syntax Parsing**: Balanced parentheses, compiler design
+- **Memory Management**: Stack frame allocation in programs`,
+    example: `// Stack Implementation
+class Stack {
+    constructor() {
+        this.items = [];
+    }
+    
+    // Add element to top - O(1)
+    push(element) {
+        this.items.push(element);
+    }
+    
+    // Remove element from top - O(1)
+    pop() {
+        if (this.isEmpty()) return null;
+        return this.items.pop();
+    }
+    
+    // View top element - O(1)
+    peek() {
+        if (this.isEmpty()) return null;
+        return this.items[this.items.length - 1];
+    }
+    
+    isEmpty() {
+        return this.items.length === 0;
+    }
+    
+    size() {
+        return this.items.length;
+    }
+}
+
+// Practical Example: Balanced Parentheses
+function isBalanced(str) {
+    const stack = new Stack();
+    const pairs = { '(': ')', '[': ']', '{': '}' };
+    
+    for (let char of str) {
+        if (char in pairs) {
+            stack.push(char);
+        } else if (Object.values(pairs).includes(char)) {
+            if (stack.isEmpty() || pairs[stack.pop()] !== char) {
+                return false;
+            }
+        }
+    }
+    
+    return stack.isEmpty();
+}`,
+    syntax: `**Stack Operation Patterns:**
+
+1. **Basic Stack Operations:**
+   \`\`\`javascript
+   class Stack {
+       constructor() { this.items = []; }
+       push(element) { this.items.push(element); }
+       pop() { return this.items.pop(); }
+       peek() { return this.items[this.items.length - 1]; }
+       isEmpty() { return this.items.length === 0; }
+   }
+   \`\`\`
+
+2. **Stack Applications:**
+   \`\`\`javascript
+   // Expression evaluation
+   function evaluatePostfix(expression) {
+       const stack = [];
+       for (let token of expression) {
+           if (isOperator(token)) {
+               const b = stack.pop(), a = stack.pop();
+               stack.push(operate(a, b, token));
+           } else {
+               stack.push(Number(token));
+           }
+       }
+       return stack.pop();
+   }
+   \`\`\``
   },
   {
     id: 'queue-operations',
@@ -1211,7 +1881,88 @@ console.log(bst.search(30)); // Found`
     category: 'Trees',
     difficulty: 'intermediate',
     timeComplexity: 'O(log n)',
-    spaceComplexity: 'O(1)'
+    spaceComplexity: 'O(1)',
+    example: `// Min Heap Implementation
+class MinHeap {
+    constructor() {
+        this.heap = [];
+    }
+    
+    insert(val) {
+        this.heap.push(val);
+        this.heapifyUp(this.heap.length - 1);
+    }
+    
+    extractMin() {
+        if (this.heap.length === 0) return null;
+        const min = this.heap[0];
+        this.heap[0] = this.heap.pop();
+        this.heapifyDown(0);
+        return min;
+    }
+    
+    heapifyUp(index) {
+        const parent = Math.floor((index - 1) / 2);
+        if (parent >= 0 && this.heap[parent] > this.heap[index]) {
+            [this.heap[parent], this.heap[index]] = [this.heap[index], this.heap[parent]];
+            this.heapifyUp(parent);
+        }
+    }
+    
+    heapifyDown(index) {
+        const left = 2 * index + 1;
+        const right = 2 * index + 2;
+        let smallest = index;
+        
+        if (left < this.heap.length && this.heap[left] < this.heap[smallest]) {
+            smallest = left;
+        }
+        if (right < this.heap.length && this.heap[right] < this.heap[smallest]) {
+            smallest = right;
+        }
+        
+        if (smallest !== index) {
+            [this.heap[index], this.heap[smallest]] = [this.heap[smallest], this.heap[index]];
+            this.heapifyDown(smallest);
+        }
+    }
+}
+
+const heap = new MinHeap();
+heap.insert(3);
+heap.insert(1);
+heap.insert(4);
+console.log(heap.extractMin()); // 1`,
+    syntax: `**Heap Operation Patterns:**
+
+1. **Insert Element:**
+   \`\`\`javascript
+   insert(val) {
+       this.heap.push(val);
+       this.heapifyUp(this.heap.length - 1);
+   }
+   \`\`\`
+
+2. **Extract Min/Max:**
+   \`\`\`javascript
+   extractMin() {
+       const min = this.heap[0];
+       this.heap[0] = this.heap.pop();
+       this.heapifyDown(0);
+       return min;
+   }
+   \`\`\`
+
+3. **Heapify Operations:**
+   \`\`\`javascript
+   heapifyUp(index) {
+       const parent = Math.floor((index - 1) / 2);
+       if (parent >= 0 && this.heap[parent] > this.heap[index]) {
+           [this.heap[parent], this.heap[index]] = [this.heap[index], this.heap[parent]];
+           this.heapifyUp(parent);
+       }
+   }
+   \`\`\``
   },
   {
     id: 'tree-inorder-traversal',
@@ -1220,7 +1971,112 @@ console.log(bst.search(30)); // Found`
     category: 'Trees',
     difficulty: 'beginner',
     timeComplexity: 'O(n)',
-    spaceComplexity: 'O(h)'
+    spaceComplexity: 'O(h)',
+    extendedDefinition: `Inorder Traversal is a depth-first tree traversal method that visits nodes in the order: Left subtree → Root → Right subtree. This traversal pattern has special significance for Binary Search Trees (BSTs) as it produces elements in sorted ascending order.
+
+**Traversal Order:**
+1. Recursively traverse the left subtree
+2. Process the current node (visit/print)
+3. Recursively traverse the right subtree
+
+**Special Property for BSTs:**
+In a Binary Search Tree, inorder traversal visits nodes in ascending sorted order. This property makes inorder traversal essential for:
+- Retrieving all elements in sorted order
+- Validating if a tree is a valid BST
+- Finding kth smallest element
+- Range queries in BSTs
+
+**Implementation Approaches:**
+1. **Recursive**: Natural and intuitive, uses function call stack
+2. **Iterative**: Uses explicit stack, more memory efficient for deep trees
+3. **Morris Traversal**: O(1) space complexity using threading technique
+
+**Space Complexity Analysis:**
+- **Recursive**: O(h) where h is tree height (due to call stack)
+- **Iterative**: O(h) for explicit stack storage
+- **Morris**: O(1) space but modifies tree structure temporarily
+
+**Applications:**
+- **Database Systems**: Retrieving records in sorted order from B-trees
+- **Expression Trees**: Evaluating mathematical expressions
+- **Syntax Trees**: Compiler design for parsing expressions
+- **File Systems**: Listing directory contents in alphabetical order
+- **Data Validation**: Checking BST property maintenance
+
+**Relationship to Other Traversals:**
+Inorder is one of three main DFS traversals, each serving different purposes:
+- **Preorder**: Good for copying/serializing trees
+- **Inorder**: Perfect for sorted data retrieval in BSTs
+- **Postorder**: Ideal for deletion and cleanup operations`,
+    example: `// Inorder Traversal (Left, Root, Right)
+function inorderTraversal(root) {
+    const result = [];
+    
+    function inorder(node) {
+        if (node) {
+            inorder(node.left);    // Visit left subtree
+            result.push(node.val); // Process current node
+            inorder(node.right);   // Visit right subtree
+        }
+    }
+    
+    inorder(root);
+    return result;
+}
+
+// Iterative Inorder Traversal
+function inorderIterative(root) {
+    const result = [], stack = [];
+    let current = root;
+    
+    while (current || stack.length > 0) {
+        // Go to leftmost node
+        while (current) {
+            stack.push(current);
+            current = current.left;
+        }
+        
+        // Process current node
+        current = stack.pop();
+        result.push(current.val);
+        
+        // Move to right subtree
+        current = current.right;
+    }
+    
+    return result;
+}
+
+// Example: Tree [1, null, 2, 3] gives [1, 3, 2]`,
+    syntax: `**Inorder Traversal Patterns:**
+
+1. **Recursive Inorder:**
+   \`\`\`javascript
+   function inorder(root) {
+       if (!root) return;
+       inorder(root.left);
+       console.log(root.val);
+       inorder(root.right);
+   }
+   \`\`\`
+
+2. **Iterative Inorder:**
+   \`\`\`javascript
+   function inorderIterative(root) {
+       const stack = [], result = [];
+       let current = root;
+       while (current || stack.length) {
+           while (current) {
+               stack.push(current);
+               current = current.left;
+           }
+           current = stack.pop();
+           result.push(current.val);
+           current = current.right;
+       }
+       return result;
+   }
+   \`\`\``
   },
   {
     id: 'tree-preorder-traversal',
@@ -1229,7 +2085,108 @@ console.log(bst.search(30)); // Found`
     category: 'Trees',
     difficulty: 'beginner',
     timeComplexity: 'O(n)',
-    spaceComplexity: 'O(h)'
+    spaceComplexity: 'O(h)',
+    extendedDefinition: `Preorder Traversal is a depth-first tree traversal method that visits nodes in the order: Root → Left subtree → Right subtree. This "parent-first" approach makes it ideal for operations that need to process a node before its children.
+
+**Traversal Order:**
+1. Process the current node (visit/print)
+2. Recursively traverse the left subtree
+3. Recursively traverse the right subtree
+
+**Key Characteristics:**
+- **Root-First Processing**: Parent nodes are always processed before their children
+- **Top-Down Approach**: Information flows from parent to children
+- **Natural Recursion**: Mirrors the recursive structure of trees
+- **Prefix Notation**: For expression trees, produces prefix notation
+
+**Why "Preorder"?**
+The name comes from processing the root "pre" (before) its subtrees. This ordering is natural for many tree operations where you need to:
+- Establish context at parent level
+- Pass information down to children
+- Make decisions based on parent state
+
+**Implementation Strategies:**
+1. **Recursive**: Most intuitive, follows tree structure naturally
+2. **Iterative with Stack**: Uses explicit stack, processes right child after left
+3. **Morris Traversal**: Constant space using tree threading
+
+**Primary Applications:**
+- **Tree Copying**: Create duplicate trees by processing structure top-down
+- **Tree Serialization**: Convert tree to string representation for storage/transmission
+- **Expression Evaluation**: Process operators before operands in expression trees
+- **File System Operations**: Process directories before their contents
+- **Syntax Tree Processing**: Compiler design for code generation
+
+**Expression Trees:**
+In mathematical expression trees, preorder traversal produces prefix notation (Polish notation):
+- Tree: + 3 4 → Preorder: + 3 4
+- Useful for stack-based expression evaluation
+
+**Comparison with Other Traversals:**
+- **Preorder**: Root → Left → Right (good for copying, serialization)
+- **Inorder**: Left → Root → Right (sorted order in BSTs)
+- **Postorder**: Left → Right → Root (good for deletion, cleanup)`,
+    example: `// Preorder Traversal (Root, Left, Right)
+function preorderTraversal(root) {
+    const result = [];
+    
+    function preorder(node) {
+        if (node) {
+            result.push(node.val); // Process current node first
+            preorder(node.left);   // Visit left subtree
+            preorder(node.right);  // Visit right subtree
+        }
+    }
+    
+    preorder(root);
+    return result;
+}
+
+// Iterative Preorder Traversal
+function preorderIterative(root) {
+    if (!root) return [];
+    
+    const result = [], stack = [root];
+    
+    while (stack.length > 0) {
+        const node = stack.pop();
+        result.push(node.val);
+        
+        // Push right first, then left (stack is LIFO)
+        if (node.right) stack.push(node.right);
+        if (node.left) stack.push(node.left);
+    }
+    
+    return result;
+}
+
+// Example: Tree [1, 2, 3, 4, 5] gives [1, 2, 4, 5, 3]`,
+    syntax: `**Preorder Traversal Patterns:**
+
+1. **Recursive Preorder:**
+   \`\`\`javascript
+   function preorder(root) {
+       if (!root) return;
+       console.log(root.val);  // Process root first
+       preorder(root.left);
+       preorder(root.right);
+   }
+   \`\`\`
+
+2. **Iterative Preorder:**
+   \`\`\`javascript
+   function preorderIterative(root) {
+       if (!root) return [];
+       const stack = [root], result = [];
+       while (stack.length) {
+           const node = stack.pop();
+           result.push(node.val);
+           if (node.right) stack.push(node.right);
+           if (node.left) stack.push(node.left);
+       }
+       return result;
+   }
+   \`\`\``
   },
   {
     id: 'tree-postorder-traversal',
@@ -1238,7 +2195,117 @@ console.log(bst.search(30)); // Found`
     category: 'Trees',
     difficulty: 'beginner',
     timeComplexity: 'O(n)',
-    spaceComplexity: 'O(h)'
+    spaceComplexity: 'O(h)',
+    extendedDefinition: `Postorder Traversal is a depth-first tree traversal method that visits nodes in the order: Left subtree → Right subtree → Root. This "children-first" approach ensures that all descendants are processed before their parent, making it essential for operations requiring bottom-up computation.
+
+**Traversal Order:**
+1. Recursively traverse the left subtree
+2. Recursively traverse the right subtree  
+3. Process the current node (visit/print)
+
+**Key Principle - Bottom-Up Processing:**
+Postorder traversal guarantees that when you process a node, all its descendants have already been processed. This property is crucial for:
+- Safe memory deallocation
+- Aggregating information from children
+- Dependency resolution
+- Cleanup operations
+
+**Why "Postorder"?**
+The name indicates that the root is processed "post" (after) its subtrees. This ensures complete information about subtrees is available when processing the parent.
+
+**Critical Applications:**
+1. **Safe Tree Deletion**: Delete children before parent to avoid memory leaks
+2. **Directory Size Calculation**: Calculate folder sizes by summing file sizes bottom-up
+3. **Expression Evaluation**: Process operands before operators in expression trees
+4. **Dependency Resolution**: Process dependencies before dependent items
+5. **Tree Height Calculation**: Compute height based on children's heights
+
+**Implementation Challenges:**
+Postorder is the most complex traversal to implement iteratively because:
+- Need to track whether children have been processed
+- Requires additional state management
+- Common approaches use two stacks or modified single stack
+
+**Expression Trees:**
+In mathematical expression trees, postorder produces postfix notation (Reverse Polish Notation):
+- Tree: + 3 4 → Postorder: 3 4 +
+- Ideal for stack-based calculators
+
+**Memory Management:**
+Postorder is the standard pattern for destructors and garbage collection:
+- Process all child objects first
+- Then safely deallocate parent object
+- Prevents dangling pointers and memory corruption
+
+**Real-World Examples:**
+- **File System**: Calculate directory sizes recursively
+- **Compiler Design**: Generate code for expression evaluation
+- **Database Systems**: Process query execution plans bottom-up
+- **Operating Systems**: Process termination and resource cleanup`,
+    example: `// Postorder Traversal (Left, Right, Root)
+function postorderTraversal(root) {
+    const result = [];
+    
+    function postorder(node) {
+        if (node) {
+            postorder(node.left);   // Visit left subtree
+            postorder(node.right);  // Visit right subtree
+            result.push(node.val);  // Process current node last
+        }
+    }
+    
+    postorder(root);
+    return result;
+}
+
+// Iterative Postorder Traversal (Two Stacks)
+function postorderIterative(root) {
+    if (!root) return [];
+    
+    const stack1 = [root], stack2 = [], result = [];
+    
+    while (stack1.length > 0) {
+        const node = stack1.pop();
+        stack2.push(node);
+        
+        if (node.left) stack1.push(node.left);
+        if (node.right) stack1.push(node.right);
+    }
+    
+    while (stack2.length > 0) {
+        result.push(stack2.pop().val);
+    }
+    
+    return result;
+}
+
+// Example: Tree [1, 2, 3, 4, 5] gives [4, 5, 2, 3, 1]`,
+    syntax: `**Postorder Traversal Patterns:**
+
+1. **Recursive Postorder:**
+   \`\`\`javascript
+   function postorder(root) {
+       if (!root) return;
+       postorder(root.left);
+       postorder(root.right);
+       console.log(root.val);  // Process root last
+   }
+   \`\`\`
+
+2. **Iterative Postorder (Two Stacks):**
+   \`\`\`javascript
+   function postorderIterative(root) {
+       if (!root) return [];
+       const stack1 = [root], stack2 = [];
+       while (stack1.length) {
+           const node = stack1.pop();
+           stack2.push(node);
+           if (node.left) stack1.push(node.left);
+           if (node.right) stack1.push(node.right);
+       }
+       return stack2.reverse().map(node => node.val);
+   }
+   \`\`\``
   },
 
   // Graphs
@@ -1665,7 +2732,137 @@ dfs(graph, 'A'); // Output: A B D F C E`
     category: 'Graphs',
     difficulty: 'intermediate',
     timeComplexity: 'O(V + E)',
-    spaceComplexity: 'O(V)'
+    spaceComplexity: 'O(V)',
+    extendedDefinition: `Breadth-First Search (BFS) is a fundamental graph traversal algorithm that explores vertices level by level, visiting all vertices at distance k before visiting any vertex at distance k+1 from the starting vertex. It uses a queue data structure to maintain the order of exploration.
+
+**Core Principle:**
+BFS explores the graph in "waves" or "levels," ensuring that all vertices at the current level are visited before moving to the next level. This systematic approach guarantees finding the shortest path in unweighted graphs.
+
+**Algorithm Steps:**
+1. Start with a source vertex and mark it as visited
+2. Add the source to a queue
+3. While queue is not empty:
+   - Dequeue a vertex
+   - Process the vertex
+   - Add all unvisited neighbors to the queue and mark them as visited
+
+**Key Properties:**
+- **Level-by-Level Exploration**: Visits vertices in order of their distance from source
+- **Shortest Path**: In unweighted graphs, BFS finds shortest paths
+- **Complete**: Will find a solution if one exists
+- **Optimal**: For unweighted graphs, finds minimum number of edges
+
+**Data Structures Used:**
+- **Queue**: FIFO structure for maintaining exploration order
+- **Visited Array/Set**: Track which vertices have been explored
+- **Parent Array**: Optional, for path reconstruction
+
+**Applications:**
+1. **Shortest Path**: Find minimum steps in unweighted graphs
+2. **Level-Order Traversal**: Process nodes level by level in trees
+3. **Connected Components**: Find all vertices reachable from a source
+4. **Bipartite Graph Testing**: Check if graph can be colored with two colors
+5. **Social Networks**: Find degrees of separation between people
+6. **Web Crawling**: Systematically explore web pages
+7. **Puzzle Solving**: Find minimum moves in games like sliding puzzles
+
+**Comparison with DFS:**
+- **BFS**: Uses queue, finds shortest paths, explores breadth-wise
+- **DFS**: Uses stack/recursion, explores depth-wise, uses less memory for sparse graphs
+
+**Time and Space Analysis:**
+- **Time**: O(V + E) where V is vertices and E is edges
+- **Space**: O(V) for queue and visited tracking in worst case`,
+    example: `// BFS Implementation for Graph
+function bfs(graph, start) {
+    const visited = new Set();
+    const queue = [start];
+    const result = [];
+    
+    visited.add(start);
+    
+    while (queue.length > 0) {
+        const vertex = queue.shift();
+        result.push(vertex);
+        
+        // Visit all unvisited neighbors
+        for (const neighbor of graph[vertex] || []) {
+            if (!visited.has(neighbor)) {
+                visited.add(neighbor);
+                queue.push(neighbor);
+            }
+        }
+    }
+    
+    return result;
+}
+
+// BFS for Shortest Path (unweighted graph)
+function shortestPath(graph, start, end) {
+    const queue = [[start, [start]]];
+    const visited = new Set([start]);
+    
+    while (queue.length > 0) {
+        const [vertex, path] = queue.shift();
+        
+        if (vertex === end) {
+            return path;
+        }
+        
+        for (const neighbor of graph[vertex] || []) {
+            if (!visited.has(neighbor)) {
+                visited.add(neighbor);
+                queue.push([neighbor, [...path, neighbor]]);
+            }
+        }
+    }
+    
+    return null; // No path found
+}
+
+// Example usage:
+// graph = {0: [1, 2], 1: [0, 3], 2: [0, 4], 3: [1], 4: [2]}
+// bfs(graph, 0) returns [0, 1, 2, 3, 4]`,
+    syntax: `**BFS Patterns:**
+
+1. **Basic BFS Traversal:**
+   \`\`\`javascript
+   function bfs(graph, start) {
+       const visited = new Set(), queue = [start];
+       visited.add(start);
+       
+       while (queue.length > 0) {
+           const vertex = queue.shift();
+           console.log(vertex);
+           
+           for (const neighbor of graph[vertex]) {
+               if (!visited.has(neighbor)) {
+                   visited.add(neighbor);
+                   queue.push(neighbor);
+               }
+           }
+       }
+   }
+   \`\`\`
+
+2. **BFS with Level Tracking:**
+   \`\`\`javascript
+   function bfsLevels(graph, start) {
+       const queue = [[start, 0]], visited = new Set([start]);
+       
+       while (queue.length > 0) {
+           const [vertex, level] = queue.shift();
+           console.log(\`Vertex \${vertex} at level \${level}\`);
+           
+           for (const neighbor of graph[vertex]) {
+               if (!visited.has(neighbor)) {
+                   visited.add(neighbor);
+                   queue.push([neighbor, level + 1]);
+               }
+           }
+       }
+   }
+   \`\`\``
   },
   {
     id: 'dijkstra-algorithm',
@@ -1730,7 +2927,117 @@ dfs(graph, 'A'); // Output: A B D F C E`
     category: 'Sorting',
     difficulty: 'beginner',
     timeComplexity: 'O(n²)',
-    spaceComplexity: 'O(1)'
+    spaceComplexity: 'O(1)',
+    extendedDefinition: `Bubble Sort is one of the simplest sorting algorithms that works by repeatedly stepping through the list, comparing adjacent elements and swapping them if they're in the wrong order. The algorithm gets its name because smaller elements "bubble" to the beginning of the list, just like air bubbles rising to the surface of water.
+
+**Algorithm Mechanism:**
+The algorithm makes multiple passes through the array. In each pass, it compares adjacent elements and swaps them if they're out of order. After each complete pass, the largest unsorted element "bubbles up" to its correct position at the end.
+
+**Key Characteristics:**
+- **In-Place**: Sorts the array without requiring additional storage space
+- **Stable**: Maintains relative order of equal elements
+- **Comparison-Based**: Uses element comparisons to determine order
+- **Adaptive**: Can be optimized to detect if array becomes sorted early
+
+**Pass-by-Pass Behavior:**
+- **Pass 1**: Largest element moves to the last position
+- **Pass 2**: Second largest element moves to second-to-last position
+- **Pass k**: kth largest element moves to its correct position
+- **Optimization**: After k passes, last k elements are sorted
+
+**Performance Analysis:**
+- **Best Case**: O(n) when array is already sorted (with optimization)
+- **Average Case**: O(n²) for random data
+- **Worst Case**: O(n²) when array is reverse sorted
+- **Space**: O(1) constant extra space
+
+**Optimizations:**
+1. **Early Termination**: Stop if no swaps occur in a pass
+2. **Reduced Range**: Don't check already sorted elements
+3. **Cocktail Sort**: Bidirectional bubble sort
+
+**Educational Value:**
+Bubble sort is primarily used for teaching because it:
+- Demonstrates basic sorting concepts
+- Shows algorithm analysis principles
+- Illustrates optimization techniques
+- Provides foundation for understanding more complex algorithms
+
+**Practical Limitations:**
+- Too slow for large datasets
+- Poor performance compared to modern algorithms
+- Rarely used in production systems
+- Mainly of historical and educational interest`,
+    example: `// Bubble Sort Implementation
+function bubbleSort(arr) {
+    const n = arr.length;
+    
+    for (let i = 0; i < n - 1; i++) {
+        let swapped = false;
+        
+        // Last i elements are already sorted
+        for (let j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                // Swap adjacent elements
+                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                swapped = true;
+            }
+        }
+        
+        // If no swapping occurred, array is sorted
+        if (!swapped) break;
+    }
+    
+    return arr;
+}
+
+// Example usage
+const numbers = [64, 34, 25, 12, 22, 11, 90];
+console.log("Original:", numbers);
+console.log("Sorted:", bubbleSort([...numbers]));
+// Output: [11, 12, 22, 25, 34, 64, 90]
+
+// Visualization of one pass:
+// [64, 34, 25, 12, 22, 11, 90]
+// [34, 64, 25, 12, 22, 11, 90] - 64 > 34, swap
+// [34, 25, 64, 12, 22, 11, 90] - 64 > 25, swap
+// [34, 25, 12, 64, 22, 11, 90] - 64 > 12, swap
+// [34, 25, 12, 22, 64, 11, 90] - 64 > 22, swap
+// [34, 25, 12, 22, 11, 64, 90] - 64 > 11, swap
+// [34, 25, 12, 22, 11, 64, 90] - 64 < 90, no swap`,
+    syntax: `**Bubble Sort Patterns:**
+
+1. **Basic Bubble Sort:**
+   \`\`\`javascript
+   function bubbleSort(arr) {
+       for (let i = 0; i < arr.length - 1; i++) {
+           for (let j = 0; j < arr.length - i - 1; j++) {
+               if (arr[j] > arr[j + 1]) {
+                   [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+               }
+           }
+       }
+       return arr;
+   }
+   \`\`\`
+
+2. **Optimized Bubble Sort:**
+   \`\`\`javascript
+   function bubbleSortOptimized(arr) {
+       let n = arr.length, swapped;
+       do {
+           swapped = false;
+           for (let i = 1; i < n; i++) {
+               if (arr[i - 1] > arr[i]) {
+                   [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]];
+                   swapped = true;
+               }
+           }
+           n--; // Reduce range as largest element is in place
+       } while (swapped);
+       return arr;
+   }
+   \`\`\``
   },
   {
     id: 'merge-sort',
@@ -2481,7 +3788,135 @@ console.log("Sorted:", quickSort([...numbers])); // [11, 12, 22, 25, 34, 64, 90]
     category: 'Sorting',
     difficulty: 'intermediate',
     timeComplexity: 'O(n log n)',
-    spaceComplexity: 'O(1)'
+    spaceComplexity: 'O(1)',
+    extendedDefinition: `Heap Sort is an efficient comparison-based sorting algorithm that uses the binary heap data structure. It combines the best features of merge sort (guaranteed O(n log n) performance) and insertion sort (in-place sorting), making it a reliable choice for systems where consistent performance is crucial.
+
+**Algorithm Overview:**
+Heap Sort works in two main phases:
+1. **Build Max Heap**: Transform the input array into a max heap structure
+2. **Extract Elements**: Repeatedly remove the maximum element and restore heap property
+
+**Heap Data Structure:**
+A binary heap is a complete binary tree where:
+- **Max Heap**: Parent nodes are greater than or equal to their children
+- **Array Representation**: For element at index i, left child is at 2i+1, right child at 2i+2
+- **Heap Property**: Maintained through heapify operations
+
+**Detailed Process:**
+1. **Heapify**: Convert array to max heap (O(n) time)
+2. **Sort**: Repeatedly swap root with last element, reduce heap size, and re-heapify (O(n log n))
+
+**Key Properties:**
+- **In-Place**: Sorts within the original array, O(1) extra space
+- **Not Stable**: May change relative order of equal elements
+- **Consistent Performance**: Always O(n log n), regardless of input distribution
+- **No Worst Case Degradation**: Unlike quicksort, performance is predictable
+
+**Heapify Operation:**
+The core operation that maintains heap property by comparing a node with its children and swapping if necessary, then recursively applying to affected subtree.
+
+**Applications:**
+- **Operating Systems**: Process scheduling with priority queues
+- **Embedded Systems**: Where memory is limited but consistent performance needed
+- **Real-Time Systems**: Predictable O(n log n) performance
+- **Database Systems**: External sorting when memory is constrained
+
+**Comparison with Other Sorts:**
+- **vs Merge Sort**: Same time complexity but O(1) space instead of O(n)
+- **vs Quick Sort**: More predictable performance, no worst-case O(n²)
+- **vs Insertion Sort**: Much better for large datasets, but more complex
+
+**Advantages:**
+- Guaranteed O(n log n) performance
+- In-place sorting
+- No recursion depth issues
+- Good cache performance for heap operations`,
+    example: `// Heap Sort Implementation
+function heapSort(arr) {
+    const n = arr.length;
+    
+    // Build max heap
+    for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+        heapify(arr, n, i);
+    }
+    
+    // Extract elements from heap one by one
+    for (let i = n - 1; i > 0; i--) {
+        // Move current root to end
+        [arr[0], arr[i]] = [arr[i], arr[0]];
+        
+        // Call heapify on reduced heap
+        heapify(arr, i, 0);
+    }
+    
+    return arr;
+}
+
+function heapify(arr, n, i) {
+    let largest = i;        // Initialize largest as root
+    const left = 2 * i + 1; // Left child
+    const right = 2 * i + 2; // Right child
+    
+    // If left child is larger than root
+    if (left < n && arr[left] > arr[largest]) {
+        largest = left;
+    }
+    
+    // If right child is larger than largest so far
+    if (right < n && arr[right] > arr[largest]) {
+        largest = right;
+    }
+    
+    // If largest is not root
+    if (largest !== i) {
+        [arr[i], arr[largest]] = [arr[largest], arr[i]];
+        
+        // Recursively heapify the affected sub-tree
+        heapify(arr, n, largest);
+    }
+}
+
+// Example usage
+const numbers = [12, 11, 13, 5, 6, 7];
+console.log("Original:", numbers);
+console.log("Sorted:", heapSort([...numbers]));
+// Output: [5, 6, 7, 11, 12, 13]`,
+    syntax: `**Heap Sort Patterns:**
+
+1. **Heapify Function:**
+   \`\`\`javascript
+   function heapify(arr, n, i) {
+       let largest = i;
+       const left = 2 * i + 1, right = 2 * i + 2;
+       
+       if (left < n && arr[left] > arr[largest]) largest = left;
+       if (right < n && arr[right] > arr[largest]) largest = right;
+       
+       if (largest !== i) {
+           [arr[i], arr[largest]] = [arr[largest], arr[i]];
+           heapify(arr, n, largest);
+       }
+   }
+   \`\`\`
+
+2. **Build Heap and Sort:**
+   \`\`\`javascript
+   function heapSort(arr) {
+       const n = arr.length;
+       
+       // Build max heap
+       for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+           heapify(arr, n, i);
+       }
+       
+       // Extract elements
+       for (let i = n - 1; i > 0; i--) {
+           [arr[0], arr[i]] = [arr[i], arr[0]];
+           heapify(arr, i, 0);
+       }
+       return arr;
+   }
+   \`\`\``
   },
   {
     id: 'insertion-sort',
@@ -2537,7 +3972,85 @@ console.log("Sorted:", quickSort([...numbers])); // [11, 12, 22, 25, 34, 64, 90]
     category: 'Searching',
     difficulty: 'beginner',
     timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)'
+    spaceComplexity: 'O(1)',
+    example: `// Linear Search Implementation
+function linearSearch(arr, target) {
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === target) {
+            return i; // Return index if found
+        }
+    }
+    return -1; // Return -1 if not found
+}
+
+// Linear Search with All Occurrences
+function linearSearchAll(arr, target) {
+    const indices = [];
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === target) {
+            indices.push(i);
+        }
+    }
+    return indices;
+}
+
+// Linear Search in Objects
+function linearSearchObject(arr, key, value) {
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i][key] === value) {
+            return arr[i];
+        }
+    }
+    return null;
+}
+
+// Example usage
+const numbers = [2, 4, 6, 8, 10, 12, 14];
+console.log(linearSearch(numbers, 8));  // Output: 3
+console.log(linearSearch(numbers, 15)); // Output: -1
+
+const duplicates = [1, 3, 5, 3, 7, 3, 9];
+console.log(linearSearchAll(duplicates, 3)); // Output: [1, 3, 5]
+
+const users = [{id: 1, name: "Alice"}, {id: 2, name: "Bob"}];
+console.log(linearSearchObject(users, "name", "Bob")); // Output: {id: 2, name: "Bob"}`,
+    syntax: `**Linear Search Patterns:**
+
+1. **Basic Linear Search:**
+   \`\`\`javascript
+   function linearSearch(arr, target) {
+       for (let i = 0; i < arr.length; i++) {
+           if (arr[i] === target) return i;
+       }
+       return -1;
+   }
+   \`\`\`
+
+2. **Linear Search with Condition:**
+   \`\`\`javascript
+   function findFirst(arr, condition) {
+       for (let i = 0; i < arr.length; i++) {
+           if (condition(arr[i])) return arr[i];
+       }
+       return null;
+   }
+   
+   // Usage: findFirst([1, 2, 3, 4], x => x > 2) returns 3
+   \`\`\`
+
+3. **Sentinel Linear Search:**
+   \`\`\`javascript
+   function sentinelSearch(arr, target) {
+       const last = arr[arr.length - 1];
+       arr[arr.length - 1] = target;
+       
+       let i = 0;
+       while (arr[i] !== target) i++;
+       
+       arr[arr.length - 1] = last;
+       return (i < arr.length - 1 || last === target) ? i : -1;
+   }
+   \`\`\``
   },
   {
     id: 'binary-search',
@@ -2815,7 +4328,88 @@ console.log(binarySearch(numbers, 4)); // Output: -1`
     category: 'Searching',
     difficulty: 'intermediate',
     timeComplexity: 'O(log log n)',
-    spaceComplexity: 'O(1)'
+    spaceComplexity: 'O(1)',
+    example: `// Interpolation Search Implementation
+function interpolationSearch(arr, target) {
+    let low = 0, high = arr.length - 1;
+    
+    while (low <= high && target >= arr[low] && target <= arr[high]) {
+        // If array has only one element
+        if (low === high) {
+            return arr[low] === target ? low : -1;
+        }
+        
+        // Calculate position using interpolation formula
+        const pos = low + Math.floor(
+            ((target - arr[low]) * (high - low)) / (arr[high] - arr[low])
+        );
+        
+        if (arr[pos] === target) {
+            return pos;
+        }
+        
+        if (arr[pos] < target) {
+            low = pos + 1;
+        } else {
+            high = pos - 1;
+        }
+    }
+    
+    return -1;
+}
+
+// Comparison with Binary Search
+function binarySearch(arr, target) {
+    let low = 0, high = arr.length - 1;
+    
+    while (low <= high) {
+        const mid = Math.floor((low + high) / 2);
+        
+        if (arr[mid] === target) return mid;
+        if (arr[mid] < target) low = mid + 1;
+        else high = mid - 1;
+    }
+    
+    return -1;
+}
+
+// Example usage
+const uniformData = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+console.log(interpolationSearch(uniformData, 70)); // Output: 6
+console.log(binarySearch(uniformData, 70));        // Output: 6
+
+// Interpolation search works better with uniform distribution
+const nonUniform = [1, 2, 3, 100, 200, 300, 400, 500];
+console.log("Non-uniform data - both algorithms work but interpolation may not be optimal");`,
+    syntax: `**Interpolation Search Patterns:**
+
+1. **Basic Interpolation Search:**
+   \`\`\`javascript
+   function interpolationSearch(arr, target) {
+       let low = 0, high = arr.length - 1;
+       
+       while (low <= high && target >= arr[low] && target <= arr[high]) {
+           if (low === high) return arr[low] === target ? low : -1;
+           
+           const pos = low + Math.floor(
+               ((target - arr[low]) * (high - low)) / (arr[high] - arr[low])
+           );
+           
+           if (arr[pos] === target) return pos;
+           arr[pos] < target ? low = pos + 1 : high = pos - 1;
+       }
+       return -1;
+   }
+   \`\`\`
+
+2. **Position Formula:**
+   \`\`\`javascript
+   // Interpolation formula estimates position
+   pos = low + [(target - arr[low]) / (arr[high] - arr[low])] * (high - low)
+   
+   // This assumes uniform distribution
+   // Better than binary search's fixed midpoint: mid = (low + high) / 2
+   \`\`\``
   },
 
   // Hashing
@@ -2826,7 +4420,92 @@ console.log(binarySearch(numbers, 4)); // Output: -1`
     category: 'Hashing',
     difficulty: 'intermediate',
     timeComplexity: 'O(1) avg',
-    spaceComplexity: 'O(n)'
+    spaceComplexity: 'O(n)',
+    example: `// Hash Table Implementation
+class HashTable {
+    constructor(size = 10) {
+        this.size = size;
+        this.table = new Array(size);
+    }
+    
+    // Simple hash function
+    hash(key) {
+        let hash = 0;
+        for (let i = 0; i < key.length; i++) {
+            hash = (hash + key.charCodeAt(i) * i) % this.size;
+        }
+        return hash;
+    }
+    
+    // Insert key-value pair - O(1) average
+    set(key, value) {
+        const index = this.hash(key);
+        
+        if (!this.table[index]) {
+            this.table[index] = [];
+        }
+        
+        // Check if key already exists
+        const bucket = this.table[index];
+        for (let i = 0; i < bucket.length; i++) {
+            if (bucket[i][0] === key) {
+                bucket[i][1] = value; // Update existing
+                return;
+            }
+        }
+        
+        // Add new key-value pair
+        bucket.push([key, value]);
+    }
+    
+    // Retrieve value by key - O(1) average
+    get(key) {
+        const index = this.hash(key);
+        const bucket = this.table[index];
+        
+        if (bucket) {
+            for (const [k, v] of bucket) {
+                if (k === key) return v;
+            }
+        }
+        
+        return undefined;
+    }
+}
+
+// Example usage
+const ht = new HashTable();
+ht.set("name", "Alice");
+ht.set("age", 25);
+console.log(ht.get("name")); // "Alice"`,
+    syntax: `**Hash Table Patterns:**
+
+1. **Basic Hash Function:**
+   \`\`\`javascript
+   function hash(key, size) {
+       let hash = 0;
+       for (let i = 0; i < key.length; i++) {
+           hash = (hash + key.charCodeAt(i)) % size;
+       }
+       return hash;
+   }
+   \`\`\`
+
+2. **Hash Table Operations:**
+   \`\`\`javascript
+   class HashTable {
+       set(key, value) {
+           const index = this.hash(key);
+           if (!this.table[index]) this.table[index] = [];
+           this.table[index].push([key, value]);
+       }
+       
+       get(key) {
+           const index = this.hash(key);
+           return this.table[index]?.find(([k]) => k === key)?.[1];
+       }
+   }
+   \`\`\``
   },
   {
     id: 'hash-chaining',
@@ -2855,7 +4534,76 @@ console.log(binarySearch(numbers, 4)); // Output: -1`
     category: 'Recursion',
     difficulty: 'intermediate',
     timeComplexity: 'Varies',
-    spaceComplexity: 'O(n)'
+    spaceComplexity: 'O(n)',
+    example: `// Basic Recursion Examples
+
+// 1. Factorial - Classic recursion example
+function factorial(n) {
+    // Base case
+    if (n <= 1) return 1;
+    
+    // Recursive case
+    return n * factorial(n - 1);
+}
+
+// 2. Sum of numbers from 1 to n
+function sum(n) {
+    if (n <= 0) return 0;
+    return n + sum(n - 1);
+}
+
+// 3. Power calculation
+function power(base, exponent) {
+    if (exponent === 0) return 1;
+    if (exponent === 1) return base;
+    return base * power(base, exponent - 1);
+}
+
+// 4. Array sum using recursion
+function arraySum(arr, index = 0) {
+    if (index >= arr.length) return 0;
+    return arr[index] + arraySum(arr, index + 1);
+}
+
+// Example usage
+console.log(factorial(5));    // 120
+console.log(sum(5));          // 15
+console.log(power(2, 3));     // 8
+console.log(arraySum([1, 2, 3, 4])); // 10`,
+    syntax: `**Recursion Patterns:**
+
+1. **Basic Recursion Template:**
+   \`\`\`javascript
+   function recursiveFunction(parameters) {
+       // Base case - stops recursion
+       if (baseCondition) {
+           return baseValue;
+       }
+       
+       // Recursive case - function calls itself
+       return someOperation(recursiveFunction(modifiedParameters));
+   }
+   \`\`\`
+
+2. **Multiple Base Cases:**
+   \`\`\`javascript
+   function fibonacci(n) {
+       if (n <= 0) return 0;  // Base case 1
+       if (n === 1) return 1; // Base case 2
+       return fibonacci(n - 1) + fibonacci(n - 2); // Recursive case
+   }
+   \`\`\`
+
+3. **Helper Function Pattern:**
+   \`\`\`javascript
+   function mainFunction(input) {
+       function helper(modifiedInput, accumulator) {
+           if (baseCase) return accumulator;
+           return helper(nextInput, updatedAccumulator);
+       }
+       return helper(input, initialValue);
+   }
+   \`\`\``
   },
   {
     id: 'tail-recursion',
@@ -2884,7 +4632,105 @@ console.log(binarySearch(numbers, 4)); // Output: -1`
     category: 'Dynamic Programming',
     difficulty: 'intermediate',
     timeComplexity: 'Varies',
-    spaceComplexity: 'Varies'
+    spaceComplexity: 'Varies',
+    example: `// Dynamic Programming Introduction
+
+// 1. Fibonacci - Naive vs DP approach
+// Naive recursion - O(2^n)
+function fibonacciNaive(n) {
+    if (n <= 1) return n;
+    return fibonacciNaive(n - 1) + fibonacciNaive(n - 2);
+}
+
+// DP with memoization - O(n)
+function fibonacciMemo(n, memo = {}) {
+    if (n in memo) return memo[n];
+    if (n <= 1) return n;
+    
+    memo[n] = fibonacciMemo(n - 1, memo) + fibonacciMemo(n - 2, memo);
+    return memo[n];
+}
+
+// DP with tabulation - O(n)
+function fibonacciTab(n) {
+    if (n <= 1) return n;
+    
+    const dp = [0, 1];
+    for (let i = 2; i <= n; i++) {
+        dp[i] = dp[i - 1] + dp[i - 2];
+    }
+    return dp[n];
+}
+
+// Space optimized DP - O(1) space
+function fibonacciOptimized(n) {
+    if (n <= 1) return n;
+    
+    let prev2 = 0, prev1 = 1;
+    for (let i = 2; i <= n; i++) {
+        const current = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = current;
+    }
+    return prev1;
+}
+
+// 2. Climbing Stairs - DP example
+function climbStairs(n) {
+    if (n <= 2) return n;
+    
+    const dp = [0, 1, 2];
+    for (let i = 3; i <= n; i++) {
+        dp[i] = dp[i - 1] + dp[i - 2];
+    }
+    return dp[n];
+}
+
+// Example usage
+console.log(fibonacciNaive(10));     // 55 (slow)
+console.log(fibonacciMemo(10));      // 55 (fast)
+console.log(fibonacciTab(10));       // 55 (fast)
+console.log(fibonacciOptimized(10)); // 55 (fastest)
+console.log(climbStairs(5));         // 8`,
+    syntax: `**Dynamic Programming Patterns:**
+
+1. **Memoization (Top-Down):**
+   \`\`\`javascript
+   function dpMemo(n, memo = {}) {
+       if (n in memo) return memo[n];
+       if (baseCase) return baseValue;
+       
+       memo[n] = recurrence(dpMemo(n-1, memo), dpMemo(n-2, memo));
+       return memo[n];
+   }
+   \`\`\`
+
+2. **Tabulation (Bottom-Up):**
+   \`\`\`javascript
+   function dpTab(n) {
+       const dp = new Array(n + 1);
+       dp[0] = baseValue1;
+       dp[1] = baseValue2;
+       
+       for (let i = 2; i <= n; i++) {
+           dp[i] = recurrence(dp[i-1], dp[i-2]);
+       }
+       return dp[n];
+   }
+   \`\`\`
+
+3. **Space Optimization:**
+   \`\`\`javascript
+   function dpOptimized(n) {
+       let prev2 = baseValue1, prev1 = baseValue2;
+       for (let i = 2; i <= n; i++) {
+           const current = recurrence(prev1, prev2);
+           prev2 = prev1;
+           prev1 = current;
+       }
+       return prev1;
+   }
+   \`\`\``
   },
   {
     id: 'longest-common-subsequence',
@@ -3406,7 +5252,139 @@ function combinationSum(candidates, target) {
     category: 'Advanced Data Structures',
     difficulty: 'intermediate',
     timeComplexity: 'O(m)',
-    spaceComplexity: 'O(ALPHABET_SIZE × n × m)'
+    spaceComplexity: 'O(ALPHABET_SIZE × n × m)',
+    example: `// Trie (Prefix Tree) Implementation
+class TrieNode {
+    constructor() {
+        this.children = {};
+        this.isEndOfWord = false;
+    }
+}
+
+class Trie {
+    constructor() {
+        this.root = new TrieNode();
+    }
+    
+    // Insert word - O(m) where m is word length
+    insert(word) {
+        let current = this.root;
+        
+        for (const char of word) {
+            if (!current.children[char]) {
+                current.children[char] = new TrieNode();
+            }
+            current = current.children[char];
+        }
+        
+        current.isEndOfWord = true;
+    }
+    
+    // Search for word - O(m)
+    search(word) {
+        let current = this.root;
+        
+        for (const char of word) {
+            if (!current.children[char]) {
+                return false;
+            }
+            current = current.children[char];
+        }
+        
+        return current.isEndOfWord;
+    }
+    
+    // Check if prefix exists - O(m)
+    startsWith(prefix) {
+        let current = this.root;
+        
+        for (const char of prefix) {
+            if (!current.children[char]) {
+                return false;
+            }
+            current = current.children[char];
+        }
+        
+        return true;
+    }
+    
+    // Get all words with given prefix
+    getWordsWithPrefix(prefix) {
+        let current = this.root;
+        const result = [];
+        
+        // Navigate to prefix end
+        for (const char of prefix) {
+            if (!current.children[char]) {
+                return result;
+            }
+            current = current.children[char];
+        }
+        
+        // DFS to find all words
+        this._dfs(current, prefix, result);
+        return result;
+    }
+    
+    _dfs(node, currentWord, result) {
+        if (node.isEndOfWord) {
+            result.push(currentWord);
+        }
+        
+        for (const [char, childNode] of Object.entries(node.children)) {
+            this._dfs(childNode, currentWord + char, result);
+        }
+    }
+}
+
+// Example usage
+const trie = new Trie();
+trie.insert("apple");
+trie.insert("app");
+trie.insert("application");
+trie.insert("apply");
+
+console.log(trie.search("app"));        // true
+console.log(trie.search("appl"));       // false
+console.log(trie.startsWith("app"));    // true
+console.log(trie.getWordsWithPrefix("app")); // ["app", "apple", "application", "apply"]`,
+    syntax: `**Trie Patterns:**
+
+1. **Basic Trie Node:**
+   \`\`\`javascript
+   class TrieNode {
+       constructor() {
+           this.children = {}; // or new Map()
+           this.isEndOfWord = false;
+       }
+   }
+   \`\`\`
+
+2. **Insert Operation:**
+   \`\`\`javascript
+   insert(word) {
+       let current = this.root;
+       for (const char of word) {
+           if (!current.children[char]) {
+               current.children[char] = new TrieNode();
+           }
+           current = current.children[char];
+       }
+       current.isEndOfWord = true;
+   }
+   \`\`\`
+
+3. **Search Operation:**
+   \`\`\`javascript
+   search(word) {
+       let current = this.root;
+       for (const char of word) {
+           if (!current.children[char]) return false;
+           current = current.children[char];
+       }
+       return current.isEndOfWord;
+   }
+   \`\`\``
   },
   {
     id: 'segment-tree',
@@ -3792,7 +5770,122 @@ The algorithm modifies the array in-place, maintaining the relative order of uni
     category: 'Bit Manipulation',
     difficulty: 'beginner',
     timeComplexity: 'O(1)',
-    spaceComplexity: 'O(1)'
+    spaceComplexity: 'O(1)',
+    example: `// Bit Manipulation Basics
+
+// Basic Bitwise Operations
+function bitwiseOperations() {
+    const a = 5;  // Binary: 101
+    const b = 3;  // Binary: 011
+    
+    console.log("AND:", a & b);    // 1 (001)
+    console.log("OR:", a | b);     // 7 (111)
+    console.log("XOR:", a ^ b);    // 6 (110)
+    console.log("NOT a:", ~a);     // -6 (two's complement)
+    console.log("Left shift:", a << 1);  // 10 (1010)
+    console.log("Right shift:", a >> 1); // 2 (10)
+}
+
+// Check if number is even or odd
+function isEven(n) {
+    return (n & 1) === 0;
+}
+
+// Check if number is power of 2
+function isPowerOfTwo(n) {
+    return n > 0 && (n & (n - 1)) === 0;
+}
+
+// Set bit at position i
+function setBit(num, i) {
+    return num | (1 << i);
+}
+
+// Clear bit at position i
+function clearBit(num, i) {
+    return num & ~(1 << i);
+}
+
+// Toggle bit at position i
+function toggleBit(num, i) {
+    return num ^ (1 << i);
+}
+
+// Check if bit at position i is set
+function isBitSet(num, i) {
+    return (num & (1 << i)) !== 0;
+}
+
+// Count number of set bits (1s)
+function countSetBits(n) {
+    let count = 0;
+    while (n) {
+        count += n & 1;
+        n >>= 1;
+    }
+    return count;
+}
+
+// Brian Kernighan's algorithm for counting set bits
+function countSetBitsFast(n) {
+    let count = 0;
+    while (n) {
+        n &= (n - 1); // Removes rightmost set bit
+        count++;
+    }
+    return count;
+}
+
+// Example usage
+bitwiseOperations();
+console.log(isEven(4));        // true
+console.log(isPowerOfTwo(8));  // true
+console.log(setBit(5, 1));     // 7 (101 -> 111)
+console.log(clearBit(7, 1));   // 5 (111 -> 101)
+console.log(countSetBits(7));  // 3`,
+    syntax: `**Bit Manipulation Patterns:**
+
+1. **Basic Operations:**
+   \`\`\`javascript
+   // AND: both bits must be 1
+   a & b
+   
+   // OR: at least one bit must be 1
+   a | b
+   
+   // XOR: bits must be different
+   a ^ b
+   
+   // NOT: flip all bits
+   ~a
+   
+   // Left shift: multiply by 2^n
+   a << n
+   
+   // Right shift: divide by 2^n
+   a >> n
+   \`\`\`
+
+2. **Common Bit Tricks:**
+   \`\`\`javascript
+   // Check even/odd
+   n & 1 === 0  // even if true
+   
+   // Power of 2 check
+   n > 0 && (n & (n - 1)) === 0
+   
+   // Set bit at position i
+   num | (1 << i)
+   
+   // Clear bit at position i
+   num & ~(1 << i)
+   
+   // Toggle bit at position i
+   num ^ (1 << i)
+   
+   // Check if bit i is set
+   (num & (1 << i)) !== 0
+   \`\`\``
   },
   {
     id: 'count-set-bits',
