@@ -1164,6 +1164,13 @@ arr.findIndex(v => v === 7); // search`,
               language={getCodeSnippet(topic.id)!.language}
               code={getCodeSnippet(topic.id)!.code}
               description={getCodeSnippet(topic.id)!.description}
+              implementations={{
+                javascript: getCodeSnippet(topic.id, 'javascript')?.code,
+                python: getCodeSnippet(topic.id, 'python')?.code,
+                java: getCodeSnippet(topic.id, 'java')?.code,
+                c: getCodeSnippet(topic.id, 'c')?.code
+              }}
+              topicId={topic.id}
             />
           )}
 
