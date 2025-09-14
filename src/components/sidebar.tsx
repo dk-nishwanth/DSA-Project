@@ -111,9 +111,9 @@ export function Sidebar() {
             )}
           </NavLink>
           {/* Sidebar collapse disabled to keep sidebar fixed */}
-          <div className="p-2 opacity-40 cursor-not-allowed" title="Sidebar is fixed" aria-hidden>
+          {/* <div className="p-2 opacity-40 cursor-not-allowed" title="Sidebar is fixed" aria-hidden>
             <Menu className="h-4 w-4" />
-          </div>
+          </div> */}
         </div>
         
         {!isCollapsed && (

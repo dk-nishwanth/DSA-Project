@@ -46,8 +46,20 @@ export default function Landing() {
               </svg>
             </div>
             <p className="text-white/80 text-lg mt-4">
-              Data Structures & Algorithms Learning Platform
+              Data Structures & Algorithms Learning Platform  
             </p>
+           <p className="text-white/80 text-lg mt-4">
+  <b>
+    Created by{' '}
+    <a href="https://www.linkedin.com/in/nishwanth-dk/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
+      Nishwanth DK
+    </a>{' '}
+    &{' '}
+    <a href="https://www.linkedin.com/in/amirtha-anand/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
+      Amirtha A
+    </a>
+  </b>
+</p>
           </div>
         </div>
       </div>

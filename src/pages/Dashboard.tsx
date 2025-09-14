@@ -38,15 +38,35 @@ export default function Dashboard() {
           <p className="text-muted-foreground mb-4">
             Master CS fundamentals through interactive visualizations and step-by-step explanations
           </p>
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
-            <h2 className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-2">
-              🚀 Start Your Journey
-            </h2>
-            <p className="text-blue-700 dark:text-blue-300 text-sm">
-              New to programming? Start with <strong>Array Basics</strong> and <strong>Linear Search</strong>. 
-              Each topic includes real-world examples and interactive visualizations to make learning fun!
-            </p>
-          </div>
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 p-6 rounded-2xl border border-blue-200 dark:border-blue-800 shadow-sm">
+  <h2 className="text-xl font-bold text-blue-900 dark:text-blue-100 mb-3 flex items-center gap-2">
+    🚀 Start Your Journey
+  </h2>
+
+  <p className="text-blue-800 dark:text-blue-300 text-sm leading-relaxed mb-4">
+    New to programming? Start with <strong>Data Structures and Algorithms (DSA)</strong>.  
+    Each topic includes simple explanations, real-world examples, and interactive visualizations to make learning fun!
+  </p>
+
+  <div className="bg-white dark:bg-blue-900/30 p-4 rounded-lg border border-blue-100 dark:border-blue-700">
+    <h3 className="text-md font-semibold text-blue-700 dark:text-blue-200 mb-2">
+      📘 What is DSA?
+    </h3>
+    <p className="text-blue-700 dark:text-blue-300 text-sm leading-relaxed">
+      Data Structures and Algorithms (DSA) are the building blocks of programming.  
+      <span className="block mt-2">
+        <strong>Data Structures</strong> are ways to store and organize data (like arrays, stacks, queues, linked lists, trees, and graphs).
+      </span>
+      <span className="block mt-2">
+        <strong>Algorithms</strong> are step-by-step methods to solve problems efficiently (like searching, sorting, and pathfinding).
+      </span>
+      <span className="block mt-2">
+        Together, DSA helps you write programs that are faster, smarter, and easier to manage.
+      </span>
+    </p>
+  </div>
+</div>
+    
         </div>
 
         {/* Stats */}

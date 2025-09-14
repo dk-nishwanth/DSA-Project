@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Sidebar } from "@/components/sidebar";
 import { Header } from "@/components/header";
+import { NotificationProvider } from "@/contexts/notification-context";
 import Dashboard from "./pages/Dashboard";
 import TopicDetail from "./pages/TopicDetail";
 import NotFound from "./pages/NotFound";
@@ -25,10 +26,11 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider defaultTheme="light" storageKey="dsa-theme">
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+      <NotificationProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
           <Routes>
             {/* Authentication Routes */}
             <Route path="/login" element={<Login />} />
@@ -115,7 +117,8 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
-      </TooltipProvider>
+        </TooltipProvider>
+      </NotificationProvider>
     </ThemeProvider>
   </QueryClientProvider>
 );

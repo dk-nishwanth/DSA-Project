@@ -1,12 +1,15 @@
-import { Search, Bell } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Badge } from '@/components/ui/badge';
 import { ProfileButton } from '@/components/profile/profile-button';
 import { dsaCategories } from '@/data/dsaTopics';
+import { NotificationPanel } from '@/components/notification-panel';
+import { useNotifications } from '@/contexts/notification-context';
 
 export function Header() {
+  const { notifications, markAsRead, markAllAsRead, clearAll } = useNotifications();
   return (
     <header className="h-16 bg-card border-b border-border px-6 flex items-center justify-between">
       <div className="flex items-center gap-6 flex-1">
@@ -31,10 +34,12 @@ export function Header() {
         
         <ThemeToggle />
         
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-4 w-4" />
-          <span className="absolute -top-1 -right-1 h-3 w-3 bg-primary rounded-full"></span>
-        </Button>
+        <NotificationPanel 
+          notifications={notifications}
+          onMarkAsRead={markAsRead}
+          onMarkAllAsRead={markAllAsRead}
+          onClearAll={clearAll}
+        />
         
         <ProfileButton 
           onNavigateToProfile={() => window.location.href = '/profile'}
