@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/auth-context';
 
 interface LoginFormProps {
   onSwitchToAdmin?: () => void;
@@ -14,11 +15,11 @@ interface LoginFormProps {
 
 export function LoginForm({ onSwitchToAdmin }: LoginFormProps) {
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: '',
     rememberMe: false
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const { login, isLoading } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -31,34 +32,20 @@ export function LoginForm({ onSwitchToAdmin }: LoginFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // For demo purposes, accept any login
-      if (formData.username && formData.password) {
-        toast({
-          title: "Login successful",
-          description: "Welcome back!",
-        });
-        navigate('/dashboard');
-      } else {
-        toast({
-          title: "Login failed",
-          description: "Please check your credentials.",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
+      await login(formData.email, formData.password);
       toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
+        title: "Login successful",
+        description: "Welcome back!",
+      });
+      navigate('/dashboard');
+    } catch (error: any) {
+      toast({
+        title: "Login failed",
+        description: error.message || "Please check your credentials.",
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -92,13 +79,13 @@ export function LoginForm({ onSwitchToAdmin }: LoginFormProps) {
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="username">Username</Label>
+            <Label htmlFor="email">Email</Label>
             <Input
-              id="username"
-              type="text"
-              placeholder="Name"
-              value={formData.username}
-              onChange={(e) => handleInputChange('username', e.target.value)}
+              id="email"
+              type="email"
+              placeholder="your.email@example.com"
+              value={formData.email}
+              onChange={(e) => handleInputChange('email', e.target.value)}
               required
             />
           </div>

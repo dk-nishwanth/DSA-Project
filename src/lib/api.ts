@@ -24,9 +24,14 @@ export async function apiFetch<T = unknown>(
   { method = 'GET', headers, params, json, ...rest }: ApiRequestOptions = {}
 ): Promise<T> {
   const url = buildUrl(path, params);
+  
+  // Get auth token from localStorage if available
+  const token = localStorage.getItem('dsa_auth_token');
+  
   const finalHeaders: HeadersInit = {
     'Accept': 'application/json',
     ...(json ? { 'Content-Type': 'application/json' } : {}),
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
     ...(headers || {}),
   };
 

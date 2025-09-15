@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/auth-context';
 
 interface SignupFormProps {
   onSwitchToAdmin?: () => void;
@@ -14,12 +15,13 @@ interface SignupFormProps {
 
 export function SignupForm({ onSwitchToAdmin }: SignupFormProps) {
   const [formData, setFormData] = useState({
-    username: '',
+    name: '',
+    email: '',
     password: '',
     confirmPassword: '',
     class: ''
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const { register, isLoading } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -32,7 +34,6 @@ export function SignupForm({ onSwitchToAdmin }: SignupFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
     try {
       // Validate passwords match
@@ -55,22 +56,19 @@ export function SignupForm({ onSwitchToAdmin }: SignupFormProps) {
         return;
       }
 
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await register(formData.name, formData.email, formData.password);
       
       toast({
         title: "Account created successfully",
         description: "Welcome to DSA Learning Platform!",
       });
       navigate('/dashboard');
-    } catch (error) {
+    } catch (error: any) {
       toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
+        title: "Registration failed",
+        description: error.message || "Something went wrong. Please try again.",
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -104,13 +102,24 @@ export function SignupForm({ onSwitchToAdmin }: SignupFormProps) {
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="username">Username</Label>
+            <Label htmlFor="name">Full Name</Label>
             <Input
-              id="username"
+              id="name"
               type="text"
-              placeholder="Name"
-              value={formData.username}
-              onChange={(e) => handleInputChange('username', e.target.value)}
+              placeholder="Your full name"
+              value={formData.name}
+              onChange={(e) => handleInputChange('name', e.target.value)}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="your.email@example.com"
+              value={formData.email}
+              onChange={(e) => handleInputChange('email', e.target.value)}
               required
             />
           </div>
