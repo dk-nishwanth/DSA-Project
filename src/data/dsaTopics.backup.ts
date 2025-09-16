@@ -885,6 +885,28 @@ function longestPalindrome(s) {
     difficulty: 'beginner',
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
+    extendedDefinition: `Anagram detection determines whether two strings contain exactly the same characters with the same frequencies, but possibly in different orders. Two strings are anagrams if one can be formed by rearranging the letters of the other.
+
+**What it does:**
+Anagram detection algorithms verify if two strings are rearrangements of each other by comparing character frequencies or sorted representations.
+
+**How it works:**
+1. **Character Frequency Method**: Count occurrences of each character in both strings and compare the counts
+2. **Sorting Method**: Sort both strings and check if they're identical
+3. **Hash Table Method**: Use a hash map to track character frequencies efficiently
+
+**When to use:**
+- Word games and puzzles (Scrabble, crosswords)
+- Cryptography and cipher analysis
+- Data deduplication and similarity detection
+- String matching and search optimization
+- Linguistic analysis and natural language processing
+
+**Key Insights:**
+- Strings must have equal length to be anagrams
+- Case sensitivity and whitespace handling affect results
+- Character frequency approach is more efficient than sorting for large strings`,
+
     example: `// Anagram Detection
 function isAnagram(s1, s2) {
     if (s1.length !== s2.length) return false;
@@ -1094,6 +1116,32 @@ class SinglyLinkedList {
     difficulty: 'intermediate',
     timeComplexity: 'O(1) - O(n)',
     spaceComplexity: 'O(1)',
+    extendedDefinition: `A Doubly Linked List is a linear data structure where each node contains data and two pointers: one pointing to the next node and another pointing to the previous node. This bidirectional linking enables efficient traversal in both forward and backward directions.
+
+**What it does:**
+Doubly linked lists provide bidirectional navigation through the data structure, allowing efficient insertion and deletion operations at both ends and at any known position.
+
+**How it works:**
+Each node maintains three components:
+1. **Data**: The actual value stored in the node
+2. **Next**: Pointer to the next node in the sequence
+3. **Previous**: Pointer to the previous node in the sequence
+
+The list typically maintains both head and tail pointers for efficient operations at both ends.
+
+**When to use:**
+- Browser history navigation (back/forward buttons)
+- Undo/redo functionality in applications
+- Music playlist with previous/next song navigation
+- LRU (Least Recently Used) cache implementation
+- Text editors with cursor movement
+- Implementation of deques (double-ended queues)
+
+**Key advantages over singly linked lists:**
+- Bidirectional traversal capability
+- Efficient deletion when node reference is known (O(1))
+- Easy implementation of reverse operations
+- Better for algorithms requiring backward movement`,
     example: `// Doubly Linked List Node
 class DoublyNode {
     constructor(data) {
@@ -1167,6 +1215,31 @@ class DoublyLinkedList {
     difficulty: 'intermediate',
     timeComplexity: 'O(1) - O(n)',
     spaceComplexity: 'O(1)',
+    extendedDefinition: `A Circular Linked List is a variation of a linked list where the last node points back to the first node, forming a circular structure. This creates an endless loop where you can traverse the entire list starting from any node.
+
+**What it does:**
+Circular linked lists provide continuous traversal capabilities and eliminate the concept of a "null" end, making them ideal for applications that require cyclic behavior or round-robin scheduling.
+
+**How it works:**
+In a circular linked list, instead of the last node pointing to null, it points back to the head node. This creates a circular chain where:
+- Traversal can continue indefinitely
+- You can start from any node and visit all others
+- Special care is needed to detect when you've completed a full cycle
+
+**When to use:**
+- Round-robin scheduling in operating systems
+- Circular buffers for streaming data
+- Music playlists with repeat functionality
+- Game development for cycling through players/turns
+- Implementation of circular queues
+- Josephus problem and similar mathematical problems
+- Continuous monitoring systems
+
+**Key considerations:**
+- Traversal requires cycle detection to avoid infinite loops
+- Memory management is simpler (no null pointer checks)
+- Insertion and deletion require careful pointer management
+- Can be implemented as singly or doubly circular`,
     example: `// Circular Linked List
 class CircularLinkedList {
     constructor() {
@@ -1360,6 +1433,36 @@ function isBalanced(str) {
     difficulty: 'beginner',
     timeComplexity: 'O(1)',
     spaceComplexity: 'O(n)',
+    extendedDefinition: `A Queue is a linear data structure that follows the First-In-First-Out (FIFO) principle, where elements are added at one end (rear) and removed from the other end (front). Think of it like a line of people waiting - the first person in line is the first to be served.
+
+**What it does:**
+Queues manage data in a sequential order where the oldest element is always processed first, making them essential for fair scheduling and ordered processing systems.
+
+**How it works:**
+The queue maintains two key positions:
+1. **Front**: Points to the first element to be removed
+2. **Rear**: Points to the position where the next element will be added
+
+Core operations include:
+- **Enqueue**: Add element to the rear (O(1))
+- **Dequeue**: Remove element from the front (O(1))
+- **Front/Peek**: View the front element without removing (O(1))
+- **isEmpty**: Check if queue is empty (O(1))
+
+**When to use:**
+- Process scheduling in operating systems
+- Breadth-First Search (BFS) in graphs and trees
+- Handling requests in web servers
+- Print job management
+- Buffer for data streams
+- Call center systems
+- Breadth-first traversal algorithms
+
+**Implementation variants:**
+- **Simple Queue**: Basic array or linked list implementation
+- **Circular Queue**: Efficient space utilization using circular buffer
+- **Priority Queue**: Elements have priorities, not strictly FIFO
+- **Double-ended Queue (Deque)**: Insertion/deletion at both ends`,
     example: `// Queue Implementation
 class Queue {
     constructor() {
@@ -1440,6 +1543,35 @@ console.log(queue.front()); // 2`,
     difficulty: 'intermediate',
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(h)',
+    extendedDefinition: `A Binary Tree is a hierarchical data structure where each node has at most two children, referred to as the left child and right child. Unlike linear data structures, trees represent hierarchical relationships and enable efficient searching, insertion, and deletion operations.
+
+**What it does:**
+Binary trees organize data in a hierarchical structure that enables efficient traversal, searching, and manipulation operations while maintaining parent-child relationships between elements.
+
+**How it works:**
+Each node in a binary tree contains:
+1. **Data**: The value stored in the node
+2. **Left Child**: Pointer to the left subtree
+3. **Right Child**: Pointer to the right subtree
+
+Tree traversal methods visit nodes in different orders:
+- **Inorder**: Left → Root → Right
+- **Preorder**: Root → Left → Right  
+- **Postorder**: Left → Right → Root
+- **Level-order**: Visit nodes level by level
+
+**When to use:**
+- Representing hierarchical data (file systems, organizational charts)
+- Expression trees for mathematical expressions
+- Decision trees in machine learning
+- Huffman coding for data compression
+- Syntax trees in compilers
+- Game AI for decision making
+
+**Key properties:**
+- Maximum nodes at level i: 2^i
+- Maximum nodes in tree of height h: 2^(h+1) - 1
+- Height ranges from log₂(n) to n-1`,
     example: `// Binary Tree Node
 class TreeNode {
     constructor(val) {
@@ -2871,16 +3003,34 @@ function shortestPath(graph, start, end) {
     category: 'Graphs',
     difficulty: 'advanced',
     timeComplexity: 'O((V + E) log V)',
-    spaceComplexity: 'O(V)'
-  },
-  {
-    id: 'bellman-ford',
-    title: 'Bellman-Ford Algorithm',
-    description: 'Shortest path algorithm that handles negative edge weights',
-    category: 'Graphs',
-    difficulty: 'advanced',
-    timeComplexity: 'O(VE)',
-    spaceComplexity: 'O(V)'
+    spaceComplexity: 'O(V)',
+    extendedDefinition: `Dijkstra's Algorithm is a greedy algorithm that finds the shortest path from a source vertex to all other vertices in a weighted graph with non-negative edge weights. It maintains a set of vertices whose shortest distance from the source is known and gradually expands this set.
+
+**What it does:**
+Dijkstra's algorithm computes the shortest path tree from a single source vertex to all other reachable vertices in a weighted graph, guaranteeing optimal solutions when all edge weights are non-negative.
+
+**How it works:**
+1. Initialize distances to all vertices as infinity, except source (distance 0)
+2. Create a priority queue with all vertices, prioritized by distance
+3. While priority queue is not empty:
+   - Extract vertex with minimum distance
+   - For each neighbor, calculate new distance through current vertex
+   - If new distance is shorter, update distance and predecessor
+4. Continue until all vertices are processed
+
+**When to use:**
+- Finding shortest paths in road networks and GPS navigation
+- Network routing protocols (OSPF, IS-IS)
+- Social network analysis (degrees of separation)
+- Game AI pathfinding with weighted terrain
+- Resource allocation and optimization problems
+- Flight connection planning with costs
+
+**Key characteristics:**
+- Greedy approach: Always selects closest unvisited vertex
+- Optimal for non-negative weights: Guarantees shortest paths
+- Single-source: Finds paths from one source to all destinations
+- Uses priority queue for efficient minimum extraction`
   },
   {
     id: 'floyd-warshall',
@@ -2889,7 +3039,33 @@ function shortestPath(graph, start, end) {
     category: 'Graphs',
     difficulty: 'advanced',
     timeComplexity: 'O(V³)',
-    spaceComplexity: 'O(V²)'
+    spaceComplexity: 'O(V²)',
+    extendedDefinition: `Floyd-Warshall Algorithm is a dynamic programming algorithm that finds the shortest paths between all pairs of vertices in a weighted graph. It can handle negative edge weights but not negative cycles, making it more versatile than Dijkstra's algorithm for certain scenarios.
+
+**What it does:**
+Floyd-Warshall computes the shortest path distances between every pair of vertices in a graph, creating a complete distance matrix that shows the minimum cost to travel from any vertex to any other vertex.
+
+**How it works:**
+1. Initialize a distance matrix with direct edge weights and infinity for non-adjacent vertices
+2. Set diagonal elements to 0 (distance from vertex to itself)
+3. For each intermediate vertex k, update distances using the recurrence:
+   - If distance[i][j] > distance[i][k] + distance[k][j], update distance[i][j]
+4. Repeat for all vertices as intermediate points
+5. The final matrix contains shortest distances between all pairs
+
+**When to use:**
+- Finding shortest paths between all pairs of vertices
+- Dense graphs where many shortest paths are needed
+- Graphs with negative edge weights (but no negative cycles)
+- Transitive closure problems
+- Network analysis requiring complete connectivity information
+- Small to medium-sized graphs (due to O(V³) complexity)
+
+**Key characteristics:**
+- All-pairs shortest path: Computes distances between every vertex pair
+- Handles negative weights: Unlike Dijkstra's, works with negative edges
+- Dynamic programming: Uses optimal substructure principle
+- Dense output: Produces complete V×V distance matrix`
   },
   {
     id: 'kruskal-algorithm',
@@ -2898,7 +3074,35 @@ function shortestPath(graph, start, end) {
     category: 'Graphs',
     difficulty: 'intermediate',
     timeComplexity: 'O(E log E)',
-    spaceComplexity: 'O(V)'
+    spaceComplexity: 'O(V)',
+    extendedDefinition: `Kruskal's Algorithm is a greedy algorithm that finds the Minimum Spanning Tree (MST) of a connected, undirected graph by selecting edges in order of increasing weight while avoiding cycles. It uses a disjoint-set (union-find) data structure to efficiently detect cycles.
+
+**What it does:**
+Kruskal's algorithm builds an MST by examining edges in ascending order of weight and adding them to the spanning tree if they don't create a cycle, resulting in a tree that connects all vertices with minimum total weight.
+
+**How it works:**
+1. Sort all edges in the graph by weight in ascending order
+2. Initialize each vertex as its own disjoint set
+3. For each edge in sorted order:
+   - Check if the edge connects vertices in different sets (no cycle)
+   - If yes, add the edge to MST and union the sets
+   - If no, skip the edge (would create cycle)
+4. Continue until MST has V-1 edges
+
+**When to use:**
+- Network design (connecting cities with minimum cable cost)
+- Circuit design and VLSI layout optimization
+- Clustering algorithms in machine learning
+- Image segmentation and computer vision
+- Transportation network optimization
+- Sparse graphs where edge-focused approach is efficient
+
+**Key characteristics:**
+- Edge-focused: Processes edges rather than vertices
+- Greedy approach: Always selects minimum weight available edge
+- Cycle detection: Uses union-find for efficient cycle checking
+- Optimal: Guarantees minimum spanning tree
+- Works well on sparse graphs due to edge sorting`
   },
   {
     id: 'prim-algorithm',
@@ -2907,7 +3111,35 @@ function shortestPath(graph, start, end) {
     category: 'Graphs',
     difficulty: 'intermediate',
     timeComplexity: 'O(E log V)',
-    spaceComplexity: 'O(V)'
+    spaceComplexity: 'O(V)',
+    extendedDefinition: `Prim's Algorithm is a greedy algorithm that finds the Minimum Spanning Tree (MST) of a connected, undirected graph by growing the tree one vertex at a time. It starts from an arbitrary vertex and repeatedly adds the minimum weight edge that connects the current tree to a new vertex.
+
+**What it does:**
+Prim's algorithm builds an MST by maintaining a growing tree and always adding the cheapest edge that expands the tree to include a new vertex, ensuring the result has minimum total weight.
+
+**How it works:**
+1. Start with an arbitrary vertex and add it to the MST
+2. Create a priority queue of all edges from vertices in MST to vertices not in MST
+3. While there are vertices not in MST:
+   - Extract the minimum weight edge from the priority queue
+   - Add the new vertex to MST
+   - Update priority queue with edges from the new vertex
+4. Continue until all vertices are included
+
+**When to use:**
+- Dense graphs where vertex-focused approach is more efficient
+- When you need to build MST incrementally
+- Real-time applications requiring progressive tree construction
+- Network design with incremental expansion
+- When memory usage for edge storage is a concern
+- Situations where starting vertex is predetermined
+
+**Key characteristics:**
+- Vertex-focused: Grows tree by adding vertices one at a time
+- Greedy approach: Always selects minimum weight edge to new vertex
+- Uses priority queue: Efficiently finds minimum weight edges
+- Optimal: Guarantees minimum spanning tree
+- Better for dense graphs: Avoids sorting all edges like Kruskal's`
   },
   {
     id: 'topological-sort',
@@ -2916,7 +3148,30 @@ function shortestPath(graph, start, end) {
     category: 'Graphs',
     difficulty: 'intermediate',
     timeComplexity: 'O(V + E)',
-    spaceComplexity: 'O(V)'
+    spaceComplexity: 'O(V)',
+    extendedDefinition: `Topological Sort is a linear ordering of vertices in a Directed Acyclic Graph (DAG) such that for every directed edge (u, v), vertex u comes before vertex v in the ordering. It's only possible for DAGs and has applications in scheduling and dependency resolution.
+
+**What it does:**
+Topological sort produces a sequence of vertices where all dependencies are satisfied - if there's an edge from A to B, then A appears before B in the sorted order.
+
+**How it works:**
+Two main approaches:
+1. **DFS-based**: Use depth-first search and add vertices to result in reverse order of finishing times
+2. **Kahn's Algorithm**: Repeatedly remove vertices with no incoming edges and add them to result
+
+**When to use:**
+- Task scheduling with dependencies (project management)
+- Course prerequisite ordering in academic planning
+- Build systems and dependency resolution
+- Compiler design for symbol resolution
+- Package manager dependency installation
+- Makefile execution order
+
+**Key characteristics:**
+- Only works on DAGs: Cyclic graphs have no topological ordering
+- Multiple valid orderings: Most DAGs have several correct topological sorts
+- Dependency satisfaction: Ensures all prerequisites are met
+- Linear time complexity: Efficient O(V + E) algorithms available`
   },
 
   // Sorting
@@ -3925,7 +4180,33 @@ console.log("Sorted:", heapSort([...numbers]));
     category: 'Sorting',
     difficulty: 'beginner',
     timeComplexity: 'O(n²)',
-    spaceComplexity: 'O(1)'
+    spaceComplexity: 'O(1)',
+    extendedDefinition: `Insertion Sort is a simple and intuitive sorting algorithm that builds the final sorted array one element at a time. It works by taking elements from the unsorted portion and inserting them into their correct position in the sorted portion, similar to how you might sort playing cards in your hand.
+
+**What it does:**
+Insertion sort maintains a sorted portion at the beginning of the array and gradually expands it by inserting each unsorted element into its correct position within the sorted portion.
+
+**How it works:**
+1. Start with the second element (first element is considered sorted)
+2. Compare the current element with elements in the sorted portion
+3. Shift larger elements one position to the right
+4. Insert the current element at its correct position
+5. Repeat until all elements are processed
+
+**When to use:**
+- Small datasets (typically n < 50)
+- Nearly sorted or partially sorted data
+- Online algorithms (sorting data as it arrives)
+- As a subroutine in hybrid algorithms like Timsort
+- When simplicity and low overhead are important
+- Educational purposes to understand sorting concepts
+
+**Key advantages:**
+- Adaptive: O(n) performance on nearly sorted data
+- Stable: Maintains relative order of equal elements
+- In-place: Requires only O(1) extra memory
+- Online: Can sort data as it's received
+- Simple implementation with low overhead`,
   },
   {
     id: 'selection-sort',
@@ -3934,7 +4215,33 @@ console.log("Sorted:", heapSort([...numbers]));
     category: 'Sorting',
     difficulty: 'beginner',
     timeComplexity: 'O(n²)',
-    spaceComplexity: 'O(1)'
+    spaceComplexity: 'O(1)',
+    extendedDefinition: `Selection Sort is a simple comparison-based sorting algorithm that works by repeatedly finding the minimum element from the unsorted portion and placing it at the beginning. It divides the array into sorted and unsorted regions, progressively expanding the sorted region.
+
+**What it does:**
+Selection sort systematically selects the smallest (or largest) element from the unsorted portion and swaps it with the first element of the unsorted portion, gradually building a sorted array from left to right.
+
+**How it works:**
+1. Find the minimum element in the entire array
+2. Swap it with the first element
+3. Find the minimum element in the remaining unsorted portion
+4. Swap it with the second element
+5. Repeat until the entire array is sorted
+
+**When to use:**
+- Educational purposes to understand sorting concepts
+- Small datasets where simplicity is preferred
+- When memory writes are expensive (minimizes swaps)
+- Situations where you need to minimize the number of swaps
+- When auxiliary memory is limited
+- Simple embedded systems with basic requirements
+
+**Key characteristics:**
+- Always performs exactly n-1 swaps (minimum possible)
+- Not adaptive: O(n²) even for sorted arrays
+- Not stable: May change relative order of equal elements
+- In-place: Requires only O(1) extra memory
+- Simple implementation with predictable behavior`
   },
   {
     id: 'counting-sort',
@@ -3943,7 +4250,33 @@ console.log("Sorted:", heapSort([...numbers]));
     category: 'Sorting',
     difficulty: 'intermediate',
     timeComplexity: 'O(n + k)',
-    spaceComplexity: 'O(k)'
+    spaceComplexity: 'O(k)',
+    extendedDefinition: `Counting Sort is a non-comparison based sorting algorithm that works by counting the occurrences of each distinct element in the input array. It's particularly efficient for sorting integers when the range of possible values (k) is not significantly larger than the number of elements (n).
+
+**What it does:**
+Counting sort creates a frequency array to count occurrences of each value, then uses these counts to determine the exact position of each element in the sorted output array.
+
+**How it works:**
+1. Find the range of input values (minimum and maximum)
+2. Create a counting array to store frequency of each value
+3. Count occurrences of each element in the input array
+4. Transform counting array to store actual positions
+5. Build the output array using the position information
+6. Copy the sorted elements back to the original array
+
+**When to use:**
+- Sorting integers with a small, known range
+- When the range of values (k) is O(n) or smaller
+- Stable sorting is required
+- Non-comparison based sorting is preferred
+- Sorting characters or small enumerated values
+- As a subroutine in radix sort
+
+**Key advantages:**
+- Linear time complexity O(n + k) when k = O(n)
+- Stable sorting algorithm
+- Predictable performance regardless of input distribution
+- No comparisons needed between elements`
   },
   {
     id: 'radix-sort',
@@ -3952,7 +4285,34 @@ console.log("Sorted:", heapSort([...numbers]));
     category: 'Sorting',
     difficulty: 'intermediate',
     timeComplexity: 'O(d × (n + k))',
-    spaceComplexity: 'O(n + k)'
+    spaceComplexity: 'O(n + k)',
+    extendedDefinition: `Radix Sort is a non-comparison based sorting algorithm that sorts integers by processing individual digits. It sorts numbers digit by digit, starting from the least significant digit (LSD) or most significant digit (MSD), using a stable sorting algorithm like counting sort as a subroutine.
+
+**What it does:**
+Radix sort processes numbers digit by digit, sorting the entire array based on each digit position, building up to a fully sorted array without ever comparing complete numbers directly.
+
+**How it works:**
+1. Find the maximum number to determine the number of digits (d)
+2. For each digit position (from rightmost to leftmost in LSD):
+   - Extract the digit at current position for each number
+   - Use counting sort to sort based on this digit
+   - Maintain stability to preserve previous sorting
+3. After processing all digits, the array is completely sorted
+
+**When to use:**
+- Sorting large arrays of integers
+- When the number of digits (d) is small relative to array size
+- Fixed-width integer keys (like IDs, zip codes)
+- Sorting strings of equal length
+- When comparison-based sorting is too slow
+- Parallel processing scenarios (digits can be processed independently)
+
+**Key characteristics:**
+- Non-comparison based: Never compares complete numbers
+- Stable: Maintains relative order of equal elements
+- Linear time when d is constant: O(n) effective performance
+- Requires extra space for counting sort subroutine
+- Works best with fixed-width data`
   },
   {
     id: 'bucket-sort',
@@ -3961,7 +4321,32 @@ console.log("Sorted:", heapSort([...numbers]));
     category: 'Sorting',
     difficulty: 'intermediate',
     timeComplexity: 'O(n + k)',
-    spaceComplexity: 'O(n + k)'
+    spaceComplexity: 'O(n + k)',
+    extendedDefinition: `Bucket Sort is a distribution-based sorting algorithm that divides the input array into a number of buckets, sorts each bucket individually (usually with another sorting algorithm), and then concatenates the sorted buckets to produce the final sorted array.
+
+**What it does:**
+Bucket sort distributes elements into multiple buckets based on their values, sorts each bucket separately, and then combines them in order to achieve a sorted array. It's most effective when input is uniformly distributed.
+
+**How it works:**
+1. Create an array of empty buckets
+2. Distribute input elements into buckets based on a mapping function
+3. Sort each individual bucket (using insertion sort, quicksort, etc.)
+4. Concatenate all sorted buckets in order to get the final result
+
+**When to use:**
+- Data is uniformly distributed across a known range
+- Floating-point numbers between 0 and 1
+- When you want to achieve linear average-case performance
+- Large datasets where distribution can be predicted
+- Parallel processing environments (buckets can be sorted independently)
+- When input range is known and reasonable
+
+**Key advantages:**
+- Average-case time complexity of O(n + k) when data is uniformly distributed
+- Can achieve linear time performance with good distribution
+- Naturally parallelizable (each bucket can be processed independently)
+- Stable when using stable sorting for individual buckets
+- Adaptive to input distribution patterns`
   },
 
   // Searching
@@ -4408,8 +4793,7 @@ console.log("Non-uniform data - both algorithms work but interpolation may not b
    pos = low + [(target - arr[low]) / (arr[high] - arr[low])] * (high - low)
    
    // This assumes uniform distribution
-   // Better than binary search's fixed midpoint: mid = (low + high) / 2
-   \`\`\``
+   \`\`\`
   },
 
   // Hashing
@@ -4421,6 +4805,30 @@ console.log("Non-uniform data - both algorithms work but interpolation may not b
     difficulty: 'intermediate',
     timeComplexity: 'O(1) avg',
     spaceComplexity: 'O(n)',
+    extendedDefinition: `A Hash Table (also called Hash Map) is a data structure that implements an associative array, mapping keys to values using a hash function. It provides extremely fast average-case performance for insertion, deletion, and lookup operations.
+
+**What it does:**
+Hash tables store key-value pairs and use a hash function to compute an index where the value should be stored or retrieved, enabling near-constant time access to data.
+
+**How it works:**
+1. **Hash Function**: Converts keys into array indices using mathematical operations
+2. **Storage**: Values are stored in an array at the computed index
+3. **Collision Handling**: When multiple keys hash to the same index, collision resolution techniques are used
+4. **Dynamic Resizing**: Table size may be adjusted to maintain good performance
+
+**When to use:**
+- Implementing dictionaries, maps, and caches
+- Database indexing and fast lookups
+- Counting frequencies of elements
+- Memoization in dynamic programming
+- Symbol tables in compilers
+- Implementing sets and associative arrays
+
+**Key characteristics:**
+- Average O(1) time complexity for basic operations
+- Space-time tradeoff: uses more memory for faster access
+- Performance depends on hash function quality and load factor
+- Requires handling of hash collisions`,
     example: `// Hash Table Implementation
 class HashTable {
     constructor(size = 10) {
@@ -4505,7 +4913,7 @@ console.log(ht.get("name")); // "Alice"`,
            return this.table[index]?.find(([k]) => k === key)?.[1];
        }
    }
-   \`\`\``
+   \`\`\`
   },
   {
     id: 'hash-chaining',
@@ -4514,7 +4922,31 @@ console.log(ht.get("name")); // "Alice"`,
     category: 'Hashing',
     difficulty: 'intermediate',
     timeComplexity: 'O(1) avg',
-    spaceComplexity: 'O(n)'
+    spaceComplexity: 'O(n)',
+    extendedDefinition: `Separate Chaining is a collision resolution technique in hash tables where each slot in the hash table contains a linked list (or chain) of all elements that hash to the same index. This approach handles collisions by allowing multiple key-value pairs to coexist at the same hash table position.
+
+**What it does:**
+Separate chaining resolves hash collisions by maintaining a list of all elements that map to the same hash table index, allowing multiple items to be stored at each position without overwriting existing data.
+
+**How it works:**
+1. **Hash Function**: Compute the hash index for a key
+2. **Chain Access**: Access the linked list at that index
+3. **Insert**: Add new key-value pairs to the end of the chain
+4. **Search**: Traverse the chain to find the desired key
+5. **Delete**: Remove the key-value pair from the chain
+
+**When to use:**
+- When the hash table size is smaller than the number of expected elements
+- When memory usage for pointers is not a major concern
+- When you want simple and straightforward collision handling
+- When the load factor might exceed 1.0
+- When deletions are frequent (easier than open addressing)
+
+**Key characteristics:**
+- Load factor can exceed 1.0: More elements than table slots
+- Simple implementation: Easy to understand and implement
+- Dynamic memory usage: Chains grow as needed
+- Cache performance: May have poor cache locality due to pointer chasing`
   },
   {
     id: 'open-addressing',
@@ -4523,7 +4955,30 @@ console.log(ht.get("name")); // "Alice"`,
     category: 'Hashing',
     difficulty: 'intermediate',
     timeComplexity: 'O(1) avg',
-    spaceComplexity: 'O(n)'
+    spaceComplexity: 'O(n)',
+    extendedDefinition: `Open Addressing is a collision resolution technique where all elements are stored directly in the hash table array. When a collision occurs, the algorithm probes for the next available slot using a systematic sequence until an empty position is found.
+
+**What it does:**
+Open addressing handles hash collisions by finding alternative positions within the same hash table array, ensuring each element has its own unique slot without using additional data structures.
+
+**How it works:**
+Three main probing strategies:
+1. **Linear Probing**: Check consecutive slots (h+1, h+2, h+3, ...)
+2. **Quadratic Probing**: Check slots at quadratic intervals (h+1², h+2², h+3², ...)
+3. **Double Hashing**: Use a second hash function to determine probe sequence
+
+**When to use:**
+- When memory usage needs to be minimized (no extra pointers)
+- When cache performance is important (better locality)
+- When the load factor is kept below 0.7-0.8
+- When you want to avoid dynamic memory allocation
+- In embedded systems with limited memory
+
+**Key characteristics:**
+- No extra memory: All data stored in the main array
+- Better cache performance: Sequential memory access
+- Load factor limitation: Performance degrades significantly above 70-80%
+- Deletion complexity: Requires special handling (tombstones)`
   },
 
   // Recursion
@@ -4535,6 +4990,28 @@ console.log(ht.get("name")); // "Alice"`,
     difficulty: 'intermediate',
     timeComplexity: 'Varies',
     spaceComplexity: 'O(n)',
+    extendedDefinition: `Recursion is a programming technique where a function calls itself to solve smaller instances of the same problem. It's a powerful paradigm that mirrors mathematical induction and provides elegant solutions to problems that have recursive structure.
+
+**What it does:**
+Recursion breaks down complex problems into simpler, similar subproblems, solving them by combining solutions from smaller cases until reaching a base case that can be solved directly.
+
+**How it works:**
+Every recursive function has two essential components:
+1. **Base Case**: A condition that stops the recursion (prevents infinite calls)
+2. **Recursive Case**: The function calls itself with modified parameters, moving toward the base case
+
+**When to use:**
+- Tree and graph traversals (DFS, tree operations)
+- Mathematical computations (factorial, Fibonacci, power)
+- Divide and conquer algorithms (merge sort, quick sort)
+- Backtracking problems (N-Queens, maze solving)
+- Problems with recursive structure (nested data, fractals)
+
+**Key characteristics:**
+- Stack-based execution: Each call creates a new stack frame
+- Space complexity: O(n) for call stack in most cases
+- Elegant and intuitive: Often mirrors the problem's natural structure
+- Performance consideration: May have overhead compared to iterative solutions`,
     example: `// Basic Recursion Examples
 
 // 1. Factorial - Classic recursion example
@@ -4612,7 +5089,30 @@ console.log(arraySum([1, 2, 3, 4])); // 10`,
     category: 'Recursion',
     difficulty: 'intermediate',
     timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)'
+    spaceComplexity: 'O(1)',
+    extendedDefinition: `Tail Recursion is a special form of recursion where the recursive call is the last operation performed in the function. This optimization allows compilers and interpreters to reuse the current function's stack frame instead of creating new ones, effectively converting recursion into iteration.
+
+**What it does:**
+Tail recursion eliminates the risk of stack overflow by reusing stack frames, making recursive algorithms as memory-efficient as their iterative counterparts while maintaining the elegance of recursive thinking.
+
+**How it works:**
+1. **Last Operation**: The recursive call must be the final operation
+2. **No Pending Operations**: No computations happen after the recursive call returns
+3. **Stack Frame Reuse**: The compiler can optimize by reusing the current stack frame
+4. **Accumulator Pattern**: Often uses accumulator parameters to carry intermediate results
+
+**When to use:**
+- When recursion depth could be very large
+- In functional programming languages with tail call optimization
+- When you want recursive elegance without stack overflow risk
+- For algorithms that naturally fit the accumulator pattern
+- In embedded systems with limited stack space
+
+**Key characteristics:**
+- Constant space complexity: O(1) instead of O(n)
+- Compiler optimization: Can be converted to loops automatically
+- Accumulator pattern: Uses helper parameters to maintain state
+- Last operation requirement: Recursive call must be the final statement`
   },
   {
     id: 'fibonacci',
@@ -4621,7 +5121,31 @@ console.log(arraySum([1, 2, 3, 4])); // 10`,
     category: 'Recursion',
     difficulty: 'beginner',
     timeComplexity: 'O(2^n)',
-    spaceComplexity: 'O(n)'
+    spaceComplexity: 'O(n)',
+    extendedDefinition: `The Fibonacci Sequence is a classic recursive problem where each number is the sum of the two preceding ones (0, 1, 1, 2, 3, 5, 8, 13, ...). It demonstrates the power and pitfalls of naive recursion and serves as an excellent example for learning optimization techniques.
+
+**What it does:**
+Fibonacci generates a sequence where F(n) = F(n-1) + F(n-2), with base cases F(0) = 0 and F(1) = 1, creating a mathematical sequence that appears frequently in nature and computer science.
+
+**How it works:**
+Multiple implementation approaches:
+1. **Naive Recursion**: Direct translation of mathematical definition (exponential time)
+2. **Memoization**: Cache results to avoid recomputation (linear time)
+3. **Bottom-up DP**: Build solution iteratively (linear time, constant space)
+4. **Matrix Exponentiation**: Advanced technique for very large n (logarithmic time)
+
+**When to use:**
+- Learning recursion and dynamic programming concepts
+- Understanding optimization techniques (memoization, tabulation)
+- Mathematical computations involving Fibonacci numbers
+- Algorithm analysis and complexity comparison
+- Teaching exponential vs polynomial time complexity
+
+**Key characteristics:**
+- Overlapping subproblems: Same calculations repeated multiple times
+- Optimal substructure: Solution built from optimal solutions of subproblems
+- Exponential naive complexity: O(2^n) without optimization
+- Linear optimized complexity: O(n) with memoization or DP`
   },
 
   // Dynamic Programming
@@ -5675,6 +6199,20 @@ The algorithm modifies the array in-place, maintaining the relative order of uni
     return slow + 1;
 }
 
+// Example: [0,0,1,1,1,2,2,3,3,4] → [0,1,2,3,4,...], length=5`,
+    syntax: `function removeDuplicates(nums) {
+    if (nums.length <= 1) return nums.length;
+    
+    let slow = 0;
+    for (let fast = 1; fast < nums.length; fast++) {
+        if (nums[fast] !== nums[slow]) {
+            slow++;
+            nums[slow] = nums[fast];
+        }
+    }
+    return slow + 1;
+}
+
 // Example: [0,0,1,1,1,2,2,3,3,4] → [0,1,2,3,4,...], length=5`
   },
   {
@@ -6359,5 +6897,133 @@ function fibonacciMatrix(n) {
 }
 
 // Example: fibonacciDP(10) = 55, fibonacciMatrix(50) computed in O(log 50)`
+  },
+  
+  // Recursion
+  {
+    id: 'recursion',
+    title: 'Recursion',
+    description: 'Master self-referential problem-solving technique',
+    category: 'Algorithm Paradigms',
+    difficulty: 'intermediate',
+    timeComplexity: 'Varies',
+    spaceComplexity: 'O(n) stack space',
+    extendedDefinition: `Recursion is a programming technique where a function calls itself to solve a problem by breaking it down into smaller instances of the same problem. It's a powerful approach for solving problems with a naturally recursive structure.
+
+**Key Components:**
+- **Base Case**: The condition that stops the recursion
+- **Recursive Case**: The part where the function calls itself
+- **Call Stack**: Memory structure that tracks function calls
+
+**Types of Recursion:**
+- **Direct Recursion**: Function calls itself directly
+- **Indirect Recursion**: Function A calls function B, which calls function A
+- **Tail Recursion**: Recursive call is the last operation in the function
+- **Multiple Recursion**: Function makes multiple recursive calls (e.g., Fibonacci)
+
+**Common Recursive Problems:**
+- Factorial calculation
+- Fibonacci sequence
+- Tree traversals
+- Divide and conquer algorithms
+- Backtracking problems
+
+**Advantages:**
+- Elegant and intuitive solutions for certain problems
+- Naturally models recursive structures (trees, graphs)
+
+**Disadvantages:**
+- Stack overflow for deep recursion
+- Often less efficient than iterative solutions
+- Higher memory usage due to call stack`,
+    example: `// Factorial using recursion
+function factorial(n) {
+  // Base case
+  if (n === 0 || n === 1) {
+    return 1;
+  }
+  
+  // Recursive case
+  return n * factorial(n - 1);
+}
+
+// Binary tree traversal using recursion
+class TreeNode {
+  constructor(val) {
+    this.val = val;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+function inorderTraversal(root) {
+  const result = [];
+  
+  function traverse(node) {
+    if (node === null) return;
+    
+    // Recursively traverse left subtree
+    traverse(node.left);
+    
+    // Process current node
+    result.push(node.val);
+    
+    // Recursively traverse right subtree
+    traverse(node.right);
+  }
+  
+  traverse(root);
+  return result;
+}
+
+// Usage
+console.log(factorial(5)); // 120
+
+const root = new TreeNode(1);
+root.left = new TreeNode(2);
+root.right = new TreeNode(3);
+root.left.left = new TreeNode(4);
+root.left.right = new TreeNode(5);
+console.log(inorderTraversal(root)); // [4, 2, 5, 1, 3]`,
+    syntax: `// Recursive Function Template
+function recursiveFunction(params) {
+  // Base case(s)
+  if (/* termination condition */) {
+    return /* base value */;
+  }
+  
+  // Process current step
+  // ...
+  
+  // Recursive case - call with modified parameters
+  return /* combine results with */ recursiveFunction(/* smaller problem */);
+}
+
+// Helper Function Pattern (for cleaner public API)
+function publicFunction(params) {
+  // Initialize result storage if needed
+  const result = [];
+  
+  // Define recursive helper
+  function helper(currentParams) {
+    // Base case
+    if (/* termination condition */) {
+      return;
+    }
+    
+    // Process current state
+    // ...
+    
+    // Recursive calls
+    helper(/* modified params 1 */);
+    helper(/* modified params 2 */);
+  }
+  
+  // Start recursion
+  helper(/* initial state */);
+  
+  // Return result
+  return result;
+}`
   }
 ];

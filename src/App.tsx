@@ -22,6 +22,9 @@ import Profile from "./pages/Profile";
 import Assignments from "./pages/Assignments";
 import AssignmentDetail from "./pages/AssignmentDetail";
 import AdminAssignmentCreator from "./pages/AdminAssignmentCreator";
+import CollegeSignup from "./pages/CollegeSignup";
+import CollegeLogin from "./pages/CollegeLogin";
+import CollegePayment from "./pages/CollegePayment";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +43,11 @@ const App = () => (
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/signup" element={<Signup />} />
             <Route path="/authorization" element={<Authorization />} />
+            
+            {/* College Student Routes */}
+            <Route path="/college-signup" element={<CollegeSignup />} />
+            <Route path="/college-login" element={<CollegeLogin />} />
+            <Route path="/college-payment" element={<CollegePayment />} />
             
             {/* Admin Routes */}
             <Route path="/admin/dashboard" element={<AdminDashboard />} />

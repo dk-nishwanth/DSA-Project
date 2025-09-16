@@ -8,6 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Slider } from '@/components/ui/slider';
 import { AdminHeader } from '@/components/admin/admin-header';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, Save } from 'lucide-react';
 
 interface AdminSettings {
   theme: 'light' | 'dark' | 'system';
@@ -31,6 +33,7 @@ interface AdminSettings {
 
 export default function AdminSettings() {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [settings, setSettings] = useState<AdminSettings>({
     theme: 'light',
     language: 'en',
@@ -65,7 +68,20 @@ export default function AdminSettings() {
       <AdminHeader />
       
       <div className="container mx-auto py-8 px-4">
-        <h1 className="text-3xl font-bold mb-6">Admin Settings</h1>
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-3xl font-bold">Admin Settings</h1>
+            <p className="text-muted-foreground">Manage your admin preferences and system settings</p>
+          </div>
+          <Button 
+            variant="outline" 
+            onClick={() => navigate('/admin')}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Dashboard
+          </Button>
+        </div>
         
         <Card>
           <CardHeader>
@@ -326,7 +342,10 @@ export default function AdminSettings() {
             </Tabs>
             
             <div className="mt-6 flex justify-end">
-              <Button onClick={handleSaveSettings}>Save Settings</Button>
+              <Button onClick={handleSaveSettings} className="flex items-center gap-2">
+                <Save className="h-4 w-4" />
+                Save Settings
+              </Button>
             </div>
           </CardContent>
         </Card>

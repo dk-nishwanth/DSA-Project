@@ -1,21 +1,36 @@
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { useNavigate } from 'react-router-dom';
-import { LogOut, User, Settings, Bell } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { LogOut, User, Settings, Bell, ArrowLeft, LayoutDashboard } from 'lucide-react';
 
 export function AdminHeader() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     // In a real app, you would clear auth tokens here
     navigate('/');
   };
 
+  const isOnDashboard = location.pathname === '/admin' || location.pathname === '/admin/';
+  const showBackButton = !isOnDashboard;
+
   return (
     <header className="border-b bg-white">
       <div className="flex h-16 items-center px-6">
         <div className="flex items-center space-x-4">
+          {showBackButton && (
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => navigate('/admin')}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Dashboard
+            </Button>
+          )}
           <h1 className="text-xl font-bold">DSA Admin Panel</h1>
         </div>
         
@@ -43,11 +58,15 @@ export function AdminHeader() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/admin')}>
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                <span>Dashboard</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/admin/profile')}>
                 <User className="mr-2 h-4 w-4" />
                 <span>Profile</span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/admin/settings')}>
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Settings</span>
               </DropdownMenuItem>

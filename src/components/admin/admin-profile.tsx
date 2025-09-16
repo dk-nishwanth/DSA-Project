@@ -7,9 +7,12 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, Save, Edit, X } from 'lucide-react';
 
 export function AdminProfile() {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   
   // Mock admin data - in a real app, this would come from an API or context
@@ -36,9 +39,24 @@ export function AdminProfile() {
   return (
     <div className="container mx-auto py-6">
       <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold">Admin Profile</h1>
+            <p className="text-muted-foreground">Manage your admin account information</p>
+          </div>
+          <Button 
+            variant="outline" 
+            onClick={() => navigate('/admin')}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Dashboard
+          </Button>
+        </div>
+        
         <Card>
           <CardHeader>
-            <CardTitle>Admin Profile</CardTitle>
+            <CardTitle>Profile Information</CardTitle>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="profile" className="w-full">
@@ -55,11 +73,20 @@ export function AdminProfile() {
                       <AvatarFallback>{adminData.firstName.charAt(0)}{adminData.lastName.charAt(0)}</AvatarFallback>
                     </Avatar>
                     {!isEditing ? (
-                      <Button variant="outline" onClick={() => setIsEditing(true)}>Edit Profile</Button>
+                      <Button variant="outline" onClick={() => setIsEditing(true)} className="flex items-center gap-2">
+                        <Edit className="h-4 w-4" />
+                        Edit Profile
+                      </Button>
                     ) : (
                       <div className="flex space-x-2">
-                        <Button variant="outline" onClick={() => setIsEditing(false)}>Cancel</Button>
-                        <Button onClick={handleSave}>Save</Button>
+                        <Button variant="outline" onClick={() => setIsEditing(false)} className="flex items-center gap-2">
+                          <X className="h-4 w-4" />
+                          Cancel
+                        </Button>
+                        <Button onClick={handleSave} className="flex items-center gap-2">
+                          <Save className="h-4 w-4" />
+                          Save
+                        </Button>
                       </div>
                     )}
                   </div>
