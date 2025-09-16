@@ -343,19 +343,6 @@ export function ArrayRotationVisualizer() {
 
       {/* Complexity Analysis */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <ComplexityBox
-          timeComplexity="O(n)"
-          spaceComplexity={
-            method === "temp-array" ? "O(n)" : "O(1)"
-          }
-          description={`${
-            method === "reversal"
-              ? "Reversal method uses 3 reversals"
-              : method === "temp-array"
-              ? "Uses extra temporary array"
-              : "In-place cyclic replacement"
-          }`}
-        />
 
         <div className="bg-muted/20 rounded-lg p-4">
           <h4 className="font-semibold mb-2">Key Points</h4>

@@ -6359,5 +6359,133 @@ function fibonacciMatrix(n) {
 }
 
 // Example: fibonacciDP(10) = 55, fibonacciMatrix(50) computed in O(log 50)`
+  },
+  
+  // Recursion
+  {
+    id: 'recursion',
+    title: 'Recursion',
+    description: 'Master self-referential problem-solving technique',
+    category: 'Algorithm Paradigms',
+    difficulty: 'intermediate',
+    timeComplexity: 'Varies',
+    spaceComplexity: 'O(n) stack space',
+    extendedDefinition: `Recursion is a programming technique where a function calls itself to solve a problem by breaking it down into smaller instances of the same problem. It's a powerful approach for solving problems with a naturally recursive structure.
+
+**Key Components:**
+- **Base Case**: The condition that stops the recursion
+- **Recursive Case**: The part where the function calls itself
+- **Call Stack**: Memory structure that tracks function calls
+
+**Types of Recursion:**
+- **Direct Recursion**: Function calls itself directly
+- **Indirect Recursion**: Function A calls function B, which calls function A
+- **Tail Recursion**: Recursive call is the last operation in the function
+- **Multiple Recursion**: Function makes multiple recursive calls (e.g., Fibonacci)
+
+**Common Recursive Problems:**
+- Factorial calculation
+- Fibonacci sequence
+- Tree traversals
+- Divide and conquer algorithms
+- Backtracking problems
+
+**Advantages:**
+- Elegant and intuitive solutions for certain problems
+- Naturally models recursive structures (trees, graphs)
+
+**Disadvantages:**
+- Stack overflow for deep recursion
+- Often less efficient than iterative solutions
+- Higher memory usage due to call stack`,
+    example: `// Factorial using recursion
+function factorial(n) {
+  // Base case
+  if (n === 0 || n === 1) {
+    return 1;
+  }
+  
+  // Recursive case
+  return n * factorial(n - 1);
+}
+
+// Binary tree traversal using recursion
+class TreeNode {
+  constructor(val) {
+    this.val = val;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+function inorderTraversal(root) {
+  const result = [];
+  
+  function traverse(node) {
+    if (node === null) return;
+    
+    // Recursively traverse left subtree
+    traverse(node.left);
+    
+    // Process current node
+    result.push(node.val);
+    
+    // Recursively traverse right subtree
+    traverse(node.right);
+  }
+  
+  traverse(root);
+  return result;
+}
+
+// Usage
+console.log(factorial(5)); // 120
+
+const root = new TreeNode(1);
+root.left = new TreeNode(2);
+root.right = new TreeNode(3);
+root.left.left = new TreeNode(4);
+root.left.right = new TreeNode(5);
+console.log(inorderTraversal(root)); // [4, 2, 5, 1, 3]`,
+    syntax: `// Recursive Function Template
+function recursiveFunction(params) {
+  // Base case(s)
+  if (/* termination condition */) {
+    return /* base value */;
+  }
+  
+  // Process current step
+  // ...
+  
+  // Recursive case - call with modified parameters
+  return /* combine results with */ recursiveFunction(/* smaller problem */);
+}
+
+// Helper Function Pattern (for cleaner public API)
+function publicFunction(params) {
+  // Initialize result storage if needed
+  const result = [];
+  
+  // Define recursive helper
+  function helper(currentParams) {
+    // Base case
+    if (/* termination condition */) {
+      return;
+    }
+    
+    // Process current state
+    // ...
+    
+    // Recursive calls
+    helper(/* modified params 1 */);
+    helper(/* modified params 2 */);
+  }
+  
+  // Start recursion
+  helper(/* initial state */);
+  
+  // Return result
+  return result;
+}`
   }
 ];

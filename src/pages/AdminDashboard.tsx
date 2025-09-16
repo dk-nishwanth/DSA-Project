@@ -7,6 +7,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import { AdminHeader } from '@/components/admin/admin-header';
 import { dsaTopics } from '@/data/dsaTopics';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -19,7 +22,8 @@ import {
   XCircle,
   Search,
   Filter,
-  Plus
+  Plus,
+  Download
 } from 'lucide-react';
 
 interface Student {
@@ -100,6 +104,21 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const initialTab = (searchParams.get('tab') as 'overview' | 'class-view' | 'analytics' | 'teach') || 'overview';
+  
+  // Export functionality
+  const [exportDialogOpen, setExportDialogOpen] = useState(false);
+  const [selectedClasses, setSelectedClasses] = useState<Record<string, boolean>>({
+    '1A': false,
+    '1B': false,
+    '1C': false,
+    '2A': false,
+    '2B': false
+  });
+  const [exportFormat, setExportFormat] = useState('csv');
+  const [exportAll, setExportAll] = useState(false);
+  const [exportSingleClass, setExportSingleClass] = useState('1A');
+  const [exportMode, setExportMode] = useState<'all' | 'selected' | 'single' | 'section'>('selected');
+  const [exportSection, setExportSection] = useState<'1' | '2'>('1');
 
   const filteredStudents = mockStudents.filter(student => {
     const matchesClass = selectedClass === 'all' || student.class === selectedClass;
@@ -107,6 +126,87 @@ export default function AdminDashboard() {
                          student.email.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesClass && matchesSearch;
   });
+  
+  // Function to handle exporting data
+  const handleExportData = () => {
+    // Get students to export based on export mode
+    let studentsToExport: Student[] = [];
+    
+    switch (exportMode) {
+      case 'all':
+        studentsToExport = mockStudents;
+        break;
+      case 'selected':
+        studentsToExport = mockStudents.filter(student => selectedClasses[student.class]);
+        break;
+      case 'single':
+        studentsToExport = mockStudents.filter(student => student.class === exportSingleClass);
+        break;
+      case 'section':
+        studentsToExport = mockStudents.filter(student => student.class.startsWith(exportSection));
+        break;
+    }
+    
+    if (studentsToExport.length === 0) {
+      alert('No students selected for export');
+      return;
+    }
+    
+    // Convert students to CSV format
+    const headers = ['ID', 'Name', 'Email', 'Class', 'Progress', 'Last Active', 'Topics Completed', 'Total Topics', 'Status'];
+    
+    let csvContent = headers.join(',') + '\n';
+    
+    studentsToExport.forEach(student => {
+      const row = [
+        student.id,
+        `"${student.name}"`,
+        `"${student.email}"`,
+        student.class,
+        student.progress,
+        `"${student.lastActive}"`,
+        student.topicsCompleted,
+        student.totalTopics,
+        student.status
+      ];
+      csvContent += row.join(',') + '\n';
+    });
+    
+    // Create a blob and download the file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    
+    // Set filename based on export mode
+    let filename = '';
+    switch (exportMode) {
+      case 'all':
+        filename = `all-students-${new Date().toISOString().split('T')[0]}`;
+        break;
+      case 'selected':
+        const selectedClassNames = Object.entries(selectedClasses)
+          .filter(([_, selected]) => selected)
+          .map(([className]) => className)
+          .join('-');
+        filename = `students-${selectedClassNames}-${new Date().toISOString().split('T')[0]}`;
+        break;
+      case 'single':
+        filename = `students-${exportSingleClass}-${new Date().toISOString().split('T')[0]}`;
+        break;
+      case 'section':
+        filename = `section-${exportSection}-${new Date().toISOString().split('T')[0]}`;
+        break;
+    }
+    
+    link.setAttribute('download', `${filename}.${exportFormat}`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    setExportDialogOpen(false);
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -141,11 +241,11 @@ export default function AdminDashboard() {
             <p className="text-muted-foreground">Monitor student progress and performance</p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline">
-              <Filter className="w-4 h-4 mr-2" />
+            <Button variant="outline" onClick={() => setExportDialogOpen(true)}>
+              <Download className="w-4 h-4 mr-2" />
               Export Data
             </Button>
-            <Button variant="outline" onClick={() => window.location.href = '/admin/assignments/create'}>
+            <Button variant="outline" onClick={() => navigate('/admin/assignments/create')}>
               <Plus className="w-4 h-4 mr-2" />
               Create Assignment
             </Button>
@@ -154,6 +254,75 @@ export default function AdminDashboard() {
               Add Student
             </Button>
           </div>
+          
+          {/* Export Dialog */}
+          <Dialog open={exportDialogOpen} onOpenChange={setExportDialogOpen}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Export Student Data</DialogTitle>
+                <DialogDescription>
+                  Select which classes to export or export all data.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="export-all" 
+                    checked={exportAll}
+                    onCheckedChange={(checked) => {
+                      setExportAll(!!checked);
+                      if (checked) {
+                        const allSelected = Object.keys(selectedClasses).reduce((acc, key) => {
+                          acc[key] = true;
+                          return acc;
+                        }, {} as Record<string, boolean>);
+                        setSelectedClasses(allSelected);
+                      }
+                    }}
+                  />
+                  <Label htmlFor="export-all">Export all classes</Label>
+                </div>
+                
+                {!exportAll && (
+                  <div className="grid grid-cols-2 gap-2">
+                    {Object.keys(selectedClasses).map((classKey) => (
+                      <div key={classKey} className="flex items-center space-x-2">
+                        <Checkbox 
+                          id={`class-${classKey}`} 
+                          checked={selectedClasses[classKey]}
+                          onCheckedChange={(checked) => {
+                            setSelectedClasses({
+                              ...selectedClasses,
+                              [classKey]: !!checked
+                            });
+                          }}
+                        />
+                        <Label htmlFor={`class-${classKey}`}>{classKey}</Label>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                <div className="space-y-1">
+                  <Label htmlFor="export-format">Export Format</Label>
+                  <Select value={exportFormat} onValueChange={setExportFormat}>
+                    <SelectTrigger id="export-format">
+                      <SelectValue placeholder="Select format" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="csv">CSV</SelectItem>
+                      <SelectItem value="excel">Excel</SelectItem>
+                      <SelectItem value="pdf">PDF</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setExportDialogOpen(false)}>Cancel</Button>
+                <Button onClick={handleExportData}>Export</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
 
       {/* Stats Cards */}

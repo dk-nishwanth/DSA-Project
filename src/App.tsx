@@ -14,6 +14,8 @@ import Login from "./pages/Login";
 import AdminLogin from "./pages/AdminLogin";
 import Signup from "./pages/Signup";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminProfile from "./pages/AdminProfile";
+import AdminSettings from "./pages/AdminSettings";
 import Authorization from "./pages/Authorization";
 import Landing from "./pages/Landing";
 import Profile from "./pages/Profile";
@@ -39,8 +41,10 @@ const App = () => (
             <Route path="/admin/signup" element={<Signup />} />
             <Route path="/authorization" element={<Authorization />} />
             
-            {/* Admin Dashboard Route */}
+            {/* Admin Routes */}
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/profile" element={<AdminProfile />} />
+            <Route path="/admin/settings" element={<AdminSettings />} />
             
             {/* Landing Page */}
             <Route path="/" element={<Landing />} />

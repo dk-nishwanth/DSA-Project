@@ -33,18 +33,30 @@ export function AdminLoginForm({ onSwitchToUser }: AdminLoginFormProps) {
     e.preventDefault();
     setIsLoading(true);
 
+    // Hardcoded credentials for demonstration
+    const correctUsername = 'Nishwanth';
+    const correctPassword = 'Nishwanth';
+    const isAdmin = true; // Assuming these credentials belong to an admin
+
     try {
-      // Simulate API call
+      // Simulate a network request with a delay
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // For demo purposes, accept any admin login
-      if (formData.username && formData.password) {
-        toast({
-          title: "Admin login successful",
-          description: "Welcome to the admin dashboard!",
-        });
-        // Send admin straight to the Teach tab so they can start a session
-        navigate('/admin/dashboard?tab=teach');
+
+      if (formData.username === correctUsername && formData.password === correctPassword) {
+        if (isAdmin) {
+          toast({
+            title: "Admin login successful",
+            description: "Welcome to the admin dashboard!",
+          });
+          // Send admin straight to the Teach tab so they can start a session
+          navigate('/admin/dashboard?tab=teach');
+        } else {
+          toast({
+            title: "Login failed",
+            description: "You do not have admin privileges.",
+            variant: "destructive",
+          });
+        }
       } else {
         toast({
           title: "Login failed",

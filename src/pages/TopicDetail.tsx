@@ -52,6 +52,382 @@ import { dsaTopics } from '@/data/dsaTopics';
 import { getCodeSnippet } from '@/data/codeSnippets';
 import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+
+// Function to provide default code snippets for topics that don't have them
+function getDefaultCodeSnippet(topicId: string, topicTitle: string, language: string = 'javascript'): string {
+  const defaultSnippets: Record<string, Record<string, string>> = {
+    javascript: {
+      default: `// ${topicTitle} Implementation
+class ${topicTitle.replace(/[^a-zA-Z0-9]/g, '')} {
+  constructor() {
+    // Initialize data structure
+    this.data = [];
+  }
+
+  // Main operations
+  add(item) {
+    this.data.push(item);
+    return this.data.length;
+  }
+
+  remove() {
+    if (this.data.length === 0) {
+      throw new Error("Structure is empty");
+    }
+    return this.data.pop();
+  }
+
+  isEmpty() {
+    return this.data.length === 0;
+  }
+
+  size() {
+    return this.data.length;
+  }
+}
+
+// Usage example
+const ${topicId.replace(/-/g, '')} = new ${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}();
+${topicId.replace(/-/g, '')}.add("example");
+console.log(${topicId.replace(/-/g, '')}.size()); // 1
+`,
+    },
+    python: {
+      default: `# ${topicTitle} Implementation
+class ${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}:
+    def __init__(self):
+        # Initialize data structure
+        self.data = []
+    
+    # Main operations
+    def add(self, item):
+        self.data.append(item)
+        return len(self.data)
+    
+    def remove(self):
+        if len(self.data) == 0:
+            raise Exception("Structure is empty")
+        return self.data.pop()
+    
+    def is_empty(self):
+        return len(self.data) == 0
+    
+    def size(self):
+        return len(self.data)
+
+# Usage example
+${topicId.replace(/-/g, '')} = ${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}()
+${topicId.replace(/-/g, '')}.add("example")
+print(${topicId.replace(/-/g, '')}.size())  # 1
+`,
+    },
+    java: {
+      default: `// ${topicTitle} Implementation
+import java.util.ArrayList;
+import java.util.List;
+
+public class ${topicTitle.replace(/[^a-zA-Z0-9]/g, '')} {
+    private List<Object> data;
+    
+    public ${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}() {
+        // Initialize data structure
+        this.data = new ArrayList<>();
+    }
+    
+    // Main operations
+    public int add(Object item) {
+        this.data.add(item);
+        return this.data.size();
+    }
+    
+    public Object remove() {
+        if (this.data.isEmpty()) {
+            throw new IllegalStateException("Structure is empty");
+        }
+        return this.data.remove(this.data.size() - 1);
+    }
+    
+    public boolean isEmpty() {
+        return this.data.isEmpty();
+    }
+    
+    public int size() {
+        return this.data.size();
+    }
+    
+    // Usage example
+    public static void main(String[] args) {
+        ${topicTitle.replace(/[^a-zA-Z0-9]/g, '')} ${topicId.replace(/-/g, '')} = new ${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}();
+        ${topicId.replace(/-/g, '')}.add("example");
+        System.out.println(${topicId.replace(/-/g, '')}.size()); // 1
+    }
+}
+`,
+    },
+    c: {
+      default: `// ${topicTitle} Implementation
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+typedef struct {
+    void** data;
+    int capacity;
+    int size;
+} ${topicTitle.replace(/[^a-zA-Z0-9]/g, '')};
+
+${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}* create${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}() {
+    ${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}* structure = malloc(sizeof(${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}));
+    structure->capacity = 10;
+    structure->size = 0;
+    structure->data = malloc(sizeof(void*) * structure->capacity);
+    return structure;
+}
+
+int add(${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}* structure, void* item) {
+    if (structure->size >= structure->capacity) {
+        structure->capacity *= 2;
+        structure->data = realloc(structure->data, sizeof(void*) * structure->capacity);
+    }
+    structure->data[structure->size++] = item;
+    return structure->size;
+}
+
+void* removeItem(${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}* structure) {
+    if (structure->size == 0) {
+        printf("Error: Structure is empty\\n");
+        return NULL;
+    }
+    return structure->data[--structure->size];
+}
+
+bool isEmpty(${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}* structure) {
+    return structure->size == 0;
+}
+
+int size(${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}* structure) {
+    return structure->size;
+}
+
+void destroy${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}(${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}* structure) {
+    free(structure->data);
+    free(structure);
+}
+
+// Usage example
+int main() {
+    ${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}* ${topicId.replace(/-/g, '')} = create${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}();
+    char* example = "example";
+    add(${topicId.replace(/-/g, '')}, example);
+    printf("Size: %d\\n", size(${topicId.replace(/-/g, '')})); // 1
+    destroy${topicTitle.replace(/[^a-zA-Z0-9]/g, '')}(${topicId.replace(/-/g, '')});
+    return 0;
+}
+`,
+    },
+  };
+
+  // Special cases for common data structures
+  if (topicId.includes('stack')) {
+    if (language === 'javascript') {
+      return `// Stack Implementation
+class Stack {
+  constructor() {
+    this.items = [];
+  }
+
+  // Push element to the top of the stack
+  push(element) {
+    this.items.push(element);
+    return this.items.length;
+  }
+
+  // Remove and return the top element
+  pop() {
+    if (this.isEmpty()) {
+      throw new Error("Stack underflow");
+    }
+    return this.items.pop();
+  }
+
+  // Return the top element without removing it
+  peek() {
+    if (this.isEmpty()) {
+      return null;
+    }
+    return this.items[this.items.length - 1];
+  }
+
+  // Check if stack is empty
+  isEmpty() {
+    return this.items.length === 0;
+  }
+
+  // Return the size of the stack
+  size() {
+    return this.items.length;
+  }
+
+  // Clear the stack
+  clear() {
+    this.items = [];
+  }
+}
+
+// Usage example
+const stack = new Stack();
+stack.push(10);
+stack.push(20);
+console.log(stack.peek()); // 20
+console.log(stack.pop()); // 20
+console.log(stack.size()); // 1
+`;
+    } else if (language === 'python') {
+      return `# Stack Implementation
+class Stack:
+    def __init__(self):
+        self.items = []
+    
+    # Push element to the top of the stack
+    def push(self, element):
+        self.items.append(element)
+        return len(self.items)
+    
+    # Remove and return the top element
+    def pop(self):
+        if self.is_empty():
+            raise Exception("Stack underflow")
+        return self.items.pop()
+    
+    # Return the top element without removing it
+    def peek(self):
+        if self.is_empty():
+            return None
+        return self.items[-1]
+    
+    # Check if stack is empty
+    def is_empty(self):
+        return len(self.items) == 0
+    
+    # Return the size of the stack
+    def size(self):
+        return len(self.items)
+    
+    # Clear the stack
+    def clear(self):
+        self.items = []
+
+# Usage example
+stack = Stack()
+stack.push(10)
+stack.push(20)
+print(stack.peek())  # 20
+print(stack.pop())   # 20
+print(stack.size())  # 1
+`;
+    }
+  } else if (topicId.includes('queue')) {
+    if (language === 'javascript') {
+      return `// Queue Implementation
+class Queue {
+  constructor() {
+    this.items = [];
+  }
+
+  // Add element to the end of the queue
+  enqueue(element) {
+    this.items.push(element);
+    return this.items.length;
+  }
+
+  // Remove and return the front element
+  dequeue() {
+    if (this.isEmpty()) {
+      throw new Error("Queue underflow");
+    }
+    return this.items.shift();
+  }
+
+  // Return the front element without removing it
+  front() {
+    if (this.isEmpty()) {
+      return null;
+    }
+    return this.items[0];
+  }
+
+  // Check if queue is empty
+  isEmpty() {
+    return this.items.length === 0;
+  }
+
+  // Return the size of the queue
+  size() {
+    return this.items.length;
+  }
+
+  // Clear the queue
+  clear() {
+    this.items = [];
+  }
+}
+
+// Usage example
+const queue = new Queue();
+queue.enqueue(10);
+queue.enqueue(20);
+console.log(queue.front()); // 10
+console.log(queue.dequeue()); // 10
+console.log(queue.size()); // 1
+`;
+    } else if (language === 'python') {
+      return `# Queue Implementation
+class Queue:
+    def __init__(self):
+        self.items = []
+    
+    # Add element to the end of the queue
+    def enqueue(self, element):
+        self.items.append(element)
+        return len(self.items)
+    
+    # Remove and return the front element
+    def dequeue(self):
+        if self.is_empty():
+            raise Exception("Queue underflow")
+        return self.items.pop(0)
+    
+    # Return the front element without removing it
+    def front(self):
+        if self.is_empty():
+            return None
+        return self.items[0]
+    
+    # Check if queue is empty
+    def is_empty(self):
+        return len(self.items) == 0
+    
+    # Return the size of the queue
+    def size(self):
+        return len(self.items)
+    
+    # Clear the queue
+    def clear(self):
+        self.items = []
+
+# Usage example
+queue = Queue()
+queue.enqueue(10)
+queue.enqueue(20)
+print(queue.front())    # 10
+print(queue.dequeue())  # 10
+print(queue.size())     # 1
+`;
+    }
+  }
+
+  return defaultSnippets[language]?.default || defaultSnippets.javascript.default;
+}
 import { DefinitionBox } from '@/components/definition-box';
 import { VoiceNarrator } from '@/components/voice-narrator';
 import { VisualizerCodeRunner } from '@/components/visualizer/visualizer-code-runner';
@@ -520,9 +896,9 @@ arr.findIndex(v => v === 7); // search`,
       'bubble-sort': {
         definition: 'Bubble sort repeatedly compares adjacent elements and swaps them if out of order, pushing larger elements to the end each pass.',
         extras: [
-          'What it does: sorts by repeated local swaps.',
-          'How it works: after pass i, the i largest elements are in their final positions.',
-          'When to use: educational purposes or very small inputs.'
+          'What it does: sorts an array by repeatedly comparing and swapping adjacent elements if they are in the wrong order.',
+          'How it works: after each pass, the largest unsorted element bubbles up to its correct position at the end.',
+          'When to use: educational purposes or very small inputs where simplicity is more important than efficiency.'
         ],
         example: 'Input [5,1,4,2]\nPass 1: swap (5,1) -> [1,5,4,2], swap (5,4) -> [1,4,5,2], swap (5,2) -> [1,4,2,5]\nPass 2: [1,2,4,5] sorted',
         syntax: `function bubbleSort(a){\n  for(let i=0;i<a.length-1;i++){\n    for(let j=0;j<a.length-1-i;j++){\n      if(a[j]>a[j+1]) [a[j],a[j+1]]=[a[j+1],a[j]];\n    }\n  }\n  return a;\n}`,
@@ -555,7 +931,7 @@ arr.findIndex(v => v === 7); // search`,
         extras: [
           'What it does: stores elements without requiring contiguous memory and grows dynamically.',
           'How it works: each node has a value and a next pointer; to insert, rewire pointers; to delete, bypass a node.',
-          'Trade-off: accessing the k-th element requires walking from the head.'
+          'When to use: when you need efficient insertions/deletions and don\'t require backward traversal or random access.'
         ],
         example: 'Head -> 10 -> 20 -> 30\nInsert head 5 -> 5 -> 10 -> 20 -> 30\nDelete 20 -> 5 -> 10 -> 30',
         syntax: `class Node{constructor(v,n=null){this.v=v;this.n=n;}}\nlet head=null;\nhead=new Node(5,head); // insert at head`,
@@ -575,9 +951,9 @@ arr.findIndex(v => v === 7); // search`,
       'stack-operations': {
         definition: 'A stack is a Last-In, First-Out (LIFO) structure that supports push and pop at the top in constant time.',
         extras: [
-          'What it does: remembers the most recent items first—like undo history.',
-          'How it works: push places an item on top; pop removes the top; peek reads it.',
-          'Used for: function calls, backtracking, expression evaluation.'
+          'What it does: remembers the most recent items first—like undo history or browser back button.',
+          'How it works: push places an item on top; pop removes the top; peek reads it without removing.',
+          'When to use: function calls, backtracking, expression evaluation, and undo operations.'
         ],
         example: 'Push 10, push 20, push 30 -> top=30\nPop -> returns 30, top=20',
         syntax: `class Stack{constructor(){this.a=[];} push(x){this.a.push(x);} pop(){return this.a.pop();}}`,
@@ -586,9 +962,9 @@ arr.findIndex(v => v === 7); // search`,
       'queue-operations': {
         definition: 'A queue is a First-In, First-Out (FIFO) structure that enqueues at the rear and dequeues at the front in constant time.',
         extras: [
-          'What it does: processes items in arrival order.',
-          'How it works: enqueue appends to the tail; dequeue removes from the head.',
-          'Used for: scheduling, BFS, buffering.'
+          'What it does: processes items in arrival order, like a line of people waiting for service.',
+          'How it works: enqueue appends to the tail; dequeue removes from the head; both operations are O(1).',
+          'When to use: scheduling tasks, implementing BFS algorithms, request buffering, and message processing.'
         ],
         example: 'Enqueue 10,20,30 -> front=10, rear=30\nDequeue -> returns 10 -> front=20',
         syntax: `class Queue{constructor(){this.a=[];} enqueue(x){this.a.push(x);} dequeue(){return this.a.shift();}}`,
@@ -998,91 +1374,91 @@ arr.findIndex(v => v === 7); // search`,
             <VisualizationAutoNarrator introText={`Let's explore ${topic.title}. ${topic.description}`} />
             {/* Removed Code & Run Visualization button */}
 
-            {topic.id === 'array-basics' && <EnhancedArrayVisualizer />}
-            {topic.id === 'linked-list-singly' && <LinkedListVisualizer />}
-            {topic.id === 'stack-operations' && <StackVisualizer />}
-            {topic.id === 'queue-operations' && <QueueVisualizer />}
-            {topic.id === 'binary-search-tree' && <BinaryTreeVisualizer />}
-            {topic.id === 'tree-inorder-traversal' && <TreeTraversalVisualizer />}
-            {topic.id === 'tree-preorder-traversal' && <TreeTraversalVisualizer />}
-            {topic.id === 'tree-postorder-traversal' && <TreeTraversalVisualizer />}
-            {topic.id === 'bubble-sort' && <EnhancedBubbleSort />}
+            {topic.id === 'array-basics' && <EnhancedArrayVisualizer operation="basics" />}
+            {topic.id === 'linked-list-singly' && <LinkedListVisualizer listType="singly" />}
+            {topic.id === 'stack-operations' && <StackVisualizer operation="basic" />}
+            {topic.id === 'queue-operations' && <QueueVisualizer operation="basic" />}
+            {topic.id === 'binary-search-tree' && <BinaryTreeVisualizer treeType="bst" />}
+            {topic.id === 'tree-inorder-traversal' && <TreeTraversalVisualizer traversalType="inorder" />}
+            {topic.id === 'tree-preorder-traversal' && <TreeTraversalVisualizer traversalType="preorder" />}
+            {topic.id === 'tree-postorder-traversal' && <TreeTraversalVisualizer traversalType="postorder" />}
+            {topic.id === 'bubble-sort' && <EnhancedBubbleSort algorithm="bubble" />}
             {topic.id === 'merge-sort' && <SortingVisualizer algorithm="merge" />}
             {topic.id === 'quick-sort' && <SortingVisualizer algorithm="quick" />}
-            {topic.id === 'heap-operations' && <HeapVisualizer />}
-            {topic.id === 'trie-operations' && <TrieVisualizer />}
-            {topic.id === 'union-find' && <UnionFindVisualizer />}
-            {topic.id === 'dijkstra-algorithm' && <GraphVisualizer />}
-            {topic.id === 'string-search-kmp' && <StringMatchingVisualizer />}
+            {topic.id === 'heap-operations' && <HeapVisualizer operation="basic" />}
+            {topic.id === 'trie-operations' && <TrieVisualizer operation="operations" />}
+            {topic.id === 'union-find' && <UnionFindVisualizer operation="basic" />}
+            {topic.id === 'dijkstra-algorithm' && <GraphVisualizer algorithm="dijkstra" />}
+            {topic.id === 'string-search-kmp' && <StringMatchingVisualizer algorithm="kmp" />}
 
             {/* New Interactive Visualizers */}
-            {topic.id === 'array-rotation' && <ArrayRotationVisualizer />}
-            {topic.id === 'string-palindrome' && <PalindromeVisualizer />}
-            {topic.id === 'linear-search' && <SearchVisualizer />}
+            {topic.id === 'array-rotation' && <ArrayRotationVisualizer operation="rotation" />}
+            {topic.id === 'string-palindrome' && <PalindromeVisualizer type="basic" />}
+            {topic.id === 'linear-search' && <SearchVisualizer algorithm="linear" />}
             {topic.id === 'binary-search' && <EnhancedBinarySearch />}
-            {topic.id === 'interpolation-search' && <SearchVisualizer />}
-            {topic.id === 'hash-table' && <HashTableVisualizer />}
+            {topic.id === 'interpolation-search' && <SearchVisualizer algorithm="interpolation" />}
+            {topic.id === 'hash-table' && <HashTableVisualizer method="basic" />}
             {topic.id === 'hash-chaining' && <SeparateChainingVisualizer />}
-            {topic.id === 'open-addressing' && <HashTableVisualizer />}
-            {topic.id === 'recursion-basics' && <RecursionVisualizer />}
-            {topic.id === 'tail-recursion' && <RecursionVisualizer />}
-            {topic.id === 'fibonacci' && <RecursionVisualizer />}
-            {topic.id === 'dp-introduction' && <DPVisualizer />}
-            {topic.id === 'longest-common-subsequence' && <DPVisualizer />}
-            {topic.id === 'knapsack-problem' && <KnapsackVisualizer />}
-            {topic.id === 'longest-increasing-subsequence' && <LongestIncreasingSubsequenceVisualizer />}
-            {topic.id === 'activity-selection' && <GreedyVisualizer />}
-            {topic.id === 'huffman-coding' && <GreedyVisualizer />}
-            {topic.id === 'fractional-knapsack' && <GreedyVisualizer />}
-            {topic.id === 'n-queens' && <BacktrackingVisualizer />}
-            {topic.id === 'sudoku-solver' && <BacktrackingVisualizer />}
-            {topic.id === 'maze-solver' && <BacktrackingVisualizer />}
+            {topic.id === 'open-addressing' && <HashTableVisualizer method="open-addressing" />}
+            {topic.id === 'recursion-basics' && <RecursionVisualizer type="basic" />}
+            {topic.id === 'tail-recursion' && <RecursionVisualizer type="tail" />}
+            {topic.id === 'fibonacci' && <RecursionVisualizer type="fibonacci" />}
+            {topic.id === 'dp-introduction' && <DPVisualizer problem="introduction" />}
+            {topic.id === 'longest-common-subsequence' && <DPVisualizer problem="lcs" />}
+            {topic.id === 'knapsack-problem' && <KnapsackVisualizer problem="01knapsack" />}
+            {topic.id === 'longest-increasing-subsequence' && <LongestIncreasingSubsequenceVisualizer problem="lis" />}
+            {topic.id === 'activity-selection' && <GreedyVisualizer algorithm="activity-selection" />}
+            {topic.id === 'huffman-coding' && <GreedyVisualizer algorithm="huffman" />}
+            {topic.id === 'fractional-knapsack' && <GreedyVisualizer algorithm="fractional-knapsack" />}
+            {topic.id === 'n-queens' && <BacktrackingVisualizer problem="n-queens" />}
+            {topic.id === 'sudoku-solver' && <BacktrackingVisualizer problem="sudoku" />}
+            {topic.id === 'maze-solver' && <BacktrackingVisualizer problem="maze" />}
             {topic.id === 'linked-list-doubly' && <DoublyLinkedListVisualizer />}
-            {topic.id === 'graph-dfs' && <DFSBFSVisualizer />}
-            {topic.id === 'graph-bfs' && <DFSBFSVisualizer />}
-            {topic.id === 'segment-tree' && <AdvancedVisualizer />}
-            {topic.id === 'fenwick-tree' && <AdvancedVisualizer />}
-            {topic.id === 'trie' && <TrieVisualizer />}
-            {topic.id === 'binary-tree' && <BinaryTreeVisualizer />}
+            {topic.id === 'graph-dfs' && <DFSBFSVisualizer algorithm="dfs" />}
+            {topic.id === 'graph-bfs' && <DFSBFSVisualizer algorithm="bfs" />}
+            {topic.id === 'segment-tree' && <AdvancedVisualizer structure="segment-tree" />}
+            {topic.id === 'fenwick-tree' && <AdvancedVisualizer structure="fenwick-tree" />}
+            {topic.id === 'trie' && <TrieVisualizer operation="basic" />}
+            {topic.id === 'binary-tree' && <BinaryTreeVisualizer treeType="binary" />}
 
             {/* Additional visualizers for new topics */}
-            {topic.id === 'heap-sort' && <HeapVisualizer />}
-            {topic.id === 'insertion-sort' && <InsertionSortVisualizer />}
-            {topic.id === 'selection-sort' && <SelectionSortVisualizer />}
-            {topic.id === 'counting-sort' && <CountingSortVisualizer />}
+            {topic.id === 'heap-sort' && <HeapVisualizer operation="sort" />}
+            {topic.id === 'insertion-sort' && <InsertionSortVisualizer algorithm="insertion" />}
+            {topic.id === 'selection-sort' && <SelectionSortVisualizer algorithm="selection" />}
+            {topic.id === 'counting-sort' && <CountingSortVisualizer algorithm="counting" />}
             {topic.id === 'radix-sort' && <SortingVisualizer algorithm="radix" />}
             {topic.id === 'bucket-sort' && <SortingVisualizer algorithm="bucket" />}
-            {topic.id === 'bellman-ford' && <GraphVisualizer />}
-            {topic.id === 'floyd-warshall' && <GraphVisualizer />}
-            {topic.id === 'kruskal-algorithm' && <GraphVisualizer />}
-            {topic.id === 'prim-algorithm' && <GraphVisualizer />}
-            {topic.id === 'topological-sort' && <GraphVisualizer />}
-            {topic.id === 'rabin-karp' && <StringMatchingVisualizer />}
-            {topic.id === 'z-algorithm' && <StringMatchingVisualizer />}
-            {topic.id === 'manacher-algorithm' && <StringMatchingVisualizer />}
-            {topic.id === 'string-anagram' && <StringMatchingVisualizer />}
-            {topic.id === 'avl-tree' && <BinaryTreeVisualizer />}
-            {topic.id === 'red-black-tree' && <BinaryTreeVisualizer />}
-            {topic.id === 'b-tree' && <BinaryTreeVisualizer />}
-            {topic.id === 'splay-tree' && <BinaryTreeVisualizer />}
-            {topic.id === 'two-sum' && <TwoPointersVisualizer />}
-            {topic.id === 'three-sum' && <TwoPointersVisualizer />}
-            {topic.id === 'container-water' && <TwoPointersVisualizer />}
-            {topic.id === 'remove-duplicates' && <TwoPointersVisualizer />}
-            {topic.id === 'sliding-window-maximum' && <SlidingWindowVisualizer />}
-            {topic.id === 'longest-substring' && <SlidingWindowVisualizer />}
-            {topic.id === 'bit-basics' && <BitManipulationVisualizer />}
-            {topic.id === 'count-set-bits' && <BitManipulationVisualizer />}
-            {topic.id === 'power-of-two' && <BitManipulationVisualizer />}
-            {topic.id === 'single-number' && <BitManipulationVisualizer />}
-            {topic.id === 'bit-subset' && <BitManipulationVisualizer />}
-            {topic.id === 'number-theory-basics' && <MathematicalVisualizer />}
-            {topic.id === 'prime-algorithms' && <MathematicalVisualizer />}
-            {topic.id === 'fast-exponentiation' && <MathematicalVisualizer />}
-            {topic.id === 'array-subarray-problems' && <EnhancedArrayVisualizer />}
-            {topic.id === 'linked-list-circular' && <LinkedListVisualizer />}
-            {topic.id === 'heap-operations' && <HeapVisualizer />}
-            {topic.id === 'sliding-window-basics' && <SlidingWindowVisualizer />}
+            {topic.id === 'bellman-ford' && <GraphVisualizer algorithm="bellman-ford" />}
+            {topic.id === 'floyd-warshall' && <GraphVisualizer algorithm="floyd-warshall" />}
+            {topic.id === 'kruskal-algorithm' && <GraphVisualizer algorithm="kruskal" />}
+            {topic.id === 'prim-algorithm' && <GraphVisualizer algorithm="prim" />}
+            {topic.id === 'topological-sort' && <GraphVisualizer algorithm="topological-sort" />}
+            {topic.id === 'rabin-karp' && <StringMatchingVisualizer algorithm="rabin-karp" />}
+            {topic.id === 'z-algorithm' && <StringMatchingVisualizer algorithm="z-algorithm" />}
+            {topic.id === 'manacher-algorithm' && <StringMatchingVisualizer algorithm="manacher" />}
+            {topic.id === 'string-anagram' && <StringMatchingVisualizer algorithm="anagram" />}
+            {topic.id === 'avl-tree' && <BinaryTreeVisualizer treeType="avl" />}
+            {topic.id === 'red-black-tree' && <BinaryTreeVisualizer treeType="red-black" />}
+            {topic.id === 'b-tree' && <BinaryTreeVisualizer treeType="b-tree" />}
+            {topic.id === 'splay-tree' && <BinaryTreeVisualizer treeType="splay" />}
+            {topic.id === 'two-sum' && <TwoPointersVisualizer algorithm="two-sum" />}
+            {topic.id === 'three-sum' && <TwoPointersVisualizer algorithm="three-sum" />}
+            {topic.id === 'container-water' && <TwoPointersVisualizer algorithm="container-water" />}
+            {topic.id === 'remove-duplicates' && <TwoPointersVisualizer algorithm="remove-duplicates" />}
+            {topic.id === 'sliding-window-maximum' && <SlidingWindowVisualizer algorithm="maximum" />}
+            {topic.id === 'longest-substring' && <SlidingWindowVisualizer algorithm="substring" />}
+            {topic.id === 'bit-basics' && <BitManipulationVisualizer operation="basics" />}
+            {topic.id === 'count-set-bits' && <BitManipulationVisualizer operation="count-bits" />}
+            {topic.id === 'power-of-two' && <BitManipulationVisualizer operation="power-of-two" />}
+            {topic.id === 'single-number' && <BitManipulationVisualizer operation="single-number" />}
+            {topic.id === 'bit-subset' && <BitManipulationVisualizer operation="subset" />}
+            {topic.id === 'number-theory-basics' && <MathematicalVisualizer topic="basics" />}
+            {topic.id === 'prime-algorithms' && <MathematicalVisualizer topic="prime" />}
+            {topic.id === 'fast-exponentiation' && <MathematicalVisualizer topic="exponentiation" />}
+            {topic.id === 'array-subarray-problems' && <EnhancedArrayVisualizer operation="subarray" />}
+            {topic.id === 'linked-list-circular' && <LinkedListVisualizer listType="circular" />}
+            {/* Removed duplicate heap-operations visualizer */}
+            {topic.id === 'sliding-window-basics' && <SlidingWindowVisualizer algorithm="basics" />}
 
           
           </div>
@@ -1158,21 +1534,19 @@ arr.findIndex(v => v === 7); // search`,
           />
 
           {/* Code Implementation */}
-          {getCodeSnippet(topic.id) && (
-            <CodeSnippetBox
-              title={`${topic.title} Implementation`}
-              language={getCodeSnippet(topic.id)!.language}
-              code={getCodeSnippet(topic.id)!.code}
-              description={getCodeSnippet(topic.id)!.description}
-              implementations={{
-                javascript: getCodeSnippet(topic.id, 'javascript')?.code,
-                python: getCodeSnippet(topic.id, 'python')?.code,
-                java: getCodeSnippet(topic.id, 'java')?.code,
-                c: getCodeSnippet(topic.id, 'c')?.code
-              }}
-              topicId={topic.id}
-            />
-          )}
+          <CodeSnippetBox
+            title={`${topic.title} Implementation`}
+            language={getCodeSnippet(topic.id)?.language || 'javascript'}
+            code={getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title)}
+            description={getCodeSnippet(topic.id)?.description || `Implementation of ${topic.title} with multiple language support`}
+            implementations={{
+              javascript: getCodeSnippet(topic.id, 'javascript')?.code || getDefaultCodeSnippet(topic.id, topic.title, 'javascript'),
+              python: getCodeSnippet(topic.id, 'python')?.code || getDefaultCodeSnippet(topic.id, topic.title, 'python'),
+              java: getCodeSnippet(topic.id, 'java')?.code || getDefaultCodeSnippet(topic.id, topic.title, 'java'),
+              c: getCodeSnippet(topic.id, 'c')?.code || getDefaultCodeSnippet(topic.id, topic.title, 'c')
+            }}
+            topicId={topic.id}
+          />
 
           {/* Pseudocode */}
           <PseudocodeBox

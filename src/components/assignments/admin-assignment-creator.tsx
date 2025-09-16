@@ -105,7 +105,14 @@ export function AdminAssignmentCreator() {
     setRubric(rubric.filter((_, i) => i !== index));
   };
 
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [savedAssignmentId, setSavedAssignmentId] = useState<string | null>(null);
+
   const handleSave = () => {
+    setIsSaving(true);
+    setSaveSuccess(false);
+    
     const question: AssignmentQuestion = {
       type: questionType,
       content: questionContent,
@@ -139,8 +146,56 @@ export function AdminAssignmentCreator() {
       tags
     });
 
-    console.log('Created assignment:', assignment);
     // In a real app, you would save to the backend here
+    // For now, we'll simulate saving to localStorage
+    try {
+      // Get existing assignments from localStorage or initialize empty array
+      const existingAssignments = JSON.parse(localStorage.getItem('dsa_assignments') || '[]');
+      
+      // Add the new assignment
+      existingAssignments.push(assignment);
+      
+      // Save back to localStorage
+      localStorage.setItem('dsa_assignments', JSON.stringify(existingAssignments));
+      
+      console.log('Assignment saved successfully:', assignment);
+      setSavedAssignmentId(assignment.id);
+      setSaveSuccess(true);
+      
+      // Reset form after successful save
+      setTimeout(() => {
+        if (confirm('Assignment created successfully! Create another assignment?')) {
+          resetForm();
+        }
+      }, 500);
+    } catch (error) {
+      console.error('Error saving assignment:', error);
+      alert('Failed to save assignment. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+  
+  const resetForm = () => {
+    setTitle('');
+    setDescription('');
+    setQuestionType('problem');
+    setDifficulty('medium');
+    setTopicId('');
+    setPoints(10);
+    setDueDate('');
+    setInstructions('');
+    setTags([]);
+    setQuestionContent('');
+    setOptions(['', '', '', '']);
+    setCorrectAnswer(0);
+    setConstraints('');
+    setCodeTemplate('');
+    setLanguage('javascript');
+    setTestCases([]);
+    setRubric([]);
+    setSaveSuccess(false);
+    setSavedAssignmentId(null);
   };
 
   const renderQuestionTypeFields = () => {

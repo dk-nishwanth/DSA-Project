@@ -328,24 +328,34 @@ export const gradeSubmission = (
   };
 };
 
+// Helper function to get all assignments (both sample and from localStorage)
+const getAllAssignments = (): Assignment[] => {
+  // Get assignments from localStorage
+  const localStorageAssignments = JSON.parse(localStorage.getItem('dsa_assignments') || '[]');
+  
+  // Combine with sample assignments
+  return [...SAMPLE_ASSIGNMENTS, ...localStorageAssignments];
+};
+
 export const getAssignmentById = (id: string): Assignment | undefined => {
-  return SAMPLE_ASSIGNMENTS.find(assignment => assignment.id === id);
+  return getAllAssignments().find(assignment => assignment.id === id);
 };
 
 export const getAssignmentsByTopic = (topicId: string): Assignment[] => {
-  return SAMPLE_ASSIGNMENTS.filter(assignment => assignment.topicId === topicId);
+  return getAllAssignments().filter(assignment => assignment.topicId === topicId);
 };
 
 export const getActiveAssignments = (): Assignment[] => {
-  return SAMPLE_ASSIGNMENTS.filter(assignment => assignment.isActive);
+  // Filter active assignments
+  return getAllAssignments().filter(assignment => assignment.isActive);
 };
 
 export const getAssignmentsByDifficulty = (difficulty: 'easy' | 'medium' | 'hard'): Assignment[] => {
-  return SAMPLE_ASSIGNMENTS.filter(assignment => assignment.difficulty === difficulty);
+  return getAllAssignments().filter(assignment => assignment.difficulty === difficulty);
 };
 
 export const getAssignmentsByType = (type: Assignment['questionType']): Assignment[] => {
-  return SAMPLE_ASSIGNMENTS.filter(assignment => assignment.questionType === type);
+  return getAllAssignments().filter(assignment => assignment.questionType === type);
 };
 
 // Helper functions for question types

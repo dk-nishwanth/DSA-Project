@@ -34,10 +34,10 @@ export function ComplexityBox({
 
   return (
     <div className="bg-card border rounded-xl p-4 shadow-lg">
-      <div className="flex items-center gap-2 mb-3">
+      {/* <div className="flex items-center gap-2 mb-3">
         <Info className="h-4 w-4 text-primary" />
         <h4 className="font-semibold text-card-foreground">{title}</h4>
-      </div>
+      </div> */}
       
       {description && (
         <p className="text-sm text-muted-foreground mb-4">{description}</p>
