@@ -1,16 +1,24 @@
-import { useState } from 'react';
-import { Search, Filter, Grid3X3, List } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, Filter, Grid3X3, List, Crown, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { ConceptCard } from '@/components/concept-card';
+import { TopicListItem } from '@/components/content/topic-gate';
 import { dsaTopics, dsaCategories } from '@/data/dsaTopics';
+import { useAuth } from '@/contexts/auth-context';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function Dashboard() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('All');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const { user, isPremium } = useAuth();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const isTrialMode = searchParams.get('trial') === 'true';
 
   const filteredTopics = dsaTopics.filter(topic => {
     const matchesSearch = topic.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -29,6 +37,36 @@ export default function Dashboard() {
 
   return (
     <div className="p-6 space-y-6 animate-fade-in">
+      {/* Subscription Status Banner */}
+      {!isPremium && (
+        <Card className="border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Crown className="w-8 h-8 text-amber-500" />
+                <div>
+                  <h3 className="font-semibold text-amber-800">
+                    {isTrialMode ? 'Free Trial Active' : 'Unlock Full Access'}
+                  </h3>
+                  <p className="text-sm text-amber-700">
+                    {isTrialMode 
+                      ? 'You have access to the first topic. Upgrade to unlock all content!'
+                      : 'Get unlimited access to all topics, visualizations, and practice problems'
+                    }
+                  </p>
+                </div>
+              </div>
+              <Button 
+                onClick={() => navigate('/subscription-payment')}
+                className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
+              >
+                Upgrade Now - ₹50/month
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Header */}
       <div className="space-y-4">
         <div>
@@ -172,9 +210,36 @@ export default function Dashboard() {
             : 'grid-cols-1'
           }
         `}>
-          {filteredTopics.map(topic => (
-            <ConceptCard key={topic.id} topic={topic} />
-          ))}
+          {filteredTopics.map((topic, index) => {
+            const isFirstTopic = index === 0;
+            const hasAccess = isPremium || isFirstTopic;
+            
+            return (
+              <div key={topic.id} className="relative">
+                {hasAccess ? (
+                  <ConceptCard topic={topic} />
+                ) : (
+                  <div className="relative">
+                    <ConceptCard topic={topic} />
+                    <div className="absolute inset-0 bg-gradient-to-br from-amber-50/90 to-orange-50/90 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                      <div className="text-center p-4">
+                        <Lock className="w-8 h-8 mx-auto mb-2 text-amber-600" />
+                        <p className="font-medium text-amber-800 mb-2">Premium Content</p>
+                        <Button 
+                          size="sm"
+                          onClick={() => navigate('/subscription-payment')}
+                          className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
+                        >
+                          <Crown className="w-3 h-3 mr-1" />
+                          Upgrade
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
         
         {filteredTopics.length === 0 && (

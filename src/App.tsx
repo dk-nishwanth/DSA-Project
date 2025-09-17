@@ -22,9 +22,8 @@ import Profile from "./pages/Profile";
 import Assignments from "./pages/Assignments";
 import AssignmentDetail from "./pages/AssignmentDetail";
 import AdminAssignmentCreator from "./pages/AdminAssignmentCreator";
-import CollegeSignup from "./pages/CollegeSignup";
-import CollegeLogin from "./pages/CollegeLogin";
-import CollegePayment from "./pages/CollegePayment";
+import SubscriptionPayment from "./pages/SubscriptionPayment";
+import PaymentSuccess from "./pages/PaymentSuccess";
 
 const queryClient = new QueryClient();
 
@@ -44,10 +43,9 @@ const App = () => (
             <Route path="/admin/signup" element={<Signup />} />
             <Route path="/authorization" element={<Authorization />} />
             
-            {/* College Student Routes */}
-            <Route path="/college-signup" element={<CollegeSignup />} />
-            <Route path="/college-login" element={<CollegeLogin />} />
-            <Route path="/college-payment" element={<CollegePayment />} />
+            {/* Payment Routes */}
+            <Route path="/subscription-payment" element={<SubscriptionPayment />} />
+            <Route path="/payment-success" element={<PaymentSuccess />} />
             
             {/* Admin Routes */}
             <Route path="/admin/dashboard" element={<AdminDashboard />} />

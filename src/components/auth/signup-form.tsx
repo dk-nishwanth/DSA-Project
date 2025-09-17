@@ -62,7 +62,8 @@ export function SignupForm({ onSwitchToAdmin }: SignupFormProps) {
         title: "Account created successfully",
         description: "Welcome to DSA Learning Platform!",
       });
-      navigate('/dashboard');
+      // Redirect to subscription page after successful registration
+      navigate('/subscription-payment');
     } catch (error: any) {
       toast({
         title: "Registration failed",

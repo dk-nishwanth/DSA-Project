@@ -130,48 +130,13 @@ export default function Landing() {
             </Card>
           </div>
 
-          <div className="mt-8 text-center space-y-4">
+          <div className="mt-8 text-center">
             <p className="text-sm text-muted-foreground">
               New to the platform?{' '}
               <Button variant="link" className="p-0 h-auto" onClick={() => navigate('/signup')}>
                 Create an account
               </Button>
             </p>
-            
-            {/* College Student Registration Section */}
-            <div className="border-t pt-6">
-              <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-6">
-                <div className="text-center mb-4">
-                  <div className="mx-auto w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-3">
-                    <Users className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900">Other College Students</h3>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Join students from other colleges and universities
-                  </p>
-                </div>
-                
-                <Button 
-                  variant="outline" 
-                  className="w-full border-purple-200 hover:bg-purple-50"
-                  onClick={() => navigate('/college-signup')}
-                >
-                  Register as College Student
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-                
-                <p className="text-xs text-muted-foreground mt-2 text-center">
-                  Already registered?{' '}
-                  <Button 
-                    variant="link" 
-                    className="p-0 h-auto text-xs" 
-                    onClick={() => navigate('/college-login')}
-                  >
-                    Login here
-                  </Button>
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

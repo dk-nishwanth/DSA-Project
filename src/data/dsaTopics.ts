@@ -413,8 +413,6 @@ console.log(maxSubarraySum(nums)); // 6 (subarray [4, -1, 2, 1])`,
    }
    \`\`\``
   },
-
-  // Strings
   {
     id: 'string-palindrome',
     title: 'Palindrome Check',
@@ -423,6 +421,7 @@ console.log(maxSubarraySum(nums)); // 6 (subarray [4, -1, 2, 1])`,
     difficulty: 'beginner',
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
+    voiceExplanation: `Think of a palindrome like a word or phrase that reads the same forwards and backwards - like "racecar" or "madam". Imagine you have two people standing at opposite ends of the word, one at the beginning and one at the end. They both start walking toward each other, checking if the letters they encounter are the same. If at any point the letters don't match, it's not a palindrome. If they meet in the middle and all letters matched along the way, congratulations - you've found a palindrome! This two-pointer approach is like having two inspectors working from both ends, making the process twice as fast. For phrases like "A man, a plan, a canal: Panama", we first clean up the text by removing spaces and punctuation, then apply the same walking-from-both-ends technique.`,
     example: `// Palindrome Check
 function isPalindrome(str) {
     const cleaned = str.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -585,6 +584,7 @@ function buildLPS(pattern) {
     difficulty: 'intermediate',
     timeComplexity: 'O(n + m)',
     spaceComplexity: 'O(1)',
+    voiceExplanation: `Imagine you're looking for a specific word in a massive book, but instead of reading every word, you have a magical fingerprint scanner. The Rabin-Karp algorithm works like this scanner - it creates a unique "fingerprint" or hash value for the pattern you're searching for. Then, it slides a window through the text, creating fingerprints for each substring of the same length. Here's the clever part: instead of recalculating the entire fingerprint each time, it uses a "rolling hash" - like updating a fingerprint by removing the leftmost character and adding a new rightmost character. When two fingerprints match, it's like finding a potential match, but you still need to double-check character by character because different words can sometimes have the same fingerprint. It's particularly powerful when searching for multiple patterns simultaneously, making it a favorite for plagiarism detection and DNA sequence analysis.`,
     extendedDefinition: `The Rabin-Karp algorithm uses hashing to find pattern occurrences in text efficiently. It employs a rolling hash function that can be updated in constant time as the window slides through the text, making it particularly effective for multiple pattern searches.
 
 **Core Concept - Rolling Hash:**
@@ -682,6 +682,7 @@ function rabinKarp(text, pattern) {
     difficulty: 'advanced',
     timeComplexity: 'O(n + m)',
     spaceComplexity: 'O(n + m)',
+    voiceExplanation: `The Z Algorithm is like having a smart memory system that remembers patterns it has seen before. Imagine you're reading a book and you want to find every place where a certain phrase repeats. The Z Algorithm creates a special "memory array" called the Z array, where each position tells you how many characters match between that position and the very beginning of the string. It's like having a ruler that measures how much of the beginning of the string matches at each position. The brilliant part is that it uses previously computed information to avoid redundant comparisons - if you already know that positions 5-10 match the beginning, you can use that knowledge to quickly compute matches for positions 6, 7, 8, and so on. This makes it incredibly efficient for finding patterns, with applications in text editors, DNA analysis, and data compression.`,
     extendedDefinition: `The Z Algorithm is a linear-time string matching algorithm that constructs a Z array where Z[i] represents the length of the longest substring starting from position i that is also a prefix of the string. This powerful preprocessing enables efficient pattern matching and various string analysis tasks.
 
 **Z Array Definition:**
@@ -885,6 +886,7 @@ function longestPalindrome(s) {
     difficulty: 'beginner',
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
+    voiceExplanation: `Think of anagrams like word puzzles where you rearrange the letters of one word to form another word - like "listen" and "silent", or "elbow" and "below". The key insight is that anagrams must have exactly the same letters in the same quantities, just in different orders. Imagine you have two bags of letter tiles - if they're anagrams, both bags should contain identical sets of letters. The most efficient way to check this is to count the frequency of each letter in both strings. You can do this by going through the first string and adding 1 to each letter's count, then going through the second string and subtracting 1 from each letter's count. If they're true anagrams, all counts should end up at zero. It's like a perfect balancing act - every letter added from the first word should be perfectly canceled out by the same letter from the second word.`,
     example: `// Anagram Detection
 function isAnagram(s1, s2) {
     if (s1.length !== s2.length) return false;
@@ -942,6 +944,7 @@ console.log(isAnagram("hello", "world")); // false`,
     difficulty: 'beginner',
     timeComplexity: 'O(1) - O(n)',
     spaceComplexity: 'O(1)',
+    voiceExplanation: `Think of a singly linked list like a treasure hunt where each clue leads you to the next location. Unlike an array where you can jump to any position instantly, a linked list is like a chain of connected nodes where each node knows only about the next one in line. Imagine you have a train where each car is connected to the next car, but you can only move forward - you can't go backwards. Each node in the list contains two things: the actual data you want to store, and a pointer or reference that tells you where to find the next node. The beauty of linked lists is their flexibility - you can easily add or remove nodes anywhere in the chain by simply updating the connections, like unhooking and rehooking train cars. However, if you want to find a specific piece of data, you have to start from the beginning and follow the chain until you find it, which can be slower than arrays for searching.`,
     extendedDefinition: `A Singly Linked List is a linear data structure where elements (nodes) are stored in sequence, with each node containing data and a reference (pointer) to the next node. Unlike arrays, linked lists don't require contiguous memory allocation, providing dynamic size capabilities.
 
 **Node Structure:**
@@ -1094,6 +1097,7 @@ class SinglyLinkedList {
     difficulty: 'intermediate',
     timeComplexity: 'O(1) - O(n)',
     spaceComplexity: 'O(1)',
+    voiceExplanation: `A doubly linked list is like upgrading from a one-way street to a two-way street. While a singly linked list only lets you move forward from one node to the next, a doubly linked list gives each node two connections - one pointing to the next node and another pointing to the previous node. Think of it like a train where each car is connected to both the car in front and the car behind it. This bidirectional connectivity makes many operations more efficient. For example, if you want to delete a node, you don't need to traverse from the beginning to find the previous node - you already have a direct reference to it. You can also traverse the list in both directions, which is useful for applications like browser history where you need to go both forward and backward through pages. The trade-off is that each node requires extra memory to store the additional pointer, but this cost is often worth it for the added flexibility and efficiency.`,
     example: `// Doubly Linked List Node
 class DoublyNode {
     constructor(data) {
@@ -1167,6 +1171,7 @@ class DoublyLinkedList {
     difficulty: 'intermediate',
     timeComplexity: 'O(1) - O(n)',
     spaceComplexity: 'O(1)',
+    voiceExplanation: `A circular linked list is like a regular linked list that has been bent into a circle - the last node points back to the first node instead of pointing to null. Imagine a group of people holding hands in a circle, where each person can only see and hold hands with the person next to them. You can start from any person and keep walking around the circle, and you'll eventually come back to where you started. This circular structure is perfect for applications that need to cycle through items repeatedly, like a playlist that repeats, a round-robin scheduler, or a game where players take turns. The tricky part is avoiding infinite loops when traversing - you need to remember where you started so you know when you've completed a full circle. Circular linked lists are especially useful when you need to represent cyclical processes or when you want to eliminate the concept of a "beginning" and "end" in your data structure.`,
     example: `// Circular Linked List
 class CircularLinkedList {
     constructor() {
@@ -1419,7 +1424,10 @@ console.log(queue.front()); // 2`,
            this.front = this.rear = -1;
            this.size = size;
        }
-       
+       isFull() {
+           return (this.front === 0 && this.rear === this.size - 1) || ((this.rear + 1) % this.size === this.front);
+       }
+       isEmpty() { return this.front === -1; }
        enqueue(element) {
            if (this.isFull()) return false;
            this.rear = (this.rear + 1) % this.size;
@@ -1427,11 +1435,17 @@ console.log(queue.front()); // 2`,
            if (this.front === -1) this.front = 0;
            return true;
        }
+       dequeue() {
+           if (this.isEmpty()) return null;
+           const item = this.items[this.front];
+           if (this.front === this.rear) { this.front = this.rear = -1; }
+           else { this.front = (this.front + 1) % this.size; }
+           return item;
+       }
+       frontElement() { return this.isEmpty() ? null : this.items[this.front]; }
    }
    \`\`\``
   },
-
-  // Trees
   {
     id: 'binary-tree',
     title: 'Binary Tree Fundamentals',
@@ -1440,6 +1454,7 @@ console.log(queue.front()); // 2`,
     difficulty: 'intermediate',
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(h)',
+    voiceExplanation: 'Think of a binary tree like a family tree, but with a special rule: each person can have at most two children - a left child and a right child. The tree starts with a single root node at the top, like the oldest ancestor, and branches downward. What makes binary trees fascinating is how you can visit all the family members in different orders. You can visit them inorder by going left child, then parent, then right child - like reading names alphabetically. You can visit preorder by going parent first, then left child, then right child - like introducing the head of household first. Or you can visit postorder by going left child, right child, then parent - like children speaking before their parents. Each traversal method gives you the data in a different sequence, making binary trees incredibly versatile for organizing and retrieving information in various ways.',
     example: `// Binary Tree Node
 class TreeNode {
     constructor(val) {
@@ -1471,37 +1486,6 @@ root.left.left = new TreeNode(4);
 root.left.right = new TreeNode(5);
 
 console.log(inorderTraversal(root)); // [4, 2, 5, 1, 3]`,
-    syntax: `**Binary Tree Traversal Patterns:**
-
-1. **Inorder (Left, Root, Right):**
-   \`\`\`javascript
-   function inorder(root) {
-       if (!root) return;
-       inorder(root.left);
-       console.log(root.val);
-       inorder(root.right);
-   }
-   \`\`\`
-
-2. **Preorder (Root, Left, Right):**
-   \`\`\`javascript
-   function preorder(root) {
-       if (!root) return;
-       console.log(root.val);
-       preorder(root.left);
-       preorder(root.right);
-   }
-   \`\`\`
-
-3. **Postorder (Left, Right, Root):**
-   \`\`\`javascript
-   function postorder(root) {
-       if (!root) return;
-       postorder(root.left);
-       postorder(root.right);
-       console.log(root.val);
-   }
-   \`\`\``
   },
   {
     id: 'binary-search-tree',
@@ -1511,6 +1495,7 @@ console.log(inorderTraversal(root)); // [4, 2, 5, 1, 3]`,
     difficulty: 'intermediate',
     timeComplexity: 'O(log n) - O(n)',
     spaceComplexity: 'O(h)',
+    voiceExplanation: `Think of a Binary Search Tree like a perfectly organized filing system where everything has its logical place. Imagine you're the root of the family tree, and everyone to your left in the family has a smaller value than you, and everyone to your right has a larger value. This rule applies to every person in the tree - they're always bigger than everyone on their left and smaller than everyone on their right. This organization makes searching incredibly fast because you can eliminate half the tree with each comparison, just like binary search. When you want to find someone, you start at the top and keep going left if they're smaller or right if they're bigger until you find them. It's like having a perfectly organized filing system where everything has its logical place.`,
     extendedDefinition: `A Binary Search Tree (BST) is a hierarchical data structure where each node has at most two children, and the tree maintains the BST property: for every node, all values in the left subtree are smaller, and all values in the right subtree are larger.
 
 **BST Property:**
@@ -1527,8 +1512,7 @@ console.log(inorderTraversal(root)); // [4, 2, 5, 1, 3]`,
 - **Inorder**: Left → Root → Right (gives sorted order)
 - **Preorder**: Root → Left → Right (useful for copying tree)
 - **Postorder**: Left → Right → Root (useful for deleting tree)`,
-    voiceExplanation: `Think of a Binary Search Tree like a family tree, but with a special rule for organizing data. Imagine you're the root of the family tree. Everyone to your left in the family has a smaller value than you, and everyone to your right has a larger value. This rule applies to every person in the tree - they're always bigger than everyone on their left and smaller than everyone on their right. This organization makes searching incredibly fast because you can eliminate half the tree with each comparison, just like binary search. When you want to find someone, you start at the top and keep going left if they're smaller or right if they're bigger until you find them. It's like having a perfectly organized filing system where everything has its logical place.`,
-    realWorldApplications: `**Industry Applications:**
+  realWorldApplications: `**Industry Applications:**
 - **Database Systems**: B-trees for indexing, query optimization, range queries
 - **File Systems**: Directory structures, file organization, metadata storage
 - **Compiler Design**: Symbol tables, syntax trees, expression parsing
