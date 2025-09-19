@@ -1,7 +1,10 @@
 import { User, Subscription, PaymentPlan, SUBSCRIPTION_PLANS } from '@/types/subscription';
+import { API_BASE_URL } from '@/lib/api';
 
 export class SubscriptionService {
-  private baseUrl = process.env.VITE_API_URL || 'http://localhost:3001/api';
+  // Note: The current backend does not expose subscription endpoints.
+  // We keep this service for future integration and use a consistent base URL.
+  private baseUrl = `${API_BASE_URL.replace(/\/$/, '')}/api`;
 
   async getPlans(): Promise<PaymentPlan[]> {
     return SUBSCRIPTION_PLANS;
@@ -12,7 +15,7 @@ export class SubscriptionService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${localStorage.getItem('dsa_auth_token')}`
       },
       body: JSON.stringify({ planId, userId })
     });
@@ -29,7 +32,7 @@ export class SubscriptionService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${localStorage.getItem('dsa_auth_token')}`
       },
       body: JSON.stringify({ paymentId, subscriptionId })
     });
@@ -45,7 +48,7 @@ export class SubscriptionService {
     const response = await fetch(`${this.baseUrl}/subscriptions/${subscriptionId}/cancel`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${localStorage.getItem('dsa_auth_token')}`
       }
     });
 
@@ -57,7 +60,7 @@ export class SubscriptionService {
   async getUserSubscription(userId: string): Promise<Subscription | null> {
     const response = await fetch(`${this.baseUrl}/users/${userId}/subscription`, {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${localStorage.getItem('dsa_auth_token')}`
       }
     });
 

@@ -1,6 +1,38 @@
 
-export const API_BASE_URL: string =
-  (import.meta as any)?.env?.VITE_API_URL || 'http://localhost:5000';
+// Dynamic backend base URL resolution with runtime override support
+const DEFAULT_API_BASE = (import.meta as any)?.env?.VITE_API_URL || 'http://localhost:5000';
+const LS_API_KEY = 'dsa_api_base_url';
+
+function resolveApiBaseFromUrlParam(): string | null {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const url = params.get('backend');
+    if (url && /^https?:\/\//i.test(url)) return url;
+  } catch {}
+  return null;
+}
+
+export function getApiBaseUrl(): string {
+  const param = resolveApiBaseFromUrlParam();
+  if (param) return param;
+  const fromLS = localStorage.getItem(LS_API_KEY);
+  return (fromLS || DEFAULT_API_BASE).replace(/\/$/, '');
+}
+
+export function setApiBaseUrl(url: string | null): void {
+  if (!url) {
+    localStorage.removeItem(LS_API_KEY);
+    return;
+  }
+  try {
+    const u = new URL(url);
+    localStorage.setItem(LS_API_KEY, `${u.origin}${u.pathname}`.replace(/\/$/, ''));
+  } catch {
+    // ignore invalid URLs
+  }
+}
+
+export const API_BASE_URL: string = getApiBaseUrl();
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
@@ -23,7 +55,13 @@ export async function apiFetch<T = unknown>(
   path: string,
   { method = 'GET', headers, params, json, ...rest }: ApiRequestOptions = {}
 ): Promise<T> {
-  const url = buildUrl(path, params);
+  // If base URL override changed at runtime, recompute
+  const url = new URL(path.replace(/^\//, ''), getApiBaseUrl().replace(/\/$/, '/') + '/');
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) url.searchParams.set(key, String(value));
+    });
+  }
   
   // Get auth token from localStorage if available
   const token = localStorage.getItem('dsa_auth_token');

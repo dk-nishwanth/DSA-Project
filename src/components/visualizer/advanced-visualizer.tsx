@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Play, Pause, SkipForward, SkipBack, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,12 +12,14 @@ type DataStructure = 'segment-tree' | 'fenwick-tree';
 interface SegmentTreeNode {
   id: string;
   value: number;
-  left?: number;
-  right?: number;
+  left: number;
+  right: number;
   leftChild?: string;
   rightChild?: string;
   isLeaf?: boolean;
   highlighted?: boolean;
+  contributes?: boolean;
+  level: number;
 }
 
 interface FenwickTreeNode {
@@ -32,6 +34,22 @@ export function AdvancedVisualizer() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [currentStepDescription, setCurrentStepDescription] = useState('');
+  const [voiceExplain, setVoiceExplain] = useState<boolean>(() => {
+    try { return localStorage.getItem('dsa_voice_explain') === '1'; } catch { return false; }
+  });
+  useEffect(() => {
+    if (!voiceExplain || !currentStepDescription) return;
+    try {
+      const u = new SpeechSynthesisUtterance(currentStepDescription);
+      u.rate = 1.05; u.pitch = 1.0; u.volume = 0.85;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    } catch {}
+  }, [voiceExplain, currentStepDescription]);
+  const setVoice = (on: boolean) => {
+    setVoiceExplain(on);
+    try { localStorage.setItem('dsa_voice_explain', on ? '1' : '0'); } catch {}
+  };
 
   // Segment Tree State
   const [segmentArray, setSegmentArray] = useState([1, 3, 5, 7, 9, 11]);
@@ -86,56 +104,66 @@ export function AdvancedVisualizer() {
 
   const buildSegmentTree = useCallback(async (arr: number[]) => {
     const n = arr.length;
-    const tree: SegmentTreeNode[] = [];
-    
     setCurrentStep(0);
     setCurrentStepDescription('Building segment tree from array');
-    await sleep(1000);
+    await sleep(300);
 
-    // Build tree nodes (simplified visualization)
+    const nodes: Record<string, SegmentTreeNode> = {};
+
     const buildNode = (nodeId: string, start: number, end: number, level: number): SegmentTreeNode => {
       if (start === end) {
-        // Leaf node
         setCurrentStep(1);
-        return {
+        const leaf: SegmentTreeNode = {
           id: nodeId,
           value: arr[start],
           left: start,
           right: end,
-          isLeaf: true
+          isLeaf: true,
+          highlighted: true,
+          contributes: false,
+          level,
         };
+        nodes[nodeId] = leaf;
+        return leaf;
       } else {
-        // Internal node
         setCurrentStep(4);
         const mid = Math.floor((start + end) / 2);
         const leftChild = `${nodeId}-L`;
         const rightChild = `${nodeId}-R`;
-        
         const leftNode = buildNode(leftChild, start, mid, level + 1);
         const rightNode = buildNode(rightChild, mid + 1, end, level + 1);
-        
         setCurrentStep(7);
-        return {
+        const node: SegmentTreeNode = {
           id: nodeId,
           value: leftNode.value + rightNode.value,
           left: start,
           right: end,
           leftChild,
-          rightChild
+          rightChild,
+          highlighted: true,
+          contributes: false,
+          level,
         };
+        nodes[nodeId] = node;
+        return node;
       }
     };
 
     const root = buildNode('root', 0, n - 1, 0);
-    
-    // Flatten tree for display
-    const flattenTree = (node: SegmentTreeNode): SegmentTreeNode[] => {
-      const result = [node];
-      // In a real implementation, we'd recursively flatten children
-      return result;
-    };
 
-    setSegmentTree(flattenTree(root));
+    // Build level-order list for rendering
+    const queue: string[] = [root.id];
+    const ordered: SegmentTreeNode[] = [];
+    while (queue.length) {
+      const id = queue.shift()!;
+      const node = nodes[id];
+      if (!node) continue;
+      ordered.push({ ...node, highlighted: false });
+      if (node.leftChild) queue.push(node.leftChild);
+      if (node.rightChild) queue.push(node.rightChild);
+    }
+
+    setSegmentTree(ordered);
     toast.success('Segment tree built successfully');
   }, []);
 
@@ -174,16 +202,55 @@ export function AdvancedVisualizer() {
 
   const querySegmentTree = useCallback(async () => {
     if (segmentTree.length === 0) return;
-    
-    setCurrentStep(9);
+
+    const within = (l: number, r: number, ql: number, qr: number) => ql <= l && r <= qr;
+    const outside = (l: number, r: number, ql: number, qr: number) => r < ql || l > qr;
+
+    setCurrentStep(58); // function query start
     setCurrentStepDescription(`Querying range [${queryLeft}, ${queryRight}]`);
-    
-    // Simplified query visualization
-    const result = segmentArray.slice(queryLeft, queryRight + 1).reduce((sum, val) => sum + val, 0);
-    
-    await sleep(1000);
+
+    // Recreate id->node map
+    const map: Record<string, SegmentTreeNode> = {};
+    segmentTree.forEach(n => (map[n.id] = { ...n, highlighted: false, contributes: false }));
+
+    const highlightNode = async (id: string, desc: string) => {
+      map[id].highlighted = true;
+      setSegmentTree(Object.values(map).sort((a,b)=> a.level - b.level || a.id.localeCompare(b.id)));
+      setCurrentStepDescription(desc);
+      await sleep(400);
+      map[id].highlighted = false;
+      setSegmentTree(Object.values(map).sort((a,b)=> a.level - b.level || a.id.localeCompare(b.id)));
+    };
+
+    let result = 0;
+    const dfs = async (id: string): Promise<number> => {
+      const node = map[id];
+      if (!node) return 0;
+      const { left, right } = node;
+
+      if (outside(left, right, queryLeft, queryRight)) {
+        setCurrentStep(60); // return 0
+        await highlightNode(id, `Node ${id} [${left},${right}] is outside range → contributes 0`);
+        return 0;
+      }
+      if (within(left, right, queryLeft, queryRight)) {
+        setCurrentStep(62); // return tree[node]
+        map[id].contributes = true;
+        setSegmentTree(Object.values(map).sort((a,b)=> a.level - b.level || a.id.localeCompare(b.id)));
+        await highlightNode(id, `Node ${id} [${left},${right}] fully within range → contributes ${node.value}`);
+        return node.value;
+      }
+      setCurrentStep(63); // mid calc and recurse both sides
+      await highlightNode(id, `Node ${id} [${left},${right}] partially overlaps → split to children`);
+      const leftSum = node.leftChild ? await dfs(node.leftChild) : 0;
+      const rightSum = node.rightChild ? await dfs(node.rightChild) : 0;
+      return leftSum + rightSum;
+    };
+
+    result = await dfs('root');
+    await sleep(300);
     toast.success(`Range sum [${queryLeft}, ${queryRight}] = ${result}`);
-  }, [segmentTree, queryLeft, queryRight, segmentArray]);
+  }, [segmentTree, queryLeft, queryRight]);
 
   const queryFenwickTree = useCallback(async () => {
     if (fenwickTree.length === 0) return;
@@ -231,6 +298,7 @@ export function AdvancedVisualizer() {
 
   const renderSegmentTree = () => (
     <div className="space-y-4">
+      
       <div className="flex gap-2 items-center mb-4">
         <span className="text-sm font-medium">Array:</span>
         <Input
@@ -281,17 +349,38 @@ export function AdvancedVisualizer() {
         ))}
       </div>
       
-      {/* Tree visualization (simplified) */}
+      {/* Tree visualization (multi-level) */}
       {segmentTree.length > 0 && (
-        <div className="flex justify-center">
-          <div className="p-4 border-2 rounded-lg bg-card">
-            <div className="text-center font-mono font-bold text-lg">
-              Root: {segmentTree[0]?.value}
-            </div>
-            <div className="text-xs text-muted-foreground text-center mt-1">
-              Range: [{segmentTree[0]?.left}, {segmentTree[0]?.right}]
-            </div>
-          </div>
+        <div className="space-y-3">
+          {(() => {
+            const levels: Record<number, SegmentTreeNode[]> = {};
+            segmentTree.forEach(n => {
+              levels[n.level] ||= [];
+              levels[n.level].push(n);
+            });
+            const sortedLevels = Object.keys(levels)
+              .map(k => parseInt(k))
+              .sort((a,b)=>a-b);
+            return (
+              <div className="flex flex-col items-center gap-4">
+                {sortedLevels.map(lvl => (
+                  <div key={lvl} className="flex gap-3">
+                    {levels[lvl].map(node => (
+                      <div
+                        key={node.id}
+                        className={`px-3 py-2 border-2 rounded-md text-center transition-all duration-300 ${
+                          node.contributes ? 'border-green-500/70 bg-green-500/10' : node.highlighted ? 'border-primary bg-primary/10' : 'border-border bg-card'
+                        }`}
+                      >
+                        <div className="font-mono text-sm font-bold">{node.value}</div>
+                        <div className="text-[10px] text-muted-foreground">[{node.left}, {node.right}]</div>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            );
+          })()}
         </div>
       )}
     </div>
@@ -398,6 +487,10 @@ export function AdvancedVisualizer() {
           <RotateCcw className="h-4 w-4 mr-1" />
           Reset
         </Button>
+        <div className="flex items-center gap-2 ml-auto">
+          <label className="text-sm">Voice Explain</label>
+          <input type="checkbox" checked={voiceExplain} onChange={(e)=>setVoice(e.target.checked)} />
+        </div>
       </div>
 
       {/* Visualization */}

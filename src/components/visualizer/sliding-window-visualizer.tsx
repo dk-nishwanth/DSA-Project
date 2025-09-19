@@ -1,8 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Play, Pause, RotateCcw, Target } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { PseudocodeBox } from '@/components/pseudocode-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVoiceExplain } from '@/hooks/useVoiceExplain';
 
 interface WindowStep {
   array: number[];
@@ -23,6 +28,10 @@ export function SlidingWindowVisualizer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [inputArray, setInputArray] = useState('1,3,-1,-3,5,3,6,7');
   const [inputWindowSize, setInputWindowSize] = useState('3');
+  const [mode, setMode] = useState<'fixed-max'|'kadane'>('fixed-max');
+  const [showMemory, setShowMemory] = useState(false);
+  const stepDesc = (steps[currentStep]?.message) || '';
+  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(stepDesc);
 
   const generateSteps = (arr: number[], k: number): WindowStep[] => {
     const steps: WindowStep[] = [];
@@ -98,8 +107,46 @@ export function SlidingWindowVisualizer() {
     return steps;
   };
 
+  // Kadane's algorithm steps
+  const generateKadaneSteps = (arr: number[]): WindowStep[] => {
+    const steps: WindowStep[] = [];
+    let best = -Infinity, curr = 0;
+    let start = 0, bestStart = 0, bestEnd = 0;
+    for (let i=0; i<arr.length; i++) {
+      if (curr + arr[i] < arr[i]) {
+        curr = arr[i]; start = i;
+      } else {
+        curr += arr[i];
+      }
+      if (curr > best) {
+        best = curr; bestStart = start; bestEnd = i;
+      }
+      steps.push({
+        array: [...arr],
+        windowStart: start,
+        windowEnd: i,
+        windowSize: i-start+1,
+        currentMax: curr,
+        maxIndex: i,
+        result: [best],
+        message: `i=${i}: curr=${curr}, best=${best} [${bestStart}, ${bestEnd}]`
+      });
+    }
+    steps.push({
+      array: [...arr],
+      windowStart: bestStart,
+      windowEnd: bestEnd,
+      windowSize: bestEnd-bestStart+1,
+      currentMax: best,
+      maxIndex: bestEnd,
+      result: [best],
+      message: `Complete! Max sum subarray [${bestStart}, ${bestEnd}] = ${best}`
+    });
+    return steps;
+  };
+
   const handleSort = () => {
-    const newSteps = generateSteps(array, windowSize);
+    const newSteps = mode==='fixed-max' ? generateSteps(array, windowSize) : generateKadaneSteps(array);
     setSteps(newSteps);
     setCurrentStep(0);
   };
@@ -152,9 +199,9 @@ export function SlidingWindowVisualizer() {
   const currentStepData = steps[currentStep] || {
     array: array,
     windowStart: 0,
-    windowEnd: windowSize - 1,
-    windowSize: windowSize,
-    currentMax: Math.max(...array.slice(0, windowSize)),
+    windowEnd: Math.max(0, (mode==='fixed-max'?windowSize:1) - 1),
+    windowSize: mode==='fixed-max'? windowSize : 1,
+    currentMax: mode==='fixed-max'? Math.max(...array.slice(0, windowSize)) : (array[0]||0),
     maxIndex: 0,
     result: [],
     message: 'Click Play to start'
@@ -190,16 +237,27 @@ export function SlidingWindowVisualizer() {
             placeholder="Enter numbers"
             className="w-48"
           />
-          <Input
-            value={inputWindowSize}
-            onChange={(e) => setInputWindowSize(e.target.value)}
-            placeholder="Window size"
-            className="w-24"
-          />
+          {mode==='fixed-max' && (
+            <Input
+              value={inputWindowSize}
+              onChange={(e) => setInputWindowSize(e.target.value)}
+              placeholder="Window size"
+              className="w-24"
+            />
+          )}
           <Button onClick={handleInputChange} variant="outline">
             Set Values
           </Button>
         </div>
+
+        <Select value={mode} onValueChange={(v: 'fixed-max'|'kadane')=>setMode(v)}>
+          <SelectTrigger className="w-48"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="fixed-max">Fixed Window Maximum</SelectItem>
+            <SelectItem value="kadane">Kadane (Max Sum Subarray)</SelectItem>
+          </SelectContent>
+        </Select>
+
       </div>
 
       {/* Progress */}
@@ -213,30 +271,30 @@ export function SlidingWindowVisualizer() {
       <div className="flex items-center justify-center gap-4 p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
         <div className="flex items-center gap-2">
           <Target className="h-5 w-5 text-blue-600" />
-          <span className="font-semibold">Window Size: {currentStepData.windowSize}</span>
+          <span className="font-semibold">{mode==='fixed-max' ? 'Window Size' : 'Current Range'}: {currentStepData.windowSize}</span>
         </div>
         {currentStepData.currentMax !== -1 && (
           <>
             <span className="text-muted-foreground">|</span>
             <span className="font-semibold text-green-600">
-              Current Max: {currentStepData.currentMax}
+              {mode==='fixed-max' ? 'Current Window Max' : 'Current Sum'}: {currentStepData.currentMax}
             </span>
           </>
         )}
       </div>
 
       {/* Visualization */}
-      <div className="bg-gradient-to-br from-orange-50 to-red-100 dark:from-orange-950 dark:to-red-900 p-8 rounded-xl border-2 border-dashed border-orange-200 dark:border-orange-800">
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900 p-8 rounded-xl border-2 border-border/50">
         <div className="flex items-end justify-center gap-2 h-64 mb-8">
           {currentStepData.array.map((value, index) => {
             const isInWindow = index >= currentStepData.windowStart && index <= currentStepData.windowEnd;
             const isMaxInWindow = index === currentStepData.maxIndex;
             
-            let barColor = 'bg-gray-400';
+            let barColor = 'bg-card border-border';
             if (isMaxInWindow && isInWindow) {
-              barColor = 'bg-green-500';
+              barColor = 'bg-primary border-primary text-primary-foreground';
             } else if (isInWindow) {
-              barColor = 'bg-blue-500';
+              barColor = 'bg-primary/20 border-primary/50';
             }
 
             const height = value >= 0 
@@ -255,13 +313,10 @@ export function SlidingWindowVisualizer() {
                 transition={{ duration: 0.3 }}
               >
                 <div
-                  className={`${barColor} rounded-t-lg flex flex-col items-center justify-end relative`}
-                  style={{
-                    height: `${Math.abs(height)}px`,
-                    marginTop: value < 0 ? `${180 - Math.abs(height)}px` : '0px'
-                  }}
+                  className={`${barColor} rounded-t-lg transition-all duration-500 flex items-end justify-center relative border-2`}
+                  style={{ height: `${Math.abs(height)}px` }}
                 >
-                  <span className="text-white font-bold text-sm mb-2">
+                  <span className="font-bold text-sm mb-2">
                     {value}
                   </span>
                 </div>
@@ -271,7 +326,7 @@ export function SlidingWindowVisualizer() {
                 
                 {isInWindow && (
                   <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
-                    <div className={`${isMaxInWindow ? 'bg-green-500' : 'bg-blue-500'} text-white px-2 py-1 rounded text-xs`}>
+                    <div className={`${isMaxInWindow ? 'bg-primary text-primary-foreground' : 'bg-primary/20 text-primary'} px-2 py-1 rounded text-xs`}>
                       {isMaxInWindow ? 'MAX' : 'WIN'}
                     </div>
                   </div>
@@ -304,7 +359,7 @@ export function SlidingWindowVisualizer() {
       {/* Result Display */}
       {currentStepData.result.length > 0 && (
         <div className="bg-card border rounded-lg p-4">
-          <h4 className="font-semibold mb-2">Maximum Values Found:</h4>
+          <h4 className="font-semibold mb-2">{mode==='fixed-max' ? 'Maximum Values Found:' : 'Maximum Sum Found:'}</h4>
           <div className="flex flex-wrap gap-2">
             {currentStepData.result.map((value, index) => (
               <div key={index} className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm font-medium">
@@ -318,31 +373,59 @@ export function SlidingWindowVisualizer() {
       {/* Legend */}
       <div className="flex flex-wrap gap-4 justify-center text-sm">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-green-500 rounded"></div>
+          <div className="w-4 h-4 bg-primary rounded"></div>
           <span>Maximum in Window</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-blue-500 rounded"></div>
+          <div className="w-4 h-4 bg-primary/20 rounded"></div>
           <span>In Current Window</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-gray-400 rounded"></div>
+          <div className="w-4 h-4 bg-card border border-border rounded"></div>
           <span>Outside Window</span>
         </div>
       </div>
 
-      {/* Algorithm Info */}
-      <div className="bg-card border rounded-lg p-4">
-        <h4 className="font-semibold mb-2">Sliding Window Maximum:</h4>
-        <ol className="list-decimal list-inside space-y-1 text-sm text-muted-foreground">
-          <li>Start with a window of size k at the beginning of the array</li>
-          <li>Find the maximum element in the current window</li>
-          <li>Add this maximum to the result array</li>
-          <li>Slide the window one position to the right</li>
-          <li>Repeat until the window reaches the end of the array</li>
-          <li>Optimized versions use deque to achieve O(n) time complexity</li>
-        </ol>
+      {/* Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
       </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <MemoryLayout
+          data={currentStepData.array}
+          title="Array Memory Layout"
+          baseAddress={1000}
+          wordSize={4}
+        />
+      )}
+
+      {/* Pseudocode */}
+      <PseudocodeBox
+        title={mode==='fixed-max' ? 'Fixed Window Maximum - Pseudocode' : "Kadane's Algorithm - Pseudocode"}
+        code={mode==='fixed-max' ? [
+          'result = []',
+          'for i in 0..n-k:',
+          '  window = a[i..i+k-1]',
+          '  result.push(max(window))'
+        ] : [
+          'best = -inf; curr = 0; start = 0',
+          'for i in 0..n-1:',
+          '  curr = max(a[i], curr + a[i])',
+          '  if curr improved best: update best and range'
+        ]}
+        highlightedLine={
+          mode==='fixed-max'
+            ? (currentStep===0 ? 1 : (currentStep>0 && currentStep<steps.length-1 ? 3 : 4))
+            : (currentStep===0 ? 1 : (currentStep>0 && currentStep<steps.length-1 ? 3 : 4))
+        }
+      />
     </div>
   );
 }

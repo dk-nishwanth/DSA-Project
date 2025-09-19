@@ -1,20 +1,42 @@
 import { api } from '@/lib/api';
 
+// Backend response/user shapes (as per DSA_backend)
+type BackendUser = {
+  id: number | string;
+  username?: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  role?: string;
+  isActive?: boolean;
+};
+
+type BackendAuthResponse = {
+  success?: boolean;
+  message?: string;
+  token: string;
+  user: BackendUser;
+};
+
 export interface LoginCredentials {
   email: string;
   password: string;
 }
 
 export interface RegisterData {
-  name: string;
+  name?: string; // Full name from UI
   email: string;
   password: string;
+  // Optional fields if UI ever supplies them directly
+  username?: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface AuthResponse {
   user: {
     id: string;
-    name: string;
+    name: string; // Combined first + last
     email: string;
     role: string;
   };
@@ -26,6 +48,7 @@ const USER_KEY = 'dsa_user';
 
 export const authService = {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
+
     // Special case for Nishwanth user as student
     if (credentials.email === 'Nishwanth' && credentials.password === 'Nishwanth') {
       const nishwanthUser = {
@@ -50,7 +73,7 @@ export const authService = {
         credentials.email === 'NishwanthAdmin' && credentials.password === 'Nishwanth') {
       const adminUser = {
         id: 'admin-1',
-        name: credentials.email === 'Nishwanth' ? 'Nishwanth' : 'Administrator',
+        name: credentials.email === 'NishwanthAdmin' ? 'Nishwanth' : 'Administrator',
         email: credentials.email,
         role: 'admin'
       };
@@ -67,10 +90,19 @@ export const authService = {
     
     // Regular login flow
     try {
-      const response = await api.post<AuthResponse>('/api/auth/login', credentials);
-      this.setToken(response.token);
-      this.setUser(response.user);
-      return response;
+      const backend = await api.post<BackendAuthResponse>('/api/auth/login', credentials);
+      const normalized: AuthResponse = {
+        token: backend.token,
+        user: {
+          id: String(backend.user.id),
+          name: [backend.user.firstName, backend.user.lastName].filter(Boolean).join(' ') || backend.user.username || backend.user.email,
+          email: backend.user.email,
+          role: (backend.user.role || 'student').toString().toLowerCase(),
+        },
+      };
+      this.setToken(normalized.token);
+      this.setUser(normalized.user);
+      return normalized;
     } catch (error) {
       // For demo purposes, create a mock user if API call fails
       console.log('Using mock login due to API error');
@@ -93,15 +125,54 @@ export const authService = {
   },
 
   async register(data: RegisterData): Promise<AuthResponse> {
-    const response = await api.post<AuthResponse>('/api/auth/register', data);
-    this.setToken(response.token);
-    this.setUser(response.user);
-    return response;
+    // Map UI fields to backend expectations
+    let firstName = data.firstName;
+    let lastName = data.lastName;
+    let username = data.username;
+
+    if (data.name && (!firstName || !lastName)) {
+      const parts = data.name.trim().split(/\s+/);
+      firstName = firstName || parts[0] || '';
+      lastName = lastName || (parts.slice(1).join(' ') || '');
+    }
+    if (!username) {
+      username = (data.email?.split('@')[0] || `${firstName || 'user'}`).replace(/[^a-zA-Z0-9_]/g, '_');
+    }
+
+    const backendPayload = {
+      username,
+      email: data.email,
+      password: data.password,
+      firstName: firstName || 'User',
+      lastName: lastName || '',
+      role: 'STUDENT',
+    };
+
+    const backend = await api.post<BackendAuthResponse>('/api/auth/register', backendPayload);
+    const normalized: AuthResponse = {
+      token: backend.token,
+      user: {
+        id: String(backend.user.id),
+        name: [backend.user.firstName, backend.user.lastName].filter(Boolean).join(' ') || backend.user.username || backend.user.email,
+        email: backend.user.email,
+        role: (backend.user.role || 'student').toString().toLowerCase(),
+      },
+    };
+    this.setToken(normalized.token);
+    this.setUser(normalized.user);
+    return normalized;
   },
 
   async logout(): Promise<void> {
-    this.removeToken();
-    this.removeUser();
+    try {
+      // Best-effort server logout if available
+      await api.post('/api/auth/logout');
+    } catch (e) {
+      // ignore network/server errors and still clear locally
+    } finally {
+      this.removeToken();
+      this.removeUser();
+    }
   },
 
   getToken(): string | null {
@@ -138,13 +209,37 @@ export const authService = {
       if (!this.isAuthenticated()) {
         return null;
       }
-      // You can implement a call to get current user from the backend if needed
-      // const response = await api.get<any>('/api/auth/me');
-      // return response;
+      // Prefer backend source of truth if available
+      const response = await api.get<any>('/api/auth/me');
+      if (response?.user && response?.token) {
+        const backendUser: BackendUser = response.user;
+        const normalizedUser = {
+          id: String(backendUser.id),
+          name: [backendUser.firstName, backendUser.lastName].filter(Boolean).join(' ') || backendUser.username || backendUser.email,
+          email: backendUser.email,
+          role: (backendUser.role || 'student').toString().toLowerCase(),
+        };
+        this.setToken(response.token);
+        this.setUser(normalizedUser);
+        return normalizedUser;
+      }
+      if (response?.id || response?.email) {
+        const backendUser: BackendUser = response;
+        const normalizedUser = {
+          id: String(backendUser.id),
+          name: [backendUser.firstName, backendUser.lastName].filter(Boolean).join(' ') || backendUser.username || backendUser.email,
+          email: backendUser.email,
+          role: (backendUser.role || 'student').toString().toLowerCase(),
+        };
+        this.setUser(normalizedUser);
+        return normalizedUser;
+      }
       return this.getUser();
-    } catch (error) {
-      this.logout();
-      return null;
+    } catch (error: any) {
+      if (error?.status === 401) {
+        await this.logout();
+      }
+      return this.getUser();
     }
   },
 };

@@ -1,4 +1,6 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
+import { motion } from "framer-motion";
+
 import { Play, RotateCcw, RefreshCw, ArrowLeftRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +13,10 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { ComplexityBox } from "@/components/complexity-box";
+import { PseudocodeBox } from "@/components/pseudocode-box";
+import { MemoryLayout } from "@/components/memory-layout";
+import { VisualizerControls } from "@/components/visualizer/visualizer-controls";
+import { useVoiceExplain } from "@/hooks/useVoiceExplain";
 
 type RotationMethod = "temp-array" | "reversal" | "cyclic";
 type Direction = "left" | "right";
@@ -27,6 +33,28 @@ export function ArrayRotationVisualizer() {
   const [stepCount, setStepCount] = useState(0);
   const [totalSteps, setTotalSteps] = useState(0);
   const [currentArray, setCurrentArray] = useState<number[]>([]);
+  const [showMemory, setShowMemory] = useState(false);
+
+  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(currentStep);
+
+  const pseudocode = useMemo(() => ({
+    reversal: [
+      'k = k % n; if right: k = n - k',
+      'reverse(a, 0, n-1)',
+      'reverse(a, 0, k-1)',
+      'reverse(a, k, n-1)'
+    ],
+    'temp-array': [
+      'k = k % n; if right: k = n - k',
+      'temp[(i+n-k)%n] = a[i] for i in 0..n-1',
+      'copy temp back to a'
+    ],
+    cyclic: [
+      'k = k % n; if right: k = n - k',
+      'for start in 0..n-1 until moved n elements:',
+      '  move a[current] to a[(current+n-k)%n] cyclically'
+    ]
+  }), []);
 
   const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -217,24 +245,39 @@ export function ArrayRotationVisualizer() {
     (arr: number[]) => {
       return (
         <div className="flex justify-center gap-2 flex-wrap">
-          {arr.map((value, index) => (
-            <div key={index} className="flex flex-col items-center">
-              <div
-                className={`w-12 h-12 flex items-center justify-center border-2 border-border bg-card text-card-foreground
-                font-mono text-sm font-semibold rounded transition-all duration-300
-                ${
-                  highlightedIndices.includes(index)
-                    ? "bg-primary text-primary-foreground animate-pulse"
-                    : ""
-                }`}
+          {arr.map((value, index) => {
+            const isHi = highlightedIndices.includes(index);
+            return (
+              <motion.div
+                key={index}
+                className="flex flex-col items-center"
+                layout
+                initial={{ scale: 1, y: 0, opacity: 1 }}
+                animate={{ 
+                  scale: isHi ? 1.15 : 1, 
+                  y: isHi ? -6 : 0, 
+                  opacity: 1 
+                }}
+                transition={{ 
+                  duration: 0.4,
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 20
+                }}
               >
-                {value}
-              </div>
-              <span className="text-xs text-muted-foreground mt-1">
-                {index}
-              </span>
-            </div>
-          ))}
+                <div
+                  className={`w-12 h-12 flex items-center justify-center border-2 font-mono text-sm font-semibold rounded transition-all duration-300 ${
+                    isHi 
+                      ? 'bg-primary text-primary-foreground border-primary shadow-lg' 
+                      : 'bg-card border-border hover:border-primary/50'
+                  }`}
+                >
+                  {value}
+                </div>
+                <span className="text-xs text-muted-foreground mt-1">{index}</span>
+              </motion.div>
+            );
+          })}
         </div>
       );
     },
@@ -315,10 +358,11 @@ export function ArrayRotationVisualizer() {
           <RotateCcw className="h-4 w-4" />
           Reset
         </Button>
+
       </div>
 
       {/* Visualization */}
-      <div className="bg-gradient-visualization rounded-xl border-2 border-border/50 p-6">
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900 rounded-xl border-2 border-border/50 p-6">
         <div className="space-y-4">
           <div className="text-center">
             <h3 className="text-lg font-semibold mb-2">Original Array</h3>
@@ -362,6 +406,27 @@ export function ArrayRotationVisualizer() {
           </ul>
         </div>
       </div>
+
+      {/* Pseudocode */}
+      <PseudocodeBox
+        title={`Array Rotation (${method === 'reversal' ? 'Reversal' : method === 'temp-array' ? 'Temporary Array' : 'Cyclic'}) - Pseudocode`}
+        code={pseudocode[method]}
+        highlightedLine={
+          method === 'reversal' ? (
+            currentStep.startsWith('Starting') ? 1 :
+            currentStep.includes('Reverse entire array') ? 2 :
+            currentStep.includes('Reverse first') ? 3 :
+            currentStep.includes('Reverse remaining') ? 4 : 0
+          ) : method === 'temp-array' ? (
+            currentStep.includes('Creating temporary array') ? 1 :
+            currentStep.includes('Moving element') ? 2 :
+            currentStep.includes('completed using temporary') ? 3 : 0
+          ) : (
+            currentStep.includes('Starting cyclic') ? 1 :
+            currentStep.includes('Placing element') ? 3 : 0
+          )
+        }
+      />
     </div>
   );
 }

@@ -1,9 +1,13 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { Play, RotateCcw, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { PseudocodeBox } from '@/components/pseudocode-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVoiceExplain } from '@/hooks/useVoiceExplain';
 
 type Algorithm = 'naive' | 'kmp' | 'rabin-karp';
 
@@ -22,6 +26,36 @@ export function StringMatchingVisualizer() {
   const [matches, setMatches] = useState<number[]>([]);
   const [comparisons, setComparisons] = useState(0);
   const [lpsArray, setLpsArray] = useState<number[]>([]);
+  const [hashWindowIndex, setHashWindowIndex] = useState<number>(-1);
+  const [currentHash, setCurrentHash] = useState<number | null>(null);
+  const [patternHash, setPatternHash] = useState<number | null>(null);
+  const [stepDesc, setStepDesc] = useState('');
+  const [showMemory, setShowMemory] = useState(false);
+  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(stepDesc);
+
+  const pseudocode = useMemo(() => ({
+    naive: [
+      'for i in 0..n-m:',
+      '  for j in 0..m-1:',
+      '    if T[i+j] != P[j]: break',
+      '  if j == m: report match at i'
+    ],
+    kmp: [
+      'lps = buildLPS(P)',
+      'i=0; j=0',
+      'while i < n:',
+      '  if T[i] == P[j]: i++; j++',
+      '  if j == m: report match; j = lps[j-1]',
+      '  else if i < n and T[i] != P[j]:',
+      '    if j != 0: j = lps[j-1] else i++'
+    ],
+    rabin: [
+      'pHash = hash(P); tHash = hash(T[0..m-1])',
+      'for i in 0..n-m:',
+      '  if pHash == tHash: verify chars',
+      '  if i < n-m: roll hash to next window'
+    ],
+  }), []);
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -54,6 +88,7 @@ export function StringMatchingVisualizer() {
 
     for (let i = 0; i <= text.length - pattern.length; i++) {
       setCurrentTextIndex(i);
+      setStepDesc(`Shift i=${i}. Compare pattern over text starting at ${i}.`);
       await sleep(300);
 
       let j = 0;
@@ -65,6 +100,7 @@ export function StringMatchingVisualizer() {
         await sleep(400);
 
         if (text[i + j] !== pattern[j]) {
+          setStepDesc(`Mismatch at T[${i+j}] vs P[${j}]. Break and shift.`);
           break;
         }
       }
@@ -72,6 +108,7 @@ export function StringMatchingVisualizer() {
       if (j === pattern.length) {
         foundMatches.push(i);
         setMatches([...foundMatches]);
+        setStepDesc(`Match found at position ${i}.`);
         toast.success(`Match found at position ${i}`);
       }
 
@@ -97,25 +134,30 @@ export function StringMatchingVisualizer() {
       setCurrentPatternIndex(j);
       totalComparisons++;
       setComparisons(totalComparisons);
+      setStepDesc(`Compare T[${i}] with P[${j}].`);
       
       await sleep(400);
 
       if (pattern[j] === text[i]) {
         i++;
         j++;
+        setStepDesc(`Match: advance to i=${i}, j=${j}.`);
       }
 
       if (j === pattern.length) {
         foundMatches.push(i - j);
         setMatches([...foundMatches]);
+        setStepDesc(`Match found at position ${i - j}. Jump using LPS to j=lps[${j-1}]`);
         toast.success(`Match found at position ${i - j}`);
         j = lps[j - 1];
       } else if (i < text.length && pattern[j] !== text[i]) {
         if (j !== 0) {
           j = lps[j - 1];
+          setStepDesc(`Mismatch: jump j to lps = ${j}. Keep i=${i}.`);
           toast.info(`Using LPS: jumping to position ${j}`);
         } else {
           i++;
+          setStepDesc(`Mismatch at j=0: increment i to ${i}.`);
         }
       }
 
@@ -126,6 +168,79 @@ export function StringMatchingVisualizer() {
     setCurrentPatternIndex(-1);
     return foundMatches;
   }, [text, pattern, buildLPSArray]);
+
+  const rabinKarpSearch = useCallback(async () => {
+    // Polynomial rolling hash parameters
+    const base = 256; // alphabet size
+    const prime = 101; // a small prime for mod to keep values visible
+    const n = text.length;
+    const m = pattern.length;
+    if (m === 0 || n < m) return [] as number[];
+
+    let pHash = 0; // hash of pattern
+    let tHash = 0; // hash of current text window
+    let h = 1;     // base^(m-1) % prime
+    const foundMatches: number[] = [];
+    let totalComparisons = 0;
+
+    for (let i = 0; i < m - 1; i++) {
+      h = (h * base) % prime;
+    }
+
+    for (let i = 0; i < m; i++) {
+      pHash = (base * pHash + pattern.charCodeAt(i)) % prime;
+      tHash = (base * tHash + text.charCodeAt(i)) % prime;
+    }
+
+    setPatternHash(pHash);
+    setCurrentHash(tHash);
+
+    for (let i = 0; i <= n - m; i++) {
+      setHashWindowIndex(i);
+      setCurrentTextIndex(i);
+      setCurrentPatternIndex(0);
+      setStepDesc(`Window i=${i}: compare hashes (pHash=${pHash}, tHash=${tHash}).`);
+      await sleep(300);
+
+      if (pHash === tHash) {
+        // Potential match, verify characters
+        let j = 0;
+        let isMatch = true;
+        while (j < m) {
+          totalComparisons++;
+          setComparisons(totalComparisons);
+          setCurrentPatternIndex(j);
+          await sleep(200);
+          if (text[i + j] !== pattern[j]) {
+            isMatch = false;
+            setStepDesc(`Hash equal but chars mismatch at j=${j}. False positive.`);
+            break;
+          }
+          j++;
+        }
+        if (isMatch) {
+          foundMatches.push(i);
+          setMatches([...foundMatches]);
+          setStepDesc(`Verified match at position ${i}.`);
+          toast.success(`Match found at position ${i}`);
+        }
+      }
+
+      // Slide the window
+      if (i < n - m) {
+        tHash = (base * (tHash - text.charCodeAt(i) * h) + text.charCodeAt(i + m)) % prime;
+        if (tHash < 0) tHash += prime;
+        setCurrentHash(tHash);
+        setStepDesc(`Roll hash to next window: tHash=${tHash}.`);
+        await sleep(200);
+      }
+    }
+
+    setCurrentTextIndex(-1);
+    setCurrentPatternIndex(-1);
+    setHashWindowIndex(-1);
+    return foundMatches;
+  }, [text, pattern]);
 
   const runSearch = useCallback(async () => {
     if (!text.trim() || !pattern.trim()) {
@@ -138,6 +253,7 @@ export function StringMatchingVisualizer() {
     setComparisons(0);
     setCurrentTextIndex(-1);
     setCurrentPatternIndex(-1);
+    setStepDesc('');
 
     try {
       switch (algorithm) {
@@ -148,7 +264,7 @@ export function StringMatchingVisualizer() {
           await kmpSearch();
           break;
         case 'rabin-karp':
-          toast.info('Rabin-Karp algorithm coming soon!');
+          await rabinKarpSearch();
           break;
       }
     } catch (error) {
@@ -164,6 +280,9 @@ export function StringMatchingVisualizer() {
     setCurrentTextIndex(-1);
     setCurrentPatternIndex(-1);
     setLpsArray([]);
+    setHashWindowIndex(-1);
+    setCurrentHash(null);
+    setPatternHash(null);
     setIsAnimating(false);
     toast.success('Search reset');
   }, []);
@@ -274,7 +393,7 @@ export function StringMatchingVisualizer() {
       </div>
 
       {/* Visualization */}
-      <div className="bg-gradient-visualization rounded-xl border-2 border-border/50 p-4">
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900 rounded-xl border-2 border-border/50 p-6">
         {/* Text Display */}
         <div className="mb-4">
           <div className="text-sm font-medium mb-2">Text:</div>
@@ -308,6 +427,20 @@ export function StringMatchingVisualizer() {
           </div>
         )}
 
+        {/* Hash values for Rabin-Karp */}
+        {algorithm === 'rabin-karp' && (
+          <div className="mb-4 grid gap-2 md:grid-cols-2">
+            <div className="p-3 border rounded bg-card">
+              <div className="text-sm font-medium mb-1">Pattern Hash</div>
+              <div className="font-mono text-sm">{patternHash ?? '-'} (mod 101)</div>
+            </div>
+            <div className="p-3 border rounded bg-card">
+              <div className="text-sm font-medium mb-1">Current Window</div>
+              <div className="text-sm">Index: <span className="font-mono">{hashWindowIndex >= 0 ? hashWindowIndex : '-'}</span></div>
+              <div className="text-sm">Hash: <span className="font-mono">{currentHash ?? '-'}</span> (mod 101)</div>
+            </div>
+          </div>
+        )}
         {/* Statistics */}
         <div className="flex gap-4 text-sm">
           <div className="flex items-center gap-2">
@@ -327,26 +460,45 @@ export function StringMatchingVisualizer() {
         </div>
       </div>
 
-      {/* Algorithm Info */}
-      <div className="bg-muted/20 rounded-lg p-3">
-        <div className="font-medium mb-2">Algorithm Info:</div>
-        <div className="text-sm text-muted-foreground space-y-1">
-          {algorithm === 'naive' && (
-            <>
-              <div>• Checks pattern at every position in text</div>
-              <div>• Time complexity: O(nm) where n = text length, m = pattern length</div>
-              <div>• Simple but inefficient for large texts</div>
-            </>
-          )}
-          {algorithm === 'kmp' && (
-            <>
-              <div>• Uses failure function (LPS array) to skip unnecessary comparisons</div>
-              <div>• Time complexity: O(n + m) - linear time!</div>
-              <div>• Preprocessing creates LPS array in O(m) time</div>
-            </>
-          )}
-        </div>
+      {/* Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
       </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <MemoryLayout
+          data={Array.from(text)}
+          title="Text Buffer Memory Layout"
+          baseAddress={3000}
+          wordSize={1}
+        />
+      )}
+
+      {/* Narration */}
+      {stepDesc && (
+        <div className="mt-3 p-2 bg-muted/20 rounded text-sm">{stepDesc}</div>
+      )}
+
+      {/* Pseudocode */}
+      <PseudocodeBox
+        title={`${algorithm.toUpperCase()} - Pseudocode`}
+        code={algorithm==='naive' ? pseudocode.naive : algorithm==='kmp' ? pseudocode.kmp : pseudocode.rabin}
+        highlightedLine={
+          algorithm==='naive' ? (
+            currentPatternIndex<0 ? 1 : (stepDesc.includes('Mismatch') ? 3 : (stepDesc.includes('Match found') ? 4 : 2))
+          ) : algorithm==='kmp' ? (
+            stepDesc.includes('jump j') ? 7 : stepDesc.includes('Mismatch at j=0') ? 7 : stepDesc.includes('report match') ? 5 : stepDesc.includes('Match: advance') ? 4 : 3
+          ) : (
+            stepDesc.includes('compare hashes') ? 3 : stepDesc.includes('Verified match') ? 3 : 4
+          )
+        }
+      />
     </div>
   );
 }

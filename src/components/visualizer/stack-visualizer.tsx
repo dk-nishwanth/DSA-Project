@@ -4,6 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Minus, Eye, RotateCcw } from 'lucide-react';
+import { ComplexityBox } from '@/components/complexity-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVoiceExplain } from '@/hooks/useVoiceExplain';
 
 interface StackItem {
   id: string;
@@ -19,7 +23,9 @@ export function StackVisualizer() {
   const [inputValue, setInputValue] = useState('');
   const [isAnimating, setIsAnimating] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
-  const [operation, setOperation] = useState<string | null>(null);
+  const [operation, setOperation] = useState<string>('');
+  const [showMemory, setShowMemory] = useState(false);
+  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(operation);
 
   const handlePush = () => {
     const value = parseInt(inputValue);
@@ -40,7 +46,7 @@ export function StackVisualizer() {
     setTimeout(() => {
       setHighlightedIndex(null);
       setIsAnimating(false);
-      setOperation(null);
+      setOperation('');
     }, 1000);
   };
 
@@ -55,7 +61,7 @@ export function StackVisualizer() {
       setStack(prev => prev.slice(0, -1));
       setHighlightedIndex(null);
       setIsAnimating(false);
-      setOperation(null);
+      setOperation('');
     }, 800);
   };
 
@@ -69,7 +75,7 @@ export function StackVisualizer() {
     setTimeout(() => {
       setHighlightedIndex(null);
       setIsAnimating(false);
-      setOperation(null);
+      setOperation('');
     }, 1500);
   };
 
@@ -81,7 +87,7 @@ export function StackVisualizer() {
     ]);
     setHighlightedIndex(null);
     setIsAnimating(false);
-    setOperation(null);
+    setOperation('');
   };
 
   return (
@@ -103,13 +109,13 @@ export function StackVisualizer() {
                   key={item.id}
                   layout
                   initial={{ opacity: 0, scale: 0.8, y: -20 }}
-                  animate={{ 
-                    opacity: 1, 
+                  animate={{
+                    opacity: 1,
                     scale: highlightedIndex === index ? 1.1 : 1,
-                    y: 0 
+                    y: 0
                   }}
                   exit={{ opacity: 0, scale: 0.8, y: -20 }}
-                  transition={{ 
+                  transition={{
                     duration: 0.3,
                     type: "spring",
                     stiffness: 200,
@@ -118,7 +124,7 @@ export function StackVisualizer() {
                   className={`
                     flex items-center justify-center w-32 h-12 rounded-lg border-2 relative
                     ${highlightedIndex === index
-                      ? 'bg-animation-highlight border-animation-highlight shadow-glow' 
+                      ? 'bg-animation-highlight border-animation-highlight shadow-glow'
                       : 'bg-card border-border'
                     }
                     transition-all duration-300
@@ -133,12 +139,12 @@ export function StackVisualizer() {
                 </motion.div>
               ))}
             </AnimatePresence>
-            
+
             {/* Stack Base */}
             <div className="w-36 h-3 bg-muted rounded-lg mt-2" />
             <span className="text-xs text-muted-foreground mt-1">Stack Base</span>
           </div>
-          
+
           {stack.length === 0 && (
             <div className="text-center py-8 text-muted-foreground">
               Stack is empty
@@ -148,6 +154,26 @@ export function StackVisualizer() {
       </div>
 
       {/* Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <MemoryLayout
+          data={stack.map(item => item.value)}
+          title="Stack Memory Layout (LIFO)"
+          baseAddress={6000}
+          wordSize={4}
+        />
+      )}
+
+      {/* Complexity Analysis */}
       <div className="space-y-4">
         <div className="flex flex-wrap gap-3">
           <div className="flex gap-2">

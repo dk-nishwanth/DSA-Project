@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Plus, Minus, Search, RotateCcw, Zap, HardDrive, Info, Play } from 'lucide-react';
 import { toast } from 'sonner';
 import { ComplexityBox } from '@/components/complexity-box';
+import { useVoiceExplain } from '@/hooks/useVoiceExplain';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
 
 interface ArrayVisualizerProps {
   initialArray?: number[];
@@ -27,6 +29,7 @@ export function EnhancedArrayVisualizer({ initialArray = [64, 25, 12, 22, 11] }:
   const [showMemoryView, setShowMemoryView] = useState(false);
   const [operationCount, setOperationCount] = useState(0);
   const [timeComplexity, setTimeComplexity] = useState('O(1)');
+  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(currentStep);
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -417,7 +420,7 @@ export function EnhancedArrayVisualizer({ initialArray = [64, 25, 12, 22, 11] }:
         )}
       </div>
 
-      {/* Status and Controls */}
+      {/* Status */}
       <div className="flex flex-wrap gap-3 items-center">
         <Badge variant="outline">Length: {array.length}</Badge>
         <Badge variant="outline">Complexity: {timeComplexity}</Badge>
@@ -426,16 +429,16 @@ export function EnhancedArrayVisualizer({ initialArray = [64, 25, 12, 22, 11] }:
             {operation.charAt(0).toUpperCase() + operation.slice(1)}ing...
           </Badge>
         )}
-        
-        <Button
-          onClick={() => setShowMemoryView(!showMemoryView)}
-          size="sm"
-          variant="ghost"
-          className="ml-auto"
-        >
-          <HardDrive className="h-4 w-4 mr-1" />
-          {showMemoryView ? 'Hide' : 'Show'} Memory
-        </Button>
+      </div>
+
+      {/* Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemoryView}
+          onToggleMemory={setShowMemoryView}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
       </div>
 
       {/* Memory Layout View */}

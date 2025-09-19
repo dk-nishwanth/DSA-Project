@@ -288,6 +288,151 @@ numbers.forEach((num, i) => console.log(\`Index \${i}: \${num}\`));`
 **Mathematical Foundation:**
 For left rotation by k positions: new_index = (old_index - k + n) % n
 For right rotation by k positions: new_index = (old_index + k) % n`,
+    voiceExplanation: `Think of array rotation like a carousel or a conveyor belt. Imagine you have a row of people standing in a line, and you want to rotate them. In a left rotation, everyone takes a step to the left, and the person at the front wraps around to the back. In a right rotation, everyone steps to the right, and the person at the back moves to the front. The clever part is that you don't need to move everyone one by one - there's a brilliant trick called the reversal algorithm. It's like doing three magic flips: first flip the entire line, then flip the first part, then flip the second part, and voila! You've rotated the array efficiently. This technique is used everywhere - from image processing where you rotate pixel arrays, to operating systems managing circular buffers, to even simple tasks like rotating elements in a game board.`,
+    realWorldApplications: `**Industry Applications:**
+- **Image Processing**: Rotating pixel matrices for image transformations
+- **Operating Systems**: Circular buffer management for I/O operations
+- **Game Development**: Rotating game boards, tile maps, and sprite arrays
+- **Data Compression**: Burrows-Wheeler transform uses rotations
+- **Cryptography**: Caesar cipher and other rotation-based encryption
+- **Audio Processing**: Circular delay buffers and audio effects
+- **Network Protocols**: Round-robin scheduling and load balancing
+- **Database Systems**: Circular log files and buffer pool management`,
+    keyConcepts: `**Essential Concepts:**
+1. **Modular Arithmetic**: Understanding k % n for handling large rotations
+2. **In-place Operations**: Minimizing space complexity through clever algorithms
+3. **Reversal Technique**: Three reversals achieve optimal O(n) time, O(1) space
+4. **Cyclic Nature**: Treating arrays as circular structures
+5. **GCD-based Cycles**: Using greatest common divisor for cyclic replacements
+6. **Time-Space Trade-offs**: Balancing algorithm efficiency and memory usage
+7. **Edge Cases**: Handling empty arrays, single elements, and zero rotations`,
+    pseudocode: `**Array Rotation Pseudocode:**
+
+ALGORITHM RotateLeftSimple(array, k)
+INPUT: array - the array to rotate, k - number of positions
+OUTPUT: rotated array
+BEGIN
+    n = array.length
+    k = k % n  // Handle rotations larger than array size
+    temp = new Array(n)
+    
+    FOR i = 0 TO n - 1 DO
+        temp[i] = array[(i + k) % n]
+    END FOR
+    
+    RETURN temp
+END
+
+ALGORITHM RotateLeftReversal(array, k)
+INPUT: array - the array to rotate, k - number of positions
+OUTPUT: rotated array (in-place)
+BEGIN
+    n = array.length
+    k = k % n
+    
+    // Step 1: Reverse entire array
+    Reverse(array, 0, n - 1)
+    
+    // Step 2: Reverse first n-k elements
+    Reverse(array, 0, n - k - 1)
+    
+    // Step 3: Reverse last k elements
+    Reverse(array, n - k, n - 1)
+END
+
+ALGORITHM Reverse(array, start, end)
+INPUT: array, start index, end index
+OUTPUT: reversed array segment
+BEGIN
+    WHILE start < end DO
+        SWAP array[start] AND array[end]
+        start = start + 1
+        end = end - 1
+    END WHILE
+END`,
+    implementationCode: `// Comprehensive Array Rotation Implementation
+
+class ArrayRotation {
+    // Simple rotation using extra space - O(n) time, O(n) space
+    static rotateLeftSimple(arr, k) {
+        const n = arr.length;
+        if (n === 0) return arr;
+        k = k % n;
+        return arr.slice(k).concat(arr.slice(0, k));
+    }
+    
+    // In-place rotation using reversal algorithm - O(n) time, O(1) space
+    static rotateLeftInPlace(arr, k) {
+        const n = arr.length;
+        if (n === 0) return arr;
+        k = k % n;
+        
+        // Step 1: Reverse entire array
+        this.reverse(arr, 0, n - 1);
+        
+        // Step 2: Reverse first n-k elements
+        this.reverse(arr, 0, n - k - 1);
+        
+        // Step 3: Reverse last k elements
+        this.reverse(arr, n - k, n - 1);
+        
+        return arr;
+    }
+    
+    // Right rotation
+    static rotateRightInPlace(arr, k) {
+        const n = arr.length;
+        if (n === 0) return arr;
+        k = k % n;
+        
+        // Right rotation by k = Left rotation by n-k
+        return this.rotateLeftInPlace(arr, n - k);
+    }
+    
+    // Cyclic replacement approach - O(n) time, O(1) space
+    static rotateLeftCyclic(arr, k) {
+        const n = arr.length;
+        if (n === 0) return arr;
+        k = k % n;
+        
+        const gcd = this.findGCD(n, k);
+        
+        for (let i = 0; i < gcd; i++) {
+            let temp = arr[i];
+            let j = i;
+            
+            while (true) {
+                let next = (j + k) % n;
+                if (next === i) break;
+                arr[j] = arr[next];
+                j = next;
+            }
+            arr[j] = temp;
+        }
+        
+        return arr;
+    }
+    
+    // Helper method to reverse array segment
+    static reverse(arr, start, end) {
+        while (start < end) {
+            [arr[start], arr[end]] = [arr[end], arr[start]];
+            start++;
+            end--;
+        }
+    }
+    
+    // Helper method to find GCD
+    static findGCD(a, b) {
+        return b === 0 ? a : this.findGCD(b, a % b);
+    }
+}
+
+// Usage Examples
+const numbers = [1, 2, 3, 4, 5, 6, 7];
+console.log(ArrayRotation.rotateLeftSimple([...numbers], 3)); // [4, 5, 6, 7, 1, 2, 3]
+console.log(ArrayRotation.rotateLeftInPlace([...numbers], 3)); // [4, 5, 6, 7, 1, 2, 3]
+console.log(ArrayRotation.rotateRightInPlace([...numbers], 2)); // [6, 7, 1, 2, 3, 4, 5]`,
     example: `// Array Rotation
 function rotateLeft(arr, k) {
     const n = arr.length;
@@ -368,6 +513,233 @@ Many subarray problems can be solved using dynamic programming principles, where
 - Signal processing (finding patterns)
 - Data analysis (trend identification)
 - Resource allocation (optimal scheduling)`,
+    voiceExplanation: `Think of subarray problems like finding the best continuous stretch in a journey. Imagine you're driving on a highway and tracking your fuel efficiency - sometimes you get great mileage, sometimes terrible. A subarray problem is like asking "what's the best continuous stretch of road where I got the highest average mileage?" Kadane's algorithm is brilliant because it makes a simple decision at each mile marker: should I continue with my current stretch, or is it better to start fresh from here? If my running total becomes negative, it's like saying "this stretch is dragging me down so much that I'm better off starting over." This same principle applies everywhere - from finding the most profitable trading period in stocks, to identifying the most productive hours in your day, to detecting the strongest signal in noisy data. The sliding window technique is like having a smart window that expands and contracts as you move through your data, always maintaining the optimal view.`,
+    keyConcepts: `**Essential Concepts:**
+1. **Contiguous Elements**: Subarrays must maintain original order and adjacency
+2. **Kadane's Principle**: At each position, choose between extending or restarting
+3. **Negative Sum Reset**: When cumulative sum becomes negative, start fresh
+4. **Sliding Window**: Efficient technique for fixed or variable-size subarrays
+5. **Two Pointers**: Often used for subarray problems with specific conditions
+6. **Prefix Sums**: Precomputed sums for efficient range queries
+7. **Dynamic Programming**: Optimal substructure in subarray problems`,
+    pseudocode: `**Subarray Problems Pseudocode:**
+
+ALGORITHM KadaneMaxSubarray(array)
+INPUT: array - array of integers
+OUTPUT: maximum sum of contiguous subarray
+BEGIN
+    IF array.length = 0 THEN
+        RETURN 0
+    END IF
+    
+    maxSoFar = array[0]
+    maxEndingHere = array[0]
+    
+    FOR i = 1 TO array.length - 1 DO
+        maxEndingHere = MAX(array[i], maxEndingHere + array[i])
+        maxSoFar = MAX(maxSoFar, maxEndingHere)
+    END FOR
+    
+    RETURN maxSoFar
+END
+
+ALGORITHM SubarrayWithSum(array, targetSum)
+INPUT: array - array of positive integers, targetSum - target sum
+OUTPUT: indices of subarray with given sum
+BEGIN
+    start = 0
+    currentSum = 0
+    
+    FOR end = 0 TO array.length - 1 DO
+        currentSum = currentSum + array[end]
+        
+        WHILE currentSum > targetSum AND start <= end DO
+            currentSum = currentSum - array[start]
+            start = start + 1
+        END WHILE
+        
+        IF currentSum = targetSum THEN
+            RETURN [start, end]
+        END IF
+    END FOR
+    
+    RETURN [-1, -1]  // Not found
+END
+
+ALGORITHM SlidingWindowMaximum(array, windowSize)
+INPUT: array - input array, windowSize - size of sliding window
+OUTPUT: array of maximum elements in each window
+BEGIN
+    result = []
+    deque = []  // Store indices
+    
+    FOR i = 0 TO array.length - 1 DO
+        // Remove indices outside current window
+        WHILE deque is not empty AND deque.front() <= i - windowSize DO
+            deque.removeFront()
+        END WHILE
+        
+        // Remove smaller elements from back
+        WHILE deque is not empty AND array[deque.back()] <= array[i] DO
+            deque.removeBack()
+        END WHILE
+        
+        deque.addBack(i)
+        
+        // Add maximum to result if window is complete
+        IF i >= windowSize - 1 THEN
+            result.add(array[deque.front()])
+        END IF
+    END FOR
+    
+    RETURN result
+END`,
+    implementationCode: `// Comprehensive Subarray Problems Implementation
+
+class SubarrayProblems {
+    // Kadane's Algorithm - Maximum Subarray Sum
+    static maxSubarraySum(arr) {
+        if (arr.length === 0) return 0;
+        
+        let maxSoFar = arr[0];
+        let maxEndingHere = arr[0];
+        let start = 0, end = 0, tempStart = 0;
+        
+        for (let i = 1; i < arr.length; i++) {
+            if (maxEndingHere < 0) {
+                maxEndingHere = arr[i];
+                tempStart = i;
+            } else {
+                maxEndingHere += arr[i];
+            }
+            
+            if (maxEndingHere > maxSoFar) {
+                maxSoFar = maxEndingHere;
+                start = tempStart;
+                end = i;
+            }
+        }
+        
+        return { maxSum: maxSoFar, startIndex: start, endIndex: end };
+    }
+    
+    // Find subarray with given sum (positive numbers)
+    static subarrayWithSum(arr, targetSum) {
+        let start = 0;
+        let currentSum = 0;
+        
+        for (let end = 0; end < arr.length; end++) {
+            currentSum += arr[end];
+            
+            while (currentSum > targetSum && start <= end) {
+                currentSum -= arr[start];
+                start++;
+            }
+            
+            if (currentSum === targetSum) {
+                return { found: true, startIndex: start, endIndex: end };
+            }
+        }
+        
+        return { found: false, startIndex: -1, endIndex: -1 };
+    }
+    
+    // Longest subarray with sum K (handles negative numbers)
+    static longestSubarrayWithSum(arr, k) {
+        const prefixSumMap = new Map();
+        let prefixSum = 0;
+        let maxLength = 0;
+        let startIndex = -1, endIndex = -1;
+        
+        prefixSumMap.set(0, -1); // Handle subarrays starting from index 0
+        
+        for (let i = 0; i < arr.length; i++) {
+            prefixSum += arr[i];
+            
+            if (prefixSumMap.has(prefixSum - k)) {
+                const length = i - prefixSumMap.get(prefixSum - k);
+                if (length > maxLength) {
+                    maxLength = length;
+                    startIndex = prefixSumMap.get(prefixSum - k) + 1;
+                    endIndex = i;
+                }
+            }
+            
+            if (!prefixSumMap.has(prefixSum)) {
+                prefixSumMap.set(prefixSum, i);
+            }
+        }
+        
+        return { maxLength, startIndex, endIndex };
+    }
+    
+    // Sliding Window Maximum
+    static slidingWindowMaximum(arr, windowSize) {
+        if (arr.length === 0 || windowSize <= 0) return [];
+        
+        const result = [];
+        const deque = []; // Store indices
+        
+        for (let i = 0; i < arr.length; i++) {
+            // Remove indices outside current window
+            while (deque.length > 0 && deque[0] <= i - windowSize) {
+                deque.shift();
+            }
+            
+            // Remove smaller elements from back
+            while (deque.length > 0 && arr[deque[deque.length - 1]] <= arr[i]) {
+                deque.pop();
+            }
+            
+            deque.push(i);
+            
+            // Add maximum to result if window is complete
+            if (i >= windowSize - 1) {
+                result.push(arr[deque[0]]);
+            }
+        }
+        
+        return result;
+    }
+    
+    // Maximum sum of subarray of size K
+    static maxSumSubarrayOfSizeK(arr, k) {
+        if (arr.length < k) return null;
+        
+        let windowSum = 0;
+        
+        // Calculate sum of first window
+        for (let i = 0; i < k; i++) {
+            windowSum += arr[i];
+        }
+        
+        let maxSum = windowSum;
+        let maxStartIndex = 0;
+        
+        // Slide the window
+        for (let i = k; i < arr.length; i++) {
+            windowSum = windowSum - arr[i - k] + arr[i];
+            if (windowSum > maxSum) {
+                maxSum = windowSum;
+                maxStartIndex = i - k + 1;
+            }
+        }
+        
+        return { maxSum, startIndex: maxStartIndex, endIndex: maxStartIndex + k - 1 };
+    }
+}
+
+// Usage Examples
+const numbers = [-2, 1, -3, 4, -1, 2, 1, -5, 4];
+console.log(SubarrayProblems.maxSubarraySum(numbers)); 
+// { maxSum: 6, startIndex: 3, endIndex: 6 } -> [4, -1, 2, 1]
+
+const positiveNums = [1, 4, 2, 7, 3, 5];
+console.log(SubarrayProblems.subarrayWithSum(positiveNums, 9));
+// { found: true, startIndex: 1, endIndex: 2 } -> [4, 2, 7] has sum 13, [2, 7] has sum 9
+
+console.log(SubarrayProblems.slidingWindowMaximum([1, 3, -1, -3, 5, 3, 6, 7], 3));
+// [3, 3, 5, 5, 6, 7]`,
     example: `// Maximum Subarray Sum (Kadane's Algorithm)
 function maxSubarraySum(arr) {
     let maxSoFar = arr[0];
@@ -421,7 +793,216 @@ console.log(maxSubarraySum(nums)); // 6 (subarray [4, -1, 2, 1])`,
     difficulty: 'beginner',
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
+    extendedDefinition: `A palindrome is a sequence of characters that reads the same forwards and backwards. Palindrome checking is a fundamental string processing problem with applications in text analysis, DNA sequence analysis, and data validation.
+
+**Types of Palindromes:**
+- **Simple Palindromes**: Single words like "racecar", "level", "madam"
+- **Phrase Palindromes**: Sentences ignoring spaces/punctuation like "A man, a plan, a canal: Panama"
+- **Numeric Palindromes**: Numbers like 121, 1331, 12321
+- **Case-Insensitive**: Ignoring letter case differences
+
+**Algorithm Approaches:**
+1. **Two Pointers**: Most efficient O(n) time, O(1) space
+2. **Reverse and Compare**: Simple but uses O(n) extra space
+3. **Recursive**: Elegant but uses O(n) stack space
+4. **Iterative**: Single loop checking from center outward
+
+**Key Considerations:**
+- **Preprocessing**: Handle spaces, punctuation, and case sensitivity
+- **Unicode Support**: Consider multi-byte characters and normalization
+- **Edge Cases**: Empty strings, single characters, null inputs
+- **Performance**: Two-pointer approach is optimal for most cases`,
     voiceExplanation: `Think of a palindrome like a word or phrase that reads the same forwards and backwards - like "racecar" or "madam". Imagine you have two people standing at opposite ends of the word, one at the beginning and one at the end. They both start walking toward each other, checking if the letters they encounter are the same. If at any point the letters don't match, it's not a palindrome. If they meet in the middle and all letters matched along the way, congratulations - you've found a palindrome! This two-pointer approach is like having two inspectors working from both ends, making the process twice as fast. For phrases like "A man, a plan, a canal: Panama", we first clean up the text by removing spaces and punctuation, then apply the same walking-from-both-ends technique.`,
+    realWorldApplications: `**Industry Applications:**
+- **Data Validation**: Credit card numbers, license plates, product codes
+- **Bioinformatics**: DNA palindromic sequences, restriction enzyme sites
+- **Text Processing**: Spell checkers, word games, linguistic analysis
+- **Security**: Password validation, cryptographic applications
+- **Database Systems**: Data integrity checks, duplicate detection
+- **Web Development**: Form validation, user input sanitization
+- **Competitive Programming**: Algorithm contests, coding interviews
+- **Natural Language Processing**: Text analysis, pattern recognition`,
+    keyConcepts: `**Essential Concepts:**
+1. **Two-Pointer Technique**: Efficient O(n) time, O(1) space approach
+2. **String Preprocessing**: Handling case, spaces, and special characters
+3. **Boundary Conditions**: Empty strings, single characters, even/odd lengths
+4. **Character Comparison**: Direct comparison vs. normalized comparison
+5. **Space-Time Tradeoffs**: In-place vs. auxiliary space approaches
+6. **Recursive vs. Iterative**: Stack space considerations
+7. **Unicode Handling**: Multi-byte character support and normalization`,
+    pseudocode: `**Palindrome Check Pseudocode:**
+
+ALGORITHM IsPalindromeTwoPointers(string)
+INPUT: string - the string to check
+OUTPUT: boolean - true if palindrome, false otherwise
+BEGIN
+    IF string is null OR string.length = 0 THEN
+        RETURN true
+    END IF
+    
+    left = 0
+    right = string.length - 1
+    
+    WHILE left < right DO
+        IF string[left] ≠ string[right] THEN
+            RETURN false
+        END IF
+        left = left + 1
+        right = right - 1
+    END WHILE
+    
+    RETURN true
+END
+
+ALGORITHM IsPalindromeWithPreprocessing(string)
+INPUT: string - the string to check (may contain spaces/punctuation)
+OUTPUT: boolean - true if palindrome, false otherwise
+BEGIN
+    // Preprocess: remove non-alphanumeric, convert to lowercase
+    cleaned = ""
+    FOR each character c in string DO
+        IF c is alphanumeric THEN
+            cleaned = cleaned + toLowerCase(c)
+        END IF
+    END FOR
+    
+    RETURN IsPalindromeTwoPointers(cleaned)
+END
+
+ALGORITHM IsPalindromeRecursive(string, left, right)
+INPUT: string, left index, right index
+OUTPUT: boolean - true if palindrome, false otherwise
+BEGIN
+    IF left >= right THEN
+        RETURN true
+    END IF
+    
+    IF string[left] ≠ string[right] THEN
+        RETURN false
+    END IF
+    
+    RETURN IsPalindromeRecursive(string, left + 1, right - 1)
+END`,
+    implementationCode: `// Comprehensive Palindrome Check Implementation
+
+class PalindromeChecker {
+    // Basic two-pointer approach - O(n) time, O(1) space
+    static isPalindrome(str) {
+        if (!str || str.length === 0) return true;
+        
+        let left = 0;
+        let right = str.length - 1;
+        
+        while (left < right) {
+            if (str[left] !== str[right]) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        
+        return true;
+    }
+    
+    // Palindrome check with preprocessing - handles spaces, punctuation, case
+    static isPalindromeIgnoreCase(str) {
+        if (!str) return true;
+        
+        // Clean string: keep only alphanumeric, convert to lowercase
+        const cleaned = str.toLowerCase().replace(/[^a-z0-9]/g, '');
+        return this.isPalindrome(cleaned);
+    }
+    
+    // Recursive approach - O(n) time, O(n) space (stack)
+    static isPalindromeRecursive(str, left = 0, right = str.length - 1) {
+        if (left >= right) return true;
+        if (str[left] !== str[right]) return false;
+        return this.isPalindromeRecursive(str, left + 1, right - 1);
+    }
+    
+    // Reverse and compare approach - O(n) time, O(n) space
+    static isPalindromeReverse(str) {
+        if (!str) return true;
+        const reversed = str.split('').reverse().join('');
+        return str === reversed;
+    }
+    
+    // Find longest palindromic substring - O(n²) time
+    static longestPalindrome(str) {
+        if (!str || str.length < 2) return str;
+        
+        let start = 0;
+        let maxLength = 1;
+        
+        // Helper function to expand around center
+        const expandAroundCenter = (left, right) => {
+            while (left >= 0 && right < str.length && str[left] === str[right]) {
+                const currentLength = right - left + 1;
+                if (currentLength > maxLength) {
+                    start = left;
+                    maxLength = currentLength;
+                }
+                left--;
+                right++;
+            }
+        };
+        
+        for (let i = 0; i < str.length; i++) {
+            // Check for odd length palindromes
+            expandAroundCenter(i, i);
+            // Check for even length palindromes
+            expandAroundCenter(i, i + 1);
+        }
+        
+        return str.substring(start, start + maxLength);
+    }
+    
+    // Count all palindromic substrings - O(n²) time
+    static countPalindromes(str) {
+        if (!str) return 0;
+        
+        let count = 0;
+        
+        const expandAroundCenter = (left, right) => {
+            while (left >= 0 && right < str.length && str[left] === str[right]) {
+                count++;
+                left--;
+                right++;
+            }
+        };
+        
+        for (let i = 0; i < str.length; i++) {
+            expandAroundCenter(i, i);     // odd length
+            expandAroundCenter(i, i + 1); // even length
+        }
+        
+        return count;
+    }
+    
+    // Check if string can be rearranged to form palindrome
+    static canFormPalindrome(str) {
+        const charCount = {};
+        
+        for (let char of str) {
+            charCount[char] = (charCount[char] || 0) + 1;
+        }
+        
+        let oddCount = 0;
+        for (let count of Object.values(charCount)) {
+            if (count % 2 === 1) oddCount++;
+        }
+        
+        // At most one character can have odd count
+        return oddCount <= 1;
+    }
+}
+
+// Usage Examples
+console.log(PalindromeChecker.isPalindrome("racecar")); // true
+console.log(PalindromeChecker.isPalindromeIgnoreCase("A man, a plan, a canal: Panama")); // true
+console.log(PalindromeChecker.longestPalindrome("babad")); // "bab" or "aba"
+console.log(PalindromeChecker.countPalindromes("abc")); // 3 ("a", "b", "c")
+console.log(PalindromeChecker.canFormPalindrome("aabbcc")); // true`,
     example: `// Palindrome Check
 function isPalindrome(str) {
     const cleaned = str.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -494,13 +1075,143 @@ When a mismatch occurs at position j in the pattern, we know that characters 0 t
 - Linear time complexity O(n + m)
 - No backtracking in the text
 - Optimal for repeated pattern searches
-- Foundation for other advanced string algorithms
+- Foundation for other advanced string algorithms`,
+    voiceExplanation: `Think of the KMP algorithm like a smart detective who learns from past mistakes. Imagine you're searching for the word "ABABACA" in a long text. When you find a mismatch, instead of starting over from the next character like a naive approach, KMP is clever - it remembers the pattern it just saw and uses that knowledge to skip ahead intelligently. The secret is the "failure function" or LPS array, which is like a cheat sheet that tells you: "Hey, if you fail at position 5, don't start from scratch - you can safely jump to position 2 because you already know positions 0-1 match what you just saw." It's like having a memory of partial matches that prevents you from doing redundant work. This makes KMP incredibly efficient for text editors when you're searching for patterns, or in DNA analysis where you're looking for specific genetic sequences.`,
+    keyConcepts: `**Essential Concepts:**
+1. **Failure Function (LPS)**: Longest Proper Prefix which is also Suffix
+2. **Pattern Preprocessing**: Building the LPS array in O(m) time
+3. **No Backtracking**: Text pointer never moves backward
+4. **Partial Match Utilization**: Using previous match information
+5. **Linear Time Complexity**: Guaranteed O(n + m) performance
+6. **Optimal Shifting**: Maximum safe shift distance after mismatch
+7. **Border Concept**: Understanding string borders and their properties`,
+    pseudocode: `**KMP Algorithm Pseudocode:**
 
-**Applications:**
-- Text editors (find and replace)
-- DNA sequence analysis
-- Compiler design (lexical analysis)
-- Network intrusion detection systems`,
+ALGORITHM BuildLPS(pattern)
+INPUT: pattern - the pattern string
+OUTPUT: lps - array of longest proper prefix suffix lengths
+BEGIN
+    m = pattern.length
+    lps = array of size m, initialized to 0
+    len = 0
+    i = 1
+    
+    WHILE i < m DO
+        IF pattern[i] = pattern[len] THEN
+            len = len + 1
+            lps[i] = len
+            i = i + 1
+        ELSE
+            IF len ≠ 0 THEN
+                len = lps[len - 1]
+            ELSE
+                lps[i] = 0
+                i = i + 1
+            END IF
+        END IF
+    END WHILE
+    
+    RETURN lps
+END
+
+ALGORITHM KMPSearch(text, pattern)
+INPUT: text - the text to search in, pattern - the pattern to find
+OUTPUT: positions - array of starting positions where pattern is found
+BEGIN
+    n = text.length
+    m = pattern.length
+    lps = BuildLPS(pattern)
+    positions = []
+    
+    i = 0
+    j = 0
+    
+    WHILE i < n DO
+        IF text[i] = pattern[j] THEN
+            i = i + 1
+            j = j + 1
+        END IF
+        
+        IF j = m THEN
+            positions.append(i - j)
+            j = lps[j - 1]
+        ELSE IF i < n AND text[i] ≠ pattern[j] THEN
+            IF j ≠ 0 THEN
+                j = lps[j - 1]
+            ELSE
+                i = i + 1
+            END IF
+        END IF
+    END WHILE
+    
+    RETURN positions
+END`,
+    implementationCode: `// Comprehensive KMP Algorithm Implementation
+
+class KMPStringMatcher {
+    static buildLPS(pattern) {
+        const m = pattern.length;
+        const lps = new Array(m).fill(0);
+        let len = 0;
+        let i = 1;
+        
+        while (i < m) {
+            if (pattern[i] === pattern[len]) {
+                len++;
+                lps[i] = len;
+                i++;
+            } else {
+                if (len !== 0) {
+                    len = lps[len - 1];
+                } else {
+                    lps[i] = 0;
+                    i++;
+                }
+            }
+        }
+        
+        return lps;
+    }
+    
+    static search(text, pattern) {
+        const n = text.length;
+        const m = pattern.length;
+        
+        if (m === 0) return [0];
+        if (n === 0 || m > n) return [];
+        
+        const lps = this.buildLPS(pattern);
+        const result = [];
+        
+        let i = 0;
+        let j = 0;
+        
+        while (i < n) {
+            if (text[i] === pattern[j]) {
+                i++;
+                j++;
+            }
+            
+            if (j === m) {
+                result.push(i - j);
+                j = lps[j - 1];
+            } else if (i < n && text[i] !== pattern[j]) {
+                if (j !== 0) {
+                    j = lps[j - 1];
+                } else {
+                    i++;
+                }
+            }
+        }
+        
+        return result;
+    }
+}
+
+// Usage Examples
+const text = "ABABDABACDABABCABCABCABCABC";
+const pattern = "ABABCABCABCABC";
+console.log("Matches:", KMPStringMatcher.search(text, pattern));`,
     example: `// KMP Algorithm Implementation
 function kmpSearch(text, pattern) {
     const lps = buildLPS(pattern);
@@ -612,6 +1323,177 @@ Since hash collisions can occur, when hash values match, the algorithm performs 
 - Image pattern recognition
 - Duplicate file detection
 - Web crawling and indexing`,
+    keyConcepts: `**Essential Concepts:**
+1. **Rolling Hash Function**: Polynomial hash that can be updated in O(1) time
+2. **Hash Collision Handling**: Verification step when hash values match
+3. **Modular Arithmetic**: Using prime numbers to reduce hash collisions
+4. **Sliding Window**: Moving the pattern window through the text
+5. **Base and Prime Selection**: Choosing appropriate values for hash function
+6. **Spurious Hits**: False positives due to hash collisions
+7. **Multiple Pattern Search**: Extending to search for multiple patterns simultaneously`,
+    pseudocode: `**Rabin-Karp Algorithm Pseudocode:**
+
+ALGORITHM RabinKarpSearch(text, pattern)
+INPUT: text - the text to search in, pattern - the pattern to find
+OUTPUT: positions - array of starting positions where pattern is found
+BEGIN
+    n = text.length
+    m = pattern.length
+    base = 256  // number of characters in alphabet
+    prime = 101  // a prime number
+    positions = []
+    
+    // Calculate h = base^(m-1) % prime
+    h = 1
+    FOR i = 0 TO m - 2 DO
+        h = (h * base) % prime
+    END FOR
+    
+    // Calculate hash for pattern and first window of text
+    patternHash = 0
+    textHash = 0
+    FOR i = 0 TO m - 1 DO
+        patternHash = (base * patternHash + pattern[i]) % prime
+        textHash = (base * textHash + text[i]) % prime
+    END FOR
+    
+    // Slide pattern over text one by one
+    FOR i = 0 TO n - m DO
+        // Check if hash values match
+        IF patternHash = textHash THEN
+            // Check character by character for exact match
+            match = true
+            FOR j = 0 TO m - 1 DO
+                IF text[i + j] ≠ pattern[j] THEN
+                    match = false
+                    BREAK
+                END IF
+            END FOR
+            
+            IF match = true THEN
+                positions.append(i)
+            END IF
+        END IF
+        
+        // Calculate hash for next window (rolling hash)
+        IF i < n - m THEN
+            textHash = (base * (textHash - text[i] * h) + text[i + m]) % prime
+            
+            // Handle negative hash values
+            IF textHash < 0 THEN
+                textHash = textHash + prime
+            END IF
+        END IF
+    END FOR
+    
+    RETURN positions
+END`,
+    implementationCode: `// Comprehensive Rabin-Karp Algorithm Implementation
+
+class RabinKarpMatcher {
+    constructor(base = 256, prime = 101) {
+        this.base = base;
+        this.prime = prime;
+    }
+    
+    // Calculate hash value for a string
+    calculateHash(str, length) {
+        let hash = 0;
+        for (let i = 0; i < length; i++) {
+            hash = (this.base * hash + str.charCodeAt(i)) % this.prime;
+        }
+        return hash;
+    }
+    
+    // Update hash using rolling hash technique
+    rollingHash(oldHash, oldChar, newChar, h) {
+        let newHash = (this.base * (oldHash - oldChar * h) + newChar) % this.prime;
+        return newHash < 0 ? newHash + this.prime : newHash;
+    }
+    
+    // Main search function
+    search(text, pattern) {
+        const n = text.length;
+        const m = pattern.length;
+        
+        if (m === 0) return [0];
+        if (n === 0 || m > n) return [];
+        
+        const result = [];
+        
+        // Calculate h = base^(m-1) % prime
+        let h = 1;
+        for (let i = 0; i < m - 1; i++) {
+            h = (h * this.base) % this.prime;
+        }
+        
+        // Calculate hash for pattern and first window
+        let patternHash = this.calculateHash(pattern, m);
+        let textHash = this.calculateHash(text, m);
+        
+        // Slide pattern over text
+        for (let i = 0; i <= n - m; i++) {
+            // Check if hash values match
+            if (patternHash === textHash) {
+                // Verify character by character
+                let match = true;
+                for (let j = 0; j < m; j++) {
+                    if (text[i + j] !== pattern[j]) {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match) result.push(i);
+            }
+            
+            // Calculate hash for next window
+            if (i < n - m) {
+                textHash = this.rollingHash(
+                    textHash, 
+                    text.charCodeAt(i), 
+                    text.charCodeAt(i + m), 
+                    h
+                );
+            }
+        }
+        
+        return result;
+    }
+    
+    // Search for multiple patterns simultaneously
+    multiSearch(text, patterns) {
+        const results = {};
+        
+        for (const pattern of patterns) {
+            results[pattern] = this.search(text, pattern);
+        }
+        
+        return results;
+    }
+    
+    // Count occurrences of pattern
+    count(text, pattern) {
+        return this.search(text, pattern).length;
+    }
+    
+    // Check if pattern exists in text
+    contains(text, pattern) {
+        return this.search(text, pattern).length > 0;
+    }
+}
+
+// Usage Examples
+const matcher = new RabinKarpMatcher();
+const text = "AABAACAADAABAABA";
+const pattern = "AABA";
+
+console.log("Pattern found at positions:", matcher.search(text, pattern));
+console.log("Pattern count:", matcher.count(text, pattern));
+console.log("Pattern exists:", matcher.contains(text, pattern));
+
+// Multiple pattern search
+const patterns = ["AABA", "CAAD", "BAAB"];
+console.log("Multiple patterns:", matcher.multiSearch(text, patterns));`,
     example: `// Rabin-Karp Algorithm
 function rabinKarp(text, pattern) {
     const base = 256, prime = 101;
@@ -705,13 +1587,6 @@ To find pattern P in text T, create string S = P + "$" + T (where "$" is a separ
 - Versatile for various string problems
 - Easy to understand and debug
 
-**Applications:**
-- String matching and searching
-- Longest common prefix problems
-- Palindrome detection algorithms
-- String compression techniques
-- Bioinformatics sequence analysis`,
-    example: `// Z Algorithm Implementation
 function zAlgorithm(s) {
     const n = s.length;
     const z = new Array(n).fill(0);
@@ -807,6 +1682,273 @@ Although the algorithm has nested loops, it runs in O(n) time because the right 
 - Finds all palindromes, not just the longest
 - Elegant use of symmetry properties
 - Foundation for advanced string algorithms`,
+    voiceExplanation: `Think of Manacher's algorithm like a master palindrome detective with a perfect memory. Imagine you're walking down a street looking for houses that are perfectly symmetrical. Instead of checking each house from scratch, this detective is incredibly smart - when he finds a symmetrical house, he remembers that everything inside that house is also symmetrical. So when he moves to the next position, if it's still within a house he's already checked, he can use his memory to instantly know how much symmetry to expect. The brilliant preprocessing trick is like adding streetlights between every house - this way, whether the original palindrome was even or odd length, everything becomes odd length with a clear center. It's like having X-ray vision that can see all palindromes at once, making it the fastest way to find every single palindromic pattern in a string, which is why it's used in DNA analysis and advanced text processing.`,
+    keyConcepts: `**Essential Concepts:**
+1. **String Preprocessing**: Adding separators to handle even/odd length uniformly
+2. **Palindrome Radius Array**: P[i] stores radius of palindrome centered at i
+3. **Mirror Property**: Using symmetry within known palindromes
+4. **Center and Right Boundary**: Tracking rightmost palindrome boundary
+5. **Linear Time Guarantee**: Each character examined at most twice
+6. **Sentinel Characters**: Boundary markers to avoid index checks
+7. **Radius to Length Conversion**: Converting radius back to original string positions`,
+    pseudocode: `**Manacher's Algorithm Pseudocode:**
+
+ALGORITHM PreprocessString(string)
+INPUT: string - the original string
+OUTPUT: processed - string with separators and sentinels
+BEGIN
+    processed = "^#"  // start with sentinel and separator
+    
+    FOR each character c in string DO
+        processed = processed + c + "#"
+    END FOR
+    
+    processed = processed + "$"  // end with sentinel
+    RETURN processed
+END
+
+ALGORITHM ManacherAlgorithm(string)
+INPUT: string - the original string
+OUTPUT: longestPalindrome - the longest palindromic substring
+BEGIN
+    processed = PreprocessString(string)
+    n = processed.length
+    P = array of size n, initialized to 0  // palindrome radius array
+    center = 0  // center of rightmost palindrome
+    right = 0   // right boundary of rightmost palindrome
+    
+    maxLength = 0
+    centerIndex = 0
+    
+    FOR i = 1 TO n - 2 DO  // skip sentinels
+        mirror = 2 * center - i  // mirror of i with respect to center
+        
+        // If i is within right boundary, use mirror property
+        IF i < right THEN
+            P[i] = MIN(right - i, P[mirror])
+        END IF
+        
+        // Try to expand palindrome centered at i
+        WHILE processed[i + (1 + P[i])] = processed[i - (1 + P[i])] DO
+            P[i] = P[i] + 1
+        END WHILE
+        
+        // If palindrome centered at i extends past right, update center and right
+        IF i + P[i] > right THEN
+            center = i
+            right = i + P[i]
+        END IF
+        
+        // Update maximum palindrome found
+        IF P[i] > maxLength THEN
+            maxLength = P[i]
+            centerIndex = i
+        END IF
+    END FOR
+    
+    // Convert back to original string coordinates
+    start = (centerIndex - maxLength) / 2
+    RETURN string.substring(start, start + maxLength)
+END`,
+    implementationCode: `// Comprehensive Manacher's Algorithm Implementation
+
+class ManacherAlgorithm {
+    // Preprocess string to handle even/odd length palindromes uniformly
+    static preprocess(str) {
+        let processed = "^#";
+        for (let char of str) {
+            processed += char + "#";
+        }
+        processed += "$";
+        return processed;
+    }
+    
+    // Find longest palindromic substring
+    static longestPalindrome(str) {
+        if (!str || str.length === 0) return "";
+        
+        const processed = this.preprocess(str);
+        const n = processed.length;
+        const P = new Array(n).fill(0);
+        let center = 0, right = 0;
+        let maxLength = 0, centerIndex = 0;
+        
+        for (let i = 1; i < n - 1; i++) {
+            const mirror = 2 * center - i;
+            
+            if (i < right) {
+                P[i] = Math.min(right - i, P[mirror]);
+            }
+            
+            // Try to expand palindrome centered at i
+            while (processed[i + (1 + P[i])] === processed[i - (1 + P[i])]) {
+                P[i]++;
+            }
+            
+            // If palindrome centered at i extends past right, adjust center and right
+            if (i + P[i] > right) {
+                center = i;
+                right = i + P[i];
+            }
+            
+            // Update maximum palindrome
+            if (P[i] > maxLength) {
+                maxLength = P[i];
+                centerIndex = i;
+            }
+        }
+        
+        const start = (centerIndex - maxLength) / 2;
+        return str.substring(start, start + maxLength);
+    }
+    
+    // Count all palindromic substrings
+    static countPalindromes(str) {
+        if (!str || str.length === 0) return 0;
+        
+        const processed = this.preprocess(str);
+        const n = processed.length;
+        const P = new Array(n).fill(0);
+        let center = 0, right = 0;
+        let count = 0;
+        
+        for (let i = 1; i < n - 1; i++) {
+            const mirror = 2 * center - i;
+            
+            if (i < right) {
+                P[i] = Math.min(right - i, P[mirror]);
+            }
+            
+            while (processed[i + (1 + P[i])] === processed[i - (1 + P[i])]) {
+                P[i]++;
+            }
+            
+            if (i + P[i] > right) {
+                center = i;
+                right = i + P[i];
+            }
+            
+            // Count palindromes: each radius contributes (radius + 1) / 2 palindromes
+            count += Math.ceil(P[i] / 2);
+        }
+        
+        return count;
+    }
+    
+    // Find all palindromic substrings with their positions
+    static findAllPalindromes(str) {
+        if (!str || str.length === 0) return [];
+        
+        const processed = this.preprocess(str);
+        const n = processed.length;
+        const P = new Array(n).fill(0);
+        let center = 0, right = 0;
+        const palindromes = [];
+        
+        for (let i = 1; i < n - 1; i++) {
+            const mirror = 2 * center - i;
+            
+            if (i < right) {
+                P[i] = Math.min(right - i, P[mirror]);
+            }
+            
+            while (processed[i + (1 + P[i])] === processed[i - (1 + P[i])]) {
+                P[i]++;
+            }
+            
+            if (i + P[i] > right) {
+                center = i;
+                right = i + P[i];
+            }
+            
+            // Extract all palindromes centered at i
+            for (let radius = 1; radius <= P[i]; radius++) {
+                const start = (i - radius) / 2;
+                const length = radius;
+                if (start >= 0 && start + length <= str.length) {
+                    palindromes.push({
+                        text: str.substring(start, start + length),
+                        start: start,
+                        length: length
+                    });
+                }
+            }
+        }
+        
+        return palindromes.sort((a, b) => a.start - b.start);
+    }
+    
+    // Check if string is a palindrome
+    static isPalindrome(str) {
+        const longest = this.longestPalindrome(str);
+        return longest.length === str.length;
+    }
+    
+    // Get detailed analysis of palindrome structure
+    static analyze(str) {
+        const processed = this.preprocess(str);
+        const n = processed.length;
+        const P = new Array(n).fill(0);
+        let center = 0, right = 0;
+        const steps = [];
+        
+        for (let i = 1; i < n - 1; i++) {
+            const mirror = 2 * center - i;
+            const oldP = P[i];
+            
+            if (i < right) {
+                P[i] = Math.min(right - i, P[mirror]);
+                steps.push({
+                    step: i,
+                    action: 'mirror',
+                    description: \`Used mirror property: P[\${i}] = min(\${right - i}, P[\${mirror}]) = \${P[i]}\`
+                });
+            }
+            
+            while (processed[i + (1 + P[i])] === processed[i - (1 + P[i])]) {
+                P[i]++;
+            }
+            
+            if (P[i] !== oldP) {
+                steps.push({
+                    step: i,
+                    action: 'expand',
+                    description: \`Expanded palindrome at \${i}: P[\${i}] = \${P[i]}\`
+                });
+            }
+            
+            if (i + P[i] > right) {
+                center = i;
+                right = i + P[i];
+                steps.push({
+                    step: i,
+                    action: 'update',
+                    description: \`Updated center=\${center}, right=\${right}\`
+                });
+            }
+        }
+        
+        return {
+            original: str,
+            processed: processed,
+            P: P,
+            steps: steps,
+            longestPalindrome: this.longestPalindrome(str),
+            allPalindromes: this.findAllPalindromes(str)
+        };
+    }
+}
+
+// Usage Examples
+const text = "babad";
+console.log("Longest palindrome:", ManacherAlgorithm.longestPalindrome(text));
+console.log("Palindrome count:", ManacherAlgorithm.countPalindromes(text));
+console.log("All palindromes:", ManacherAlgorithm.findAllPalindromes(text));
+console.log("Is palindrome:", ManacherAlgorithm.isPalindrome("racecar"));
+
+// Detailed analysis
+const analysis = ManacherAlgorithm.analyze("ababa");
+console.log("Analysis:", analysis);`,
     example: `// Manacher's Algorithm
 function longestPalindrome(s) {
     // Preprocess string: "abc" -> "^#a#b#c#$"
@@ -886,7 +2028,317 @@ function longestPalindrome(s) {
     difficulty: 'beginner',
     timeComplexity: 'O(n)',
     spaceComplexity: 'O(1)',
+    extendedDefinition: `Anagram detection is the process of determining whether two strings are anagrams of each other. Two strings are anagrams if they contain exactly the same characters with the same frequencies, but possibly in different orders. This fundamental string processing problem has applications in word games, cryptography, and text analysis.
+
+**Types of Anagrams:**
+- **Simple Anagrams**: Direct letter rearrangements like "listen" ↔ "silent"
+- **Phrase Anagrams**: Ignoring spaces and punctuation like "A gentleman" ↔ "Elegant man"
+- **Case-Insensitive**: Ignoring letter case differences
+- **Multi-word Anagrams**: Phrases that rearrange to form other phrases
+
+**Algorithm Approaches:**
+1. **Character Frequency Counting**: Most efficient O(n) time, O(1) space for fixed alphabet
+2. **Sorting**: Simple but O(n log n) time due to sorting overhead
+3. **Prime Number Mapping**: Unique prime for each character, but overflow concerns
+4. **Bit Manipulation**: For specific character sets, very space efficient
+
+**Key Properties:**
+- **Length Equality**: Anagrams must have identical lengths
+- **Character Conservation**: Every character in one string must appear in the other
+- **Frequency Preservation**: Each character must appear the same number of times
+- **Order Independence**: The arrangement of characters doesn't matter
+
+**Optimization Considerations:**
+- **Early Termination**: Check lengths first for quick rejection
+- **Alphabet Size**: Use arrays for small alphabets, hash maps for larger ones
+- **Unicode Support**: Handle multi-byte characters and normalization
+- **Memory Efficiency**: Choose data structures based on character set size`,
     voiceExplanation: `Think of anagrams like word puzzles where you rearrange the letters of one word to form another word - like "listen" and "silent", or "elbow" and "below". The key insight is that anagrams must have exactly the same letters in the same quantities, just in different orders. Imagine you have two bags of letter tiles - if they're anagrams, both bags should contain identical sets of letters. The most efficient way to check this is to count the frequency of each letter in both strings. You can do this by going through the first string and adding 1 to each letter's count, then going through the second string and subtracting 1 from each letter's count. If they're true anagrams, all counts should end up at zero. It's like a perfect balancing act - every letter added from the first word should be perfectly canceled out by the same letter from the second word.`,
+    realWorldApplications: `**Industry Applications:**
+- **Word Games**: Scrabble, anagram solvers, crossword puzzles
+- **Cryptography**: Detecting simple substitution ciphers and transpositions
+- **Text Analysis**: Plagiarism detection, document similarity analysis
+- **Data Deduplication**: Finding duplicate entries with different orderings
+- **Bioinformatics**: DNA sequence analysis and pattern matching
+- **Search Engines**: Query expansion and alternative search suggestions
+- **Social Media**: Detecting spam accounts with scrambled usernames
+- **Educational Software**: Language learning tools and spelling games`,
+    keyConcepts: `**Essential Concepts:**
+1. **Character Frequency**: Counting occurrences of each character
+2. **Hash Table Usage**: Efficient storage and lookup of character counts
+3. **Early Termination**: Optimizing by checking length first
+4. **Space-Time Tradeoffs**: Array vs hash map based on alphabet size
+5. **Case Sensitivity**: Handling uppercase/lowercase considerations
+6. **Unicode Normalization**: Dealing with multi-byte characters
+7. **Alphabet Constraints**: Leveraging known character sets for optimization`,
+    pseudocode: `**Anagram Detection Pseudocode:**
+
+ALGORITHM IsAnagramFrequencyCount(string1, string2)
+INPUT: string1, string2 - the two strings to compare
+OUTPUT: boolean - true if strings are anagrams, false otherwise
+BEGIN
+    // Early termination: different lengths cannot be anagrams
+    IF string1.length ≠ string2.length THEN
+        RETURN false
+    END IF
+    
+    // Initialize character frequency map
+    charCount = new HashMap()
+    
+    // Count characters in first string
+    FOR each character c in string1 DO
+        IF charCount.contains(c) THEN
+            charCount[c] = charCount[c] + 1
+        ELSE
+            charCount[c] = 1
+        END IF
+    END FOR
+    
+    // Subtract characters from second string
+    FOR each character c in string2 DO
+        IF NOT charCount.contains(c) THEN
+            RETURN false  // Character not in first string
+        END IF
+        
+        charCount[c] = charCount[c] - 1
+        
+        IF charCount[c] < 0 THEN
+            RETURN false  // More occurrences in second string
+        END IF
+    END FOR
+    
+    // Check if all counts are zero
+    FOR each count in charCount.values() DO
+        IF count ≠ 0 THEN
+            RETURN false
+        END IF
+    END FOR
+    
+    RETURN true
+END
+
+ALGORITHM IsAnagramSorting(string1, string2)
+INPUT: string1, string2 - the two strings to compare
+OUTPUT: boolean - true if strings are anagrams, false otherwise
+BEGIN
+    IF string1.length ≠ string2.length THEN
+        RETURN false
+    END IF
+    
+    sortedString1 = SORT(string1.toCharArray())
+    sortedString2 = SORT(string2.toCharArray())
+    
+    RETURN sortedString1 = sortedString2
+END
+
+ALGORITHM IsAnagramArray(string1, string2)
+INPUT: string1, string2 - strings with characters in range [a-z]
+OUTPUT: boolean - true if strings are anagrams, false otherwise
+BEGIN
+    IF string1.length ≠ string2.length THEN
+        RETURN false
+    END IF
+    
+    count = array of size 26, initialized to 0
+    
+    FOR i = 0 TO string1.length - 1 DO
+        count[string1[i] - 'a'] = count[string1[i] - 'a'] + 1
+        count[string2[i] - 'a'] = count[string2[i] - 'a'] - 1
+    END FOR
+    
+    FOR i = 0 TO 25 DO
+        IF count[i] ≠ 0 THEN
+            RETURN false
+        END IF
+    END FOR
+    
+    RETURN true
+END`,
+    implementationCode: `// Comprehensive Anagram Detection Implementation
+
+class AnagramDetector {
+    // Basic frequency counting approach - O(n) time, O(k) space where k is alphabet size
+    static isAnagram(str1, str2) {
+        if (str1.length !== str2.length) return false;
+        
+        const charCount = {};
+        
+        // Count characters in first string
+        for (let char of str1.toLowerCase()) {
+            charCount[char] = (charCount[char] || 0) + 1;
+        }
+        
+        // Subtract characters from second string
+        for (let char of str2.toLowerCase()) {
+            if (!charCount[char]) return false;
+            charCount[char]--;
+            if (charCount[char] < 0) return false;
+        }
+        
+        return true;
+    }
+    
+    // Optimized version using single pass - O(n) time, O(k) space
+    static isAnagramOptimized(str1, str2) {
+        if (str1.length !== str2.length) return false;
+        
+        const charCount = {};
+        
+        // Single pass: increment for str1, decrement for str2
+        for (let i = 0; i < str1.length; i++) {
+            const char1 = str1[i].toLowerCase();
+            const char2 = str2[i].toLowerCase();
+            
+            charCount[char1] = (charCount[char1] || 0) + 1;
+            charCount[char2] = (charCount[char2] || 0) - 1;
+        }
+        
+        // Check if all counts are zero
+        for (let count of Object.values(charCount)) {
+            if (count !== 0) return false;
+        }
+        
+        return true;
+    }
+    
+    // Array-based approach for lowercase letters only - O(n) time, O(1) space
+    static isAnagramArray(str1, str2) {
+        if (str1.length !== str2.length) return false;
+        
+        const count = new Array(26).fill(0);
+        
+        for (let i = 0; i < str1.length; i++) {
+            count[str1.charCodeAt(i) - 97]++; // 'a' = 97
+            count[str2.charCodeAt(i) - 97]--;
+        }
+        
+        return count.every(c => c === 0);
+    }
+    
+    // Sorting approach - O(n log n) time, O(n) space
+    static isAnagramSorting(str1, str2) {
+        if (str1.length !== str2.length) return false;
+        
+        const sorted1 = str1.toLowerCase().split('').sort().join('');
+        const sorted2 = str2.toLowerCase().split('').sort().join('');
+        
+        return sorted1 === sorted2;
+    }
+    
+    // Find all anagrams of a word in a list
+    static findAnagrams(word, wordList) {
+        const anagrams = [];
+        
+        for (let candidate of wordList) {
+            if (this.isAnagram(word, candidate)) {
+                anagrams.push(candidate);
+            }
+        }
+        
+        return anagrams;
+    }
+    
+    // Group anagrams together
+    static groupAnagrams(words) {
+        const groups = {};
+        
+        for (let word of words) {
+            // Use sorted word as key
+            const key = word.toLowerCase().split('').sort().join('');
+            
+            if (!groups[key]) {
+                groups[key] = [];
+            }
+            groups[key].push(word);
+        }
+        
+        return Object.values(groups);
+    }
+    
+    // Check if string can form an anagram of target
+    static canFormAnagram(source, target) {
+        const sourceCount = {};
+        const targetCount = {};
+        
+        // Count characters in both strings
+        for (let char of source.toLowerCase()) {
+            sourceCount[char] = (sourceCount[char] || 0) + 1;
+        }
+        
+        for (let char of target.toLowerCase()) {
+            targetCount[char] = (targetCount[char] || 0) + 1;
+        }
+        
+        // Check if source has enough of each character
+        for (let char in targetCount) {
+            if ((sourceCount[char] || 0) < targetCount[char]) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    // Generate all possible anagrams (permutations) of a string
+    static generateAnagrams(str) {
+        if (str.length <= 1) return [str];
+        
+        const anagrams = [];
+        
+        for (let i = 0; i < str.length; i++) {
+            const char = str[i];
+            const remaining = str.slice(0, i) + str.slice(i + 1);
+            const subAnagrams = this.generateAnagrams(remaining);
+            
+            for (let subAnagram of subAnagrams) {
+                anagrams.push(char + subAnagram);
+            }
+        }
+        
+        return [...new Set(anagrams)]; // Remove duplicates
+    }
+    
+    // Performance comparison of different methods
+    static performanceTest(str1, str2, iterations = 100000) {
+        const methods = [
+            { name: 'Frequency Count', fn: this.isAnagram },
+            { name: 'Optimized', fn: this.isAnagramOptimized },
+            { name: 'Array Based', fn: this.isAnagramArray },
+            { name: 'Sorting', fn: this.isAnagramSorting }
+        ];
+        
+        const results = {};
+        
+        for (let method of methods) {
+            const start = performance.now();
+            
+            for (let i = 0; i < iterations; i++) {
+                method.fn.call(this, str1, str2);
+            }
+            
+            const end = performance.now();
+            results[method.name] = end - start;
+        }
+        
+        return results;
+    }
+}
+
+// Usage Examples
+console.log("Basic anagram check:", AnagramDetector.isAnagram("listen", "silent")); // true
+console.log("Case insensitive:", AnagramDetector.isAnagram("Listen", "Silent")); // true
+console.log("Not anagrams:", AnagramDetector.isAnagram("hello", "world")); // false
+
+// Find anagrams in a list
+const words = ["eat", "tea", "tan", "ate", "nat", "bat"];
+console.log("Anagrams of 'eat':", AnagramDetector.findAnagrams("eat", words));
+
+// Group anagrams
+console.log("Grouped anagrams:", AnagramDetector.groupAnagrams(words));
+
+// Performance comparison
+const perf = AnagramDetector.performanceTest("listen", "silent");
+console.log("Performance results:", perf);`,
     example: `// Anagram Detection
 function isAnagram(s1, s2) {
     if (s1.length !== s2.length) return false;

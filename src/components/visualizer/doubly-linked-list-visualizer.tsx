@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+
 import { Play, Pause, SkipForward, SkipBack, RotateCcw, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,6 +7,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { PseudocodeBox } from '@/components/pseudocode-box';
 import { ComplexityBox } from '@/components/complexity-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVoiceExplain } from '@/hooks/useVoiceExplain';
 
 interface DoublyNode {
   id: string;
@@ -30,6 +34,8 @@ export function DoublyLinkedListVisualizer() {
   const [highlightedNodes, setHighlightedNodes] = useState<string[]>([]);
   const [animationSteps, setAnimationSteps] = useState<any[]>([]);
   const [currentStepDescription, setCurrentStepDescription] = useState('');
+  const [showMemory, setShowMemory] = useState(false);
+  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(currentStepDescription);
 
   const pseudocode: Record<Operation, string[]> = {
     'insert-head': [
@@ -366,7 +372,7 @@ export function DoublyLinkedListVisualizer() {
       </div>
 
       {/* Visualization */}
-      <div className="bg-gradient-visualization rounded-xl border-2 border-border/50 p-6">
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900 rounded-xl border-2 border-border/50 p-6">
         <h3 className="text-lg font-semibold mb-4 text-center">Doubly Linked List</h3>
         
         <div className="flex justify-center items-center min-h-24 flex-wrap gap-2">
@@ -383,6 +389,26 @@ export function DoublyLinkedListVisualizer() {
           </div>
         )}
       </div>
+
+      {/* Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <MemoryLayout
+          data={nodes.map(n => n.value)}
+          title="Node Values Memory Layout"
+          baseAddress={5000}
+          wordSize={4}
+        />
+      )}
 
       {/* Pseudocode */}
       <PseudocodeBox 

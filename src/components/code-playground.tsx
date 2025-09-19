@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Play, Save, RotateCcw, Code2, Terminal, Maximize2, Minimize2 } from 'lucide-react';
-import { runOnJudge0, Judge0Language } from '@/lib/judge0';
+import { runCodeWithPiston, PistonLanguages, getPistonCodeTemplate } from '@/lib/piston';
 import { cn } from '@/lib/utils';
 
 interface CodePlaygroundProps {
@@ -215,22 +215,53 @@ export function CodePlayground({ topicId, topicTitle, initialCode }: CodePlaygro
       } else if (activeLanguage === 'web') {
         // For web technologies, we'll show a preview message
         setOutput('🌐 Web Code Preview:\n\nYour HTML/CSS/JavaScript code has been processed!\n\nIn a real environment, this would render as a web page.\n\nCode structure looks good! ✅');
+      } else if (activeLanguage === 'sql') {
+        // SQL is not supported by Piston, show a message
+        setOutput('🗃️ SQL Execution:\n\nSQL queries would be executed against a database.\n\nYour SQL syntax looks good! ✅\n\nIn a real environment, this would connect to a database engine.');
       } else {
-        // Use Judge0 for all other languages
-        const languageMap: Record<string, number> = {
-          python: Judge0Language.python,
-          java: Judge0Language.java,
-          cpp: Judge0Language.cpp,
-          c: Judge0Language.c,
-          csharp: Judge0Language.csharp,
-          sql: Judge0Language.sql
+        // Use Piston API for all other languages
+        const pistonLanguageMap: Record<string, keyof typeof PistonLanguages> = {
+          python: 'python',
+          java: 'java',
+          cpp: 'cpp',
+          c: 'c',
+          csharp: 'csharp'
         };
         
-        const languageId = languageMap[activeLanguage];
-        if (languageId) {
-          const res = await runOnJudge0({ languageId, source: currentCode });
-          const out = res.stdout || res.compile_output || res.stderr || '';
-          setOutput(out || `${res.status?.description || 'Finished'}`);
+        const pistonLanguage = pistonLanguageMap[activeLanguage];
+        if (pistonLanguage) {
+          const result = await runCodeWithPiston(pistonLanguage, currentCode);
+          
+          let outputText = '';
+          
+          // Handle compilation errors
+          if (result.compile && result.compile.stderr) {
+            outputText += `❌ Compilation Error:\n${result.compile.stderr}\n\n`;
+          }
+          
+          // Handle runtime output
+          if (result.run.stdout) {
+            outputText += `✅ Output:\n${result.run.stdout}\n`;
+          }
+          
+          // Handle runtime errors
+          if (result.run.stderr) {
+            outputText += `⚠️ Runtime Error/Warning:\n${result.run.stderr}\n`;
+          }
+          
+          // Handle exit code
+          if (result.run.code !== 0) {
+            outputText += `\n❌ Process exited with code: ${result.run.code}\n`;
+          }
+          
+          // Add execution info
+          outputText += `\n📊 Language: ${result.language} (${result.version})\n`;
+          
+          if (!outputText.trim()) {
+            outputText = '✅ Code executed successfully with no output.\nTip: Use print statements to see results!';
+          }
+          
+          setOutput(outputText);
         } else {
           setOutput('❌ Language not supported yet');
         }

@@ -36,6 +36,130 @@ export function BinaryTreeVisualizer() {
   const [highlightedNodes, setHighlightedNodes] = useState<string[]>([]);
   const [traversalOrder, setTraversalOrder] = useState<number[]>([]);
   const [operation, setOperation] = useState<string | null>(null);
+  const [lcaInputs, setLcaInputs] = useState<{a: string, b: string}>({ a: '', b: '' });
+  const [lcaMode, setLcaMode] = useState<'bst' | 'general'>('bst');
+  const [treeHeight, setTreeHeight] = useState<number | null>(null);
+
+  const computeHeight = (node: TreeNode | null): number => {
+    if (!node) return -1;
+    return 1 + Math.max(computeHeight(node.left || null), computeHeight(node.right || null));
+  };
+
+  const handleHeight = () => {
+    if (!root) return;
+    const h = computeHeight(root);
+    setTreeHeight(h);
+    setOperation(`Height = ${h}`);
+  };
+
+  const handleLevelOrder = async () => {
+    if (!root || isAnimating) return;
+    setIsAnimating(true);
+    setOperation('Level Order Traversal');
+    setHighlightedNodes([]);
+    setTraversalOrder([]);
+    const queue: (TreeNode | null)[] = [root];
+    const order: number[] = [];
+    while (queue.length > 0) {
+      const node = queue.shift();
+      if (!node) continue;
+      setHighlightedNodes(prev => [...prev, node.id]);
+      order.push(node.value);
+      setTraversalOrder([...order]);
+      await new Promise(r => setTimeout(r, 600));
+      if (node.left) queue.push(node.left);
+      if (node.right) queue.push(node.right);
+    }
+    setTimeout(() => {
+      setHighlightedNodes([]);
+      setIsAnimating(false);
+      setOperation(null);
+    }, 1200);
+  };
+
+  const findLCAInBST = async (node: TreeNode | null, a: number, b: number): Promise<TreeNode | null> => {
+    let cur = node;
+    const pathHighlight: string[] = [];
+    while (cur) {
+      pathHighlight.push(cur.id);
+      setHighlightedNodes([...pathHighlight]);
+      await new Promise(r => setTimeout(r, 500));
+      if (a < cur.value && b < cur.value) {
+        cur = cur.left || null;
+      } else if (a > cur.value && b > cur.value) {
+        cur = cur.right || null;
+      } else {
+        return cur;
+      }
+    }
+    return null;
+  };
+
+  const findNodeByValue = (node: TreeNode | null, val: number): TreeNode | null => {
+    if (!node) return null;
+    if (node.value === val) return node;
+    return findNodeByValue(node.left || null, val) || findNodeByValue(node.right || null, val);
+  };
+
+  const buildParentDepth = (node: TreeNode | null) => {
+    const parent = new Map<string, TreeNode | null>();
+    const depth = new Map<string, number>();
+    if (!node) return { parent, depth };
+    const q: (TreeNode | null)[] = [node];
+    parent.set(node.id, null); depth.set(node.id, 0);
+    while (q.length) {
+      const cur = q.shift();
+      if (!cur) continue;
+      if (cur.left) { parent.set(cur.left.id, cur); depth.set(cur.left.id, (depth.get(cur.id) || 0) + 1); q.push(cur.left); }
+      if (cur.right){ parent.set(cur.right.id, cur); depth.set(cur.right.id, (depth.get(cur.id) || 0) + 1); q.push(cur.right); }
+    }
+    return { parent, depth };
+  };
+
+  const findLCAInGeneral = async (rootNode: TreeNode | null, a: number, b: number): Promise<TreeNode | null> => {
+    if (!rootNode) return null;
+    const A = findNodeByValue(rootNode, a);
+    const B = findNodeByValue(rootNode, b);
+    if (!A || !B) return null;
+    const { parent, depth } = buildParentDepth(rootNode);
+    // climb deeper node up to same depth
+    let u: TreeNode | null = A, v: TreeNode | null = B;
+    let du = depth.get(A.id) || 0, dv = depth.get(B.id) || 0;
+    const pathHighlight: string[] = [];
+    const pulse = async (id?: string) => { if (!id) return; pathHighlight.push(id); setHighlightedNodes([...pathHighlight]); await new Promise(r => setTimeout(r, 500)); };
+    while (du > dv && u) { await pulse(u.id); u = parent.get(u.id) || null; du--; }
+    while (dv > du && v) { await pulse(v.id); v = parent.get(v.id) || null; dv--; }
+    while (u && v && u.id !== v.id) {
+      await pulse(u.id); await pulse(v.id);
+      u = parent.get(u.id) || null;
+      v = parent.get(v.id) || null;
+    }
+    if (u) await pulse(u.id);
+    return u;
+  };
+
+  const handleLCA = async () => {
+    if (!root || isAnimating) return;
+    const a = parseInt(lcaInputs.a);
+    const b = parseInt(lcaInputs.b);
+    if (isNaN(a) || isNaN(b)) return;
+    setIsAnimating(true);
+    setOperation(`Finding LCA(${a}, ${b})`);
+    setHighlightedNodes([]);
+    const lca = lcaMode === 'bst'
+      ? await findLCAInBST(root, Math.min(a,b), Math.max(a,b))
+      : await findLCAInGeneral(root, a, b);
+    if (lca) {
+      setOperation(`LCA is ${lca.value}`);
+      // pulse highlight
+      setHighlightedNodes(prev => Array.from(new Set([...prev, lca.id])));
+    } else {
+      setOperation('LCA not found');
+    }
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 1200);
+  };
 
   const insertNode = (root: TreeNode | null, value: number): TreeNode => {
     if (!root) {
@@ -247,6 +371,23 @@ export function BinaryTreeVisualizer() {
             <Play className="h-4 w-4 mr-1" />
             Inorder Traversal
           </Button>
+          <Button 
+            onClick={handleLevelOrder}
+            disabled={isAnimating || !root}
+            size="sm"
+            variant="secondary"
+          >
+            <Play className="h-4 w-4 mr-1" />
+            Level Order
+          </Button>
+          <Button 
+            onClick={handleHeight}
+            disabled={isAnimating || !root}
+            size="sm"
+            variant="outline"
+          >
+            Height
+          </Button>
           
           <Button 
             onClick={handleReset}
@@ -271,6 +412,39 @@ export function BinaryTreeVisualizer() {
               Traversal: {traversalOrder.join(' → ')}
             </Badge>
           )}
+          {treeHeight !== null && (
+            <Badge variant="outline">
+              Height: {treeHeight}
+            </Badge>
+          )}
+        </div>
+
+        {/* LCA Controls */}
+        <div className="flex flex-wrap items-center gap-2 pt-2">
+          <span className="text-sm text-muted-foreground">LCA:</span>
+          <select
+            className="border rounded px-2 py-1 text-sm"
+            value={lcaMode}
+            onChange={e=>setLcaMode(e.target.value as 'bst'|'general')}
+          >
+            <option value="bst">BST LCA</option>
+            <option value="general">General Tree LCA</option>
+          </select>
+          <Input
+            placeholder="A"
+            value={lcaInputs.a}
+            onChange={e => setLcaInputs({ ...lcaInputs, a: e.target.value })}
+            className="w-24"
+            type="number"
+          />
+          <Input
+            placeholder="B"
+            value={lcaInputs.b}
+            onChange={e => setLcaInputs({ ...lcaInputs, b: e.target.value })}
+            className="w-24"
+            type="number"
+          />
+          <Button onClick={handleLCA} disabled={isAnimating || !root} size="sm">Find LCA</Button>
         </div>
       </div>
     </div>

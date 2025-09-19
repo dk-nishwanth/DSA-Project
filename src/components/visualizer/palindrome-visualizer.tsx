@@ -1,9 +1,13 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Play, RotateCcw, CheckCircle, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { ComplexityBox } from '@/components/complexity-box';
+import { PseudocodeBox } from '@/components/pseudocode-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVoiceExplain } from '@/hooks/useVoiceExplain';
 
 export function PalindromeVisualizer() {
   const [text, setText] = useState('racecar');
@@ -13,6 +17,8 @@ export function PalindromeVisualizer() {
   const [comparedPairs, setComparedPairs] = useState<{left: number, right: number, match: boolean}[]>([]);
   const [result, setResult] = useState<boolean | null>(null);
   const [currentStep, setCurrentStep] = useState('');
+  const [showMemory, setShowMemory] = useState(false);
+  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(currentStep);
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -73,6 +79,15 @@ export function PalindromeVisualizer() {
     
     toast.success(isPalindrome ? 'It\'s a palindrome!' : 'Not a palindrome');
   }, [text]);
+
+  const pseudocode = [
+    'clean = toLowerCase(removeNonAlnum(text))',
+    'left = 0; right = clean.length - 1',
+    'while left < right:',
+    "  if clean[left] != clean[right]: return false",
+    '  left++; right--',
+    'return true'
+  ];
 
   const resetCheck = useCallback(() => {
     setLeftPointer(-1);
@@ -159,6 +174,11 @@ export function PalindromeVisualizer() {
           <RotateCcw className="h-4 w-4" />
           Reset
         </Button>
+
+        <div className="flex items-center gap-2 ml-auto">
+          <label className="text-sm">Voice Explain</label>
+          <input type="checkbox" checked={voiceEnabled} onChange={(e)=>setVoiceEnabled(e.target.checked)} />
+        </div>
       </div>
 
       {/* Result Display */}
@@ -176,7 +196,7 @@ export function PalindromeVisualizer() {
       )}
 
       {/* Visualization */}
-      <div className="bg-gradient-visualization rounded-xl border-2 border-border/50 p-6">
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900 rounded-xl border-2 border-border/50 p-4">
         <div className="space-y-6">
           <div className="text-center">
             <h3 className="text-lg font-semibold mb-3">Original Text</h3>
@@ -214,6 +234,35 @@ export function PalindromeVisualizer() {
           )}
         </div>
       </div>
+
+      {/* Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <MemoryLayout
+          data={Array.from(text)}
+          title="String Memory Layout"
+          baseAddress={2000}
+          wordSize={1}
+        />
+      )}
+
+      {/* Pseudocode */}
+      <PseudocodeBox title="Palindrome Check - Two Pointers" code={pseudocode} highlightedLine={
+        currentStep.includes('Starting') ? 1 :
+        currentStep.includes('Comparing') ? 3 :
+        currentStep.includes("don't match") ? 4 :
+        currentStep.includes('Continue checking') ? 5 :
+        currentStep.includes('All characters') ? 6 : 0
+      } />
 
       {/* Complexity Analysis */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

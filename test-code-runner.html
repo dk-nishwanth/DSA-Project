@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Runner Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .language-test {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .language-test h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        .output {
+            background: #1a202c;
+            color: #68d391;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            min-height: 50px;
+        }
+        .error {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success {
+            background: #c6f6d5;
+            color: #2f855a;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        button {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #3182ce;
+        }
+        button:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .status.running {
+            background: #fef5e7;
+            color: #d69e2e;
+        }
+        .status.success {
+            background: #c6f6d5;
+            color: #2f855a;
+        }
+        .status.error {
+            background: #fed7d7;
+            color: #c53030;
+        }
+        .test-all {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .progress {
+            width: 100%;
+            height: 20px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            background: #4299e1;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Code Runner Test Suite</h1>
+        <p>Testing code execution across multiple programming languages using the Piston API</p>
+        
+        <div class="test-all">
+            <button onclick="testAllLanguages()" id="testAllBtn">Test All Languages</button>
+            <button onclick="clearAllOutputs()">Clear All Outputs</button>
+            <div class="progress" id="progressContainer" style="display: none;">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div id="overallStatus"></div>
+        </div>
+
+        <!-- JavaScript Test -->
+        <div class="language-test">
+            <h3>JavaScript (Node.js) <span class="status" id="status-javascript"></span></h3>
+            <div class="code-block" id="code-javascript">// JavaScript Hello World with Array Operations
+console.log("=== JavaScript Test ===");
+console.log("Hello from JavaScript!");
+
+// Array operations
+const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map(n => n * 2);
+console.log("Original array:", numbers);
+console.log("Doubled array:", doubled);
+
+// Object operations
+const person = { name: "Alice", age: 30 };
+console.log("Person:", JSON.stringify(person));
+
+// Function test
+function fibonacci(n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+console.log("Fibonacci(7):", fibonacci(7));
+console.log("Test completed successfully!");</div>
+            <button onclick="runCode('javascript', document.getElementById('code-javascript').textContent, 'output-javascript')">Run JavaScript</button>
+            <div class="output" id="output-javascript">Click "Run JavaScript" to execute...</div>
+        </div>
+
+        <!-- Python Test -->
+        <div class="language-test">
+            <h3>Python <span class="status" id="status-python"></span></h3>
+            <div class="code-block" id="code-python"># Python Hello World with Data Structures
+print("=== Python Test ===")
+print("Hello from Python!")
+
+# List operations
+numbers = [1, 2, 3, 4, 5]
+doubled = [n * 2 for n in numbers]
+print(f"Original list: {numbers}")
+print(f"Doubled list: {doubled}")
+
+# Dictionary operations
+person = {"name": "Bob", "age": 25}
+print(f"Person: {person}")
+
+# Function test
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+print(f"Fibonacci(7): {fibonacci(7)}")
+
+# Class test
+class Calculator:
+    def add(self, a, b):
+        return a + b
+
+calc = Calculator()
+print(f"Calculator 5 + 3 = {calc.add(5, 3)}")
+print("Test completed successfully!")</div>
+            <button onclick="runCode('python', document.getElementById('code-python').textContent, 'output-python')">Run Python</button>
+            <div class="output" id="output-python">Click "Run Python" to execute...</div>
+        </div>
+
+        <!-- Java Test -->
+        <div class="language-test">
+            <h3>Java <span class="status" id="status-java"></span></h3>
+            <div class="code-block" id="code-java">// Java Hello World with OOP
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("=== Java Test ===");
+        System.out.println("Hello from Java!");
+        
+        // Array operations
+        int[] numbers = {1, 2, 3, 4, 5};
+        System.out.print("Original array: ");
+        System.out.println(Arrays.toString(numbers));
+        
+        // ArrayList operations
+        ArrayList<Integer> doubled = new ArrayList<>();
+        for (int num : numbers) {
+            doubled.add(num * 2);
+        }
+        System.out.println("Doubled ArrayList: " + doubled);
+        
+        // Object test
+        Person person = new Person("Charlie", 28);
+        System.out.println("Person: " + person);
+        
+        // Fibonacci test
+        System.out.println("Fibonacci(7): " + fibonacci(7));
+        System.out.println("Test completed successfully!");
+    }
+    
+    static int fibonacci(int n) {
+        if (n <= 1) return n;
+        return fibonacci(n - 1) + fibonacci(n - 2);
+    }
+}
+
+class Person {
+    String name;
+    int age;
+    
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+    
+    @Override
+    public String toString() {
+        return name + " (age " + age + ")";
+    }
+}</div>
+            <button onclick="runCode('java', document.getElementById('code-java').textContent, 'output-java')">Run Java</button>
+            <div class="output" id="output-java">Click "Run Java" to execute...</div>
+        </div>
+
+        <!-- C++ Test -->
+        <div class="language-test">
+            <h3>C++ <span class="status" id="status-cpp"></span></h3>
+            <div class="code-block" id="code-cpp">#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+class Person {
+public:
+    string name;
+    int age;
+    
+    Person(string n, int a) : name(n), age(a) {}
+    
+    void display() {
+        cout << name << " (age " << age << ")" << endl;
+    }
+};
+
+int fibonacci(int n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+int main() {
+    cout << "=== C++ Test ===" << endl;
+    cout << "Hello from C++!" << endl;
+    
+    // Vector operations
+    vector<int> numbers = {1, 2, 3, 4, 5};
+    cout << "Original vector: ";
+    for (int num : numbers) {
+        cout << num << " ";
+    }
+    cout << endl;
+    
+    vector<int> doubled;
+    for (int num : numbers) {
+        doubled.push_back(num * 2);
+    }
+    cout << "Doubled vector: ";
+    for (int num : doubled) {
+        cout << num << " ";
+    }
+    cout << endl;
+    
+    // Object test
+    Person person("David", 32);
+    cout << "Person: ";
+    person.display();
+    
+    // Fibonacci test
+    cout << "Fibonacci(7): " << fibonacci(7) << endl;
+    cout << "Test completed successfully!" << endl;
+    
+    return 0;
+}</div>
+            <button onclick="runCode('cpp', document.getElementById('code-cpp').textContent, 'output-cpp')">Run C++</button>
+            <div class="output" id="output-cpp">Click "Run C++" to execute...</div>
+        </div>
+
+        <!-- C Test -->
+        <div class="language-test">
+            <h3>C <span class="status" id="status-c"></span></h3>
+            <div class="code-block" id="code-c">#include <stdio.h>
+#include <stdlib.h>
+
+int fibonacci(int n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+int main() {
+    printf("=== C Test ===\n");
+    printf("Hello from C!\n");
+    
+    // Array operations
+    int numbers[] = {1, 2, 3, 4, 5};
+    int size = sizeof(numbers) / sizeof(numbers[0]);
+    
+    printf("Original array: ");
+    for (int i = 0; i < size; i++) {
+        printf("%d ", numbers[i]);
+    }
+    printf("\n");
+    
+    printf("Doubled array: ");
+    for (int i = 0; i < size; i++) {
+        printf("%d ", numbers[i] * 2);
+    }
+    printf("\n");
+    
+    // Fibonacci test
+    printf("Fibonacci(7): %d\n", fibonacci(7));
+    
+    // Pointer test
+    int x = 42;
+    int *ptr = &x;
+    printf("Value: %d, Address: %p\n", *ptr, (void*)ptr);
+    
+    printf("Test completed successfully!\n");
+    
+    return 0;
+}</div>
+            <button onclick="runCode('c', document.getElementById('code-c').textContent, 'output-c')">Run C</button>
+            <div class="output" id="output-c">Click "Run C" to execute...</div>
+        </div>
+
+        <!-- Go Test -->
+        <div class="language-test">
+            <h3>Go <span class="status" id="status-go"></span></h3>
+            <div class="code-block" id="code-go">package main
+
+import "fmt"
+
+type Person struct {
+    Name string
+    Age  int
+}
+
+func (p Person) String() string {
+    return fmt.Sprintf("%s (age %d)", p.Name, p.Age)
+}
+
+func fibonacci(n int) int {
+    if n <= 1 {
+        return n
+    }
+    return fibonacci(n-1) + fibonacci(n-2)
+}
+
+func main() {
+    fmt.Println("=== Go Test ===")
+    fmt.Println("Hello from Go!")
+    
+    // Slice operations
+    numbers := []int{1, 2, 3, 4, 5}
+    fmt.Printf("Original slice: %v\n", numbers)
+    
+    var doubled []int
+    for _, num := range numbers {
+        doubled = append(doubled, num*2)
+    }
+    fmt.Printf("Doubled slice: %v\n", doubled)
+    
+    // Struct test
+    person := Person{Name: "Eve", Age: 27}
+    fmt.Printf("Person: %s\n", person)
+    
+    // Fibonacci test
+    fmt.Printf("Fibonacci(7): %d\n", fibonacci(7))
+    
+    // Map test
+    colors := map[string]string{
+        "red":   "#FF0000",
+        "green": "#00FF00",
+        "blue":  "#0000FF",
+    }
+    fmt.Printf("Colors: %v\n", colors)
+    
+    fmt.Println("Test completed successfully!")
+}</div>
+            <button onclick="runCode('go', document.getElementById('code-go').textContent, 'output-go')">Run Go</button>
+            <div class="output" id="output-go">Click "Run Go" to execute...</div>
+        </div>
+
+        <!-- Rust Test -->
+        <div class="language-test">
+            <h3>Rust <span class="status" id="status-rust"></span></h3>
+            <div class="code-block" id="code-rust">use std::collections::HashMap;
+
+#[derive(Debug)]
+struct Person {
+    name: String,
+    age: u32,
+}
+
+impl Person {
+    fn new(name: &str, age: u32) -> Person {
+        Person {
+            name: name.to_string(),
+            age,
+        }
+    }
+}
+
+fn fibonacci(n: u32) -> u32 {
+    match n {
+        0 | 1 => n,
+        _ => fibonacci(n - 1) + fibonacci(n - 2),
+    }
+}
+
+fn main() {
+    println!("=== Rust Test ===");
+    println!("Hello from Rust!");
+    
+    // Vector operations
+    let numbers = vec![1, 2, 3, 4, 5];
+    println!("Original vector: {:?}", numbers);
+    
+    let doubled: Vec<i32> = numbers.iter().map(|x| x * 2).collect();
+    println!("Doubled vector: {:?}", doubled);
+    
+    // Struct test
+    let person = Person::new("Frank", 35);
+    println!("Person: {:?}", person);
+    
+    // Fibonacci test
+    println!("Fibonacci(7): {}", fibonacci(7));
+    
+    // HashMap test
+    let mut colors = HashMap::new();
+    colors.insert("red", "#FF0000");
+    colors.insert("green", "#00FF00");
+    colors.insert("blue", "#0000FF");
+    println!("Colors: {:?}", colors);
+    
+    // Option test
+    let maybe_number = Some(42);
+    match maybe_number {
+        Some(n) => println!("Found number: {}", n),
+        None => println!("No number found"),
+    }
+    
+    println!("Test completed successfully!");
+}</div>
+            <button onclick="runCode('rust', document.getElementById('code-rust').textContent, 'output-rust')">Run Rust</button>
+            <div class="output" id="output-rust">Click "Run Rust" to execute...</div>
+        </div>
+
+        <!-- TypeScript Test -->
+        <div class="language-test">
+            <h3>TypeScript <span class="status" id="status-typescript"></span></h3>
+            <div class="code-block" id="code-typescript">// TypeScript Hello World with Types
+interface Person {
+    name: string;
+    age: number;
+}
+
+class Calculator {
+    add(a: number, b: number): number {
+        return a + b;
+    }
+    
+    multiply(a: number, b: number): number {
+        return a * b;
+    }
+}
+
+function fibonacci(n: number): number {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+function processArray<T>(arr: T[], processor: (item: T) => T): T[] {
+    return arr.map(processor);
+}
+
+console.log("=== TypeScript Test ===");
+console.log("Hello from TypeScript!");
+
+// Array operations with types
+const numbers: number[] = [1, 2, 3, 4, 5];
+const doubled = processArray(numbers, (n) => n * 2);
+console.log("Original array:", numbers);
+console.log("Doubled array:", doubled);
+
+// Object with interface
+const person: Person = { name: "Grace", age: 29 };
+console.log("Person:", person);
+
+// Class test
+const calc = new Calculator();
+console.log("Calculator 8 + 7 =", calc.add(8, 7));
+console.log("Calculator 6 * 4 =", calc.multiply(6, 4));
+
+// Fibonacci test
+console.log("Fibonacci(7):", fibonacci(7));
+
+// Union types
+type Status = "loading" | "success" | "error";
+const currentStatus: Status = "success";
+console.log("Current status:", currentStatus);
+
+console.log("Test completed successfully!");</div>
+            <button onclick="runCode('typescript', document.getElementById('code-typescript').textContent, 'output-typescript')">Run TypeScript</button>
+            <div class="output" id="output-typescript">Click "Run TypeScript" to execute...</div>
+        </div>
+
+        <div id="testResults" style="margin-top: 30px;"></div>
+    </div>
+
+    <script>
+        let testResults = {};
+        let totalTests = 0;
+        let completedTests = 0;
+
+        const runCode = async (language, code, outputId) => {
+            const outputElement = document.getElementById(outputId);
+            const statusElement = document.getElementById(`status-${language}`);
+            
+            // Update status to running
+            statusElement.textContent = "RUNNING";
+            statusElement.className = "status running";
+            outputElement.textContent = "Running...";
+            
+            try {
+                const res = await axios.post("https://emkc.org/api/v2/piston/execute", {
+                    language: language,
+                    version: "*", // latest version
+                    files: [
+                        {
+                            name: "Main",
+                            content: code,
+                        },
+                    ],
+                });
+
+                const output = res.data.run.output || res.data.run.stderr || "No output";
+                outputElement.textContent = output;
+                
+                // Check if execution was successful
+                if (res.data.run.code === 0 && output.includes("Test completed successfully!")) {
+                    statusElement.textContent = "SUCCESS";
+                    statusElement.className = "status success";
+                    testResults[language] = { success: true, output: output };
+                } else {
+                    statusElement.textContent = "ERROR";
+                    statusElement.className = "status error";
+                    testResults[language] = { success: false, output: output, error: res.data.run.stderr };
+                }
+            } catch (err) {
+                const errorMsg = "Error running code: " + err.message;
+                outputElement.textContent = errorMsg;
+                statusElement.textContent = "ERROR";
+                statusElement.className = "status error";
+                testResults[language] = { success: false, error: errorMsg };
+            }
+            
+            // Update progress if running all tests
+            if (totalTests > 0) {
+                completedTests++;
+                updateProgress();
+            }
+        };
+
+        const testAllLanguages = async () => {
+            const languages = ['javascript', 'python', 'java', 'cpp', 'c', 'go', 'rust', 'typescript'];
+            const testAllBtn = document.getElementById('testAllBtn');
+            const progressContainer = document.getElementById('progressContainer');
+            
+            testAllBtn.disabled = true;
+            testAllBtn.textContent = "Testing...";
+            progressContainer.style.display = 'block';
+            
+            totalTests = languages.length;
+            completedTests = 0;
+            testResults = {};
+            
+            // Clear previous results
+            clearAllOutputs();
+            
+            // Run all tests
+            for (const lang of languages) {
+                const codeElement = document.getElementById(`code-${lang}`);
+                const outputId = `output-${lang}`;
+                await runCode(lang, codeElement.textContent, outputId);
+                
+                // Add small delay between tests
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            
+            // Show final results
+            showTestSummary();
+            
+            testAllBtn.disabled = false;
+            testAllBtn.textContent = "Test All Languages";
+            progressContainer.style.display = 'none';
+        };
+
+        const updateProgress = () => {
+            const progressBar = document.getElementById('progressBar');
+            const percentage = (completedTests / totalTests) * 100;
+            progressBar.style.width = percentage + '%';
+        };
+
+        const clearAllOutputs = () => {
+            const languages = ['javascript', 'python', 'java', 'cpp', 'c', 'go', 'rust', 'typescript'];
+            
+            languages.forEach(lang => {
+                const outputElement = document.getElementById(`output-${lang}`);
+                const statusElement = document.getElementById(`status-${lang}`);
+                
+                outputElement.textContent = `Click "Run ${lang.charAt(0).toUpperCase() + lang.slice(1)}" to execute...`;
+                statusElement.textContent = "";
+                statusElement.className = "status";
+            });
+            
+            document.getElementById('testResults').innerHTML = '';
+            document.getElementById('overallStatus').innerHTML = '';
+        };
+
+        const showTestSummary = () => {
+            const resultsDiv = document.getElementById('testResults');
+            const overallStatusDiv = document.getElementById('overallStatus');
+            
+            const successCount = Object.values(testResults).filter(r => r.success).length;
+            const totalCount = Object.keys(testResults).length;
+            
+            let summaryHTML = `<h2>🧪 Test Results Summary</h2>`;
+            summaryHTML += `<p><strong>Passed:</strong> ${successCount}/${totalCount} languages</p>`;
+            
+            if (successCount === totalCount) {
+                overallStatusDiv.innerHTML = `<div class="success">✅ All ${totalCount} languages working perfectly!</div>`;
+            } else {
+                overallStatusDiv.innerHTML = `<div class="error">❌ ${totalCount - successCount} language(s) failed</div>`;
+            }
+            
+            summaryHTML += `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 20px;">`;
+            
+            Object.entries(testResults).forEach(([lang, result]) => {
+                const statusClass = result.success ? 'success' : 'error';
+                const statusIcon = result.success ? '✅' : '❌';
+                summaryHTML += `
+                    <div class="${statusClass}" style="padding: 10px; border-radius: 5px;">
+                        <strong>${statusIcon} ${lang.charAt(0).toUpperCase() + lang.slice(1)}</strong><br>
+                        ${result.success ? 'Working' : 'Failed'}
+                    </div>
+                `;
+            });
+            
+            summaryHTML += `</div>`;
+            resultsDiv.innerHTML = summaryHTML;
+        };
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Code Runner Test Suite loaded');
+        });
+    </script>
+</body>
+</html>

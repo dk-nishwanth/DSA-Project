@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piston API Language Debug</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .language { margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Piston API Language Diagnostics</h1>
+    <button onclick="checkAvailableLanguages()">Check Available Languages</button>
+    <button onclick="testFailedLanguages()">Test Failed Languages</button>
+    
+    <div id="results"></div>
+
+    <script>
+        async function checkAvailableLanguages() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<p>Fetching available languages...</p>';
+            
+            try {
+                const response = await axios.get('https://emkc.org/api/v2/piston/runtimes');
+                const languages = response.data;
+                
+                let html = '<h2>Available Languages:</h2>';
+                
+                // Filter for languages we're interested in
+                const targetLanguages = ['cpp', 'c++', 'c', 'rust', 'typescript'];
+                const foundLanguages = languages.filter(lang => 
+                    targetLanguages.some(target => 
+                        lang.language.toLowerCase().includes(target) || 
+                        lang.aliases?.some(alias => alias.toLowerCase().includes(target))
+                    )
+                );
+                
+                foundLanguages.forEach(lang => {
+                    html += `<div class="language">
+                        <strong>Language:</strong> ${lang.language}<br>
+                        <strong>Version:</strong> ${lang.version}<br>
+                        <strong>Aliases:</strong> ${lang.aliases ? lang.aliases.join(', ') : 'None'}<br>
+                    </div>`;
+                });
+                
+                // Show all languages for reference
+                html += '<h3>All Available Languages:</h3>';
+                html += '<div style="max-height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">';
+                languages.forEach(lang => {
+                    html += `${lang.language} (${lang.version}), `;
+                });
+                html += '</div>';
+                
+                resultsDiv.innerHTML = html;
+            } catch (error) {
+                resultsDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            }
+        }
+
+        async function testFailedLanguages() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<p>Testing failed languages...</p>';
+            
+            const testCases = {
+                'cpp': '#include <iostream>\nusing namespace std;\nint main() {\n    cout << "Hello C++" << endl;\n    return 0;\n}',
+                'c++': '#include <iostream>\nusing namespace std;\nint main() {\n    cout << "Hello C++" << endl;\n    return 0;\n}',
+                'c': '#include <stdio.h>\nint main() {\n    printf("Hello C\\n");\n    return 0;\n}',
+                'rust': 'fn main() {\n    println!("Hello Rust!");\n}',
+                'typescript': 'console.log("Hello TypeScript!");'
+            };
+            
+            let html = '<h2>Language Test Results:</h2>';
+            
+            for (const [langName, code] of Object.entries(testCases)) {
+                try {
+                    const response = await axios.post('https://emkc.org/api/v2/piston/execute', {
+                        language: langName,
+                        version: '*',
+                        files: [{
+                            name: 'main',
+                            content: code
+                        }]
+                    });
+                    
+                    const success = response.data.run.code === 0;
+                    html += `<div class="language ${success ? 'success' : 'error'}">
+                        <strong>${langName}:</strong> ${success ? '✅ SUCCESS' : '❌ FAILED'}<br>
+                        <strong>Output:</strong> ${response.data.run.stdout || response.data.run.stderr || 'No output'}<br>
+                        <strong>Exit Code:</strong> ${response.data.run.code}<br>
+                        <strong>Language Version:</strong> ${response.data.language} ${response.data.version}<br>
+                    </div>`;
+                } catch (error) {
+                    html += `<div class="language error">
+                        <strong>${langName}:</strong> ❌ ERROR<br>
+                        <strong>Error:</strong> ${error.message}<br>
+                    </div>`;
+                }
+                
+                // Add delay between requests
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            
+            resultsDiv.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "code-runner-test",
+  "version": "1.0.0",
+  "description": "Test suite for code execution using Piston API",
+  "main": "test-runner.js",
+  "scripts": {
+    "test": "node test-runner.js",
+    "test:js": "node test-runner.js javascript",
+    "test:python": "node test-runner.js python",
+    "test:java": "node test-runner.js java",
+    "test:cpp": "node test-runner.js cpp",
+    "test:c": "node test-runner.js c",
+    "test:go": "node test-runner.js go",
+    "test:rust": "node test-runner.js rust",
+    "test:ts": "node test-runner.js typescript"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "keywords": ["code-execution", "piston-api", "testing"],
+  "author": "DSA Project",
+  "license": "MIT"
+}

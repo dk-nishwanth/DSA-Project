@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix Language Issues</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { background: white; padding: 20px; border-radius: 8px; max-width: 1200px; margin: 0 auto; }
+        .test-result { margin: 10px 0; padding: 15px; border-radius: 5px; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .info { background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; margin: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .language-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Language Fix Tool</h1>
+        <p>This tool will identify and fix the language execution issues.</p>
+        
+        <button onclick="findWorkingLanguages()">1. Find Working Language Names</button>
+        <button onclick="testAllVariations()">2. Test All Variations</button>
+        <button onclick="generateFixedCode()">3. Generate Fixed Code</button>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        let availableLanguages = [];
+        
+        async function findWorkingLanguages() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="info">Fetching available languages...</div>';
+            
+            try {
+                const response = await axios.get('https://emkc.org/api/v2/piston/runtimes');
+                availableLanguages = response.data;
+                
+                // Find languages we need
+                const targetLanguages = {
+                    'cpp': ['c++', 'cpp', 'g++', 'gcc'],
+                    'c': ['c', 'gcc'],
+                    'rust': ['rust', 'rustc'],
+                    'typescript': ['typescript', 'ts', 'node', 'javascript']
+                };
+                
+                let html = '<h2>🔍 Available Languages Analysis</h2>';
+                
+                for (const [ourName, variations] of Object.entries(targetLanguages)) {
+                    html += `<div class="test-result info"><h3>${ourName.toUpperCase()}</h3>`;
+                    
+                    const matches = availableLanguages.filter(lang => 
+                        variations.some(variation => 
+                            lang.language.toLowerCase().includes(variation.toLowerCase()) ||
+                            (lang.aliases && lang.aliases.some(alias => 
+                                alias.toLowerCase().includes(variation.toLowerCase())
+                            ))
+                        )
+                    );
+                    
+                    if (matches.length > 0) {
+                        html += '<strong>Found matches:</strong><br>';
+                        matches.forEach(match => {
+                            html += `• Language: "${match.language}", Version: ${match.version}`;
+                            if (match.aliases) html += `, Aliases: [${match.aliases.join(', ')}]`;
+                            html += '<br>';
+                        });
+                    } else {
+                        html += '<strong>❌ No matches found</strong>';
+                    }
+                    html += '</div>';
+                }
+                
+                resultsDiv.innerHTML = html;
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function testAllVariations() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="info">Testing language variations...</div>';
+            
+            const testCases = {
+                // C++ variations
+                'c++': {
+                    code: '#include <iostream>\\nusing namespace std;\\nint main() {\\n    cout << "Hello C++" << endl;\\n    return 0;\\n}',
+                    filename: 'main.cpp'
+                },
+                'cpp': {
+                    code: '#include <iostream>\\nusing namespace std;\\nint main() {\\n    cout << "Hello C++" << endl;\\n    return 0;\\n}',
+                    filename: 'main.cpp'
+                },
+                'g++': {
+                    code: '#include <iostream>\\nusing namespace std;\\nint main() {\\n    cout << "Hello C++" << endl;\\n    return 0;\\n}',
+                    filename: 'main.cpp'
+                },
+                
+                // C variations
+                'c': {
+                    code: '#include <stdio.h>\\nint main() {\\n    printf("Hello C\\\\n");\\n    return 0;\\n}',
+                    filename: 'main.c'
+                },
+                'gcc': {
+                    code: '#include <stdio.h>\\nint main() {\\n    printf("Hello C\\\\n");\\n    return 0;\\n}',
+                    filename: 'main.c'
+                },
+                
+                // Rust variations
+                'rust': {
+                    code: 'fn main() {\\n    println!("Hello Rust!");\\n}',
+                    filename: 'main.rs'
+                },
+                'rustc': {
+                    code: 'fn main() {\\n    println!("Hello Rust!");\\n}',
+                    filename: 'main.rs'
+                },
+                
+                // TypeScript variations
+                'typescript': {
+                    code: 'console.log("Hello TypeScript!");\\nconst x: number = 42;\\nconsole.log("Number:", x);',
+                    filename: 'main.ts'
+                },
+                'ts': {
+                    code: 'console.log("Hello TypeScript!");\\nconst x: number = 42;\\nconsole.log("Number:", x);',
+                    filename: 'main.ts'
+                },
+                'javascript': {
+                    code: 'console.log("Hello TypeScript as JS!");\\nconst x = 42;\\nconsole.log("Number:", x);',
+                    filename: 'main.js'
+                }
+            };
+            
+            let html = '<h2>🧪 Language Variation Test Results</h2><div class="language-grid">';
+            
+            for (const [langName, testCase] of Object.entries(testCases)) {
+                try {
+                    const response = await axios.post('https://emkc.org/api/v2/piston/execute', {
+                        language: langName,
+                        version: '*',
+                        files: [{
+                            name: testCase.filename,
+                            content: testCase.code
+                        }]
+                    });
+                    
+                    const success = response.data.run.code === 0;
+                    const className = success ? 'success' : 'error';
+                    const icon = success ? '✅' : '❌';
+                    
+                    html += `<div class="test-result ${className}">
+                        <h4>${icon} ${langName}</h4>
+                        <strong>Status:</strong> ${success ? 'SUCCESS' : 'FAILED'}<br>
+                        <strong>Language:</strong> ${response.data.language}<br>
+                        <strong>Version:</strong> ${response.data.version}<br>
+                        <strong>Exit Code:</strong> ${response.data.run.code}<br>
+                        <strong>Output:</strong><br>
+                        <pre>${response.data.run.stdout || response.data.run.stderr || 'No output'}</pre>
+                    </div>`;
+                } catch (error) {
+                    html += `<div class="test-result error">
+                        <h4>❌ ${langName}</h4>
+                        <strong>Error:</strong> ${error.message}<br>
+                    </div>`;
+                }
+                
+                // Add delay between requests
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+            
+            html += '</div>';
+            resultsDiv.innerHTML = html;
+        }
+        
+        async function generateFixedCode() {
+            const resultsDiv = document.getElementById('results');
+            
+            // Based on common Piston API language names
+            const workingMapping = {
+                javascript: 'javascript',
+                python: 'python',
+                java: 'java',
+                cpp: 'c++',           // Most likely working name
+                c: 'c',
+                csharp: 'csharp',
+                go: 'go',
+                rust: 'rust',
+                typescript: 'typescript'  // Try direct first, fallback to javascript
+            };
+            
+            let html = `<h2>🔧 Generated Fix Code</h2>
+            <div class="info">
+                <p>Copy this updated language mapping to your piston.ts file:</p>
+                <pre>// Updated Language mapping for Piston API
+export const PistonLanguages = {
+  javascript: 'javascript',
+  python: 'python',
+  java: 'java',
+  cpp: 'c++',
+  c: 'c',
+  csharp: 'csharp',
+  go: 'go',
+  rust: 'rust',
+  typescript: 'typescript',
+  php: 'php',
+  ruby: 'ruby',
+  kotlin: 'kotlin',
+  swift: 'swift',
+  r: 'r',
+  scala: 'scala',
+  perl: 'perl',
+  lua: 'lua',
+  bash: 'bash',
+  powershell: 'powershell'
+} as const;</pre>
+            </div>
+            
+            <div class="info">
+                <p>And update the filename mapping:</p>
+                <pre>const extensions: Record<string, string> = {
+  'javascript': 'main.js',
+  'python': 'main.py',
+  'java': 'Main.java',
+  'c++': 'main.cpp',
+  'c': 'main.c',
+  'csharp': 'Main.cs',
+  'go': 'main.go',
+  'rust': 'main.rs',
+  'typescript': 'main.ts',
+  'php': 'main.php',
+  'ruby': 'main.rb',
+  'kotlin': 'main.kt',
+  'swift': 'main.swift',
+  'r': 'main.r',
+  'scala': 'main.scala',
+  'perl': 'main.pl',
+  'lua': 'main.lua',
+  'bash': 'main.sh',
+  'powershell': 'main.ps1'
+};</pre>
+            </div>`;
+            
+            resultsDiv.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

@@ -1,9 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Plus, Minus, Search, RotateCcw } from 'lucide-react';
+import { PseudocodeBox } from '@/components/pseudocode-box';
+import { ComplexityBox } from '@/components/complexity-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVoiceExplain } from '@/hooks/useVoiceExplain';
 
 interface Node {
   id: string;
@@ -12,6 +17,7 @@ interface Node {
 }
 
 export function LinkedListVisualizer() {
+
   const [nodes, setNodes] = useState<Node[]>([
     { id: '1', value: 10, next: '2' },
     { id: '2', value: 20, next: '3' },
@@ -22,6 +28,14 @@ export function LinkedListVisualizer() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [highlightedNode, setHighlightedNode] = useState<string | null>(null);
   const [operation, setOperation] = useState<string | null>(null);
+  const [stepDesc, setStepDesc] = useState('');
+  const [showMemory, setShowMemory] = useState(false);
+  const [pseudoTitle, setPseudoTitle] = useState('');
+  const [pseudoCode, setPseudoCode] = useState<string[]>([]);
+  const [pseudoLine, setPseudoLine] = useState(0);
+  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(stepDesc);
+
+  const sleep = (ms: number) => new Promise(res => setTimeout(res, ms));
 
   const handleInsert = async (pos: 'head' | 'tail' | 'position') => {
     const value = parseInt(inputValue);
@@ -29,6 +43,18 @@ export function LinkedListVisualizer() {
 
     setIsAnimating(true);
     setOperation(`Inserting ${value} at ${pos}`);
+    setPseudoTitle(`Insert ${pos === 'head' ? 'Head' : 'Tail'} - Pseudocode`);
+    const code = pos==='head' ? [
+      'newNode = create(value)',
+      'newNode.next = head',
+      'head = newNode'
+    ] : [
+      'newNode = create(value)',
+      'if head == null: head = newNode',
+      'else: traverse to tail; tail.next = newNode'
+    ];
+    setPseudoCode(code); setPseudoLine(1);
+    setStepDesc(`Create new node with value ${value}.`);
 
     const newNode: Node = {
       id: Date.now().toString(),
@@ -36,11 +62,18 @@ export function LinkedListVisualizer() {
     };
 
     if (pos === 'head') {
+      await sleep(400);
+      setPseudoLine(2); setStepDesc('Link newNode.next to current head.');
       newNode.next = nodes.length > 0 ? nodes[0].id : undefined;
       setNodes(prev => [newNode, ...prev]);
       setHighlightedNode(newNode.id);
+      await sleep(400);
+      setPseudoLine(3); setStepDesc('Move head pointer to new node.');
     } else if (pos === 'tail') {
+      await sleep(400);
+      setPseudoLine(2);
       if (nodes.length > 0) {
+        setStepDesc('Traverse to tail and connect new node.');
         setNodes(prev => {
           const updated = [...prev];
           updated[updated.length - 1].next = newNode.id;
@@ -50,45 +83,61 @@ export function LinkedListVisualizer() {
         setNodes([newNode]);
       }
       setHighlightedNode(newNode.id);
+      await sleep(400);
+      setPseudoLine(3);
     }
 
     setInputValue('');
-    setTimeout(() => {
-      setHighlightedNode(null);
-      setIsAnimating(false);
-      setOperation(null);
-    }, 1500);
+    await sleep(600);
+    setHighlightedNode(null);
+    setIsAnimating(false);
+    setOperation(null);
+    setStepDesc('');
   };
 
-  const handleDelete = (pos: 'head' | 'tail') => {
+  const handleDelete = async (pos: 'head' | 'tail') => {
     if (nodes.length === 0) return;
 
     setIsAnimating(true);
     setOperation(`Deleting from ${pos}`);
+    setPseudoTitle(`Delete ${pos==='head'?'Head':'Tail'} - Pseudocode`);
+    const code = pos==='head' ? [
+      'if head == null: return',
+      'head = head.next'
+    ] : [
+      'if head == null: return',
+      'traverse to second last',
+      'secondLast.next = null'
+    ];
+    setPseudoCode(code); setPseudoLine(1);
 
     if (pos === 'head') {
       setHighlightedNode(nodes[0].id);
-      setTimeout(() => {
-        setNodes(prev => prev.slice(1));
-        setHighlightedNode(null);
-        setIsAnimating(false);
-        setOperation(null);
-      }, 800);
+      setStepDesc('Move head to next node.');
+      await sleep(600);
+      setPseudoLine(2);
+      setNodes(prev => prev.slice(1));
+      setHighlightedNode(null);
+      setIsAnimating(false);
+      setOperation(null);
+      setStepDesc('');
     } else if (pos === 'tail') {
       const lastNode = nodes[nodes.length - 1];
       setHighlightedNode(lastNode.id);
-      setTimeout(() => {
-        setNodes(prev => {
-          const updated = prev.slice(0, -1);
-          if (updated.length > 0) {
-            updated[updated.length - 1].next = undefined;
-          }
-          return updated;
-        });
-        setHighlightedNode(null);
-        setIsAnimating(false);
-        setOperation(null);
-      }, 800);
+      setStepDesc('Detach last node by setting previous next to null.');
+      await sleep(600);
+      setPseudoLine(3);
+      setNodes(prev => {
+        const updated = prev.slice(0, -1);
+        if (updated.length > 0) {
+          updated[updated.length - 1].next = undefined;
+        }
+        return updated;
+      });
+      setHighlightedNode(null);
+      setIsAnimating(false);
+      setOperation(null);
+      setStepDesc('');
     }
   };
 
@@ -98,20 +147,34 @@ export function LinkedListVisualizer() {
 
     setIsAnimating(true);
     setOperation(`Searching for ${value}`);
+    setPseudoTitle('Search - Pseudocode');
+    setPseudoCode([
+      'current = head',
+      'while current != null:',
+      '  if current.value == x: return true',
+      '  current = current.next',
+      'return false'
+    ]);
+    setPseudoLine(1);
 
     for (let i = 0; i < nodes.length; i++) {
       setHighlightedNode(nodes[i].id);
+      setStepDesc(`Visit node ${i} (value=${nodes[i].value}).`);
+      setPseudoLine(2);
       await new Promise(resolve => setTimeout(resolve, 600));
       
       if (nodes[i].value === value) {
+        setPseudoLine(3);
         setOperation(`Found ${value}!`);
         setTimeout(() => {
           setHighlightedNode(null);
           setIsAnimating(false);
           setOperation(null);
+          setStepDesc('');
         }, 1000);
         return;
       }
+      setPseudoLine(4);
     }
 
     setOperation(`${value} not found`);
@@ -119,6 +182,7 @@ export function LinkedListVisualizer() {
       setHighlightedNode(null);
       setIsAnimating(false);
       setOperation(null);
+      setStepDesc('');
     }, 1000);
   };
 
@@ -131,6 +195,7 @@ export function LinkedListVisualizer() {
     setHighlightedNode(null);
     setIsAnimating(false);
     setOperation(null);
+    setStepDesc('');
   };
 
   return (
@@ -143,7 +208,7 @@ export function LinkedListVisualizer() {
       </div>
 
       {/* Linked List Visualization */}
-      <div className="mb-8 overflow-x-auto">
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900 rounded-xl border-2 border-border/50 p-6 mb-8 overflow-x-auto">
         <div className="flex items-center gap-4 min-h-[120px] p-4 justify-center">
           <AnimatePresence mode="popLayout">
             {nodes.map((node, index) => (
@@ -282,6 +347,53 @@ export function LinkedListVisualizer() {
               {operation}
             </Badge>
           )}
+        </div>
+
+        {stepDesc && (
+          <div className="p-3 bg-muted/20 rounded-lg">
+            <p className="text-sm">{stepDesc}</p>
+          </div>
+        )}
+      </div>
+
+      {/* Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <MemoryLayout
+          data={nodes.map(n => n.value)}
+          title="Node Values Memory Layout"
+          baseAddress={4000}
+          wordSize={4}
+        />
+      )}
+
+      {/* Pseudocode */}
+      <PseudocodeBox title={pseudoTitle || 'Singly Linked List - Pseudocode'} code={pseudoCode} highlightedLine={pseudoLine} />
+
+      {/* Complexity */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ComplexityBox
+          title="Time Complexity"
+          timeComplexity="O(1) - O(n)"
+          spaceComplexity="O(1)"
+          description="Insert/Delete at head: O(1), tail and search operations: O(n)"
+        />
+        <div className="bg-muted/20 rounded-lg p-4">
+          <h4 className="font-semibold mb-2">Key Points</h4>
+          <ul className="text-sm space-y-1">
+            <li>• No random access; traversal from head.</li>
+            <li>• Head insertion is O(1); tail insertion O(n) unless tail pointer maintained.</li>
+            <li>• Good for frequent insert/delete at head.</li>
+          </ul>
         </div>
       </div>
     </div>

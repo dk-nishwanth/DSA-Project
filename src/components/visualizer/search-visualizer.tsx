@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 
-type SearchAlgorithm = 'linear' | 'binary' | 'interpolation';
+type SearchAlgorithm = 'linear' | 'binary' | 'interpolation' | 'exponential';
 
 export function SearchVisualizer() {
   const [array, setArray] = useState([2, 5, 8, 12, 16, 23, 38, 45, 67, 78, 89, 99]);
@@ -143,6 +143,67 @@ export function SearchVisualizer() {
     return -1;
   }, [array, target]);
 
+  const exponentialSearch = useCallback(async () => {
+    // Requires sorted array
+    let comparisonCount = 0;
+    if (array.length === 0) return -1;
+    setCurrentStep(`Exponential Search: checking first element`);
+    setCurrentIndex(0);
+    comparisonCount++;
+    setComparisons(comparisonCount);
+    await sleep(500);
+
+    if (array[0] === target) {
+      setFoundIndex(0);
+      setCurrentStep(`Found target ${target} at index 0!`);
+      return 0;
+    }
+
+    // Find range where target may reside
+    let bound = 1;
+    while (bound < array.length && array[bound] < target) {
+      setSearchRange({ left: bound / 2, right: Math.min(array.length - 1, bound) });
+      setCurrentStep(`Expanding bound to ${bound}: array[${bound}] = ${array[bound]} < ${target}`);
+      await sleep(700);
+      comparisonCount++;
+      setComparisons(comparisonCount);
+      bound *= 2;
+    }
+    const left = Math.floor(bound / 2);
+    const right = Math.min(array.length - 1, bound);
+    setSearchRange({ left, right });
+    setCurrentStep(`Binary search between [${left}, ${right}]`);
+    await sleep(600);
+
+    // Binary search within found range
+    let l = left, r = right;
+    while (l <= r) {
+      const mid = Math.floor((l + r) / 2);
+      setCurrentIndex(mid);
+      setSearchRange({ left: l, right: r });
+      comparisonCount++;
+      setComparisons(comparisonCount);
+      setCurrentStep(`Checking middle: array[${mid}] = ${array[mid]} vs ${target}`);
+      await sleep(700);
+
+      if (array[mid] === target) {
+        setFoundIndex(mid);
+        setCurrentStep(`Found target ${target} at index ${mid}!`);
+        return mid;
+      } else if (array[mid] < target) {
+        l = mid + 1;
+        setCurrentStep(`${array[mid]} < ${target}, move right`);
+      } else {
+        r = mid - 1;
+        setCurrentStep(`${array[mid]} > ${target}, move left`);
+      }
+      await sleep(500);
+    }
+
+    setCurrentStep(`Target ${target} not found in range`);
+    return -1;
+  }, [array, target]);
+
   const runSearch = useCallback(async () => {
     if (array.length === 0) {
       toast.error('Array is empty');
@@ -150,10 +211,11 @@ export function SearchVisualizer() {
     }
 
     // Check if array is sorted for binary/interpolation search
-    if ((algorithm === 'binary' || algorithm === 'interpolation')) {
+    if ((algorithm === 'binary' || algorithm === 'interpolation' || algorithm === 'exponential')) {
       const isSorted = array.every((val, i) => i === 0 || array[i - 1] <= val);
       if (!isSorted) {
-        toast.error(`${algorithm === 'binary' ? 'Binary' : 'Interpolation'} search requires a sorted array`);
+        const name = algorithm === 'binary' ? 'Binary' : (algorithm === 'interpolation' ? 'Interpolation' : 'Exponential');
+        toast.error(`${name} search requires a sorted array`);
         return;
       }
     }
@@ -179,6 +241,9 @@ export function SearchVisualizer() {
         case 'interpolation':
           result = await interpolationSearch();
           break;
+        case 'exponential':
+          result = await exponentialSearch();
+          break;
       }
 
       if (result !== -1) {
@@ -193,7 +258,7 @@ export function SearchVisualizer() {
     setCurrentIndex(-1);
     setSearchRange(null);
     setIsAnimating(false);
-  }, [algorithm, linearSearch, binarySearch, interpolationSearch, array, target]);
+  }, [algorithm, linearSearch, binarySearch, interpolationSearch, exponentialSearch, array, target]);
 
   const resetSearch = useCallback(() => {
     setCurrentIndex(-1);
@@ -283,6 +348,7 @@ export function SearchVisualizer() {
             <SelectItem value="linear">Linear Search</SelectItem>
             <SelectItem value="binary">Binary Search</SelectItem>
             <SelectItem value="interpolation">Interpolation Search</SelectItem>
+            <SelectItem value="exponential">Exponential Search</SelectItem>
           </SelectContent>
         </Select>
 
@@ -356,6 +422,14 @@ export function SearchVisualizer() {
               <div>• <strong>Time Complexity:</strong> O(log log n) average, O(n) worst case</div>
               <div>• <strong>Space Complexity:</strong> O(1) - No extra space needed</div>
               <div>• <strong>Best for:</strong> Uniformly distributed sorted data</div>
+            </>
+          )}
+          {algorithm === 'exponential' && (
+            <>
+              <div>• <strong>Exponential Search:</strong> Quickly finds a range by doubling, then binary search within</div>
+              <div>• <strong>Time Complexity:</strong> O(log i) where i is target position</div>
+              <div>• <strong>Space Complexity:</strong> O(1)</div>
+              <div>• <strong>Requires:</strong> Sorted array</div>
             </>
           )}
         </div>

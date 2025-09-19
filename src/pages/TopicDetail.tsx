@@ -42,6 +42,38 @@ import { EnhancedArrayVisualizer } from '@/components/visualizer/enhanced-array-
 import { EnhancedBubbleSort } from '@/components/visualizer/enhanced-bubble-sort';
 import { EnhancedBinarySearch } from '@/components/visualizer/enhanced-binary-search';
 import { TreeTraversalVisualizer } from '@/components/visualizer/tree-traversal-visualizer';
+import { ZAlgorithmVisualizer } from '@/components/visualizer/z-algorithm-visualizer';
+import { ManacherVisualizer } from '@/components/visualizer/manacher-visualizer';
+import { AnagramVisualizer } from '@/components/visualizer/anagram-visualizer';
+import { OpenAddressingVisualizer } from '@/components/visualizer/open-addressing-visualizer';
+import { TopologicalSortVisualizer } from '@/components/visualizer/topological-sort-visualizer';
+import { FloydWarshallVisualizer } from '@/components/visualizer/floyd-warshall-visualizer';
+import { KruskalVisualizer } from '@/components/visualizer/kruskal-visualizer';
+import { PrimVisualizer } from '@/components/visualizer/prim-visualizer';
+import { MergeSortVisualizer } from '@/components/visualizer/merge-sort-visualizer';
+import { QuickSortVisualizer } from '@/components/visualizer/quick-sort-visualizer';
+import { HeapSortVisualizer } from '@/components/visualizer/heap-sort-visualizer';
+import { RadixSortVisualizer } from '@/components/visualizer/radix-sort-visualizer';
+import { SegmentTreeVisualizer } from '@/components/visualizer/segment-tree-visualizer';
+import { FenwickTreeVisualizer } from '@/components/visualizer/fenwick-tree-visualizer';
+import { AVLTreeVisualizer } from '@/components/visualizer/avl-tree-visualizer';
+import { RedBlackTreeVisualizer } from '@/components/visualizer/red-black-tree-visualizer';
+import { LCSVisualizer } from '@/components/visualizer/lcs-visualizer';
+import { EditDistanceVisualizer } from '@/components/visualizer/edit-distance-visualizer';
+import { CoinChangeVisualizer } from '@/components/visualizer/coin-change-visualizer';
+import { MatrixChainVisualizer } from '@/components/visualizer/matrix-chain-visualizer';
+import { FibonacciDPVisualizer } from '@/components/visualizer/fibonacci-dp-visualizer';
+import { HuffmanVisualizer } from '@/components/visualizer/huffman-visualizer';
+import { CircularLinkedListVisualizer } from '@/components/visualizer/circular-linked-list-visualizer';
+import { ContainerWithMostWaterVisualizer } from '@/components/visualizer/two-pointers-container-water';
+import { TrappingRainWaterVisualizer } from '@/components/visualizer/two-pointers-trapping-rain';
+import { LongestUniqueSubstringVisualizer } from '@/components/visualizer/sliding-window-longest-unique';
+import { MinimumWindowSubstringVisualizer } from '@/components/visualizer/sliding-window-min-window';
+import { SlidingWindowMaximumVisualizer } from '@/components/visualizer/sliding-window-maximum';
+import { SieveVisualizer } from '@/components/visualizer/sieve-visualizer';
+import { FastExponentiationVisualizer } from '@/components/visualizer/fast-exponentiation-visualizer';
+import { NQueensVisualizer } from '@/components/visualizer/n-queens-visualizer';
+import { SudokuVisualizer } from '@/components/visualizer/sudoku-visualizer';
 
 import { ComplexityBox } from '@/components/complexity-box';
 import { PseudocodeBox } from '@/components/pseudocode-box';
@@ -428,6 +460,7 @@ print(queue.size())     # 1
 
   return defaultSnippets[language]?.default || defaultSnippets.javascript.default;
 }
+
 import { DefinitionBox } from '@/components/definition-box';
 import { VoiceNarrator } from '@/components/voice-narrator';
 import { VisualizerCodeRunner } from '@/components/visualizer/visualizer-code-runner';
@@ -444,6 +477,155 @@ export default function TopicDetail() {
   if (!topic) {
     return <Navigate to="/" replace />;
   }
+
+  const renderVisualizer = (topicId: string) => {
+    switch (topicId) {
+      // Arrays
+      case 'array-basics':
+        return <EnhancedArrayVisualizer />;
+      case 'array-rotation':
+        return <ArrayRotationVisualizer />;
+      case 'array-subarray-problems':
+        return <SlidingWindowVisualizer />;
+
+      // Strings
+      case 'string-palindrome':
+        return <PalindromeVisualizer />;
+      case 'string-search-kmp':
+      case 'rabin-karp':
+        return <StringMatchingVisualizer />;
+      case 'z-algorithm':
+        return <ZAlgorithmVisualizer />;
+      case 'manacher-algorithm':
+        return <ManacherVisualizer />;
+      case 'string-anagram':
+        return <AnagramVisualizer />;
+
+      // Linked Lists
+      case 'linked-list-singly':
+        return <LinkedListVisualizer />;
+      case 'linked-list-doubly':
+        return <DoublyLinkedListVisualizer />;
+      case 'linked-list-circular':
+        return <CircularLinkedListVisualizer />;
+
+      // Stacks & Queues
+      case 'stack-operations':
+        return <StackVisualizer />;
+      case 'queue-operations':
+        return <QueueVisualizer />;
+
+      // Trees
+      case 'binary-tree-fundamentals':
+      case 'binary-search-tree':
+        return <BinaryTreeVisualizer />;
+      case 'avl-tree':
+        return <AVLTreeVisualizer />;
+      case 'red-black-tree':
+        return <RedBlackTreeVisualizer />;
+      case 'tree-traversals':
+      case 'tree-inorder-traversal':
+      case 'tree-preorder-traversal':
+      case 'tree-postorder-traversal':
+        return <TreeTraversalVisualizer />;
+
+      // Graphs
+      case 'graph-dfs':
+      case 'graph-bfs':
+      case 'dijkstra-algorithm':
+      case 'bellman-ford-algorithm':
+        return <GraphVisualizer />;
+      case 'topological-sort':
+        return <TopologicalSortVisualizer />;
+      case 'floyd-warshall-algorithm':
+        return <FloydWarshallVisualizer />;
+      case 'kruskal-algorithm':
+        return <KruskalVisualizer />;
+      case 'prim-algorithm':
+        return <PrimVisualizer />;
+
+      // Sorting
+      case 'bubble-sort':
+        return <EnhancedBubbleSort />;
+      case 'merge-sort':
+        return <MergeSortVisualizer />;
+      case 'quick-sort':
+        return <QuickSortVisualizer />;
+      case 'heap-sort':
+        return <HeapSortVisualizer />;
+      case 'radix-sort':
+      case 'bucket-sort':
+        return <RadixSortVisualizer />;
+      case 'insertion-sort':
+        return <InsertionSortVisualizer />;
+      case 'selection-sort':
+        return <SelectionSortVisualizer />;
+      case 'counting-sort':
+        return <CountingSortVisualizer />;
+      // other sorts can fall back to generic
+
+      // Searching
+      case 'linear-search':
+      case 'binary-search':
+      case 'interpolation-search':
+      case 'exponential-search':
+        return <SearchVisualizer />;
+
+      // Two Pointers (per-problem)
+      case 'container-with-most-water':
+        return <ContainerWithMostWaterVisualizer />;
+      case 'trapping-rain-water':
+        return <TrappingRainWaterVisualizer />;
+
+      // Hashing
+      case 'hash-table-basics':
+      case 'hash-functions':
+      case 'hash-chaining':
+        return <HashTableVisualizer />;
+      case 'open-addressing':
+        return <OpenAddressingVisualizer />;
+
+      // DP, Greedy, Backtracking, etc.
+      case 'n-queens':
+        return <NQueensVisualizer />;
+      case 'sudoku-solver':
+        return <SudokuVisualizer />;
+      case 'dp-fundamentals':
+      case '0-1-knapsack':
+      case 'longest-increasing-subsequence':
+        return <DPVisualizer />;
+      case 'activity-selection':
+      case 'fractional-knapsack':
+      case 'job-scheduling':
+        return <GreedyVisualizer />;
+      case 'n-queens':
+      case 'subset-generation':
+      case 'permutation-generation':
+        return <BacktrackingVisualizer />;
+
+      // Defaults
+      default:
+        // Generic fallbacks by category
+        switch (topic.category) {
+          case 'Arrays':
+            return <EnhancedArrayVisualizer />;
+          case 'Strings':
+            return <StringMatchingVisualizer />;
+          case 'Searching':
+            return <SearchVisualizer />;
+          case 'Sorting':
+            return <SortingVisualizer />;
+          case 'Graphs':
+            return <GraphVisualizer />;
+          case 'Trees':
+            return <BinaryTreeVisualizer />;
+          case 'Hashing':
+            return <HashTableVisualizer />;
+          default:
+            return <AdvancedVisualizer />;
+        }
+    }
+  };
 
   // Sample pseudocode for array operations
   const arrayPseudocode = [
@@ -1373,94 +1555,8 @@ arr.findIndex(v => v === 7); // search`,
             </div>
             <VisualizationAutoNarrator introText={`Let's explore ${topic.title}. ${topic.description}`} />
             {/* Removed Code & Run Visualization button */}
+            {renderVisualizer(topic.id)}
 
-            {topic.id === 'array-basics' && <EnhancedArrayVisualizer operation="basics" />}
-            {topic.id === 'linked-list-singly' && <LinkedListVisualizer listType="singly" />}
-            {topic.id === 'stack-operations' && <StackVisualizer operation="basic" />}
-            {topic.id === 'queue-operations' && <QueueVisualizer operation="basic" />}
-            {topic.id === 'binary-search-tree' && <BinaryTreeVisualizer treeType="bst" />}
-            {topic.id === 'tree-inorder-traversal' && <TreeTraversalVisualizer traversalType="inorder" />}
-            {topic.id === 'tree-preorder-traversal' && <TreeTraversalVisualizer traversalType="preorder" />}
-            {topic.id === 'tree-postorder-traversal' && <TreeTraversalVisualizer traversalType="postorder" />}
-            {topic.id === 'bubble-sort' && <EnhancedBubbleSort algorithm="bubble" />}
-            {topic.id === 'merge-sort' && <SortingVisualizer algorithm="merge" />}
-            {topic.id === 'quick-sort' && <SortingVisualizer algorithm="quick" />}
-            {topic.id === 'heap-operations' && <HeapVisualizer operation="basic" />}
-            {topic.id === 'trie-operations' && <TrieVisualizer operation="operations" />}
-            {topic.id === 'union-find' && <UnionFindVisualizer operation="basic" />}
-            {topic.id === 'dijkstra-algorithm' && <GraphVisualizer algorithm="dijkstra" />}
-            {topic.id === 'string-search-kmp' && <StringMatchingVisualizer algorithm="kmp" />}
-
-            {/* New Interactive Visualizers */}
-            {topic.id === 'array-rotation' && <ArrayRotationVisualizer operation="rotation" />}
-            {topic.id === 'string-palindrome' && <PalindromeVisualizer type="basic" />}
-            {topic.id === 'linear-search' && <SearchVisualizer algorithm="linear" />}
-            {topic.id === 'binary-search' && <EnhancedBinarySearch />}
-            {topic.id === 'interpolation-search' && <SearchVisualizer algorithm="interpolation" />}
-            {topic.id === 'hash-table' && <HashTableVisualizer method="basic" />}
-            {topic.id === 'hash-chaining' && <SeparateChainingVisualizer />}
-            {topic.id === 'open-addressing' && <HashTableVisualizer method="open-addressing" />}
-            {topic.id === 'recursion-basics' && <RecursionVisualizer type="basic" />}
-            {topic.id === 'tail-recursion' && <RecursionVisualizer type="tail" />}
-            {topic.id === 'fibonacci' && <RecursionVisualizer type="fibonacci" />}
-            {topic.id === 'dp-introduction' && <DPVisualizer problem="introduction" />}
-            {topic.id === 'longest-common-subsequence' && <DPVisualizer problem="lcs" />}
-            {topic.id === 'knapsack-problem' && <KnapsackVisualizer problem="01knapsack" />}
-            {topic.id === 'longest-increasing-subsequence' && <LongestIncreasingSubsequenceVisualizer problem="lis" />}
-            {topic.id === 'activity-selection' && <GreedyVisualizer algorithm="activity-selection" />}
-            {topic.id === 'huffman-coding' && <GreedyVisualizer algorithm="huffman" />}
-            {topic.id === 'fractional-knapsack' && <GreedyVisualizer algorithm="fractional-knapsack" />}
-            {topic.id === 'n-queens' && <BacktrackingVisualizer problem="n-queens" />}
-            {topic.id === 'sudoku-solver' && <BacktrackingVisualizer problem="sudoku" />}
-            {topic.id === 'maze-solver' && <BacktrackingVisualizer problem="maze" />}
-            {topic.id === 'linked-list-doubly' && <DoublyLinkedListVisualizer />}
-            {topic.id === 'graph-dfs' && <DFSBFSVisualizer algorithm="dfs" />}
-            {topic.id === 'graph-bfs' && <DFSBFSVisualizer algorithm="bfs" />}
-            {topic.id === 'segment-tree' && <AdvancedVisualizer structure="segment-tree" />}
-            {topic.id === 'fenwick-tree' && <AdvancedVisualizer structure="fenwick-tree" />}
-            {topic.id === 'trie' && <TrieVisualizer operation="basic" />}
-            {topic.id === 'binary-tree' && <BinaryTreeVisualizer treeType="binary" />}
-
-            {/* Additional visualizers for new topics */}
-            {topic.id === 'heap-sort' && <HeapVisualizer operation="sort" />}
-            {topic.id === 'insertion-sort' && <InsertionSortVisualizer algorithm="insertion" />}
-            {topic.id === 'selection-sort' && <SelectionSortVisualizer algorithm="selection" />}
-            {topic.id === 'counting-sort' && <CountingSortVisualizer algorithm="counting" />}
-            {topic.id === 'radix-sort' && <SortingVisualizer algorithm="radix" />}
-            {topic.id === 'bucket-sort' && <SortingVisualizer algorithm="bucket" />}
-            {topic.id === 'bellman-ford' && <GraphVisualizer algorithm="bellman-ford" />}
-            {topic.id === 'floyd-warshall' && <GraphVisualizer algorithm="floyd-warshall" />}
-            {topic.id === 'kruskal-algorithm' && <GraphVisualizer algorithm="kruskal" />}
-            {topic.id === 'prim-algorithm' && <GraphVisualizer algorithm="prim" />}
-            {topic.id === 'topological-sort' && <GraphVisualizer algorithm="topological-sort" />}
-            {topic.id === 'rabin-karp' && <StringMatchingVisualizer algorithm="rabin-karp" />}
-            {topic.id === 'z-algorithm' && <StringMatchingVisualizer algorithm="z-algorithm" />}
-            {topic.id === 'manacher-algorithm' && <StringMatchingVisualizer algorithm="manacher" />}
-            {topic.id === 'string-anagram' && <StringMatchingVisualizer algorithm="anagram" />}
-            {topic.id === 'avl-tree' && <BinaryTreeVisualizer treeType="avl" />}
-            {topic.id === 'red-black-tree' && <BinaryTreeVisualizer treeType="red-black" />}
-            {topic.id === 'b-tree' && <BinaryTreeVisualizer treeType="b-tree" />}
-            {topic.id === 'splay-tree' && <BinaryTreeVisualizer treeType="splay" />}
-            {topic.id === 'two-sum' && <TwoPointersVisualizer algorithm="two-sum" />}
-            {topic.id === 'three-sum' && <TwoPointersVisualizer algorithm="three-sum" />}
-            {topic.id === 'container-water' && <TwoPointersVisualizer algorithm="container-water" />}
-            {topic.id === 'remove-duplicates' && <TwoPointersVisualizer algorithm="remove-duplicates" />}
-            {topic.id === 'sliding-window-maximum' && <SlidingWindowVisualizer algorithm="maximum" />}
-            {topic.id === 'longest-substring' && <SlidingWindowVisualizer algorithm="substring" />}
-            {topic.id === 'bit-basics' && <BitManipulationVisualizer operation="basics" />}
-            {topic.id === 'count-set-bits' && <BitManipulationVisualizer operation="count-bits" />}
-            {topic.id === 'power-of-two' && <BitManipulationVisualizer operation="power-of-two" />}
-            {topic.id === 'single-number' && <BitManipulationVisualizer operation="single-number" />}
-            {topic.id === 'bit-subset' && <BitManipulationVisualizer operation="subset" />}
-            {topic.id === 'number-theory-basics' && <MathematicalVisualizer topic="basics" />}
-            {topic.id === 'prime-algorithms' && <MathematicalVisualizer topic="prime" />}
-            {topic.id === 'fast-exponentiation' && <MathematicalVisualizer topic="exponentiation" />}
-            {topic.id === 'array-subarray-problems' && <EnhancedArrayVisualizer operation="subarray" />}
-            {topic.id === 'linked-list-circular' && <LinkedListVisualizer listType="circular" />}
-            {/* Removed duplicate heap-operations visualizer */}
-            {topic.id === 'sliding-window-basics' && <SlidingWindowVisualizer algorithm="basics" />}
-
-          
           </div>
 
           {/* Explanation Steps */}
@@ -1476,7 +1572,7 @@ arr.findIndex(v => v === 7); // search`,
           {/* Teaching Cards - beginner-friendly summary (hidden for array-basics) */}
           {topic.id !== 'array-basics' && (
             <TeachingCards
-              items={getTeachingCardItems(topic.id, topic.category)}
+              items={getTeachingCardItems(topic.id, topic.category) as any}
               mistakes={getCommonMistakes(topic.id, topic.category)}
             />
           )}
@@ -1508,10 +1604,10 @@ arr.findIndex(v => v === 7); // search`,
             topicId={topic.id} 
             topicTitle={topic.title}
             initialCode={{
-              javascript: getCodeSnippet(topic.id, 'javascript'),
-              python: getCodeSnippet(topic.id, 'python'),
-              java: getCodeSnippet(topic.id, 'java'),
-              cpp: getCodeSnippet(topic.id, 'cpp')
+              javascript: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'javascript'),
+              python: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'python'),
+              java: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'java'),
+              cpp: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'c')
             }}
           />
 
