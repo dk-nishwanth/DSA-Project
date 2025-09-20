@@ -199,16 +199,17 @@ export function LinkedListVisualizer() {
   };
 
   return (
-    <div className="visualization-container p-6">
-      <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-2">Linked List Operations</h3>
-        <p className="text-muted-foreground text-sm">
+    <div className="w-full space-y-6">
+      {/* Header */}
+      <div className="text-center">
+        <h3 className="text-2xl font-bold mb-2">Linked List Visualizer</h3>
+        <p className="text-muted-foreground">
           Interactive singly linked list with insert, delete, and search operations
         </p>
       </div>
 
       {/* Linked List Visualization */}
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900 rounded-xl border-2 border-border/50 p-6 mb-8 overflow-x-auto">
+      <div className="bg-gradient-visualization rounded-xl border-2 border-primary/20 p-6 overflow-x-auto">
         <div className="flex items-center gap-4 min-h-[120px] p-4 justify-center">
           <AnimatePresence mode="popLayout">
             {nodes.map((node, index) => (
@@ -227,8 +228,8 @@ export function LinkedListVisualizer() {
                 <div className={`
                   flex flex-col items-center p-4 rounded-xl border-2 min-w-[80px]
                   ${highlightedNode === node.id 
-                    ? 'bg-animation-highlight border-animation-highlight shadow-glow' 
-                    : 'bg-card border-border'
+                    ? 'bg-primary text-primary-foreground border-primary shadow-lg' 
+                    : 'bg-card border-border hover:border-primary/50'
                   }
                   transition-all duration-300
                 `}>

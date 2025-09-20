@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, RotateCcw, Shuffle, Target } from 'lucide-react';
 import { StepByStepBase, VisualizationStep } from './step-by-step-base';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { useVoiceExplain } from '@/hooks/useVoiceExplain';
 
 export function EnhancedBinarySearch() {
   const [array, setArray] = useState<number[]>([1, 3, 5, 7, 9, 11, 13, 15, 17, 19]);
@@ -11,6 +13,17 @@ export function EnhancedBinarySearch() {
   const [inputArray, setInputArray] = useState('1,3,5,7,9,11,13,15,17,19');
   const [inputTarget, setInputTarget] = useState('7');
   const [steps, setSteps] = useState<VisualizationStep[]>([]);
+  const [showMemory, setShowMemory] = useState(false);
+  const [currentStep, setCurrentStep] = useState('');
+  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(currentStep);
+
+  // Update currentStep when steps change
+  React.useEffect(() => {
+    if (steps.length > 0) {
+      const latestStep = steps[steps.length - 1];
+      setCurrentStep(latestStep.description || latestStep.title);
+    }
+  }, [steps]);
 
   const generateBinarySearchSteps = (arr: number[], target: number): VisualizationStep[] => {
     const steps: VisualizationStep[] = [];
@@ -441,6 +454,7 @@ export function EnhancedBinarySearch() {
           steps={steps}
           title="Binary Search Step-by-Step"
           initialSpeed={1500}
+          onStepChange={(step) => setCurrentStep(step.description || step.title)}
         >
           {(currentStep) => renderSearchVisualization(currentStep)}
         </StepByStepBase>
@@ -488,6 +502,55 @@ export function EnhancedBinarySearch() {
           <li>Each step eliminates half the remaining possibilities</li>
         </ol>
       </div>
+
+      {/* Voice Explain and Show Memory Controls */}
+      <VisualizerControls
+        voiceEnabled={voiceEnabled}
+        onToggleVoice={setVoiceEnabled}
+        showMemory={showMemory}
+        onToggleMemory={setShowMemory}
+      />
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <div className="bg-muted/20 rounded-lg p-4">
+          <h4 className="font-semibold mb-3">Memory Layout</h4>
+          <div className="space-y-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <h5 className="text-sm font-medium mb-2">Array Elements</h5>
+                <div className="space-y-1">
+                  {array.map((value, index) => (
+                    <div key={index} className="flex justify-between text-xs font-mono bg-background/50 p-2 rounded">
+                      <span>arr[{index}]</span>
+                      <span>{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <h5 className="text-sm font-medium mb-2">Memory Addresses</h5>
+                <div className="space-y-1">
+                  {array.map((value, index) => {
+                    const address = 0x3000 + (index * 4); // Different base address for binary search
+                    return (
+                      <div key={index} className="flex justify-between text-xs font-mono bg-background/50 p-2 rounded">
+                        <span>0x{address.toString(16).toUpperCase()}</span>
+                        <span>{value}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+            <div className="mt-3 p-3 bg-info/10 rounded-lg border border-info/30">
+              <p className="text-xs text-info-foreground">
+                <strong>Memory Info:</strong> Each integer occupies 4 bytes in memory. Binary search accesses memory in O(log n) pattern, jumping to middle elements rather than sequential access.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

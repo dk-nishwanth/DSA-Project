@@ -3,7 +3,6 @@ import { Play, RotateCcw, CheckCircle, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import { ComplexityBox } from '@/components/complexity-box';
 import { PseudocodeBox } from '@/components/pseudocode-box';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
 import { MemoryLayout } from '@/components/memory-layout';
@@ -264,23 +263,15 @@ export function PalindromeVisualizer() {
         currentStep.includes('All characters') ? 6 : 0
       } />
 
-      {/* Complexity Analysis */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <ComplexityBox
-          timeComplexity="O(n)"
-          spaceComplexity="O(1)"
-          description="Two pointer approach compares characters from both ends"
-        />
-        
-        <div className="bg-muted/20 rounded-lg p-4">
-          <h4 className="font-semibold mb-2">Key Points</h4>
-          <ul className="text-sm space-y-1">
-            <li>• <strong>Preprocessing:</strong> Remove spaces, punctuation, convert to lowercase</li>
-            <li>• <strong>Two Pointers:</strong> Start from both ends, move toward center</li>
-            <li>• <strong>Applications:</strong> Data validation, string processing</li>
-            <li>• <strong>Real World:</strong> DNA sequences, word games, data integrity</li>
-          </ul>
-        </div>
+      {/* Key Points */}
+      <div className="bg-muted/20 rounded-lg p-4">
+        <h4 className="font-semibold mb-2">Key Points</h4>
+        <ul className="text-sm space-y-1">
+          <li>• <strong>Preprocessing:</strong> Remove spaces, punctuation, convert to lowercase</li>
+          <li>• <strong>Two Pointers:</strong> Start from both ends, move toward center</li>
+          <li>• <strong>Applications:</strong> Data validation, string processing</li>
+          <li>• <strong>Real World:</strong> DNA sequences, word games, data integrity</li>
+        </ul>
       </div>
     </div>
   );

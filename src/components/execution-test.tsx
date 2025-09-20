@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { executeCode, testExecutionServices } from '@/lib/code-executor';
+import { executeCode, testExecutionService } from '@/lib/code-executor';
 import { Play, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 
 export function ExecutionTest() {
@@ -13,18 +13,17 @@ export function ExecutionTest() {
 
   const testCodes = {
     javascript: 'console.log("Hello from JavaScript!"); console.log("Current time:", new Date().toISOString());',
-    python: 'print("Hello from Python!"); import datetime; print("Current time:", datetime.datetime.now())',
+    python: 'print("Hello from Python!")\nprint("Math test: 2 + 2 =", 2 + 2)\nprint("List test:", [1, 2, 3, 4, 5])',
     java: 'public class Main { public static void main(String[] args) { System.out.println("Hello from Java!"); System.out.println("Current time: " + java.time.LocalDateTime.now()); } }',
     cpp: '#include <iostream>\n#include <chrono>\nusing namespace std;\nint main() { cout << "Hello from C++!" << endl; auto now = chrono::system_clock::now(); auto time_t = chrono::system_clock::to_time_t(now); cout << "Current time: " << ctime(&time_t); return 0; }',
-    c: '#include <stdio.h>\n#include <time.h>\nint main() { printf("Hello from C!\\n"); time_t t = time(NULL); printf("Current time: %s", ctime(&t)); return 0; }',
-    python: 'print("Hello from Python!")\nprint("Math test: 2 + 2 =", 2 + 2)\nprint("List test:", [1, 2, 3, 4, 5])'
+    c: '#include <stdio.h>\n#include <time.h>\nint main() { printf("Hello from C!\\n"); time_t t = time(NULL); printf("Current time: %s", ctime(&t)); return 0; }'
   };
 
   const runTest = async (language: string) => {
     setIsRunning(true);
     try {
       const result = await executeCode({
-        language,
+        language: language as keyof typeof testCodes,
         code: testCodes[language as keyof typeof testCodes],
         input: ''
       });
@@ -52,10 +51,11 @@ export function ExecutionTest() {
   const testAllServices = async () => {
     setIsRunning(true);
     try {
-      const status = await testExecutionServices();
-      setServiceStatus(status);
+      const status = await testExecutionService();
+      setServiceStatus({ piston: status });
     } catch (error) {
       console.error('Service test failed:', error);
+      setServiceStatus({ piston: false });
     } finally {
       setIsRunning(false);
     }
@@ -177,10 +177,10 @@ export function ExecutionTest() {
           <AlertDescription>
             <strong>How to enable real execution:</strong>
             <ol className="list-decimal list-inside mt-2 space-y-1">
-              <li>Get a free RapidAPI key from <a href="https://rapidapi.com/judge0-official/api/judge0-ce/" target="_blank" className="text-blue-600 hover:underline">Judge0</a></li>
-              <li>Add it to your environment: <code className="bg-muted px-1 rounded">NEXT_PUBLIC_RAPIDAPI_KEY=your_key</code></li>
-              <li>Or store it locally using the "Setup Required" button in the code playground</li>
-              <li>Restart your development server</li>
+              <li>Code execution is powered by the free Piston API service</li>
+              <li>No API keys or environment setup required</li>
+              <li>Simply click run to execute your code instantly</li>
+              <li>Supports 12+ programming languages out of the box</li>
             </ol>
           </AlertDescription>
         </Alert>

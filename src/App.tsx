@@ -24,6 +24,7 @@ import AssignmentDetail from "./pages/AssignmentDetail";
 import AdminAssignmentCreator from "./pages/AdminAssignmentCreator";
 import SubscriptionPayment from "./pages/SubscriptionPayment";
 import PaymentSuccess from "./pages/PaymentSuccess";
+import { VoiceSpeedTest } from "./components/voice-speed-test";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +55,9 @@ const App = () => (
             
             {/* Landing Page */}
             <Route path="/" element={<Landing />} />
+            
+            {/* Test Routes */}
+            <Route path="/voice-test" element={<VoiceSpeedTest />} />
             
             {/* Main App Routes */}
             <Route path="/dashboard" element={

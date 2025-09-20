@@ -85,17 +85,18 @@ export function QueueVisualizer() {
   };
 
   return (
-    <div className="visualization-container p-6">
-      <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-2">Queue Operations (FIFO)</h3>
-        <p className="text-muted-foreground text-sm">
+    <div className="w-full space-y-6">
+      {/* Header */}
+      <div className="text-center">
+        <h3 className="text-2xl font-bold mb-2">Queue Visualizer</h3>
+        <p className="text-muted-foreground">
           First In, First Out data structure with enqueue, dequeue, and peek operations
         </p>
       </div>
 
       {/* Queue Visualization */}
-      <div className="mb-8 overflow-x-auto">
-        <div className="flex flex-col items-center gap-4 min-h-[200px] p-4">
+      <div className="bg-gradient-visualization rounded-xl border-2 border-primary/20 p-6">
+        <div className="flex flex-col items-center gap-4 min-h-[200px]">
           <div className="flex items-center gap-2">
             <span className="text-sm text-primary font-medium">FRONT</span>
             <div className="flex items-center gap-1">
@@ -120,8 +121,8 @@ export function QueueVisualizer() {
                     className={`
                       flex items-center justify-center w-16 h-16 rounded-lg border-2
                       ${highlightedIndex === index
-                        ? 'bg-animation-highlight border-animation-highlight shadow-glow' 
-                        : 'bg-card border-border'
+                        ? 'bg-primary text-primary-foreground border-primary shadow-lg' 
+                        : 'bg-card border-border hover:border-primary/50'
                       }
                       transition-all duration-300
                     `}

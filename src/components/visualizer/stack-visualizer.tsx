@@ -91,16 +91,17 @@ export function StackVisualizer() {
   };
 
   return (
-    <div className="visualization-container p-6">
-      <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-2">Stack Operations (LIFO)</h3>
-        <p className="text-muted-foreground text-sm">
+    <div className="w-full space-y-6">
+      {/* Header */}
+      <div className="text-center">
+        <h3 className="text-2xl font-bold mb-2">Stack Visualizer</h3>
+        <p className="text-muted-foreground">
           Last In, First Out data structure with push, pop, and peek operations
         </p>
       </div>
 
       {/* Stack Visualization */}
-      <div className="mb-8">
+      <div className="bg-gradient-visualization rounded-xl border-2 border-primary/20 p-6">
         <div className="flex flex-col items-center justify-end min-h-[300px] p-4">
           <div className="flex flex-col-reverse gap-1 items-center">
             <AnimatePresence mode="popLayout">
@@ -124,8 +125,8 @@ export function StackVisualizer() {
                   className={`
                     flex items-center justify-center w-32 h-12 rounded-lg border-2 relative
                     ${highlightedIndex === index
-                      ? 'bg-animation-highlight border-animation-highlight shadow-glow'
-                      : 'bg-card border-border'
+                      ? 'bg-primary text-primary-foreground border-primary shadow-lg'
+                      : 'bg-card border-border hover:border-primary/50'
                     }
                     transition-all duration-300
                   `}

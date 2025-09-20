@@ -1,14 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { RotateCcw, Shuffle } from 'lucide-react';
+import { RotateCcw, Shuffle, HardDrive } from 'lucide-react';
 import { StepByStepBase, VisualizationStep } from './step-by-step-base';
+import { VisualizerControls } from './visualizer-controls';
 
 export function EnhancedBubbleSort() {
   const [array, setArray] = useState<number[]>([64, 34, 25, 12, 22, 11, 90]);
   const [inputValue, setInputValue] = useState('64,34,25,12,22,11,90');
   const [steps, setSteps] = useState<VisualizationStep[]>([]);
+  const [showMemoryView, setShowMemoryView] = useState(false);
+  const [memoryAddresses, setMemoryAddresses] = useState<number[]>([]);
+
+  const generateMemoryAddresses = () => {
+    const baseAddress = 0x1000;
+    return array.map((_, index) => baseAddress + (index * 4));
+  };
+
+  useEffect(() => {
+    setMemoryAddresses(generateMemoryAddresses());
+  }, [array]);
 
   const generateBubbleSortSteps = (arr: number[]): VisualizationStep[] => {
     const steps: VisualizationStep[] = [];
@@ -276,6 +288,11 @@ export function EnhancedBubbleSort() {
                   <span className="absolute -bottom-6 text-xs text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 px-1 py-0.5 rounded">
                     [{index}]
                   </span>
+                  {showMemoryView && (
+                    <span className="absolute -bottom-12 text-xs font-mono text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded">
+                      0x{memoryAddresses[index]?.toString(16).toUpperCase()}
+                    </span>
+                  )}
 
                   {/* Status indicators */}
                   {sorted?.includes(index) && (
@@ -325,6 +342,43 @@ export function EnhancedBubbleSort() {
             <div className="text-xs text-purple-600">Current Pass</div>
           </div>
         </div>
+
+        {/* Memory Layout View */}
+        {showMemoryView && (
+          <div className="mt-6 p-4 bg-muted/20 rounded-lg border">
+            <h4 className="font-semibold mb-3 flex items-center gap-2">
+              <HardDrive className="h-4 w-4" />
+              Memory Layout
+            </h4>
+            <div className="space-y-2">
+              <div className="text-xs text-muted-foreground mb-2">
+                Array elements are stored in contiguous memory locations:
+              </div>
+              <div className="grid grid-cols-1 gap-1 font-mono text-xs">
+                {displayArray.map((value, index) => (
+                  <div 
+                    key={index}
+                    className={`flex justify-between items-center p-2 rounded ${
+                      sorted?.includes(index) ? 'bg-green-100 dark:bg-green-900' :
+                      comparing?.includes(index) ? 'bg-yellow-100 dark:bg-yellow-900' :
+                      swapping?.includes(index) ? 'bg-red-100 dark:bg-red-900' :
+                      'bg-gray-100 dark:bg-gray-800'
+                    }`}
+                  >
+                    <span>arr[{index}]</span>
+                    <span className="font-bold">{value}</span>
+                    <span className="text-muted-foreground">
+                      0x{memoryAddresses[index]?.toString(16).toUpperCase()}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="text-xs text-muted-foreground mt-2">
+                Each element occupies 4 bytes (32-bit integer). Base address: 0x{memoryAddresses[0]?.toString(16).toUpperCase()}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
@@ -369,6 +423,16 @@ export function EnhancedBubbleSort() {
             Reset
           </Button>
         </div>
+      </div>
+
+      {/* Memory Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemoryView}
+          onToggleMemory={setShowMemoryView}
+          voiceEnabled={false}
+          onToggleVoice={() => {}}
+        />
       </div>
 
       {/* Step-by-Step Visualization */}

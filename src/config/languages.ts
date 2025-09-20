@@ -2,7 +2,7 @@ export interface Language {
   id: string;
   name: string;
   extension: string;
-  judge0LanguageId: number;
+  pistonLanguage: string;
   defaultCode: string;
   supportsInput: boolean;
   icon: string;
@@ -13,7 +13,7 @@ export const SUPPORTED_LANGUAGES: Language[] = [
     id: 'python',
     name: 'Python',
     extension: '.py',
-    judge0LanguageId: 71,
+    pistonLanguage: 'python',
     defaultCode: `# Python Code
 def main():
     print("Hello, World!")
@@ -29,12 +29,12 @@ if __name__ == "__main__":
     id: 'javascript',
     name: 'JavaScript',
     extension: '.js',
-    judge0LanguageId: 63,
+    pistonLanguage: 'javascript',
     defaultCode: `// JavaScript Code
 console.log("Hello, World!");
 
-// Simple input simulation
-const name = "World"; // In real Judge0, you'd use stdin
+// Simple example
+const name = "World";
 console.log(\`Hello, \${name}!\`);`,
     supportsInput: false,
     icon: '🟨'
@@ -43,7 +43,7 @@ console.log(\`Hello, \${name}!\`);`,
     id: 'java',
     name: 'Java',
     extension: '.java',
-    judge0LanguageId: 62,
+    pistonLanguage: 'java',
     defaultCode: `// Java Code
 public class Main {
     public static void main(String[] args) {
@@ -58,7 +58,7 @@ public class Main {
     id: 'cpp',
     name: 'C++',
     extension: '.cpp',
-    judge0LanguageId: 54,
+    pistonLanguage: 'cpp',
     defaultCode: `// C++ Code
 #include <iostream>
 using namespace std;
@@ -75,7 +75,7 @@ int main() {
     id: 'c',
     name: 'C',
     extension: '.c',
-    judge0LanguageId: 50,
+    pistonLanguage: 'c',
     defaultCode: `// C Code
 #include <stdio.h>
 
@@ -91,7 +91,7 @@ int main() {
     id: 'csharp',
     name: 'C#',
     extension: '.cs',
-    judge0LanguageId: 51,
+    pistonLanguage: 'csharp',
     defaultCode: `// C# Code
 using System;
 
@@ -108,7 +108,7 @@ class Program {
     id: 'go',
     name: 'Go',
     extension: '.go',
-    judge0LanguageId: 60,
+    pistonLanguage: 'go',
     defaultCode: `// Go Code
 package main
 
@@ -125,7 +125,7 @@ func main() {
     id: 'rust',
     name: 'Rust',
     extension: '.rs',
-    judge0LanguageId: 73,
+    pistonLanguage: 'rust',
     defaultCode: `// Rust Code
 fn main() {
     println!("Hello, World!");
@@ -138,7 +138,7 @@ fn main() {
     id: 'php',
     name: 'PHP',
     extension: '.php',
-    judge0LanguageId: 68,
+    pistonLanguage: 'php',
     defaultCode: `<?php
 // PHP Code
 echo "Hello, World!\\n";
@@ -151,7 +151,7 @@ echo "Hello, PHP!\\n";
     id: 'ruby',
     name: 'Ruby',
     extension: '.rb',
-    judge0LanguageId: 72,
+    pistonLanguage: 'ruby',
     defaultCode: `# Ruby Code
 puts "Hello, World!"
 puts "Hello, Ruby!"`,
@@ -162,7 +162,7 @@ puts "Hello, Ruby!"`,
     id: 'sql',
     name: 'SQL',
     extension: '.sql',
-    judge0LanguageId: 82,
+    pistonLanguage: 'sql',
     defaultCode: `-- SQL Code
 SELECT 'Hello, World!' as message;
 SELECT 'Hello, SQL!' as message;`,

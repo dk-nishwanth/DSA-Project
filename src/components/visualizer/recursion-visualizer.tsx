@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { useVoiceExplain } from '@/hooks/useVoiceExplain';
 
 type RecursionType = 'factorial' | 'fibonacci' | 'tail-factorial' | 'tower-hanoi' | 'binary-search';
 
@@ -23,9 +25,11 @@ export function RecursionVisualizer() {
   const [inputValue, setInputValue] = useState(5);
   const [isAnimating, setIsAnimating] = useState(false);
   const [callStack, setCallStack] = useState<CallStackFrame[]>([]);
-  const [currentStep, setCurrentStep] = useState('');
+  const [currentStep, setCurrentStep] = useState('Recursion visualizer ready. Choose a function and input value to see the call stack in action!');
   const [finalResult, setFinalResult] = useState<any>(null);
   const [expandedFrames, setExpandedFrames] = useState<Set<number>>(new Set());
+  const [showMemory, setShowMemory] = useState(false);
+  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(currentStep);
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -63,20 +67,20 @@ export function RecursionVisualizer() {
       localVars: {},
     });
 
-    setCurrentStep(`Calling factorial(${n})`);
+    setCurrentStep(`Entering factorial function with parameter n=${n}. Adding new frame to call stack at level ${level}.`);
 
     if (n <= 1) {
       await updateFrame(frameId, { 
         returnValue: 1,
         localVars: { baseCase: true }
       });
-      setCurrentStep(`Base case: factorial(${n}) = 1`);
+      setCurrentStep(`Base case reached! factorial(${n}) = 1. This is the simplest case that stops the recursion. Now we can start returning values back up the call stack.`);
       await sleep(800);
       await removeFrame(frameId);
       return 1;
     }
 
-    setCurrentStep(`Need to calculate factorial(${n-1}) first`);
+    setCurrentStep(`Recursive case: factorial(${n}) = ${n} * factorial(${n-1}). We need to calculate factorial(${n-1}) first before we can compute this result.`);
     const subResult = await factorialRecursion(n - 1, level + 1);
     
     const result = n * subResult;
@@ -85,7 +89,7 @@ export function RecursionVisualizer() {
       localVars: { subResult, calculation: `${n} * ${subResult}` }
     });
     
-    setCurrentStep(`factorial(${n}) = ${n} * ${subResult} = ${result}`);
+    setCurrentStep(`Now we can compute factorial(${n})! We got ${subResult} from the recursive call, so factorial(${n}) = ${n} * ${subResult} = ${result}. Returning this result to the previous call.`);
     await sleep(800);
     await removeFrame(frameId);
     
@@ -405,6 +409,74 @@ export function RecursionVisualizer() {
           )}
         </div>
       </div>
+
+      {/* Voice Explain and Show Memory Controls */}
+      <div className="bg-muted/30 rounded-lg p-4 border-2 border-primary/20">
+        <h4 className="font-semibold mb-3 text-center">Visualizer Controls</h4>
+        <div className="flex justify-center">
+          <VisualizerControls
+            voiceEnabled={voiceEnabled}
+            onToggleVoice={setVoiceEnabled}
+            showMemory={showMemory}
+            onToggleMemory={setShowMemory}
+          />
+        </div>
+      </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <div className="bg-muted/20 rounded-lg p-4">
+          <h4 className="font-semibold mb-3">Call Stack Memory Layout</h4>
+          <div className="space-y-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <h5 className="text-sm font-medium mb-2">Stack Frames</h5>
+                <div className="space-y-1">
+                  {callStack.length === 0 ? (
+                    <div className="text-xs font-mono bg-background/50 p-2 rounded">
+                      <span>Stack is empty</span>
+                    </div>
+                  ) : (
+                    callStack.map((frame, index) => {
+                      const address = 0x7000 + (index * 16); // Different base address for call stack
+                      return (
+                        <div key={frame.id} className={`flex justify-between text-xs font-mono p-2 rounded ${
+                          frame.isActive ? 'bg-primary/20 border border-primary/30' : 'bg-background/50'
+                        }`}>
+                          <span>frame[{index}]</span>
+                          <span>0x{address.toString(16).toUpperCase()}</span>
+                          <span>{frame.functionName}({JSON.stringify(frame.parameters).slice(1, -1)})</span>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+              <div>
+                <h5 className="text-sm font-medium mb-2">Stack Details</h5>
+                <div className="space-y-1">
+                  <div className="text-xs font-mono bg-background/50 p-2 rounded">
+                    <div><strong>Stack Depth:</strong> {callStack.length}</div>
+                    <div><strong>Max Depth:</strong> {Math.max(callStack.length, 1)}</div>
+                    <div><strong>Active Frames:</strong> {callStack.filter(f => f.isActive).length}</div>
+                    <div><strong>Current Function:</strong> {callStack.length > 0 ? callStack[callStack.length - 1]?.functionName : 'None'}</div>
+                    <div><strong>Recursion Type:</strong> {recursionType}</div>
+                    <div><strong>Input Value:</strong> {inputValue}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-3 p-3 bg-info/10 rounded-lg border border-info/30">
+              <p className="text-xs text-info-foreground">
+                <strong>Memory Info:</strong> Each function call creates a new stack frame containing parameters, local variables, and return address. 
+                The call stack grows downward in memory as functions call each other recursively. When a function returns, its frame is removed from the stack.
+                {callStack.length > 0 && ` Currently ${callStack.length} frame${callStack.length === 1 ? '' : 's'} on the stack.`}
+                {finalResult !== null && ` Final result: ${finalResult}`}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

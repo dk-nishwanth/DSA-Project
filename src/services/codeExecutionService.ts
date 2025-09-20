@@ -1,9 +1,8 @@
-import { Language } from '../config/languages';
-import { runOnJudge0, Judge0Result } from '../lib/judge0';
+import { runCodeWithPiston, PistonLanguages, testPistonConnection } from '../lib/piston';
 
 export interface ExecutionRequest {
   code: string;
-  language: Language;
+  language: keyof typeof PistonLanguages;
   input?: string;
   filename?: string;
 }
@@ -21,21 +20,21 @@ class CodeExecutionService {
     try {
       const startTime = Date.now();
       
-      const result: Judge0Result = await runOnJudge0({
-        languageId: request.language.judge0LanguageId,
-        source: request.code,
-        stdin: request.input
-      });
+      const result = await runCodeWithPiston(
+        request.language,
+        request.code,
+        request.input
+      );
 
       const executionTime = Date.now() - startTime;
 
-      // Convert Judge0 result to our format
+      // Convert Piston result to our format
       return {
-        success: result.status.id === 3, // 3 = Accepted
-        output: result.stdout || result.compile_output || result.stderr || '',
-        error: result.status.id !== 3 ? result.status.description : undefined,
+        success: result.run.code === 0,
+        output: result.run.stdout || result.run.output || '',
+        error: result.run.stderr || (result.compile?.stderr) || undefined,
         executionTime: executionTime,
-        memoryUsage: result.memory
+        memoryUsage: undefined // Piston doesn't provide memory usage
       };
     } catch (error) {
       console.error('Code execution error:', error);
@@ -50,12 +49,7 @@ class CodeExecutionService {
 
   async checkHealth(): Promise<boolean> {
     try {
-      // Test with a simple Python code
-      const testResult = await runOnJudge0({
-        languageId: 71, // Python
-        source: 'print("Health check")'
-      });
-      return testResult.status.id !== 0; // 0 means error
+      return await testPistonConnection();
     } catch {
       return false;
     }

@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Play, Pause, RotateCcw, Shuffle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVoiceExplain } from '@/hooks/useVoiceExplain';
 
 interface SortStep {
   array: number[];
@@ -17,6 +20,10 @@ export function InsertionSortVisualizer() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [inputValue, setInputValue] = useState('64,34,25,12,22,11,90');
+  const [showMemory, setShowMemory] = useState(false);
+  
+  const [voiceText, setVoiceText] = useState('');
+  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(voiceText);
 
   const generateSteps = (arr: number[]): SortStep[] => {
     const steps: SortStep[] = [];
@@ -187,7 +194,7 @@ export function InsertionSortVisualizer() {
       )}
 
       {/* Visualization */}
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900 p-8 rounded-xl border-2 border-dashed border-blue-200 dark:border-blue-800">
+      <div className="p-6 bg-gradient-visualization rounded-xl border-2 border-primary/20">
         <div className="flex items-end justify-center gap-2 h-64">
           {currentStepData.array.map((value, index) => {
             const isComparing = currentStepData.comparing.includes(index);
@@ -259,6 +266,25 @@ export function InsertionSortVisualizer() {
           <li>Insert the current element at its correct position</li>
           <li>Repeat until all elements are processed</li>
         </ol>
+      </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <MemoryLayout
+          title="Array Memory Layout"
+          data={currentStepData.array}
+          baseAddress={0x3000}
+        />
+      )}
+
+      {/* Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
       </div>
     </div>
   );

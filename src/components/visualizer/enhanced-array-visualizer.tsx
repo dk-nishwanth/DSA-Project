@@ -6,7 +6,6 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus, Minus, Search, RotateCcw, Zap, HardDrive, Info, Play } from 'lucide-react';
 import { toast } from 'sonner';
-import { ComplexityBox } from '@/components/complexity-box';
 import { useVoiceExplain } from '@/hooks/useVoiceExplain';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
 
@@ -475,11 +474,7 @@ export function EnhancedArrayVisualizer({ initialArray = [64, 25, 12, 22, 11] }:
         </div>
       )}
 
-      {/* Complexity Analysis */}
-      <ComplexityBox
-        timeComplexity="O(1) - O(n)"
-        spaceComplexity="O(1)"
-      />
+      {/* Complexity Analysis removed - now shown in sidebar only */}
 
       {/* Learning Points */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

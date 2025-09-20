@@ -27,7 +27,7 @@ import {
   Eye
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { executeCode, formatExecutionResult } from '@/lib/direct-executor';
+import { runCodeWithPiston, PistonLanguages } from '@/lib/piston';
 
 interface AdvancedCodePlaygroundProps {
   topicId: string;
@@ -357,6 +357,24 @@ SELECT * FROM users WHERE age > 25;`
   }
 };
 
+// Map language IDs to Piston language names
+const mapLanguageToPiston = (languageId: string): keyof typeof PistonLanguages | null => {
+  const mapping: Record<string, keyof typeof PistonLanguages> = {
+    'javascript': 'javascript',
+    'python': 'python',
+    'java': 'java',
+    'cpp': 'cpp',
+    'c': 'c',
+    'csharp': 'csharp',
+    'php': 'php',
+    'ruby': 'ruby',
+    'go': 'go',
+    'rust': 'rust'
+  };
+  
+  return mapping[languageId] || null;
+};
+
 export function AdvancedCodePlayground({ topicId, topicTitle, initialCode }: AdvancedCodePlaygroundProps) {
   const [activeLanguage, setActiveLanguage] = useState<SupportedLanguage>('javascript');
   const [code, setCode] = useState<Record<string, string>>({});
@@ -370,6 +388,7 @@ export function AdvancedCodePlayground({ topicId, topicTitle, initialCode }: Adv
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
   const [showSettings, setShowSettings] = useState(false);
   const [executionTime, setExecutionTime] = useState<number | null>(null);
+  const [executionService, setExecutionService] = useState<string>('Piston');
   const [activeWebTab, setActiveWebTab] = useState<'html' | 'css' | 'js'>('html');
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
@@ -505,6 +524,7 @@ ${webCode.js}
   const runCode = async () => {
     setIsRunning(true);
     setOutput('🚀 Executing code...');
+    const startTime = Date.now();
 
     try {
       if (activeLanguage === 'webdev') {
@@ -542,18 +562,56 @@ ${webCode.js}
         setOutput('✅ Web page rendered successfully in preview window');
         setExecutionTime(100);
       } else {
-        // Use real code execution service
+        // Use Piston API for code execution
         const currentCode = code[activeLanguage] || '';
 
-        const result = await executeCode({
-          language: activeLanguage,
-          code: currentCode,
-          input: input
-        });
+        // Map language to Piston format
+        const pistonLanguage = mapLanguageToPiston(activeLanguage);
+        if (!pistonLanguage) {
+          throw new Error(`Language ${activeLanguage} is not supported by Piston API`);
+        }
 
-        setOutput(formatExecutionResult(result));
-        setExecutionTime(result.executionTime);
-        setExecutionService(result.service);
+        const result = await runCodeWithPiston(pistonLanguage, currentCode, input);
+        
+        // Format output
+        let outputText = '';
+        
+        // Handle compilation errors
+        if (result.compile && result.compile.stderr) {
+          outputText += `❌ Compilation Error:\n${result.compile.stderr}\n\n`;
+        }
+        
+        // Handle runtime output
+        if (result.run.stdout) {
+          outputText += `✅ Output:\n${result.run.stdout}\n`;
+        }
+        
+        // Handle runtime errors
+        if (result.run.stderr) {
+          outputText += `⚠️ Runtime Error/Warning:\n${result.run.stderr}\n`;
+        }
+        
+        // Handle exit code
+        if (result.run.code !== 0) {
+          outputText += `\n❌ Process exited with code: ${result.run.code}\n`;
+        }
+        
+        // Add execution info
+        const execTime = Date.now() - startTime;
+        outputText += `\n📊 Execution Summary:\n`;
+        outputText += `Language: ${result.language} (${result.version})\n`;
+        outputText += `Compilation: ${result.compile ? (result.compile.stderr ? '❌ Failed' : '✅ Success') : '✅ Success'}\n`;
+        outputText += `Exit Code: ${result.run.code}\n`;
+        outputText += `Execution Time: ${execTime}ms\n`;
+        outputText += `Service: Piston API\n`;
+        
+        if (!outputText.trim()) {
+          outputText = '✅ Code executed successfully with no output.\nTip: Use print statements to see results!';
+        }
+        
+        setOutput(outputText);
+        setExecutionTime(execTime);
+        setExecutionService('Piston');
       }
     } catch (error: any) {
       setOutput(`❌ Execution Error: ${error.message}`);

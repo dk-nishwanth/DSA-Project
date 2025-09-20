@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Test</title>
+</head>
+<body>
+    <h1>Voice Synthesis Test</h1>
+    <button onclick="testVoice()">Test Voice</button>
+    <input type="text" id="textInput" value="Testing voice synthesis for DSA visualizers" style="width: 400px;">
+    <br><br>
+    <button onclick="testSearchVoice()">Test Search Voice</button>
+    
+    <script>
+        function testVoice() {
+            const text = document.getElementById('textInput').value;
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 1.05;
+                utterance.pitch = 1.0;
+                utterance.volume = 0.85;
+                
+                // Cancel any ongoing speech
+                window.speechSynthesis.cancel();
+                
+                // Speak the text
+                window.speechSynthesis.speak(utterance);
+                
+                console.log('Voice synthesis started');
+            } else {
+                alert('Speech synthesis not supported in this browser');
+            }
+        }
+        
+        function testSearchVoice() {
+            const searchTexts = [
+                'Starting linear search - checking each element sequentially',
+                'Checking index 0: comparing 2 with target 23. No match, continuing search.',
+                'Checking index 1: comparing 5 with target 23. No match, continuing search.',
+                'Linear search complete! Found target 23 at index 5 after 6 comparisons.'
+            ];
+            
+            let index = 0;
+            function speakNext() {
+                if (index < searchTexts.length) {
+                    const utterance = new SpeechSynthesisUtterance(searchTexts[index]);
+                    utterance.rate = 1.05;
+                    utterance.pitch = 1.0;
+                    utterance.volume = 0.85;
+                    
+                    utterance.onend = () => {
+                        index++;
+                        setTimeout(speakNext, 1000); // Wait 1 second between utterances
+                    };
+                    
+                    window.speechSynthesis.speak(utterance);
+                }
+            }
+            
+            window.speechSynthesis.cancel();
+            speakNext();
+        }
+        
+        // Check if speech synthesis is available
+        window.addEventListener('load', () => {
+            if ('speechSynthesis' in window) {
+                console.log('Speech synthesis is available');
+                console.log('Available voices:', window.speechSynthesis.getVoices());
+            } else {
+                console.log('Speech synthesis is NOT available');
+            }
+        });
+    </script>
+</body>
+</html>

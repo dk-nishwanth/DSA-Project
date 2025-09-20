@@ -298,8 +298,8 @@ export function BinaryTreeVisualizer() {
           cx={node.x}
           cy={node.y}
           r="20"
-          fill={highlightedNodes.includes(node.id) ? "hsl(var(--animation-highlight))" : "hsl(var(--card))"}
-          stroke={highlightedNodes.includes(node.id) ? "hsl(var(--animation-highlight))" : "hsl(var(--border))"}
+          fill={highlightedNodes.includes(node.id) ? "hsl(var(--primary))" : "hsl(var(--card))"}
+          stroke={highlightedNodes.includes(node.id) ? "hsl(var(--primary))" : "hsl(var(--border))"}
           strokeWidth="2"
           animate={{
             scale: highlightedNodes.includes(node.id) ? 1.2 : 1,
@@ -325,16 +325,17 @@ export function BinaryTreeVisualizer() {
   };
 
   return (
-    <div className="visualization-container p-6">
-      <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-2">Binary Search Tree</h3>
-        <p className="text-muted-foreground text-sm">
+    <div className="w-full space-y-6">
+      {/* Header */}
+      <div className="text-center">
+        <h3 className="text-2xl font-bold mb-2">Binary Search Tree Visualizer</h3>
+        <p className="text-muted-foreground">
           Interactive BST with insert and traversal operations
         </p>
       </div>
 
       {/* Tree Visualization */}
-      <div className="mb-8 border rounded-xl p-4 bg-card">
+      <div className="bg-gradient-visualization rounded-xl border-2 border-primary/20 p-6">
         <svg width="600" height="300" className="mx-auto">
           {root && renderNode(root)}
         </svg>

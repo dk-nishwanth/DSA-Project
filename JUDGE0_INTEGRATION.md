@@ -1,26 +1,19 @@
-# Judge0 API Integration
+# DEPRECATED - Judge0 Integration Removed
 
-This project now includes real Judge0 API integration for code execution across multiple programming languages.
+This file is deprecated. Judge0 API integration has been removed from the project.
 
-## 🚀 Features
+## ✅ Current Solution: Piston API
 
-- **Real Code Execution**: Execute code in Python, Java, C++, C, C#, SQL, and more
-- **Multiple API Options**: Free Judge0 instance, RapidAPI, or self-hosted
-- **Fallback System**: Automatic fallback to mock execution if API fails
-- **Environment Configuration**: Easy setup via environment variables
+The project now uses **Piston API** exclusively for code execution:
 
-## 📋 Supported Languages
+- **File**: `src/lib/piston.ts`
+- **Component**: `src/components/enhanced-code-playground.tsx`
+- **No API Keys Required**: Free and reliable
+- **12+ Languages Supported**: JavaScript, Python, Java, C++, C, C#, Go, Rust, TypeScript, PHP, Ruby, Kotlin
 
-| Language | Judge0 ID | Status |
-|----------|-----------|--------|
-| Python   | 71        | ✅     |
-| Java     | 62        | ✅     |
-| C++      | 54        | ✅     |
-| C        | 50        | ✅     |
-| C#       | 51        | ✅     |
-| SQL      | 82        | ✅     |
-| JavaScript | 63     | ✅     |
-| Web (HTML/CSS/JS) | 85 | ✅ |
+## 🗑️ Removed Judge0 References
+
+The following Judge0-related code has been removed:
 
 ## ⚙️ Configuration
 

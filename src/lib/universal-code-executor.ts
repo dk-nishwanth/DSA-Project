@@ -23,25 +23,7 @@ export interface CodeRequest {
 
 // Language configurations for different execution services
 const EXECUTION_SERVICES = {
-  // Judge0 CE - Most reliable for competitive programming languages
-  judge0: {
-    baseUrl: 'https://judge0-ce.p.rapidapi.com',
-    languages: {
-      javascript: 63,  // Node.js
-      python: 71,      // Python 3
-      java: 62,        // OpenJDK
-      c: 50,           // GCC
-      cpp: 54,         // G++
-      csharp: 51,      // C# Mono
-      php: 68,         // PHP
-      ruby: 72,        // Ruby
-      go: 60,          // Go
-      rust: 73,        // Rust
-      sql: 82          // SQLite
-    }
-  },
-  
-  // Piston API - Free alternative
+  // Piston API - Primary execution service
   piston: {
     baseUrl: 'https://emkc.org/api/v2/piston',
     languages: {
@@ -76,11 +58,9 @@ const EXECUTION_SERVICES = {
   }
 };
 
-// Get API keys from environment or localStorage
+// Get API keys from environment or localStorage (for future services)
 function getApiKeys() {
   return {
-    rapidapi: process.env.NEXT_PUBLIC_RAPIDAPI_KEY || 
-              (typeof window !== 'undefined' ? localStorage.getItem('rapidapi_key') : null),
     sphere: process.env.NEXT_PUBLIC_SPHERE_ENGINE_KEY ||
             (typeof window !== 'undefined' ? localStorage.getItem('sphere_key') : null)
   };
@@ -266,111 +246,7 @@ async function executeWebCode(request: CodeRequest): Promise<ExecutionResult> {
   }
 }
 
-// Execute code using Judge0 API
-async function executeWithJudge0(request: CodeRequest): Promise<ExecutionResult> {
-  const startTime = Date.now();
-  
-  try {
-    const languageId = EXECUTION_SERVICES.judge0.languages[request.language as keyof typeof EXECUTION_SERVICES.judge0.languages];
-    if (!languageId) {
-      throw new Error(`Language ${request.language} not supported by Judge0`);
-    }
-
-    const apiKey = getApiKeys().rapidapi;
-    if (!apiKey || apiKey === 'your-rapidapi-key-here') {
-      throw new Error('Judge0 API key not configured');
-    }
-
-    // Submit code for execution
-    const submitResponse = await fetch(`${EXECUTION_SERVICES.judge0.baseUrl}/submissions?base64_encoded=true&wait=false`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-RapidAPI-Key': apiKey,
-        'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
-      },
-      body: JSON.stringify({
-        language_id: languageId,
-        source_code: btoa(request.code),
-        stdin: request.input ? btoa(request.input) : '',
-        cpu_time_limit: 10,
-        memory_limit: 256000,
-        wall_time_limit: 15
-      })
-    });
-
-    if (!submitResponse.ok) {
-      const errorText = await submitResponse.text();
-      throw new Error(`Judge0 submission failed: ${submitResponse.status} - ${errorText}`);
-    }
-
-    const { token } = await submitResponse.json();
-
-    // Poll for result with exponential backoff
-    let result;
-    let attempts = 0;
-    const maxAttempts = 20;
-    let delay = 1000;
-
-    do {
-      await new Promise(resolve => setTimeout(resolve, delay));
-      
-      const resultResponse = await fetch(`${EXECUTION_SERVICES.judge0.baseUrl}/submissions/${token}?base64_encoded=true`, {
-        headers: {
-          'X-RapidAPI-Key': apiKey,
-          'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
-        }
-      });
-
-      if (!resultResponse.ok) {
-        throw new Error(`Failed to get result: ${resultResponse.status}`);
-      }
-
-      result = await resultResponse.json();
-      attempts++;
-      
-      // Exponential backoff
-      if (result.status.id <= 2) {
-        delay = Math.min(delay * 1.2, 3000);
-      }
-    } while (result.status.id <= 2 && attempts < maxAttempts);
-
-    // Decode outputs
-    const stdout = result.stdout ? atob(result.stdout) : '';
-    const stderr = result.stderr ? atob(result.stderr) : '';
-    const compile_output = result.compile_output ? atob(result.compile_output) : '';
-
-    let output = '';
-    let compilationOutput = '';
-    
-    if (compile_output) {
-      compilationOutput = compile_output;
-      output += `Compilation Output:\n${compile_output}\n\n`;
-    }
-    
-    if (stdout) {
-      output += `Program Output:\n${stdout}`;
-    }
-    
-    if (stderr) {
-      output += (output ? '\n\n' : '') + `Error Output:\n${stderr}`;
-    }
-
-    return {
-      success: result.status.id === 3, // Accepted
-      output: output || 'Program executed successfully (no output)',
-      error: result.status.id !== 3 ? `${result.status.description}${stderr ? ': ' + stderr : ''}` : undefined,
-      executionTime: result.time ? parseFloat(result.time) * 1000 : Date.now() - startTime,
-      memory: result.memory,
-      exitCode: result.exit_code,
-      compilationOutput,
-      service: 'Judge0'
-    };
-
-  } catch (error: any) {
-    throw new Error(`Judge0 execution failed: ${error.message}`);
-  }
-}
+// Piston API exclusively
 
 // Execute code using Piston API
 async function executeWithPiston(request: CodeRequest): Promise<ExecutionResult> {
@@ -583,18 +459,12 @@ export async function executeCode(request: CodeRequest): Promise<ExecutionResult
     }
 
     if (language === 'sql') {
-      // Try Judge0 first, then fallback to simulation
-      try {
-        return await executeWithJudge0(request);
-      } catch (error) {
-        console.log('Judge0 SQL execution failed, using simulation...');
-        return await executeSQLCode(request);
-      }
+      // Use SQL simulation directly
+      return await executeSQLCode(request);
     }
 
     // Try execution services in order of preference
     const executors = [
-      { name: 'Judge0', execute: executeWithJudge0 },
       { name: 'Piston', execute: executeWithPiston }
     ];
 
@@ -618,8 +488,8 @@ export async function executeCode(request: CodeRequest): Promise<ExecutionResult
     // If all services fail, return informative error
     return {
       success: false,
-      output: `⚠️ Real execution services are currently unavailable for ${language}.\n\nLast error: ${lastError}\n\n💡 To enable real execution:\n1. Get a free RapidAPI key from Judge0\n2. Click the "Setup Required" button\n3. Enter your API key\n\nFree tier includes 500 executions per month!`,
-      error: 'Real execution services unavailable',
+      output: `⚠️ Code execution service is currently unavailable for ${language}.\n\nLast error: ${lastError}\n\n💡 The Piston API service may be temporarily down. Please try again later or check your internet connection.`,
+      error: 'Execution service unavailable',
       executionTime: 100,
       service: 'Error Handler'
     };
@@ -638,24 +508,6 @@ export async function executeCode(request: CodeRequest): Promise<ExecutionResult
 // Test all execution services
 export async function testAllServices(): Promise<{ [key: string]: boolean }> {
   const results: { [key: string]: boolean } = {};
-
-  // Test Judge0
-  try {
-    const apiKey = getApiKeys().rapidapi;
-    if (apiKey && apiKey !== 'your-rapidapi-key-here') {
-      const response = await fetch('https://judge0-ce.p.rapidapi.com/languages', {
-        headers: {
-          'X-RapidAPI-Key': apiKey,
-          'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
-        }
-      });
-      results.judge0 = response.ok;
-    } else {
-      results.judge0 = false;
-    }
-  } catch {
-    results.judge0 = false;
-  }
 
   // Test Piston
   try {

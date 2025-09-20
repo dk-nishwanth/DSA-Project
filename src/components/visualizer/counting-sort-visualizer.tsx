@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Play, Pause, RotateCcw, Shuffle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVoiceExplain } from '@/hooks/useVoiceExplain';
 
 interface CountingStep {
   array: number[];
@@ -19,6 +22,10 @@ export function CountingSortVisualizer() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [inputValue, setInputValue] = useState('4,2,2,8,3,3,1');
+  const [showMemory, setShowMemory] = useState(false);
+  
+  const [voiceText, setVoiceText] = useState('');
+  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(voiceText);
 
   const generateSteps = (arr: number[]): CountingStep[] => {
     const steps: CountingStep[] = [];
@@ -210,7 +217,7 @@ export function CountingSortVisualizer() {
       )}
 
       {/* Visualization */}
-      <div className="bg-gradient-to-br from-indigo-50 to-purple-100 dark:from-indigo-950 dark:to-purple-900 p-8 rounded-xl border-2 border-dashed border-indigo-200 dark:border-indigo-800">
+      <div className="p-6 bg-gradient-visualization rounded-xl border-2 border-primary/20">
         <div className="space-y-8">
           {/* Original Array */}
           <div>
@@ -333,6 +340,61 @@ export function CountingSortVisualizer() {
           <li>Time Complexity: O(n + k) where k is the range of input</li>
           <li>Space Complexity: O(k) for the count array</li>
         </ol>
+      </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <MemoryLayout
+          title="Array Memory Layout"
+          data={array}
+          baseAddress={0x5000}
+        />
+      )}
+
+      {/* Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {/* Controls */}
+      <div className="flex flex-wrap gap-4 items-center">
+        <div className="flex gap-2">
+          <Button
+            onClick={isPlaying ? handlePause : handlePlay}
+            disabled={steps.length > 0 && currentStep >= steps.length - 1}
+            className="flex items-center gap-2"
+          >
+            {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+            {isPlaying ? 'Pause' : 'Play'}
+          </Button>
+          
+          <Button onClick={handleReset} variant="outline">
+            <RotateCcw className="h-4 w-4 mr-2" />
+            Reset
+          </Button>
+          
+          <Button onClick={handleShuffle} variant="outline">
+            <Shuffle className="h-4 w-4 mr-2" />
+            Shuffle
+          </Button>
+        </div>
+
+        <div className="flex gap-2 items-center">
+          <Input
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Enter non-negative integers"
+            className="w-64"
+          />
+          <Button onClick={handleInputChange} variant="outline">
+            Set Array
+          </Button>
+        </div>
       </div>
     </div>
   );

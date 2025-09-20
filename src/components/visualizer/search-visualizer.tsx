@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { useVoiceExplain } from '@/hooks/useVoiceExplain';
 
 type SearchAlgorithm = 'linear' | 'binary' | 'interpolation' | 'exponential';
 
@@ -18,8 +20,16 @@ export function SearchVisualizer() {
   const [foundIndex, setFoundIndex] = useState(-1);
   const [comparisons, setComparisons] = useState(0);
   const [currentStep, setCurrentStep] = useState('');
+  const [showMemory, setShowMemory] = useState(false);
+  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(currentStep);
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+  // Generate memory addresses for visualization
+  const generateMemoryAddresses = () => {
+    const baseAddress = 0x2000; // Different base address for search visualizer
+    return array.map((_, index) => baseAddress + (index * 4));
+  };
 
   const updateArray = useCallback(() => {
     try {
@@ -37,23 +47,26 @@ export function SearchVisualizer() {
 
   const linearSearch = useCallback(async () => {
     let comparisonCount = 0;
+    setCurrentStep('Starting linear search - checking each element sequentially');
+    await sleep(800);
     
     for (let i = 0; i < array.length; i++) {
       setCurrentIndex(i);
       comparisonCount++;
       setComparisons(comparisonCount);
-      setCurrentStep(`Checking index ${i}: ${array[i]} ${array[i] === target ? '==' : '!='} ${target}`);
+      const stepText = `Checking index ${i}: comparing ${array[i]} with target ${target}. ${array[i] === target ? 'Found match!' : 'No match, continuing search.'}`;
+      setCurrentStep(stepText);
       
       await sleep(600);
       
       if (array[i] === target) {
         setFoundIndex(i);
-        setCurrentStep(`Found target ${target} at index ${i}!`);
+        setCurrentStep(`Linear search complete! Found target ${target} at index ${i} after ${comparisonCount} comparisons.`);
         return i;
       }
     }
     
-    setCurrentStep(`Target ${target} not found in array`);
+    setCurrentStep(`Linear search complete! Target ${target} not found in array after checking all ${array.length} elements.`);
     return -1;
   }, [array, target]);
 
@@ -61,6 +74,9 @@ export function SearchVisualizer() {
     let left = 0;
     let right = array.length - 1;
     let comparisonCount = 0;
+    
+    setCurrentStep('Starting binary search on sorted array - dividing search space in half each step');
+    await sleep(800);
 
     while (left <= right) {
       const mid = Math.floor((left + right) / 2);
@@ -69,25 +85,28 @@ export function SearchVisualizer() {
       comparisonCount++;
       setComparisons(comparisonCount);
       
-      setCurrentStep(`Checking middle: array[${mid}] = ${array[mid]} vs target ${target}`);
+      setCurrentStep(`Step ${comparisonCount}: Checking middle element at index ${mid}. Comparing ${array[mid]} with target ${target}.`);
       await sleep(800);
-
+      
       if (array[mid] === target) {
         setFoundIndex(mid);
-        setCurrentStep(`Found target ${target} at index ${mid}!`);
-        return mid;
+        setCurrentStep(`Binary search complete! Found target ${target} at index ${mid} after ${comparisonCount} comparisons. Much faster than linear search!`);
+        break;
       } else if (array[mid] < target) {
+        setCurrentStep(`${array[mid]} is less than ${target}, so target must be in right half. Eliminating left half and searching indices ${mid + 1} to ${right}.`);
         left = mid + 1;
-        setCurrentStep(`${array[mid]} < ${target}, search right half`);
       } else {
+        setCurrentStep(`${array[mid]} is greater than ${target}, so target must be in left half. Eliminating right half and searching indices ${left} to ${mid - 1}.`);
         right = mid - 1;
-        setCurrentStep(`${array[mid]} > ${target}, search left half`);
       }
       
       await sleep(600);
     }
-
-    setCurrentStep(`Target ${target} not found in array`);
+    
+    if (left > right) {
+      setCurrentStep(`Binary search complete! Target ${target} not found in array after ${comparisonCount} comparisons.`);
+    }
+    
     return -1;
   }, [array, target]);
 
@@ -95,18 +114,21 @@ export function SearchVisualizer() {
     let left = 0;
     let right = array.length - 1;
     let comparisonCount = 0;
+    
+    setCurrentStep('Starting interpolation search - making smart guesses about target position based on value distribution');
+    await sleep(800);
 
     while (left <= right && target >= array[left] && target <= array[right]) {
       if (left === right) {
         setCurrentIndex(left);
         comparisonCount++;
         setComparisons(comparisonCount);
-        setCurrentStep(`Single element left: array[${left}] = ${array[left]}`);
+        setCurrentStep(`Final check at index ${left}: comparing ${array[left]} with target ${target}`);
         await sleep(600);
         
         if (array[left] === target) {
           setFoundIndex(left);
-          setCurrentStep(`Found target ${target} at index ${left}!`);
+          setCurrentStep(`Interpolation search complete! Found target ${target} at index ${left} after ${comparisonCount} comparisons.`);
           return left;
         }
         break;
@@ -120,26 +142,26 @@ export function SearchVisualizer() {
       setSearchRange({left, right});
       comparisonCount++;
       setComparisons(comparisonCount);
+      setCurrentStep(`Step ${comparisonCount}: Using interpolation formula to estimate position ${clampedPos}. Comparing ${array[clampedPos]} with target ${target}.`);
       
-      setCurrentStep(`Interpolated position: ${clampedPos}, array[${clampedPos}] = ${array[clampedPos]}`);
       await sleep(800);
-
+      
       if (array[clampedPos] === target) {
         setFoundIndex(clampedPos);
-        setCurrentStep(`Found target ${target} at index ${clampedPos}!`);
+        setCurrentStep(`Interpolation search complete! Found target ${target} at index ${clampedPos} after ${comparisonCount} comparisons. Smart estimation worked!`);
         return clampedPos;
       } else if (array[clampedPos] < target) {
+        setCurrentStep(`${array[clampedPos]} is less than ${target}, so target is in right portion. Adjusting search range to indices ${clampedPos + 1} to ${right}.`);
         left = clampedPos + 1;
-        setCurrentStep(`${array[clampedPos]} < ${target}, search right`);
       } else {
+        setCurrentStep(`${array[clampedPos]} is greater than ${target}, so target is in left portion. Adjusting search range to indices ${left} to ${clampedPos - 1}.`);
         right = clampedPos - 1;
-        setCurrentStep(`${array[clampedPos]} > ${target}, search left`);
       }
       
       await sleep(600);
     }
-
-    setCurrentStep(`Target ${target} not found in array`);
+    
+    setCurrentStep(`Interpolation search complete! Target ${target} not found in array after ${comparisonCount} comparisons.`);
     return -1;
   }, [array, target]);
 
@@ -434,6 +456,56 @@ export function SearchVisualizer() {
           )}
         </div>
       </div>
+
+      {/* Voice Explain and Show Memory Controls */}
+      <VisualizerControls
+        voiceEnabled={voiceEnabled}
+        onToggleVoice={setVoiceEnabled}
+        showMemory={showMemory}
+        onToggleMemory={setShowMemory}
+      />
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <div className="bg-muted/20 rounded-lg p-4">
+          <h4 className="font-semibold mb-3">Memory Layout</h4>
+          <div className="space-y-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <h5 className="text-sm font-medium mb-2">Array Elements</h5>
+                <div className="space-y-1">
+                  {array.map((value, index) => (
+                    <div key={index} className="flex justify-between text-xs font-mono bg-background/50 p-2 rounded">
+                      <span>arr[{index}]</span>
+                      <span>{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <h5 className="text-sm font-medium mb-2">Memory Addresses</h5>
+                <div className="space-y-1">
+                  {generateMemoryAddresses().map((address, index) => (
+                    <div key={index} className={`flex justify-between text-xs font-mono p-2 rounded ${
+                      index === currentIndex ? 'bg-primary/20 border border-primary/30' : 'bg-background/50'
+                    }`}>
+                      <span>0x{address.toString(16).toUpperCase()}</span>
+                      <span>{array[index]}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="mt-3 p-3 bg-info/10 rounded-lg border border-info/30">
+              <p className="text-xs text-info-foreground">
+                <strong>Memory Info:</strong> Each integer occupies 4 bytes. 
+                {currentIndex >= 0 && ` Currently accessing index ${currentIndex} at address 0x${generateMemoryAddresses()[currentIndex].toString(16).toUpperCase()}.`}
+                {foundIndex >= 0 && ` Target found at index ${foundIndex} (address 0x${generateMemoryAddresses()[foundIndex].toString(16).toUpperCase()}).`}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

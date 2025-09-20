@@ -1,6 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVoiceExplain } from '@/hooks/useVoiceExplain';
 
 function getMax(a: number[]) { return a.reduce((m, x) => Math.max(m, x), 0); }
 
@@ -10,13 +14,17 @@ export function RadixSortVisualizer() {
   const [isSorting, setIsSorting] = useState(false);
   const [digitExp, setDigitExp] = useState<number | null>(null);
   const [buckets, setBuckets] = useState<number[][]>(Array.from({length:10},()=>[]));
+  const [showMemory, setShowMemory] = useState(false);
+  
+  const [voiceText, setVoiceText] = useState('');
+  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(voiceText);
 
   const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
 
-  const updateFromInput = () => {
+  const updateFromInput = useCallback(() => {
     const nums = input.split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n) && n>=0);
     if (nums.length) setArr(nums);
-  };
+  }, [input]);
 
   const countingPass = async (a: number[], exp: number) => {
     const B: number[][] = Array.from({length:10},()=>[]);
@@ -85,6 +93,25 @@ export function RadixSortVisualizer() {
       <div className="bg-muted/20 rounded-lg p-3 text-sm text-muted-foreground">
         <div>• LSD Radix Sort using base-10 buckets per digit.</div>
         <div>• Time: O(d*(n + b)) where d=#digits and b=base (10 here). Space: O(n + b)</div>
+      </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <MemoryLayout
+          title="Array Memory Layout"
+          data={arr}
+          baseAddress={0x6000}
+        />
+      )}
+
+      {/* Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
       </div>
     </div>
   );

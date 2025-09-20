@@ -87,8 +87,8 @@ export function SimpleCodeTest() {
         )}
 
         <div className="text-sm text-muted-foreground">
-          💡 <strong>Note:</strong> To enable real execution for all languages, get a free RapidAPI key 
-          from Judge0 and configure it using the "Setup Required" button in the code playground.
+          💡 <strong>Note:</strong> Real code execution is powered by the free Piston API service. 
+          No API keys required - just click run and your code executes instantly!
         </div>
       </CardContent>
     </Card>

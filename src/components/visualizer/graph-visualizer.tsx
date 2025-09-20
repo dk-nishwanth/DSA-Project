@@ -25,7 +25,7 @@ interface GraphEdge {
   isInPath?: boolean;
 }
 
-type Algorithm = 'dfs' | 'bfs' | 'dijkstra' | 'bellman-ford' | 'prim' | 'kruskal';
+type Algorithm = 'dfs' | 'bfs' | 'dijkstra' | 'bellman-ford' | 'floyd-warshall' | 'prim' | 'kruskal' | 'topological-sort';
 
 export function GraphVisualizer() {
   const [nodes, setNodes] = useState<GraphNode[]>([
@@ -48,6 +48,10 @@ export function GraphVisualizer() {
   ]);
   
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<Algorithm>('bfs');
+  const [isDirected, setIsDirected] = useState(false);
+  const [showWeights, setShowWeights] = useState(true);
+  const [animationSpeed, setAnimationSpeed] = useState(800);
+  const [graphPreset, setGraphPreset] = useState('default');
   const [sourceNode, setSourceNode] = useState('A');
   const [targetNode, setTargetNode] = useState('F');
   const [isAnimating, setIsAnimating] = useState(false);
@@ -121,6 +125,22 @@ export function GraphVisualizer() {
       '  if find(u) ≠ find(v):',
       '    union(u,v); add (u,v) to MST'
     ],
+    floydWarshall: [
+      'for k = 0 to |V|-1:',
+      '  for i = 0 to |V|-1:',
+      '    for j = 0 to |V|-1:',
+      '      if dist[i][k] + dist[k][j] < dist[i][j]:',
+      '        dist[i][j] = dist[i][k] + dist[k][j]'
+    ],
+    topologicalSort: [
+      'compute in-degrees for all vertices',
+      'queue ← vertices with in-degree 0',
+      'while queue not empty:',
+      '  u ← queue.dequeue()',
+      '  for each neighbor v of u:',
+      '    decrease in-degree of v',
+      '    if in-degree of v = 0: queue.enqueue(v)'
+    ]
   }), []);
 
   const resetGraph = useCallback(() => {
@@ -150,6 +170,84 @@ export function GraphVisualizer() {
   }, [sourceNode, targetNode]);
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+  // Graph presets
+  const graphPresets = {
+    default: {
+      nodes: [
+        { id: 'A', x: 150, y: 100 },
+        { id: 'B', x: 350, y: 100 },
+        { id: 'C', x: 550, y: 100 },
+        { id: 'D', x: 150, y: 250 },
+        { id: 'E', x: 350, y: 250 },
+        { id: 'F', x: 550, y: 250 }
+      ],
+      edges: [
+        { from: 'A', to: 'B', weight: 4 },
+        { from: 'A', to: 'D', weight: 2 },
+        { from: 'B', to: 'C', weight: 3 },
+        { from: 'B', to: 'E', weight: 1 },
+        { from: 'C', to: 'F', weight: 2 },
+        { from: 'D', to: 'E', weight: 5 },
+        { from: 'E', to: 'F', weight: 3 }
+      ]
+    },
+    dag: {
+      nodes: [
+        { id: 'A', x: 100, y: 100 },
+        { id: 'B', x: 250, y: 100 },
+        { id: 'C', x: 400, y: 100 },
+        { id: 'D', x: 175, y: 200 },
+        { id: 'E', x: 325, y: 200 },
+        { id: 'F', x: 250, y: 300 }
+      ],
+      edges: [
+        { from: 'A', to: 'B', weight: 1 },
+        { from: 'A', to: 'D', weight: 1 },
+        { from: 'B', to: 'C', weight: 1 },
+        { from: 'B', to: 'E', weight: 1 },
+        { from: 'D', to: 'F', weight: 1 },
+        { from: 'E', to: 'F', weight: 1 }
+      ]
+    },
+    complete: {
+      nodes: [
+        { id: 'A', x: 200, y: 100 },
+        { id: 'B', x: 350, y: 150 },
+        { id: 'C', x: 300, y: 300 },
+        { id: 'D', x: 150, y: 300 },
+        { id: 'E', x: 100, y: 150 }
+      ],
+      edges: [
+        { from: 'A', to: 'B', weight: 2 },
+        { from: 'A', to: 'C', weight: 4 },
+        { from: 'A', to: 'D', weight: 1 },
+        { from: 'A', to: 'E', weight: 3 },
+        { from: 'B', to: 'C', weight: 1 },
+        { from: 'B', to: 'D', weight: 5 },
+        { from: 'B', to: 'E', weight: 2 },
+        { from: 'C', to: 'D', weight: 3 },
+        { from: 'C', to: 'E', weight: 1 },
+        { from: 'D', to: 'E', weight: 2 }
+      ]
+    }
+  };
+
+  // Load graph preset
+  const loadPreset = useCallback((preset: string) => {
+    const presetData = graphPresets[preset as keyof typeof graphPresets];
+    if (presetData) {
+      setNodes(presetData.nodes);
+      setEdges(presetData.edges);
+      resetGraph();
+    }
+  }, [resetGraph]);
+
+  useEffect(() => {
+    if (graphPreset !== 'default') {
+      loadPreset(graphPreset);
+    }
+  }, [graphPreset, loadPreset]);
 
   const highlightNode = useCallback((nodeId: string, highlight: boolean) => {
     setNodes(prev => prev.map(node => 
@@ -222,7 +320,7 @@ export function GraphVisualizer() {
           setCurrentStepDescription(`Discovered ${neighbor} from ${current} → enqueue ${neighbor}`);
           setQueueState([...queue]);
           
-          await sleep(800);
+          await sleep(animationSpeed);
           
           highlightEdge(current, neighbor, false);
         }
@@ -282,7 +380,7 @@ export function GraphVisualizer() {
           const alt = dist.get(current)! + edge.weight;
           
           highlightEdge(current, neighbor, true);
-          await sleep(600);
+          await sleep(animationSpeed * 0.75);
           
           if (alt < dist.get(neighbor)!) {
             dist.set(neighbor, alt);
@@ -525,70 +623,619 @@ export function GraphVisualizer() {
             : x
         )));
         added++;
-        await sleep(300);
+        await sleep(animationSpeed * 0.375);
       }
     }
     if (added === nodes.length - 1) toast.success('Kruskal: MST constructed');
     else toast.error('Kruskal: MST not complete (graph may be disconnected)');
   }, [edges, nodes, highlightEdge]);
 
-  // ...
+  // Floyd-Warshall Algorithm (All-pairs shortest paths)
+  const runFloydWarshall = useCallback(async () => {
+    const nodeIds = nodes.map(n => n.id);
+    const n = nodeIds.length;
+    const dist: number[][] = Array(n).fill(0).map(() => Array(n).fill(Infinity));
+    const next: (string | null)[][] = Array(n).fill(0).map(() => Array(n).fill(null));
+    
+    // Initialize distance matrix
+    for (let i = 0; i < n; i++) {
+      dist[i][i] = 0;
+    }
+    
+    for (const edge of edges) {
+      const i = nodeIds.indexOf(edge.from);
+      const j = nodeIds.indexOf(edge.to);
+      if (i !== -1 && j !== -1) {
+        dist[i][j] = edge.weight;
+        next[i][j] = edge.to;
+        // For undirected graphs
+        if (!isDirected) {
+          dist[j][i] = edge.weight;
+          next[j][i] = edge.from;
+        }
+      }
+    }
+    
+    setCurrentStep(1);
+    setCurrentStepDescription('Initialize distance matrix with direct edge weights');
+    await sleep(animationSpeed);
+    
+    // Floyd-Warshall main algorithm
+    for (let k = 0; k < n; k++) {
+      highlightNode(nodeIds[k], true);
+      setCurrentStep(2);
+      setCurrentStepDescription(`Using ${nodeIds[k]} as intermediate vertex`);
+      await sleep(animationSpeed);
+      
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+          if (dist[i][k] + dist[k][j] < dist[i][j]) {
+            dist[i][j] = dist[i][k] + dist[k][j];
+            next[i][j] = next[i][k];
+            
+            if (i !== j && nodeIds[i] && nodeIds[j]) {
+              highlightEdge(nodeIds[i], nodeIds[j], true);
+              setCurrentStep(3);
+              setCurrentStepDescription(`Updated distance ${nodeIds[i]} → ${nodeIds[j]} = ${dist[i][j]} via ${nodeIds[k]}`);
+              await sleep(animationSpeed * 0.5);
+              highlightEdge(nodeIds[i], nodeIds[j], false);
+            }
+          }
+        }
+      }
+      
+      highlightNode(nodeIds[k], false);
+    }
+    
+    // Show final distances
+    const distanceMap = new Map<string, number>();
+    const sourceIdx = nodeIds.indexOf(sourceNode);
+    if (sourceIdx !== -1) {
+      for (let i = 0; i < n; i++) {
+        if (dist[sourceIdx][i] !== Infinity) {
+          distanceMap.set(nodeIds[i], dist[sourceIdx][i]);
+        }
+      }
+      setDistances(distanceMap);
+    }
+    
+    toast.success('Floyd-Warshall: All-pairs shortest paths computed');
+  }, [nodes, edges, sourceNode, isDirected, highlightNode, highlightEdge, animationSpeed]);
+
+  // Topological Sort (Kahn's Algorithm)
+  const runTopologicalSort = useCallback(async () => {
+    if (!isDirected) {
+      toast.error('Topological sort requires a directed graph');
+      return;
+    }
+    
+    const nodeIds = nodes.map(n => n.id);
+    const inDegree = new Map<string, number>();
+    const adjList = new Map<string, string[]>();
+    
+    // Initialize
+    for (const nodeId of nodeIds) {
+      inDegree.set(nodeId, 0);
+      adjList.set(nodeId, []);
+    }
+    
+    // Build adjacency list and calculate in-degrees
+    for (const edge of edges) {
+      adjList.get(edge.from)?.push(edge.to);
+      inDegree.set(edge.to, (inDegree.get(edge.to) || 0) + 1);
+    }
+    
+    // Find nodes with in-degree 0
+    const queue: string[] = [];
+    for (const [nodeId, degree] of inDegree) {
+      if (degree === 0) {
+        queue.push(nodeId);
+      }
+    }
+    
+    const result: string[] = [];
+    setCurrentStep(1);
+    setCurrentStepDescription('Initialize: Find vertices with in-degree 0');
+    setQueueState([...queue]);
+    await sleep(animationSpeed);
+    
+    while (queue.length > 0) {
+      const current = queue.shift()!;
+      result.push(current);
+      setVisitedNodes([...result]);
+      highlightNode(current, true);
+      
+      setCurrentStep(2);
+      setCurrentStepDescription(`Process ${current}: Add to topological order`);
+      await sleep(animationSpeed);
+      
+      // Reduce in-degree of neighbors
+      const neighbors = adjList.get(current) || [];
+      for (const neighbor of neighbors) {
+        highlightEdge(current, neighbor, true);
+        const newDegree = (inDegree.get(neighbor) || 0) - 1;
+        inDegree.set(neighbor, newDegree);
+        
+        setCurrentStep(3);
+        setCurrentStepDescription(`Reduce in-degree of ${neighbor} to ${newDegree}`);
+        await sleep(animationSpeed * 0.5);
+        
+        if (newDegree === 0) {
+          queue.push(neighbor);
+          setCurrentStepDescription(`${neighbor} now has in-degree 0, add to queue`);
+        }
+        
+        highlightEdge(current, neighbor, false);
+      }
+      
+      setQueueState([...queue]);
+      highlightNode(current, false);
+      await sleep(animationSpeed * 0.5);
+    }
+    
+    if (result.length === nodeIds.length) {
+      toast.success(`Topological order: ${result.join(' → ')}`);
+      setShortestPath(result);
+    } else {
+      toast.error('Graph contains a cycle - topological sort not possible');
+    }
+  }, [nodes, edges, isDirected, highlightNode, highlightEdge, animationSpeed]);
+
+  // Main algorithm runner
+  const runAlgorithm = useCallback(async () => {
+    if (isAnimating) return;
+    
+    setIsAnimating(true);
+    resetGraph();
+    
+    try {
+      switch (selectedAlgorithm) {
+        case 'bfs':
+          await runBFS();
+          break;
+        case 'dfs':
+          await runDFS();
+          break;
+        case 'dijkstra':
+          await runDijkstra();
+          break;
+        case 'bellman-ford':
+          await runBellmanFord();
+          break;
+        case 'floyd-warshall':
+          await runFloydWarshall();
+          break;
+        case 'prim':
+          await runPrim();
+          break;
+        case 'kruskal':
+          await runKruskal();
+          break;
+        case 'topological-sort':
+          await runTopologicalSort();
+          break;
+        default:
+          toast.error('Algorithm not implemented');
+      }
+    } catch (error) {
+      toast.error('Algorithm execution failed');
+      console.error(error);
+    } finally {
+      setIsAnimating(false);
+    }
+  }, [
+    isAnimating, selectedAlgorithm, resetGraph, runBFS, runDFS, runDijkstra, 
+    runBellmanFord, runFloydWarshall, runPrim, runKruskal, runTopologicalSort
+  ]);
 
   return (
     <div className="w-full space-y-4">
-      {/* Controls */}
+      {/* Enhanced Controls */}
       <div className="flex flex-wrap gap-3 p-4 bg-muted/30 rounded-xl border">
-        {/* ... */}
-        <div className="flex items-center gap-2 ml-auto">
-          <label className="text-sm">Voice Explain</label>
+        {/* Algorithm Selection */}
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium">Algorithm:</label>
+          <Select value={selectedAlgorithm} onValueChange={(value: Algorithm) => setSelectedAlgorithm(value)}>
+            <SelectTrigger className="w-40">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="bfs">BFS</SelectItem>
+              <SelectItem value="dfs">DFS</SelectItem>
+              <SelectItem value="dijkstra">Dijkstra</SelectItem>
+              <SelectItem value="bellman-ford">Bellman-Ford</SelectItem>
+              <SelectItem value="floyd-warshall">Floyd-Warshall</SelectItem>
+              <SelectItem value="prim">Prim's MST</SelectItem>
+              <SelectItem value="kruskal">Kruskal's MST</SelectItem>
+              <SelectItem value="topological-sort">Topological Sort</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Graph Type */}
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium">Graph Type:</label>
+          <Select value={isDirected ? 'directed' : 'undirected'} onValueChange={(value) => setIsDirected(value === 'directed')}>
+            <SelectTrigger className="w-32">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="undirected">Undirected</SelectItem>
+              <SelectItem value="directed">Directed</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Graph Presets */}
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium">Preset:</label>
+          <Select value={graphPreset} onValueChange={setGraphPreset}>
+            <SelectTrigger className="w-32">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="default">Default</SelectItem>
+              <SelectItem value="dag">DAG</SelectItem>
+              <SelectItem value="complete">Complete</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Source Node */}
+        {(selectedAlgorithm === 'bfs' || selectedAlgorithm === 'dfs' || 
+          selectedAlgorithm === 'dijkstra' || selectedAlgorithm === 'bellman-ford' ||
+          selectedAlgorithm === 'prim') && (
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium">Source:</label>
+            <Select value={sourceNode} onValueChange={setSourceNode}>
+              <SelectTrigger className="w-16">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {nodes.map(node => (
+                  <SelectItem key={node.id} value={node.id}>{node.id}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
+        {/* Target Node */}
+        {(selectedAlgorithm === 'bfs' || selectedAlgorithm === 'dfs' || 
+          selectedAlgorithm === 'dijkstra' || selectedAlgorithm === 'bellman-ford') && (
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium">Target:</label>
+            <Select value={targetNode} onValueChange={setTargetNode}>
+              <SelectTrigger className="w-16">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {nodes.map(node => (
+                  <SelectItem key={node.id} value={node.id}>{node.id}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
+        {/* Animation Speed */}
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium">Speed:</label>
+          <Select value={animationSpeed.toString()} onValueChange={(value) => setAnimationSpeed(Number(value))}>
+            <SelectTrigger className="w-20">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1200">Slow</SelectItem>
+              <SelectItem value="800">Normal</SelectItem>
+              <SelectItem value="400">Fast</SelectItem>
+              <SelectItem value="200">Very Fast</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Show Weights Toggle */}
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium">Show Weights:</label>
+          <input
+            type="checkbox"
+            checked={showWeights}
+            onChange={(e) => setShowWeights(e.target.checked)}
+            className="rounded"
+          />
+        </div>
+
+        {/* Control Buttons */}
+        <div className="flex gap-2 ml-auto">
+          <Button
+            onClick={runAlgorithm}
+            disabled={isAnimating}
+            className="flex items-center gap-2"
+          >
+            <Play className="w-4 h-4" />
+            {isAnimating ? 'Running...' : 'Run Algorithm'}
+          </Button>
+          
+          <Button
+            onClick={resetGraph}
+            variant="outline"
+            disabled={isAnimating}
+            className="flex items-center gap-2"
+          >
+            <RotateCcw className="w-4 h-4" />
+            Reset
+          </Button>
+        </div>
+
+        {/* Voice Explain */}
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium">Voice Explain:</label>
           <input
             type="checkbox"
             checked={voiceExplain}
-            onChange={(e)=>setVoice(e.target.checked)}
+            onChange={(e) => setVoice(e.target.checked)}
+            className="rounded"
           />
         </div>
-        {/* ... */}
       </div>
 
-      {/* Visualization */}
-      <div className="relative bg-gradient-visualization rounded-xl border-2 border-border/50">
-        {/* ... */}
+      {/* Enhanced Visualization */}
+      <div className="relative bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-xl border-2 border-border/50 min-h-[400px]">
+        <svg width="700" height="400" className="w-full h-full">
+          {/* Render Edges */}
+          {edges.map((edge, index) => {
+            const fromNode = nodes.find(n => n.id === edge.from);
+            const toNode = nodes.find(n => n.id === edge.to);
+            if (!fromNode || !toNode) return null;
+
+            const dx = toNode.x - fromNode.x;
+            const dy = toNode.y - fromNode.y;
+            const length = Math.sqrt(dx * dx + dy * dy);
+            const unitX = dx / length;
+            const unitY = dy / length;
+            
+            // Adjust for node radius
+            const nodeRadius = 25;
+            const startX = fromNode.x + unitX * nodeRadius;
+            const startY = fromNode.y + unitY * nodeRadius;
+            const endX = toNode.x - unitX * nodeRadius;
+            const endY = toNode.y - unitY * nodeRadius;
+
+            return (
+              <g key={`${edge.from}-${edge.to}-${index}`}>
+                {/* Edge Line */}
+                <line
+                  x1={startX}
+                  y1={startY}
+                  x2={endX}
+                  y2={endY}
+                  stroke={edge.isHighlighted ? '#3b82f6' : edge.isInPath ? '#10b981' : '#6b7280'}
+                  strokeWidth={edge.isHighlighted || edge.isInPath ? 3 : 2}
+                  className="transition-all duration-300"
+                />
+                
+                {/* Arrow for directed graphs */}
+                {isDirected && (
+                  <polygon
+                    points={`${endX},${endY} ${endX - 8 * unitX + 4 * unitY},${endY - 8 * unitY - 4 * unitX} ${endX - 8 * unitX - 4 * unitY},${endY - 8 * unitY + 4 * unitX}`}
+                    fill={edge.isHighlighted ? '#3b82f6' : edge.isInPath ? '#10b981' : '#6b7280'}
+                    className="transition-all duration-300"
+                  />
+                )}
+                
+                {/* Edge Weight */}
+                {showWeights && (
+                  <text
+                    x={(startX + endX) / 2}
+                    y={(startY + endY) / 2 - 5}
+                    textAnchor="middle"
+                    className="text-xs font-medium fill-gray-700 dark:fill-gray-300"
+                    style={{ fontSize: '12px' }}
+                  >
+                    {edge.weight}
+                  </text>
+                )}
+              </g>
+            );
+          })}
+
+          {/* Render Nodes */}
+          {nodes.map((node) => (
+            <g key={node.id}>
+              {/* Node Circle */}
+              <circle
+                cx={node.x}
+                cy={node.y}
+                r={25}
+                fill={
+                  node.isSource ? '#10b981' :
+                  node.isTarget ? '#ef4444' :
+                  node.isHighlighted ? '#3b82f6' :
+                  node.visited ? '#8b5cf6' :
+                  '#f3f4f6'
+                }
+                stroke={
+                  node.isHighlighted ? '#1d4ed8' :
+                  node.visited ? '#7c3aed' :
+                  '#6b7280'
+                }
+                strokeWidth={node.isHighlighted ? 3 : 2}
+                className="transition-all duration-300 cursor-pointer hover:stroke-blue-500"
+              />
+              
+              {/* Node Label */}
+              <text
+                x={node.x}
+                y={node.y + 5}
+                textAnchor="middle"
+                className="text-sm font-bold fill-gray-800 dark:fill-gray-200 pointer-events-none"
+                style={{ fontSize: '14px' }}
+              >
+                {node.id}
+              </text>
+              
+              {/* Distance Label */}
+              {distances.has(node.id) && distances.get(node.id) !== Infinity && (
+                <text
+                  x={node.x}
+                  y={node.y - 35}
+                  textAnchor="middle"
+                  className="text-xs font-medium fill-blue-600 dark:fill-blue-400"
+                  style={{ fontSize: '11px' }}
+                >
+                  d: {distances.get(node.id)}
+                </text>
+              )}
+            </g>
+          ))}
+        </svg>
+
+        {/* Legend */}
+        <div className="absolute top-4 right-4 bg-white/90 dark:bg-gray-800/90 rounded-lg p-3 text-xs space-y-1 backdrop-blur-sm">
+          <div className="font-medium mb-2">Legend:</div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-green-500"></div>
+            <span>Source</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-red-500"></div>
+            <span>Target</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+            <span>Current</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-purple-500"></div>
+            <span>Visited</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-0.5 bg-green-500"></div>
+            <span>Path</span>
+          </div>
+        </div>
       </div>
 
-      {/* Algorithm Info */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-muted/20 rounded-lg p-3">
-          <h4 className="font-medium mb-2">Algorithm Info:</h4>
-          <div className="text-sm text-muted-foreground space-y-1">
-            {/* ... */}
+      {/* Enhanced Algorithm Info */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-muted/20 rounded-lg p-4">
+          <h4 className="font-medium mb-3 text-primary">Algorithm Info</h4>
+          <div className="text-sm space-y-2">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Algorithm:</span>
+              <span className="font-medium">{selectedAlgorithm.toUpperCase()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Graph Type:</span>
+              <span className="font-medium">{isDirected ? 'Directed' : 'Undirected'}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Vertices:</span>
+              <span className="font-medium">{nodes.length}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Edges:</span>
+              <span className="font-medium">{edges.length}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Status:</span>
+              <span className={`font-medium ${isAnimating ? 'text-blue-600' : 'text-green-600'}`}>
+                {isAnimating ? 'Running' : 'Ready'}
+              </span>
+            </div>
           </div>
         </div>
         
-        <div className="bg-muted/20 rounded-lg p-3">
-          <h4 className="font-medium mb-2">Current State:</h4>
-          <div className="text-sm text-muted-foreground space-y-1">
-            <div>• Source: <span className="text-success font-medium">{sourceNode}</span></div>
-            <div>• Target: <span className="text-destructive font-medium">{targetNode}</span></div>
+        <div className="bg-muted/20 rounded-lg p-4">
+          <h4 className="font-medium mb-3 text-primary">Current State</h4>
+          <div className="text-sm space-y-2">
+            {(selectedAlgorithm === 'bfs' || selectedAlgorithm === 'dfs' || 
+              selectedAlgorithm === 'dijkstra' || selectedAlgorithm === 'bellman-ford' ||
+              selectedAlgorithm === 'prim') && (
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Source:</span>
+                <span className="font-medium text-green-600">{sourceNode}</span>
+              </div>
+            )}
+            {(selectedAlgorithm === 'bfs' || selectedAlgorithm === 'dfs' || 
+              selectedAlgorithm === 'dijkstra' || selectedAlgorithm === 'bellman-ford') && (
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Target:</span>
+                <span className="font-medium text-red-600">{targetNode}</span>
+              </div>
+            )}
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Visited:</span>
+              <span className="font-medium">{visitedNodes.length}</span>
+            </div>
+            {queueState.length > 0 && (
+              <div>
+                <span className="text-muted-foreground">Queue:</span>
+                <div className="mt-1 text-xs bg-blue-100 dark:bg-blue-900/30 rounded px-2 py-1">
+                  [{queueState.join(', ')}]
+                </div>
+              </div>
+            )}
+            {stackState.length > 0 && (
+              <div>
+                <span className="text-muted-foreground">Stack:</span>
+                <div className="mt-1 text-xs bg-purple-100 dark:bg-purple-900/30 rounded px-2 py-1">
+                  [{stackState.join(', ')}]
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="bg-muted/20 rounded-lg p-4">
+          <h4 className="font-medium mb-3 text-primary">Results</h4>
+          <div className="text-sm space-y-2">
             {shortestPath.length > 0 && (
-              <div>• Path: <span className="text-primary font-medium">{shortestPath.join(' → ')}</span></div>
+              <div>
+                <span className="text-muted-foreground">Path Found:</span>
+                <div className="mt-1 text-xs bg-green-100 dark:bg-green-900/30 rounded px-2 py-1 font-mono">
+                  {shortestPath.join(' → ')}
+                </div>
+              </div>
+            )}
+            {distances.size > 0 && (
+              <div>
+                <span className="text-muted-foreground">Distances:</span>
+                <div className="mt-1 space-y-1">
+                  {Array.from(distances.entries()).map(([node, dist]) => (
+                    <div key={node} className="flex justify-between text-xs">
+                      <span>{node}:</span>
+                      <span className="font-mono">{dist === Infinity ? '∞' : dist}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
             {currentStepDescription && (
-              <div className="mt-2 p-2 bg-muted/30 rounded">{currentStepDescription}</div>
+              <div>
+                <span className="text-muted-foreground">Current Step:</span>
+                <div className="mt-1 text-xs bg-yellow-100 dark:bg-yellow-900/30 rounded px-2 py-1">
+                  {currentStepDescription}
+                </div>
+              </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Pseudocode Panel */}
+      {/* Enhanced Pseudocode Panel */}
       <PseudocodeBox
-        title={`${selectedAlgorithm.toUpperCase()} - Pseudocode`}
+        title={`${selectedAlgorithm.toUpperCase()} Algorithm - Pseudocode`}
         code={
-          selectedAlgorithm==='bfs' ? pseudocode.bfs :
-          selectedAlgorithm==='dfs' ? pseudocode.dfs :
-          selectedAlgorithm==='dijkstra' ? pseudocode.dijkstra :
-          selectedAlgorithm==='bellman-ford' ? pseudocode.bellmanFord :
-          selectedAlgorithm==='prim' ? pseudocode.prim :
-          pseudocode.kruskal
+          selectedAlgorithm === 'bfs' ? pseudocode.bfs :
+          selectedAlgorithm === 'dfs' ? pseudocode.dfs :
+          selectedAlgorithm === 'dijkstra' ? pseudocode.dijkstra :
+          selectedAlgorithm === 'bellman-ford' ? pseudocode.bellmanFord :
+          selectedAlgorithm === 'floyd-warshall' ? pseudocode.floydWarshall :
+          selectedAlgorithm === 'prim' ? pseudocode.prim :
+          selectedAlgorithm === 'kruskal' ? pseudocode.kruskal :
+          selectedAlgorithm === 'topological-sort' ? pseudocode.topologicalSort :
+          pseudocode.bfs
         }
         highlightedLine={currentStep}
       />

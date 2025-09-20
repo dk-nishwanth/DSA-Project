@@ -267,10 +267,10 @@ export function LanguageExecutionTest() {
             <AlertDescription>
               <strong>To enable real execution for all languages:</strong>
               <ol className="list-decimal list-inside mt-2 space-y-1">
-                <li>Get a free RapidAPI key from <a href="https://rapidapi.com/judge0-official/api/judge0-ce/" target="_blank" className="text-blue-600 hover:underline">Judge0</a></li>
-                <li>Click "Setup Required" in any code playground</li>
-                <li>Enter your API key and test the connection</li>
-                <li>Enjoy real compilation and execution for all languages!</li>
+                <li>Code execution is powered by the free Piston API</li>
+                <li>No API keys or setup required</li>
+                <li>Simply click run to execute your code instantly</li>
+                <li>Supports 12+ programming languages out of the box!</li>
               </ol>
             </AlertDescription>
           </Alert>

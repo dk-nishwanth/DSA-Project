@@ -1,5 +1,5 @@
 import React from 'react';
-import { Codespace } from '../components/codespace/Codespace';
+import { EnhancedCodespaceIntegration } from '../components/codespace/EnhancedCodespaceIntegration';
 import { Code, Zap, Shield, Globe } from 'lucide-react';
 
 export const CodespacePage: React.FC = () => {
@@ -18,7 +18,7 @@ export const CodespacePage: React.FC = () => {
                   Personal Codespace
                 </h1>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Multi-language code editor with Judge0 execution
+                  Multi-language code editor with Piston API execution
                 </p>
               </div>
             </div>
@@ -34,7 +34,7 @@ export const CodespacePage: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Globe className="w-4 h-4 text-blue-500" />
-                <span>11+ Languages</span>
+                <span>12+ Languages</span>
               </div>
             </div>
           </div>
@@ -43,15 +43,11 @@ export const CodespacePage: React.FC = () => {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="h-[calc(100vh-200px)]">
-          <Codespace
-            className="h-full"
-            onCodeChange={(code, language) => {
-              // Optional: Save to localStorage or send to analytics
-              console.log(`Code changed for ${language.name}:`, code.length, 'characters');
-            }}
-          />
-        </div>
+        <EnhancedCodespaceIntegration
+          className="w-full"
+          topicId="codespace"
+          topicTitle="Personal Codespace"
+        />
       </div>
 
       {/* Footer */}
@@ -59,7 +55,7 @@ export const CodespacePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
             <div className="flex items-center gap-4">
-              <span>Powered by Judge0 API</span>
+              <span>Powered by Piston API</span>
               <span>•</span>
               <span>Secure execution environment</span>
             </div>

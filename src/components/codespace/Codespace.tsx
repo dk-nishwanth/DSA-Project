@@ -5,7 +5,7 @@ import { OutputPanel } from './OutputPanel';
 import { InputPanel } from './InputPanel';
 import { Toolbar } from './Toolbar';
 import { Language, getDefaultLanguage, getLanguageById } from '../../config/languages';
-import { runOnJudge0, Judge0Result } from '../../lib/judge0';
+import { runCodeWithPiston, testPistonConnection, PistonLanguages } from '../../lib/piston';
 import { AlertCircle, Wifi, WifiOff } from 'lucide-react';
 
 interface CodespaceProps {
@@ -21,6 +21,7 @@ interface ExecutionResult {
   error?: string;
   executionTime: number;
 }
+
 
 export const Codespace: React.FC<CodespaceProps> = ({
   className = '',
@@ -43,16 +44,12 @@ export const Codespace: React.FC<CodespaceProps> = ({
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [isOnline, setIsOnline] = useState<boolean>(true);
 
-  // Check Judge0 API health on mount
+  // Check Piston API health on mount
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        // Test with a simple Python code
-        const testResult = await runOnJudge0({
-          languageId: 71, // Python
-          source: 'print("Health check")'
-        });
-        setIsOnline(testResult.status.id !== 0); // 0 means error
+        const isHealthy = await testPistonConnection();
+        setIsOnline(isHealthy);
       } catch {
         setIsOnline(false);
       }
@@ -78,7 +75,7 @@ export const Codespace: React.FC<CodespaceProps> = ({
     onCodeChange?.(newCode, selectedLanguage);
   }, [selectedLanguage, onCodeChange]);
 
-  // Execute code using Judge0
+  // Execute code using Piston API
   const handleRun = useCallback(async () => {
     if (isRunning || !isOnline) return;
 
@@ -87,20 +84,20 @@ export const Codespace: React.FC<CodespaceProps> = ({
 
     try {
       const startTime = Date.now();
-      
-      const result: Judge0Result = await runOnJudge0({
-        languageId: selectedLanguage.judge0LanguageId,
-        source: code,
-        stdin: selectedLanguage.supportsInput ? input : undefined
-      });
+      // Use the pistonLanguage property from the language config
+      const result = await runCodeWithPiston(
+        selectedLanguage.pistonLanguage as keyof typeof PistonLanguages,
+        code,
+        selectedLanguage.supportsInput ? input : undefined
+      );
 
       const executionTime = Date.now() - startTime;
 
-      // Convert Judge0 result to our format
+      // Convert Piston result to our format
       const executionResult: ExecutionResult = {
-        success: result.status.id === 3, // 3 = Accepted
-        output: result.stdout || result.compile_output || result.stderr || '',
-        error: result.status.id !== 3 ? result.status.description : undefined,
+        success: result.run.code === 0,
+        output: result.run.stdout || result.run.output || '',
+        error: result.run.stderr || (result.compile?.stderr) || undefined,
         executionTime: executionTime
       };
 
@@ -209,7 +206,7 @@ export const Codespace: React.FC<CodespaceProps> = ({
       {!isOnline && (
         <div className="flex items-center gap-2 px-4 py-2 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300 text-sm border-b border-red-200 dark:border-red-800">
           <WifiOff className="w-4 h-4" />
-          <span>Judge0 API is offline. Code execution is disabled.</span>
+          <span>Piston API is offline. Code execution is disabled.</span>
         </div>
       )}
 

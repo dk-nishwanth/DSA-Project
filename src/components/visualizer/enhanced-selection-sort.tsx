@@ -1,14 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { RotateCcw, Shuffle } from 'lucide-react';
+import { RotateCcw, Shuffle, HardDrive } from 'lucide-react';
 import { StepByStepBase, VisualizationStep } from './step-by-step-base';
+import { VisualizerControls } from './visualizer-controls';
 
 export function EnhancedSelectionSort() {
   const [array, setArray] = useState<number[]>([64, 25, 12, 22, 11, 90]);
   const [inputValue, setInputValue] = useState('64,25,12,22,11,90');
   const [steps, setSteps] = useState<VisualizationStep[]>([]);
+  const [showMemoryView, setShowMemoryView] = useState(false);
+  const [memoryAddresses, setMemoryAddresses] = useState<number[]>([]);
+
+  const generateMemoryAddresses = () => {
+    const baseAddress = 0x1000;
+    return array.map((_, index) => baseAddress + (index * 4));
+  };
+
+  useEffect(() => {
+    setMemoryAddresses(generateMemoryAddresses());
+  }, [array]);
 
   const generateSelectionSortSteps = (arr: number[]): VisualizationStep[] => {
     const steps: VisualizationStep[] = [];

@@ -1075,39 +1075,6 @@ arr.findIndex(v => v === 7); // search`,
         syntax: `function interpolationSearch(arr, target) {\n  let low = 0, high = arr.length - 1;\n  while (low <= high && target >= arr[low] && target <= arr[high]) {\n    let pos = low + Math.floor(((target - arr[low]) * (high - low)) / (arr[high] - arr[low]));\n    if (arr[pos] === target) return pos;\n    if (arr[pos] < target) low = pos + 1;\n    else high = pos - 1;\n  }\n  return -1;\n}`,
         narration: 'Interpolation search is like finding a name in a phone book. You don\'t start in the middle; you make an educated guess based on the first letter.'
       },
-      'bubble-sort': {
-        definition: 'Bubble sort repeatedly compares adjacent elements and swaps them if out of order, pushing larger elements to the end each pass.',
-        extras: [
-          'What it does: sorts an array by repeatedly comparing and swapping adjacent elements if they are in the wrong order.',
-          'How it works: after each pass, the largest unsorted element bubbles up to its correct position at the end.',
-          'When to use: educational purposes or very small inputs where simplicity is more important than efficiency.'
-        ],
-        example: 'Input [5,1,4,2]\nPass 1: swap (5,1) -> [1,5,4,2], swap (5,4) -> [1,4,5,2], swap (5,2) -> [1,4,2,5]\nPass 2: [1,2,4,5] sorted',
-        syntax: `function bubbleSort(a){\n  for(let i=0;i<a.length-1;i++){\n    for(let j=0;j<a.length-1-i;j++){\n      if(a[j]>a[j+1]) [a[j],a[j+1]]=[a[j+1],a[j]];\n    }\n  }\n  return a;\n}`,
-        narration: 'We look at neighbors and swap if needed. Big elements bubble to the right; after each pass, one more element is fixed at the end.'
-      },
-      'merge-sort': {
-        definition: 'Merge sort is a divide-and-conquer algorithm that splits the array in half, recursively sorts each half, then merges the sorted halves.',
-        extras: [
-          'What it does: guarantees O(n log n) time complexity regardless of input distribution.',
-          'How it works: recursively divides until single elements, then merges in sorted order.',
-          'When to use: stable sorting is required, predictable performance is needed, or working with linked lists.'
-        ],
-        example: 'Input [38, 27, 43, 3]\nSplit: [38, 27] [43, 3]\nSplit: [38] [27] [43] [3]\nMerge: [27, 38] [3, 43]\nMerge: [3, 27, 38, 43]',
-        syntax: `function mergeSort(arr) {\n  if (arr.length <= 1) return arr;\n  const mid = Math.floor(arr.length / 2);\n  const left = mergeSort(arr.slice(0, mid));\n  const right = mergeSort(arr.slice(mid));\n  return merge(left, right);\n}\n\nfunction merge(left, right) {\n  let result = [], i = 0, j = 0;\n  while (i < left.length && j < right.length) {\n    result.push(left[i] <= right[j] ? left[i++] : right[j++]);\n  }\n  return result.concat(left.slice(i)).concat(right.slice(j));\n}`,
-        narration: 'Merge sort breaks the problem into smaller pieces, sorts them individually, and then combines them in order. It\'s like sorting small piles of cards and then merging them.'
-      },
-      'quick-sort': {
-        definition: 'Quick sort is a divide-and-conquer algorithm that selects a pivot element and partitions the array around it, recursively sorting the sub-arrays.',
-        extras: [
-          'What it does: typically achieves O(n log n) average-case performance with low overhead.',
-          'How it works: chooses a pivot, places smaller elements before it and larger elements after it, then recursively sorts the partitions.',
-          'When to use: general-purpose sorting, in-place sorting with limited extra memory.'
-        ],
-        example: 'Input [10, 80, 30, 90, 40]\nPivot=40: [10, 30] [40] [80, 90]\nRecursively sort: [10, 30, 40, 80, 90]',
-        syntax: `function quickSort(arr, low = 0, high = arr.length - 1) {\n  if (low < high) {\n    const pivotIndex = partition(arr, low, high);\n    quickSort(arr, low, pivotIndex - 1);\n    quickSort(arr, pivotIndex + 1, high);\n  }\n  return arr;\n}\n\nfunction partition(arr, low, high) {\n  const pivot = arr[high];\n  let i = low - 1;\n  for (let j = low; j < high; j++) {\n    if (arr[j] <= pivot) {\n      i++;\n      [arr[i], arr[j]] = [arr[j], arr[i]];\n    }\n  }\n  [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];\n  return i + 1;\n}`,
-        narration: 'Quick sort picks a pivot element and arranges everything around it. Smaller values go left, larger values go right, and we repeat the process for each section.'
-      },
       'linked-list-singly': {
         definition: 'A singly linked list is a chain of nodes where each node points to the next. It supports efficient insertion and deletion with pointer updates.',
         extras: [
@@ -1490,8 +1457,42 @@ arr.findIndex(v => v === 7); // search`,
           'When to use: scheduling problems, register allocation in compilers, map coloring, and solving certain types of constraints.'
         ],
         example: 'Graph: A--B--C--D--A\nValid coloring: A(red), B(blue), C(red), D(blue)',
-        syntax: `// Greedy coloring algorithm\nfunction greedyColoring(graph) {\n  const result = {};\n  const vertices = Object.keys(graph);\n  \n  // Assign the first color to first vertex\n  result[vertices[0]] = 0;\n  \n  // Initialize remaining vertices as unassigned\n  for (let i = 1; i < vertices.length; i++) {\n    result[vertices[i]] = -1;\n  }\n  \n  // A temporary array to store the available colors\n  const available = Array(vertices.length).fill(true);\n  \n  // Assign colors to remaining vertices\n  for (let u = 1; u < vertices.length; u++) {\n    // Process all adjacent vertices and flag their colors as unavailable\n    for (const adj of graph[vertices[u]]) {\n      if (result[adj] !== -1) {\n        available[result[adj]] = false;\n      }\n    }\n    \n    // Find the first available color\n    let cr;\n    for (cr = 0; cr < vertices.length; cr++) {\n      if (available[cr]) break;\n    }\n    \n    // Assign the found color\n    result[vertices[u]] = cr;\n    \n    // Reset the available array for next iteration\n    available.fill(true);\n  }\n  \n  return result;\n}`,
-        narration: 'Graph coloring is like assigning meeting rooms to different groups, ensuring that groups that need to meet at the same time get different rooms. It\'s a fundamental problem with applications ranging from scheduling to map design.'
+        syntax: `// Greedy Graph Coloring Algorithm\nclass Graph {\n  constructor(vertices) {\n    this.V = vertices;\n    this.adj = Array(vertices).fill().map(() => []);\n  }\n  \n  addEdge(u, v) {\n    this.adj[u].push(v);\n    this.adj[v].push(u); // For undirected graph\n  }\n  \n  greedyColoring() {\n    const result = Array(this.V).fill(-1);\n    result[0] = 0;\n    const available = Array(this.V).fill(false);\n    \n    for (let u = 1; u < this.V; u++) {\n      for (let i = 0; i < this.adj[u].length; i++) {\n        const adjacentVertex = this.adj[u][i];\n        if (result[adjacentVertex] !== -1) {\n          available[result[adjacentVertex]] = true;\n        }\n      }\n      \n      let color;\n      for (color = 0; color < this.V; color++) {\n        if (!available[color]) break;\n      }\n      \n      result[u] = color;\n      available.fill(false);\n    }\n    \n    return result;\n  }\n}`,
+        narration: 'Graph coloring is like assigning meeting rooms to different groups, ensuring that groups that need to meet at the same time get different rooms.'
+      },
+      // Sorting Algorithms
+      'bubble-sort': {
+        definition: 'Bubble Sort repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order, causing larger elements to "bubble" to the end.',
+        extras: [
+          'What it does: sorts by comparing and swapping adjacent elements in multiple passes.',
+          'How it works: each pass moves the largest unsorted element to its correct position at the end.',
+          'When to use: educational purposes, small datasets, or when simplicity is more important than efficiency.'
+        ],
+        example: 'Input: [5, 1, 4, 2]\nPass 1: [1, 4, 2, 5]\nPass 2: [1, 2, 4, 5] (sorted)',
+        syntax: `function bubbleSort(arr) {\n  let n = arr.length;\n  for (let i = 0; i < n - 1; i++) {\n    for (let j = 0; j < n - i - 1; j++) {\n      if (arr[j] > arr[j + 1]) {\n        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];\n      }\n    }\n  }\n  return arr;\n}`,
+        narration: 'Bubble sort is like organizing books by height - you keep comparing neighbors and swapping them until the tallest ones bubble to the end.'
+      },
+      'merge-sort': {
+        definition: 'Merge Sort divides the array into halves, recursively sorts each half, then merges the sorted halves back together using a divide-and-conquer approach.',
+        extras: [
+          'What it does: breaks down the sorting problem into smaller, manageable pieces.',
+          'How it works: divides array in half, sorts each half recursively, then merges sorted halves.',
+          'When to use: when stable sorting is needed, large datasets, or guaranteed O(n log n) performance is required.'
+        ],
+        example: 'Input: [38, 27, 43, 3]\nDivide: [38, 27] [43, 3]\nSort: [27, 38] [3, 43]\nMerge: [3, 27, 38, 43]',
+        syntax: `function mergeSort(arr) {\n  if (arr.length <= 1) return arr;\n  \n  const mid = Math.floor(arr.length / 2);\n  const left = mergeSort(arr.slice(0, mid));\n  const right = mergeSort(arr.slice(mid));\n  \n  return merge(left, right);\n}\n\nfunction merge(left, right) {\n  const result = [];\n  let i = 0, j = 0;\n  \n  while (i < left.length && j < right.length) {\n    if (left[i] <= right[j]) {\n      result.push(left[i++]);\n    } else {\n      result.push(right[j++]);\n    }\n  }\n  \n  return result.concat(left.slice(i)).concat(right.slice(j));\n}`,
+        narration: 'Merge sort is like organizing a deck of cards by splitting it in half, sorting each half, then carefully merging them back together in order.'
+      },
+      'quick-sort': {
+        definition: 'Quick Sort picks a pivot element, partitions the array around it (smaller elements left, larger right), then recursively sorts the partitions.',
+        extras: [
+          'What it does: sorts by partitioning around a pivot element and recursively sorting partitions.',
+          'How it works: choose pivot, rearrange array so smaller elements are left of pivot, larger are right, then recurse.',
+          'When to use: general-purpose sorting, when average-case O(n log n) is acceptable, in-place sorting needed.'
+        ],
+        example: 'Input: [10, 80, 30, 90, 40]\nPivot: 40\nPartition: [10, 30, 40, 90, 80]\nRecurse on [10, 30] and [90, 80]',
+        syntax: `function quickSort(arr, low = 0, high = arr.length - 1) {\n  if (low < high) {\n    const pi = partition(arr, low, high);\n    quickSort(arr, low, pi - 1);\n    quickSort(arr, pi + 1, high);\n  }\n  return arr;\n}`,
+        narration: 'Quick sort is like organizing a group by picking someone as a reference point, having everyone shorter stand to the left and taller to the right.'
       }
     };
     return byId[topicId] || {};
@@ -1540,11 +1541,11 @@ arr.findIndex(v => v === 7); // search`,
             {(() => { const c = getTopicContent(topic.id); return null; })()}
             <DefinitionBox 
               title={topic.title} 
-              definition={(getTopicContent(topic.id).definition) || topic.extendedDefinition || topic.description}
+              definition={topic.extendedDefinition || (getTopicContent(topic.id).definition) || topic.description}
               extra={getTopicContent(topic.id).extras || []}
               example={(getTopicContent(topic.id).example) || (topic.example || getExample(topic.id))}
               syntax={(getTopicContent(topic.id).syntax) || (topic.syntax || getSyntax(topic.id))}
-              narrationText={(getTopicContent(topic.id).narration) || `${topic.title}. ${topic.description}. ${getVisualizationNarration(topic.id)}`}
+              narrationText={topic.voiceExplanation || (getTopicContent(topic.id).narration) || `${topic.title}. ${topic.description}. ${getVisualizationNarration(topic.id)}`}
             />
           </div>
 
@@ -1633,13 +1634,13 @@ arr.findIndex(v => v === 7); // search`,
           <CodeSnippetBox
             title={`${topic.title} Implementation`}
             language={getCodeSnippet(topic.id)?.language || 'javascript'}
-            code={getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title)}
+            code={getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'javascript')}
             description={getCodeSnippet(topic.id)?.description || `Implementation of ${topic.title} with multiple language support`}
             implementations={{
-              javascript: getCodeSnippet(topic.id, 'javascript')?.code || getDefaultCodeSnippet(topic.id, topic.title, 'javascript'),
-              python: getCodeSnippet(topic.id, 'python')?.code || getDefaultCodeSnippet(topic.id, topic.title, 'python'),
-              java: getCodeSnippet(topic.id, 'java')?.code || getDefaultCodeSnippet(topic.id, topic.title, 'java'),
-              c: getCodeSnippet(topic.id, 'c')?.code || getDefaultCodeSnippet(topic.id, topic.title, 'c')
+              javascript: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'javascript'),
+              python: getDefaultCodeSnippet(topic.id, topic.title, 'python'),
+              java: getDefaultCodeSnippet(topic.id, topic.title, 'java'),
+              c: getDefaultCodeSnippet(topic.id, topic.title, 'c')
             }}
             topicId={topic.id}
           />

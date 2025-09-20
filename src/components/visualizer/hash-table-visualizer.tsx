@@ -1,9 +1,11 @@
-import React, { useState, useCallback } from 'react';
-import { Play, RotateCcw, Plus, Minus, Search } from 'lucide-react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { Play, RotateCcw, Plus, Minus, Search, HardDrive } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { useVoiceExplain } from '@/hooks/useVoiceExplain';
 
 type CollisionMethod = 'chaining' | 'linear-probing' | 'quadratic-probing';
 
@@ -27,7 +29,18 @@ export function HashTableVisualizer() {
   const [searchKey, setSearchKey] = useState('apple');
   const [isAnimating, setIsAnimating] = useState(false);
   const [highlightedSlots, setHighlightedSlots] = useState<number[]>([]);
-  const [currentStep, setCurrentStep] = useState('');
+  const [currentStep, setCurrentStep] = useState('Hash table visualizer loaded. Try inserting or searching for keys to see the collision resolution in action!');
+  const [showMemory, setShowMemory] = useState(false);
+  const { 
+    enabled: voiceEnabled, 
+    setEnabled: setVoiceEnabled,
+    speed: voiceSpeed,
+    setSpeed: setVoiceSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech
+  } = useVoiceExplain(currentStep);
 
   // For separate chaining
   const [chainTable, setChainTable] = useState<(ChainNode | null)[]>(Array(7).fill(null));
@@ -36,6 +49,12 @@ export function HashTableVisualizer() {
   const [openTable, setOpenTable] = useState<(HashEntry | null)[]>(Array(7).fill(null));
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+  // Update current step when method changes
+  useEffect(() => {
+    const methodName = method.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+    setCurrentStep(`Switched to ${methodName} collision resolution method. Ready for hash table operations!`);
+  }, [method]);
 
   const hashFunction = useCallback((key: string, size: number) => {
     let hash = 0;
@@ -54,7 +73,7 @@ export function HashTableVisualizer() {
     setChainTable(Array(newSize).fill(null));
     setOpenTable(Array(newSize).fill(null));
     setHighlightedSlots([]);
-    setCurrentStep('');
+    setCurrentStep('Hash table reset. Ready for new operations.');
     setIsAnimating(false);
     toast.success('Hash table reset');
   }, [tableSize]);
@@ -62,21 +81,21 @@ export function HashTableVisualizer() {
   const insertChaining = useCallback(async (key: string, value: string) => {
     const hash = hashFunction(key, chainTable.length);
     setHighlightedSlots([hash]);
-    setCurrentStep(`Hash(${key}) = ${hash}. Inserting into slot ${hash}`);
+    setCurrentStep(`Using hash function to compute index for key "${key}". Hash(${key}) = ${hash}. This is our target slot in the hash table.`);
     
     await sleep(800);
 
     const newTable = [...chainTable];
     if (!newTable[hash]) {
       newTable[hash] = { key, value };
-      setCurrentStep(`Slot ${hash} is empty. Inserted directly.`);
+      setCurrentStep(`Perfect! Slot ${hash} is empty, so we can insert the key-value pair "${key}": "${value}" directly. No collision occurred.`);
     } else {
       // Handle collision by chaining
       let current = newTable[hash];
       while (current) {
         if (current.key === key) {
           current.value = value;
-          setCurrentStep(`Key ${key} already exists. Updated value.`);
+          setCurrentStep(`Key "${key}" already exists in the chain at slot ${hash}. Updating its value to "${value}".`);
           setChainTable(newTable);
           return;
         }
@@ -84,7 +103,7 @@ export function HashTableVisualizer() {
         current = current.next;
       }
       current!.next = { key, value };
-      setCurrentStep(`Collision detected! Added ${key} to chain at slot ${hash}.`);
+      setCurrentStep(`Collision detected! Slot ${hash} is occupied, but with separate chaining, we can add "${key}": "${value}" to the linked list chain at this slot.`);
     }
     
     setChainTable(newTable);
@@ -96,9 +115,18 @@ export function HashTableVisualizer() {
     let hash = originalHash;
     let attempt = 0;
     
+    setCurrentStep(`Using hash function to compute index for key "${key}". Hash(${key}) = ${originalHash}. Starting open addressing insertion.`);
+    await sleep(800);
+    
     while (attempt < openTable.length) {
       setHighlightedSlots([hash]);
-      setCurrentStep(`Trying slot ${hash} (attempt ${attempt + 1})`);
+      
+      if (attempt === 0) {
+        setCurrentStep(`First attempt: checking slot ${hash} for key "${key}".`);
+      } else {
+        const probingMethod = method === 'linear-probing' ? 'linear probing' : 'quadratic probing';
+        setCurrentStep(`Attempt ${attempt + 1}: using ${probingMethod} to check slot ${hash} for key "${key}".`);
+      }
       
       await sleep(600);
 
@@ -106,30 +134,34 @@ export function HashTableVisualizer() {
         const newTable = [...openTable];
         newTable[hash] = { key, value };
         setOpenTable(newTable);
-        setCurrentStep(`Inserted ${key} at slot ${hash}`);
+        setCurrentStep(`Success! Found empty slot ${hash}. Inserted "${key}": "${value}" using open addressing after ${attempt + 1} attempts.`);
         await sleep(800);
         return;
       } else if (openTable[hash]?.key === key) {
         const newTable = [...openTable];
         newTable[hash] = { key, value };
         setOpenTable(newTable);
-        setCurrentStep(`Updated existing key ${key} at slot ${hash}`);
+        setCurrentStep(`Key "${key}" already exists at slot ${hash}. Updated its value to "${value}".`);
         await sleep(800);
         return;
       } else {
-        setCurrentStep(`Slot ${hash} occupied by ${openTable[hash]?.key}. Collision!`);
+        const occupyingKey = openTable[hash]?.key;
+        setCurrentStep(`Collision! Slot ${hash} is occupied by "${occupyingKey}". Need to probe for next available slot.`);
         await sleep(600);
         
         attempt++;
         if (method === 'linear-probing') {
           hash = (originalHash + attempt) % openTable.length;
+          setCurrentStep(`Linear probing: trying next slot ${hash} (original + ${attempt}).`);
         } else {
           hash = quadraticProbe(originalHash, attempt, openTable.length);
+          setCurrentStep(`Quadratic probing: trying slot ${hash} using formula (original + ${attempt}²) mod table_size.`);
         }
+        await sleep(400);
       }
     }
     
-    setCurrentStep('Hash table is full!');
+    setCurrentStep(`Hash table is full! Checked all ${openTable.length} slots but couldn't find space for "${key}".`);
     toast.error('Hash table is full');
   }, [openTable, hashFunction, method, quadraticProbe]);
 
@@ -145,27 +177,44 @@ export function HashTableVisualizer() {
     if (method === 'chaining') {
       const hash = hashFunction(searchKey, chainTable.length);
       setHighlightedSlots([hash]);
-      setCurrentStep(`Searching for ${searchKey}. Hash(${searchKey}) = ${hash}`);
+      setCurrentStep(`Searching for "${searchKey}" using separate chaining. Hash(${searchKey}) = ${hash}. Checking the chain at slot ${hash}.`);
       
       await sleep(800);
       
       let current = chainTable[hash];
       let found = false;
+      let chainPosition = 0;
       
-      while (current) {
-        if (current.key === searchKey) {
-          setCurrentStep(`Found ${searchKey} with value: ${current.value}`);
-          found = true;
-          break;
-        }
-        current = current.next;
-      }
-      
-      if (!found) {
-        setCurrentStep(`Key ${searchKey} not found in the hash table`);
+      if (!current) {
+        setCurrentStep(`Slot ${hash} is empty. Key "${searchKey}" is not in the hash table.`);
         toast.error('Key not found');
       } else {
-        toast.success(`Found: ${searchKey}`);
+        setCurrentStep(`Found chain at slot ${hash}. Traversing the linked list to find "${searchKey}".`);
+        await sleep(600);
+        
+        while (current) {
+          chainPosition++;
+          setCurrentStep(`Checking position ${chainPosition} in chain: found key "${current.key}". ${current.key === searchKey ? 'This matches our target!' : 'Not a match, continuing...'}`);
+          await sleep(600);
+          
+          if (current.key === searchKey) {
+            setCurrentStep(`Success! Found "${searchKey}" at slot ${hash}, position ${chainPosition} in the chain, with value: "${current.value}".`);
+            found = true;
+            toast.success(`Found: ${searchKey}`);
+            break;
+          }
+          current = current.next;
+          
+          if (current) {
+            setCurrentStep(`Moving to next node in the chain at slot ${hash}.`);
+            await sleep(400);
+          }
+        }
+        
+        if (!found) {
+          setCurrentStep(`Reached end of chain at slot ${hash}. Key "${searchKey}" is not in the hash table after checking ${chainPosition} nodes.`);
+          toast.error('Key not found');
+        }
       }
     } else {
       // Open addressing search
@@ -174,32 +223,49 @@ export function HashTableVisualizer() {
       let attempt = 0;
       let found = false;
       
+      setCurrentStep(`Searching for "${searchKey}" using open addressing. Hash(${searchKey}) = ${originalHash}. Starting at slot ${originalHash}.`);
+      await sleep(800);
+      
       while (attempt < openTable.length) {
         setHighlightedSlots([hash]);
-        setCurrentStep(`Searching slot ${hash} for ${searchKey}`);
+        
+        if (attempt === 0) {
+          setCurrentStep(`First attempt: checking slot ${hash} for "${searchKey}".`);
+        } else {
+          const probingMethod = method === 'linear-probing' ? 'linear probing' : 'quadratic probing';
+          setCurrentStep(`Attempt ${attempt + 1}: using ${probingMethod} to check slot ${hash} for "${searchKey}".`);
+        }
         
         await sleep(600);
         
         if (!openTable[hash]) {
-          setCurrentStep(`Empty slot found. Key ${searchKey} not in table.`);
+          setCurrentStep(`Found empty slot at ${hash}. This means "${searchKey}" is not in the hash table, as we would have encountered it before this empty slot.`);
           break;
         } else if (openTable[hash]?.key === searchKey && !openTable[hash]?.isDeleted) {
-          setCurrentStep(`Found ${searchKey} with value: ${openTable[hash]?.value}`);
+          setCurrentStep(`Success! Found "${searchKey}" at slot ${hash} with value: "${openTable[hash]?.value}". Search completed after ${attempt + 1} attempts.`);
           found = true;
           toast.success(`Found: ${searchKey}`);
           break;
+        } else if (openTable[hash]?.isDeleted) {
+          setCurrentStep(`Slot ${hash} contains a deleted entry. Continuing search as "${searchKey}" might be further along the probe sequence.`);
+        } else {
+          setCurrentStep(`Slot ${hash} contains "${openTable[hash]?.key}", not our target. Continuing probe sequence.`);
         }
         
+        await sleep(400);
         attempt++;
         if (method === 'linear-probing') {
           hash = (originalHash + attempt) % openTable.length;
+          setCurrentStep(`Linear probing: moving to next slot ${hash}.`);
         } else {
           hash = quadraticProbe(originalHash, attempt, openTable.length);
+          setCurrentStep(`Quadratic probing: jumping to slot ${hash} using quadratic formula.`);
         }
+        await sleep(400);
       }
       
       if (!found && attempt >= openTable.length) {
-        setCurrentStep(`Key ${searchKey} not found after checking all slots`);
+        setCurrentStep(`Search exhausted! Checked all ${openTable.length} slots but "${searchKey}" was not found in the hash table.`);
         toast.error('Key not found');
       }
     }
@@ -378,6 +444,76 @@ export function HashTableVisualizer() {
           )}
         </div>
       </div>
+
+      {/* Voice Explain and Show Memory Controls */}
+      <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6 border-2 border-blue-200 dark:border-blue-800">
+        <h4 className="font-semibold mb-4 text-center text-lg">Visualizer Controls</h4>
+        <div className="flex justify-center">
+          <VisualizerControls
+            showMemory={showMemory}
+            onToggleMemory={setShowMemory}
+            voiceEnabled={voiceEnabled}
+            onToggleVoice={setVoiceEnabled}
+            voiceSpeed={voiceSpeed}
+            onVoiceSpeedChange={setVoiceSpeed}
+            isSpeaking={isSpeaking}
+            onPauseSpeech={pauseSpeech}
+            onResumeSpeech={resumeSpeech}
+            onStopSpeech={stopSpeech}
+          />
+        </div>
+      </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 border-2 border-green-200 dark:border-green-800">
+          <h4 className="font-semibold mb-3 text-lg">Hash Table Memory Layout</h4>
+          <div className="space-y-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <h5 className="text-sm font-medium mb-2">Hash Table Slots</h5>
+                <div className="space-y-1">
+                  {(method === 'chaining' ? chainTable : openTable).map((slot, index) => {
+                    const address = 0x4000 + (index * 8); // Different base address for hash table
+                    return (
+                      <div key={index} className={`flex justify-between text-xs font-mono p-2 rounded ${
+                        highlightedSlots.includes(index) ? 'bg-primary/20 border border-primary/30' : 'bg-background/50'
+                      }`}>
+                        <span>slot[{index}]</span>
+                        <span>0x{address.toString(16).toUpperCase()}</span>
+                        <span>{slot ? (method === 'chaining' ? `${slot.key}:${slot.value}` : `${(slot as HashEntry).key}:${(slot as HashEntry).value}`) : 'empty'}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <div>
+                <h5 className="text-sm font-medium mb-2">Hash Function Details</h5>
+                <div className="space-y-1">
+                  <div className="text-xs font-mono bg-background/50 p-2 rounded">
+                    <div><strong>Algorithm:</strong> djb2 hash</div>
+                    <div><strong>Formula:</strong> hash = hash * 31 + charCode</div>
+                    <div><strong>Table Size:</strong> {method === 'chaining' ? chainTable.length : openTable.length}</div>
+                    <div><strong>Load Factor:</strong> {
+                      method === 'chaining' 
+                        ? (chainTable.filter(slot => slot !== null).length / chainTable.length).toFixed(2)
+                        : (openTable.filter(slot => slot !== null && !slot.isDeleted).length / openTable.length).toFixed(2)
+                    }</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-3 p-3 bg-info/10 rounded-lg border border-info/30">
+              <p className="text-xs text-info-foreground">
+                <strong>Memory Info:</strong> Each hash table slot occupies 8 bytes (pointer to key-value pair). 
+                {method === 'chaining' && ' Separate chaining uses additional memory for linked list nodes.'}
+                {method !== 'chaining' && ' Open addressing stores entries directly in the table slots.'}
+                {highlightedSlots.length > 0 && ` Currently accessing slot ${highlightedSlots[0]} at address 0x${(0x4000 + (highlightedSlots[0] * 8)).toString(16).toUpperCase()}.`}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Algorithm Info */}
       <div className="bg-muted/20 rounded-lg p-4">
