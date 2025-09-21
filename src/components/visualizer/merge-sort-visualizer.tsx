@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { RotateCcw, Play, Pause, SkipForward } from 'lucide-react';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
 import { MemoryLayout } from '@/components/memory-layout';
-import { useVoiceExplain } from '@/hooks/useVoiceExplain';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface MergeStep {
   array: number[];
@@ -29,8 +29,19 @@ export function MergeSortVisualizer() {
   const [showMemory, setShowMemory] = useState(false);
   const [memoryAddresses, setMemoryAddresses] = useState<number[]>([]);
   
-  const [voiceText, setVoiceText] = useState('');
-  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(voiceText);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2500 });
 
   const generateMemoryAddresses = () => {
     const baseAddress = 0x2000;
@@ -131,9 +142,7 @@ export function MergeSortVisualizer() {
     setCurrentStep(0);
     setIsSorting(true);
     
-    if (voiceEnabled) {
-      setVoiceText("Starting merge sort visualization. We'll divide the array recursively and then merge the sorted parts.");
-    }
+    speakOperation("Starting merge sort visualization", "We'll divide the array recursively and then merge the sorted parts.");
   };
 
   const nextStep = () => {
@@ -142,9 +151,7 @@ export function MergeSortVisualizer() {
       setCurrentStep(nextStepIndex);
       setCurrentArray(steps[nextStepIndex].array);
       
-      if (voiceEnabled) {
-        setVoiceText(steps[nextStepIndex].description);
-      }
+      speakStep("", steps[nextStepIndex].description, nextStepIndex, steps.length);
     }
   };
 
@@ -317,6 +324,12 @@ export function MergeSortVisualizer() {
           onToggleMemory={setShowMemory}
           voiceEnabled={voiceEnabled}
           onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
         />
       </div>
     </div>

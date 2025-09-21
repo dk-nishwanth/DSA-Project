@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
 import { MemoryLayout } from '@/components/memory-layout';
-import { useVoiceExplain } from '@/hooks/useVoiceExplain';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 function getMax(a: number[]) { return a.reduce((m, x) => Math.max(m, x), 0); }
 
@@ -16,8 +16,17 @@ export function RadixSortVisualizer() {
   const [buckets, setBuckets] = useState<number[][]>(Array.from({length:10},()=>[]));
   const [showMemory, setShowMemory] = useState(false);
   
-  const [voiceText, setVoiceText] = useState('');
-  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(voiceText);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakOperation
+  } = useVisualizerVoice({ minInterval: 2500 });
 
   const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
 
@@ -111,6 +120,12 @@ export function RadixSortVisualizer() {
           onToggleMemory={setShowMemory}
           voiceEnabled={voiceEnabled}
           onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
         />
       </div>
     </div>

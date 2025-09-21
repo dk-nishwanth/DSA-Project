@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
-import { useVoiceExplain } from '@/hooks/useVoiceExplain';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 type RecursionType = 'factorial' | 'fibonacci' | 'tail-factorial' | 'tower-hanoi' | 'binary-search';
 
@@ -29,7 +29,17 @@ export function RecursionVisualizer() {
   const [finalResult, setFinalResult] = useState<any>(null);
   const [expandedFrames, setExpandedFrames] = useState<Set<number>>(new Set());
   const [showMemory, setShowMemory] = useState(false);
-  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(currentStep);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakOperation
+  } = useVisualizerVoice({ minInterval: 2500 });
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -417,6 +427,12 @@ export function RecursionVisualizer() {
           <VisualizerControls
             voiceEnabled={voiceEnabled}
             onToggleVoice={setVoiceEnabled}
+            voiceSpeed={speed}
+            onVoiceSpeedChange={setSpeed}
+            isSpeaking={isSpeaking}
+            onPauseSpeech={pauseSpeech}
+            onResumeSpeech={resumeSpeech}
+            onStopSpeech={stopSpeech}
             showMemory={showMemory}
             onToggleMemory={setShowMemory}
           />

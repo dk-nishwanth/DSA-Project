@@ -31,8 +31,24 @@ import SubscriptionPayment from "./pages/SubscriptionPayment";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import { VoiceSpeedTest } from "./components/voice-speed-test";
 import TestAuth from "./pages/TestAuth";
+import { AdvancedLearningDashboard } from "./components/advanced-learning-dashboard";
+import { InterviewSimulator } from "./components/interview-simulator";
+import { EnhancedCodeEditor } from "./components/enhanced-code-editor";
+import { AdvancedFeaturesIntegration } from "./services/advanced-features-integration";
+import { AdvancedFeaturesTest } from "./components/advanced-features-test";
+import { DebugInfo } from "./components/debug-info";
+import { GamificationTest } from "./components/gamification-test";
 
 const queryClient = new QueryClient();
+
+// Initialize advanced features
+const advancedFeatures = AdvancedFeaturesIntegration.getInstance();
+advancedFeatures.initializeForAllTopics().then(() => {
+  console.log('🚀 Advanced features initialized successfully');
+  advancedFeatures.validateAdvancedFeatures();
+}).catch((error) => {
+  console.error('❌ Advanced features initialization failed:', error);
+});
 
 const App = () => (
   <ErrorBoundary>
@@ -88,6 +104,32 @@ const App = () => (
             {/* Test Routes */}
             <Route path="/voice-test" element={<VoiceSpeedTest />} />
             <Route path="/test-auth" element={<TestAuth />} />
+            <Route path="/test-advanced-features" element={<AdvancedFeaturesTest />} />
+            <Route path="/debug" element={<DebugInfo />} />
+            <Route path="/test-gamification" element={<GamificationTest />} />
+            
+            {/* Advanced Learning Features */}
+            <Route path="/advanced-dashboard" element={
+              <ProtectedRoute>
+                <div className="min-h-screen bg-gray-50">
+                  <AdvancedLearningDashboard />
+                </div>
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/interview-simulator" element={
+              <ProtectedRoute>
+                <InterviewSimulator />
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/code-editor" element={
+              <ProtectedRoute>
+                <div className="min-h-screen bg-gray-50 p-6">
+                  <EnhancedCodeEditor />
+                </div>
+              </ProtectedRoute>
+            } />
             
             {/* Main App Routes */}
             <Route path="/dashboard" element={

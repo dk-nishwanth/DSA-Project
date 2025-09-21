@@ -5,7 +5,7 @@ import { Play, Pause, RotateCcw, Shuffle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
 import { MemoryLayout } from '@/components/memory-layout';
-import { useVoiceExplain } from '@/hooks/useVoiceExplain';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface SortStep {
   array: number[];
@@ -22,8 +22,17 @@ export function InsertionSortVisualizer() {
   const [inputValue, setInputValue] = useState('64,34,25,12,22,11,90');
   const [showMemory, setShowMemory] = useState(false);
   
-  const [voiceText, setVoiceText] = useState('');
-  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(voiceText);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakOperation
+  } = useVisualizerVoice({ minInterval: 2500 });
 
   const generateSteps = (arr: number[]): SortStep[] => {
     const steps: SortStep[] = [];
@@ -284,6 +293,12 @@ export function InsertionSortVisualizer() {
           onToggleMemory={setShowMemory}
           voiceEnabled={voiceEnabled}
           onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
         />
       </div>
     </div>

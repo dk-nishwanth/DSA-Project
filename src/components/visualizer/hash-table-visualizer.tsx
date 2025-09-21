@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
-import { useVoiceExplain } from '@/hooks/useVoiceExplain';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 type CollisionMethod = 'chaining' | 'linear-probing' | 'quadratic-probing';
 
@@ -32,15 +32,16 @@ export function HashTableVisualizer() {
   const [currentStep, setCurrentStep] = useState('Hash table visualizer loaded. Try inserting or searching for keys to see the collision resolution in action!');
   const [showMemory, setShowMemory] = useState(false);
   const { 
-    enabled: voiceEnabled, 
-    setEnabled: setVoiceEnabled,
-    speed: voiceSpeed,
-    setSpeed: setVoiceSpeed,
+    voiceEnabled, 
+    setVoiceEnabled,
+    speed,
+    setSpeed,
     isSpeaking,
     pauseSpeech,
     resumeSpeech,
-    stopSpeech
-  } = useVoiceExplain(currentStep);
+    stopSpeech,
+    speakOperation
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   // For separate chaining
   const [chainTable, setChainTable] = useState<(ChainNode | null)[]>(Array(7).fill(null));
@@ -450,16 +451,16 @@ export function HashTableVisualizer() {
         <h4 className="font-semibold mb-4 text-center text-lg">Visualizer Controls</h4>
         <div className="flex justify-center">
           <VisualizerControls
-            showMemory={showMemory}
-            onToggleMemory={setShowMemory}
             voiceEnabled={voiceEnabled}
             onToggleVoice={setVoiceEnabled}
-            voiceSpeed={voiceSpeed}
-            onVoiceSpeedChange={setVoiceSpeed}
+            voiceSpeed={speed}
+            onVoiceSpeedChange={setSpeed}
             isSpeaking={isSpeaking}
             onPauseSpeech={pauseSpeech}
             onResumeSpeech={resumeSpeech}
             onStopSpeech={stopSpeech}
+            showMemory={showMemory}
+            onToggleMemory={setShowMemory}
           />
         </div>
       </div>

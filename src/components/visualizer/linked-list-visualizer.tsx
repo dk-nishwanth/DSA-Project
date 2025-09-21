@@ -8,7 +8,7 @@ import { PseudocodeBox } from '@/components/pseudocode-box';
 import { ComplexityBox } from '@/components/complexity-box';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
 import { MemoryLayout } from '@/components/memory-layout';
-import { useVoiceExplain } from '@/hooks/useVoiceExplain';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface Node {
   id: string;
@@ -33,7 +33,17 @@ export function LinkedListVisualizer() {
   const [pseudoTitle, setPseudoTitle] = useState('');
   const [pseudoCode, setPseudoCode] = useState<string[]>([]);
   const [pseudoLine, setPseudoLine] = useState(0);
-  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(stepDesc);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakOperation
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const sleep = (ms: number) => new Promise(res => setTimeout(res, ms));
 
@@ -364,6 +374,12 @@ export function LinkedListVisualizer() {
           onToggleMemory={setShowMemory}
           voiceEnabled={voiceEnabled}
           onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
         />
       </div>
 

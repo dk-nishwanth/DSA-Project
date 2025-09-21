@@ -30,6 +30,8 @@ import { SearchBar } from '@/components/search-bar';
 import { ProgressTracker } from '@/components/progress-tracker';
 import { useAuth } from '@/contexts/auth-context';
 import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 const categoryIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   'Arrays': Database,
@@ -176,6 +178,30 @@ export function Sidebar() {
           <div className="mt-4 space-y-3">
             <progressTracker.ProgressBadge />
             
+            {/* Advanced Features Quick Access */}
+            {isPremium && (
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <Brain className="h-4 w-4 text-blue-600" />
+                  <span className="text-sm font-medium text-blue-800">Advanced Features</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <NavLink to="/advanced-dashboard" className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200 transition-colors text-center">
+                    AI Dashboard
+                  </NavLink>
+                  <NavLink to="/interview-simulator" className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded hover:bg-purple-200 transition-colors text-center">
+                    Mock Interview
+                  </NavLink>
+                  <NavLink to="/code-editor" className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded hover:bg-green-200 transition-colors text-center">
+                    Code Editor
+                  </NavLink>
+                  <div className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-center">
+                    Gamification
+                  </div>
+                </div>
+              </div>
+            )}
+            
             {/* Free tier usage indicator */}
             {!isPremium && (
               <div className="bg-gradient-to-r from-orange-100 to-red-100 border border-orange-200 rounded-lg p-3">
@@ -320,14 +346,27 @@ export function Sidebar() {
                                   <CheckCircle className="h-3 w-3 text-success" />
                                 )}
                                 <span className="flex-1">{topic.title}</span>
-                                <span className={cn(
-                                  "text-xs px-2 py-0.5 rounded-full",
-                                  topic.difficulty === 'beginner' && "bg-success/20 text-success",
-                                  topic.difficulty === 'intermediate' && "bg-warning/20 text-warning",
-                                  topic.difficulty === 'advanced' && "bg-destructive/20 text-destructive"
-                                )}>
-                                  {topic.difficulty[0].toUpperCase()}
-                                </span>
+                                <div className="flex items-center gap-1">
+                                  {/* Advanced Features Indicators */}
+                                  {isPremium && (
+                                    <>
+                                      <div title="AI-Powered Explanations">
+                                        <Brain className="h-3 w-3 text-blue-500" />
+                                      </div>
+                                      <div title="Gamification">
+                                        <Zap className="h-3 w-3 text-yellow-500" />
+                                      </div>
+                                    </>
+                                  )}
+                                  <span className={cn(
+                                    "text-xs px-2 py-0.5 rounded-full",
+                                    topic.difficulty === 'beginner' && "bg-success/20 text-success",
+                                    topic.difficulty === 'intermediate' && "bg-warning/20 text-warning",
+                                    topic.difficulty === 'advanced' && "bg-destructive/20 text-destructive"
+                                  )}>
+                                    {topic.difficulty[0].toUpperCase()}
+                                  </span>
+                                </div>
                               </div>
                             </NavLink>
                           );

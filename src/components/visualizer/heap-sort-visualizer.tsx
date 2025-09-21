@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { RotateCcw, Play } from 'lucide-react';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
 import { MemoryLayout } from '@/components/memory-layout';
-import { useVoiceExplain } from '@/hooks/useVoiceExplain';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface HeapSortStep {
   array: number[];
@@ -28,8 +28,19 @@ export function HeapSortVisualizer() {
   const [showMemory, setShowMemory] = useState(false);
   const [heapSize, setHeapSize] = useState(7);
   
-  const [voiceText, setVoiceText] = useState('');
-  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(voiceText);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2500 });
 
   const updateFromInput = () => {
     const nums = input.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
@@ -142,9 +153,7 @@ export function HeapSortVisualizer() {
     setCurrentStep(0);
     setIsSorting(true);
     
-    if (voiceEnabled) {
-      setVoiceText("Starting heap sort visualization. We'll build a max heap and then extract elements in sorted order.");
-    }
+    speakOperation("Starting heap sort visualization", "We'll build a max heap and then extract elements in sorted order.");
   };
 
   const nextStep = () => {
@@ -154,9 +163,7 @@ export function HeapSortVisualizer() {
       setCurrentArray(steps[nextStepIndex].array);
       setHeapSize(steps[nextStepIndex].heapSize);
       
-      if (voiceEnabled) {
-        setVoiceText(steps[nextStepIndex].description);
-      }
+      speakStep("", steps[nextStepIndex].description, nextStepIndex, steps.length);
     }
   };
 
@@ -298,6 +305,12 @@ export function HeapSortVisualizer() {
           onToggleMemory={setShowMemory}
           voiceEnabled={voiceEnabled}
           onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
         />
       </div>
     </div>

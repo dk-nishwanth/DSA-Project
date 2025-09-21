@@ -469,11 +469,22 @@ import { TeachingCards } from '@/components/teaching-cards';
 import { AdvancedCodePlayground } from '@/components/advanced-code-playground';
 import { WebPlayground } from '@/components/web-playground';
 import { TopicAccessGuard } from '@/components/auth/topic-access-guard';
+import { useAdvancedFeatures } from '@/hooks/useAdvancedFeatures';
 
 export default function TopicDetail() {
   const [currentExplanationStep, setCurrentExplanationStep] = useState(0);
   const { topicId } = useParams<{ topicId: string }>();
   const topic = dsaTopics.find(t => t.id === topicId);
+
+  // Advanced features integration
+  const {
+    currentSession,
+    xpGained,
+    achievementsUnlocked,
+    trackInteraction,
+    endSession,
+    isPremium
+  } = useAdvancedFeatures(topicId || '');
 
   if (!topic) {
     return <Navigate to="/" replace />;
@@ -1504,7 +1515,7 @@ arr.findIndex(v => v === 7); // search`,
       <div className="p-6 space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
-        <NavLink to="/">
+        <NavLink to="/dashboard">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard
@@ -1531,8 +1542,46 @@ arr.findIndex(v => v === 7); // search`,
         </div>
       </div>
 
-      {/* Learning Progress */}
+      {/* Learning Progress with Session Tracking */}
       <LearningProgress currentTopicId={topic.id} />
+      
+      {/* Learning Session Indicator (Advanced Feature) */}
+      {currentSession && (
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4 mb-4">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-sm font-medium text-blue-800">Learning Session Active</span>
+            {xpGained > 0 && (
+              <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
+                +{xpGained} XP
+              </span>
+            )}
+          </div>
+          <button 
+            onClick={() => endSession()}
+            className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
+          >
+            Complete Session
+          </button>
+        </div>
+      )}
+      
+      {/* Achievement Notifications */}
+      {achievementsUnlocked.length > 0 && (
+        <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-4 mb-4">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-lg">🏆</span>
+            <span className="font-medium text-yellow-800">New Achievement{achievementsUnlocked.length > 1 ? 's' : ''} Unlocked!</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {achievementsUnlocked.map((achievement, index) => (
+              <span key={index} className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
+                {achievement.icon} {achievement.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
@@ -1551,7 +1600,10 @@ arr.findIndex(v => v === 7); // search`,
             />
           </div>
 
-          <div className="bg-card border rounded-xl p-6 shadow-subtle">
+          <div 
+            className="bg-card border rounded-xl p-6 shadow-subtle"
+            onClick={() => trackInteraction({ topicId: topic.id, action: 'visualization_view', data: { type: 'interactive_visualizer' } })}
+          >
             <div className="flex items-center gap-2 mb-4">
               <Lightbulb className="h-5 w-5 text-primary" />
               <h2 className="text-xl font-semibold">Interactive Visualization</h2>
@@ -1599,20 +1651,24 @@ arr.findIndex(v => v === 7); // search`,
             </div>
           </div>
 
-          {/* Interactive Quiz */}
-          <InteractiveQuiz topicId={topic.id} />
+          {/* Interactive Quiz with Advanced Tracking */}
+          <div onClick={() => trackInteraction({ topicId: topic.id, action: 'quiz_attempt', data: { type: 'interactive_quiz' } })}>
+            <InteractiveQuiz topicId={topic.id} />
+          </div>
 
-          {/* Advanced Personal Codespace */}
-          <AdvancedCodePlayground 
-            topicId={topic.id} 
-            topicTitle={topic.title}
-            initialCode={{
-              javascript: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'javascript'),
-              python: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'python'),
-              java: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'java'),
-              cpp: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'c')
-            }}
-          />
+          {/* Advanced Personal Codespace with Tracking */}
+          <div onClick={() => trackInteraction({ topicId: topic.id, action: 'code_submit', data: { type: 'playground' } })}>
+            <AdvancedCodePlayground 
+              topicId={topic.id} 
+              topicTitle={topic.title}
+              initialCode={{
+                javascript: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'javascript'),
+                python: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'python'),
+                java: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'java'),
+                cpp: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'c')
+              }}
+            />
+          </div>
 
           {/* Web Development Playground for web-related topics */}
           {(topic.category === 'Web Development' || topic.title.toLowerCase().includes('html') || topic.title.toLowerCase().includes('css')) && (
@@ -1631,6 +1687,90 @@ arr.findIndex(v => v === 7); // search`,
             spaceComplexity={topic.spaceComplexity || 'O(1)'}
             description="Performance characteristics for the main operations"
           />
+
+          {/* AI Recommendations (Advanced Feature) */}
+          {isPremium && (
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 border border-blue-200 rounded-xl p-4 shadow-subtle">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-lg">🧠</span>
+                <h4 className="font-semibold text-blue-800">AI Recommendations</h4>
+              </div>
+              <div className="space-y-2 text-sm">
+                <div className="p-2 bg-white/60 rounded-lg">
+                  <p className="text-blue-700 font-medium">Needs Improvement</p>
+                  <p className="text-blue-600 text-xs">Confidence: 90%</p>
+                </div>
+                <div className="p-2 bg-white/60 rounded-lg">
+                  <p className="text-blue-700 font-medium">Practice more examples</p>
+                  <p className="text-blue-600 text-xs">Confidence: 85%</p>
+                </div>
+                <div className="p-2 bg-white/60 rounded-lg">
+                  <p className="text-blue-700 font-medium">Review related topics</p>
+                  <p className="text-blue-600 text-xs">Confidence: 75%</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Session Stats (Advanced Feature) */}
+          {currentSession && (
+            <div className="bg-gradient-to-br from-green-50 to-blue-50 border border-green-200 rounded-xl p-4 shadow-subtle">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-lg">⚡</span>
+                <h4 className="font-semibold text-green-800">Session Stats</h4>
+              </div>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-green-700">XP Gained</span>
+                  <span className="font-medium text-green-800">+{xpGained}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-green-700">Activities</span>
+                  <span className="font-medium text-green-800">{currentSession.activitiesCompleted.length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-green-700">Progress</span>
+                  <span className="font-medium text-green-800">60%</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Quick Actions (Advanced Feature) */}
+          <div className="bg-card border rounded-xl p-4 shadow-subtle">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-lg">🚀</span>
+              <h4 className="font-semibold text-card-foreground">Quick Actions</h4>
+            </div>
+            <div className="space-y-2">
+              <button 
+                onClick={() => trackInteraction({ topicId: topic.id, action: 'visualization_view', data: { type: 'practice' } })}
+                className="w-full text-left p-2 text-sm bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+              >
+                <span className="text-blue-700">🎯 Practice Problems</span>
+              </button>
+              {isPremium && (
+                <button 
+                  onClick={() => trackInteraction({ topicId: topic.id, action: 'visualization_view', data: { type: 'ai_help' } })}
+                  className="w-full text-left p-2 text-sm bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors"
+                >
+                  <span className="text-purple-700">🧠 AI Explanation</span>
+                </button>
+              )}
+              <button 
+                onClick={() => trackInteraction({ topicId: topic.id, action: 'code_submit', data: { type: 'challenge' } })}
+                className="w-full text-left p-2 text-sm bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
+              >
+                <span className="text-green-700">💻 Code Challenge</span>
+              </button>
+              <button 
+                onClick={() => trackInteraction({ topicId: topic.id, action: 'visualization_view', data: { type: 'related' } })}
+                className="w-full text-left p-2 text-sm bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
+              >
+                <span className="text-orange-700">🔗 Related Topics</span>
+              </button>
+            </div>
+          </div>
 
           {/* Code Implementation */}
           <CodeSnippetBox

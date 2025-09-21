@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
-import { useVoiceExplain } from '@/hooks/useVoiceExplain';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 type SearchAlgorithm = 'linear' | 'binary' | 'interpolation' | 'exponential';
 
@@ -21,7 +21,19 @@ export function SearchVisualizer() {
   const [comparisons, setComparisons] = useState(0);
   const [currentStep, setCurrentStep] = useState('');
   const [showMemory, setShowMemory] = useState(false);
-  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(currentStep);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -47,7 +59,9 @@ export function SearchVisualizer() {
 
   const linearSearch = useCallback(async () => {
     let comparisonCount = 0;
-    setCurrentStep('Starting linear search - checking each element sequentially');
+    const stepText = 'Starting linear search - checking each element sequentially';
+    setCurrentStep(stepText);
+    speakOperation("Linear Search", stepText);
     await sleep(800);
     
     for (let i = 0; i < array.length; i++) {
@@ -61,7 +75,9 @@ export function SearchVisualizer() {
       
       if (array[i] === target) {
         setFoundIndex(i);
-        setCurrentStep(`Linear search complete! Found target ${target} at index ${i} after ${comparisonCount} comparisons.`);
+        const resultText = `Linear search complete! Found target ${target} at index ${i} after ${comparisonCount} comparisons.`;
+        setCurrentStep(resultText);
+        speakResult(resultText);
         return i;
       }
     }
@@ -461,6 +477,12 @@ export function SearchVisualizer() {
       <VisualizerControls
         voiceEnabled={voiceEnabled}
         onToggleVoice={setVoiceEnabled}
+        voiceSpeed={speed}
+        onVoiceSpeedChange={setSpeed}
+        isSpeaking={isSpeaking}
+        onPauseSpeech={pauseSpeech}
+        onResumeSpeech={resumeSpeech}
+        onStopSpeech={stopSpeech}
         showMemory={showMemory}
         onToggleMemory={setShowMemory}
       />

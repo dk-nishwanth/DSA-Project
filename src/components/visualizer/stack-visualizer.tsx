@@ -7,7 +7,7 @@ import { Plus, Minus, Eye, RotateCcw } from 'lucide-react';
 import { ComplexityBox } from '@/components/complexity-box';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
 import { MemoryLayout } from '@/components/memory-layout';
-import { useVoiceExplain } from '@/hooks/useVoiceExplain';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface StackItem {
   id: string;
@@ -25,14 +25,26 @@ export function StackVisualizer() {
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const [operation, setOperation] = useState<string>('');
   const [showMemory, setShowMemory] = useState(false);
-  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(operation);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakOperation
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const handlePush = () => {
     const value = parseInt(inputValue);
     if (isNaN(value)) return;
 
     setIsAnimating(true);
-    setOperation(`Pushing ${value}`);
+    const opText = `Pushing ${value} onto the stack`;
+    setOperation(opText);
+    speakOperation('Push Operation', opText);
 
     const newItem: StackItem = {
       id: Date.now().toString(),
@@ -54,7 +66,10 @@ export function StackVisualizer() {
     if (stack.length === 0) return;
 
     setIsAnimating(true);
-    setOperation(`Popping ${stack[stack.length - 1].value}`);
+    const topItem = stack[stack.length - 1];
+    const opText = `Popping ${topItem.value} from the stack`;
+    setOperation(opText);
+    speakOperation('Pop Operation', opText);
     setHighlightedIndex(stack.length - 1);
 
     setTimeout(() => {
@@ -69,7 +84,9 @@ export function StackVisualizer() {
     if (stack.length === 0) return;
 
     setIsAnimating(true);
-    setOperation(`Top element: ${stack[stack.length - 1].value}`);
+    const opText = `Top element: ${stack[stack.length - 1].value}`;
+    setOperation(opText);
+    speakOperation('Peek Operation', opText);
     setHighlightedIndex(stack.length - 1);
 
     setTimeout(() => {
@@ -161,6 +178,12 @@ export function StackVisualizer() {
           onToggleMemory={setShowMemory}
           voiceEnabled={voiceEnabled}
           onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
         />
       </div>
 

@@ -5,7 +5,7 @@ import { Play, Pause, RotateCcw, Shuffle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
 import { MemoryLayout } from '@/components/memory-layout';
-import { useVoiceExplain } from '@/hooks/useVoiceExplain';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface CountingStep {
   array: number[];
@@ -24,8 +24,17 @@ export function CountingSortVisualizer() {
   const [inputValue, setInputValue] = useState('4,2,2,8,3,3,1');
   const [showMemory, setShowMemory] = useState(false);
   
-  const [voiceText, setVoiceText] = useState('');
-  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(voiceText);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakOperation
+  } = useVisualizerVoice({ minInterval: 2500 });
 
   const generateSteps = (arr: number[]): CountingStep[] => {
     const steps: CountingStep[] = [];
@@ -358,6 +367,12 @@ export function CountingSortVisualizer() {
           onToggleMemory={setShowMemory}
           voiceEnabled={voiceEnabled}
           onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
         />
       </div>
 

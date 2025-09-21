@@ -50,17 +50,22 @@ export function StepByStepBase({
       const title = (currentStep as any)?.title || '';
       const highlight = (currentStep as any)?.highlight || '';
       const narrationText = [title, description, highlight].filter(Boolean).join('. ') + (highlight ? '.' : '');
+      
+      // Dispatch event with controlled timing flag
       const event = new CustomEvent('visualization_step', {
         detail: {
           description,
           title,
           highlight,
-          narrationText
+          narrationText,
+          useControlledTiming: true, // Flag for voice system to use independent timing
+          stepIndex: currentStepIndex,
+          totalSteps: steps.length
         }
       });
       window.dispatchEvent(event);
     }
-  }, [currentStepIndex, currentStep, onStepChange]);
+  }, [currentStepIndex, currentStep, onStepChange, steps.length]);
 
   useEffect(() => {
     if (isPlaying && steps.length > 0) {
