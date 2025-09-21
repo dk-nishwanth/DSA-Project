@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User, Settings, BarChart3, Trophy, LogOut, ChevronDown } from 'lucide-react';
+import { User, Settings, BarChart3, Trophy, LogOut, ChevronDown, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -12,6 +12,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { SAMPLE_PROFILE } from '@/data/profileData';
+import { useAuth } from '@/contexts/auth-context';
 
 interface ProfileButtonProps {
   onNavigateToProfile?: () => void;
@@ -28,8 +29,34 @@ export function ProfileButton({
   onNavigateToAchievements,
   onLogout
 }: ProfileButtonProps) {
+  const { user, isPremium, subscription } = useAuth();
   const profile = SAMPLE_PROFILE;
   const unlockedAchievements = profile.achievements.filter(a => a.unlockedDate).length;
+  
+  // Get subscription display info
+  const getSubscriptionInfo = () => {
+    if (!user || !subscription) return { plan: 'Free', color: 'bg-gray-500' };
+    
+    if (subscription.plan === 'premium') {
+      if (subscription.endDate) {
+        const endDate = new Date(subscription.endDate);
+        const startDate = new Date(subscription.startDate);
+        const diffTime = endDate.getTime() - startDate.getTime();
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        if (diffDays >= 365) {
+          return { plan: '₹500/year', color: 'bg-gradient-to-r from-purple-500 to-pink-500' };
+        } else {
+          return { plan: '₹50/month', color: 'bg-gradient-to-r from-blue-500 to-cyan-500' };
+        }
+      }
+      return { plan: 'Premium', color: 'bg-gradient-to-r from-amber-500 to-orange-500' };
+    }
+    
+    return { plan: 'Free', color: 'bg-gray-500' };
+  };
+  
+  const subscriptionInfo = getSubscriptionInfo();
 
   return (
     <DropdownMenu>
@@ -46,10 +73,20 @@ export function ProfileButton({
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{profile.username}</p>
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-medium leading-none">
+                {user?.name || profile.username}
+              </p>
+              {isPremium && <Crown className="w-3 h-3 text-amber-500" />}
+            </div>
             <p className="text-xs leading-none text-muted-foreground">
-              {profile.email}
+              {user?.email || profile.email}
             </p>
+            <Badge 
+              className={`text-xs ${subscriptionInfo.color} text-white border-0 w-fit`}
+            >
+              {subscriptionInfo.plan}
+            </Badge>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   User, 
@@ -22,7 +22,13 @@ import {
   Flame,
   Star,
   CheckCircle,
-  Circle
+  Circle,
+  Crown,
+  CreditCard,
+  AlertTriangle,
+  CheckCircle2,
+  XCircle,
+  RefreshCw
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -41,14 +47,129 @@ import {
 } from '@/data/profileData';
 import { dsaTopics } from '@/data/dsaTopics';
 import { StudyCalendar } from '@/components/study-calendar';
+import { useAuth } from '@/contexts/auth-context';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 export function ProfilePage() {
+  const { user, isPremium, subscription, updateSubscription } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [profile, setProfile] = useState<UserProfile>(SAMPLE_PROFILE);
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({
     username: profile.username,
     email: profile.email
   });
+
+  // Check subscription expiry on component mount and periodically
+  useEffect(() => {
+    const checkSubscriptionExpiry = () => {
+      if (subscription && subscription.status === 'active') {
+        const now = new Date();
+        const endDate = new Date(subscription.endDate);
+        
+        if (now > endDate) {
+          // Subscription has expired
+          const expiredSubscription = {
+            ...subscription,
+            status: 'expired' as const
+          };
+          
+          if (updateSubscription) {
+            updateSubscription(expiredSubscription);
+          }
+          
+          toast({
+            title: "Subscription Expired",
+            description: "Your premium subscription has expired. Upgrade to continue accessing all features.",
+            variant: "destructive"
+          });
+        }
+      }
+    };
+
+    // Check immediately
+    checkSubscriptionExpiry();
+    
+    // Check every minute
+    const interval = setInterval(checkSubscriptionExpiry, 60000);
+    
+    return () => clearInterval(interval);
+  }, [subscription, updateSubscription, toast]);
+
+  const formatDate = (date: Date | string) => {
+    return new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const getDaysRemaining = () => {
+    if (!subscription || subscription.status !== 'active') return 0;
+    const now = new Date();
+    const endDate = new Date(subscription.endDate);
+    const diffTime = endDate.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return Math.max(0, diffDays);
+  };
+
+  const getSubscriptionStatus = () => {
+    if (!subscription) return 'No subscription';
+    
+    switch (subscription.status) {
+      case 'active':
+        const daysRemaining = getDaysRemaining();
+        if (daysRemaining <= 0) return 'Expired';
+        if (daysRemaining <= 7) return 'Expiring Soon';
+        return 'Active';
+      case 'expired':
+        return 'Expired';
+      case 'cancelled':
+        return 'Cancelled';
+      case 'trial':
+        return 'Trial';
+      default:
+        return 'Unknown';
+    }
+  };
+
+  const getStatusColor = () => {
+    const status = getSubscriptionStatus();
+    switch (status) {
+      case 'Active':
+        return 'text-green-600 bg-green-100';
+      case 'Expiring Soon':
+        return 'text-yellow-600 bg-yellow-100';
+      case 'Expired':
+      case 'Cancelled':
+        return 'text-red-600 bg-red-100';
+      case 'Trial':
+        return 'text-blue-600 bg-blue-100';
+      default:
+        return 'text-gray-600 bg-gray-100';
+    }
+  };
+
+  const handleUpgrade = () => {
+    navigate('/subscription-payment');
+  };
+
+  const handleCancelSubscription = () => {
+    if (subscription && updateSubscription) {
+      const cancelledSubscription = {
+        ...subscription,
+        status: 'cancelled' as const
+      };
+      updateSubscription(cancelledSubscription);
+      
+      toast({
+        title: "Subscription Cancelled",
+        description: "Your subscription has been cancelled. You'll retain access until the end of your billing period.",
+      });
+    }
+  };
 
   const handleSaveProfile = () => {
     setProfile(updateProfile(profile, {
@@ -211,8 +332,9 @@ export function ProfilePage() {
 
       {/* Main Content Tabs */}
       <Tabs defaultValue="progress" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="progress">Progress</TabsTrigger>
+          <TabsTrigger value="subscription">Subscription</TabsTrigger>
           <TabsTrigger value="calendar">Calendar</TabsTrigger>
           <TabsTrigger value="achievements">Achievements</TabsTrigger>
           <TabsTrigger value="statistics">Statistics</TabsTrigger>
@@ -326,6 +448,282 @@ export function ProfilePage() {
                     </div>
                   );
                 })}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Subscription Tab */}
+        <TabsContent value="subscription" className="space-y-6">
+          {/* Current Subscription */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Crown className="h-5 w-5" />
+                Current Subscription
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {/* Subscription Status */}
+                <div className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                      isPremium ? 'bg-gradient-to-br from-yellow-400 to-orange-500' : 'bg-gray-100'
+                    }`}>
+                      {isPremium ? (
+                        <Crown className="w-6 h-6 text-white" />
+                      ) : (
+                        <User className="w-6 h-6 text-gray-500" />
+                      )}
+                    </div>
+                    <div>
+                      <div className="font-semibold text-lg">
+                        {subscription?.plan === 'premium' ? 'Premium Plan' : 'Free Plan'}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge className={getStatusColor()}>
+                          {getSubscriptionStatus()}
+                        </Badge>
+                        {subscription?.plan === 'premium' && (
+                          <span className="text-sm text-muted-foreground">
+                            {getDaysRemaining()} days remaining
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold">
+                      {subscription?.plan === 'premium' ? '₹50' : '₹0'}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {subscription?.plan === 'premium' ? 'per month' : 'forever'}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Subscription Details */}
+                {subscription && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <h4 className="font-semibold">Subscription Details</h4>
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Plan Type:</span>
+                          <span className="font-medium">
+                            {subscription.plan === 'premium' ? 'Premium' : 'Free'}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Status:</span>
+                          <Badge className={getStatusColor()}>
+                            {getSubscriptionStatus()}
+                          </Badge>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Start Date:</span>
+                          <span className="font-medium">
+                            {formatDate(subscription.startDate)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">End Date:</span>
+                          <span className="font-medium">
+                            {formatDate(subscription.endDate)}
+                          </span>
+                        </div>
+                        {subscription.paymentMethod && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Payment Method:</span>
+                            <span className="font-medium">{subscription.paymentMethod}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h4 className="font-semibold">Usage Statistics</h4>
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Topics Accessed:</span>
+                          <span className="font-medium">
+                            {isPremium ? 'Unlimited' : '5 per month'}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Advanced Features:</span>
+                          <span className="font-medium">
+                            {isPremium ? (
+                              <CheckCircle2 className="w-4 h-4 text-green-600" />
+                            ) : (
+                              <XCircle className="w-4 h-4 text-red-600" />
+                            )}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Progress Tracking:</span>
+                          <span className="font-medium">
+                            {isPremium ? (
+                              <CheckCircle2 className="w-4 h-4 text-green-600" />
+                            ) : (
+                              <XCircle className="w-4 h-4 text-red-600" />
+                            )}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Mock Interviews:</span>
+                          <span className="font-medium">
+                            {isPremium ? (
+                              <CheckCircle2 className="w-4 h-4 text-green-600" />
+                            ) : (
+                              <XCircle className="w-4 h-4 text-red-600" />
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Action Buttons */}
+                <div className="flex gap-4 pt-4 border-t">
+                  {!isPremium || subscription?.status === 'expired' ? (
+                    <Button onClick={handleUpgrade} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                      <Crown className="w-4 h-4 mr-2" />
+                      Upgrade to Premium
+                    </Button>
+                  ) : (
+                    <>
+                      <Button variant="outline" onClick={handleUpgrade}>
+                        <RefreshCw className="w-4 h-4 mr-2" />
+                        Renew Subscription
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        onClick={handleCancelSubscription}
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      >
+                        <XCircle className="w-4 h-4 mr-2" />
+                        Cancel Subscription
+                      </Button>
+                    </>
+                  )}
+                </div>
+
+                {/* Expiry Warning */}
+                {subscription?.status === 'active' && getDaysRemaining() <= 7 && getDaysRemaining() > 0 && (
+                  <div className="flex items-center gap-3 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                    <div>
+                      <div className="font-medium text-yellow-800">
+                        Subscription Expiring Soon
+                      </div>
+                      <div className="text-sm text-yellow-700">
+                        Your subscription expires in {getDaysRemaining()} days. Renew now to avoid interruption.
+                      </div>
+                    </div>
+                    <Button size="sm" onClick={handleUpgrade} className="ml-auto">
+                      Renew Now
+                    </Button>
+                  </div>
+                )}
+
+                {/* Expired Notice */}
+                {subscription?.status === 'expired' && (
+                  <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <XCircle className="w-5 h-5 text-red-600" />
+                    <div>
+                      <div className="font-medium text-red-800">
+                        Subscription Expired
+                      </div>
+                      <div className="text-sm text-red-700">
+                        Your premium features have been disabled. Upgrade to restore full access.
+                      </div>
+                    </div>
+                    <Button size="sm" onClick={handleUpgrade} className="ml-auto">
+                      Upgrade Now
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Features Comparison */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CreditCard className="h-5 w-5" />
+                Plan Features
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Free Plan */}
+                <div className="p-4 border rounded-lg">
+                  <div className="text-center mb-4">
+                    <h3 className="text-lg font-semibold">Free Plan</h3>
+                    <div className="text-2xl font-bold">₹0</div>
+                    <div className="text-sm text-muted-foreground">Forever</div>
+                  </div>
+                  <ul className="space-y-2">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-green-600" />
+                      <span className="text-sm">5 topics per month</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-green-600" />
+                      <span className="text-sm">Basic visualizations</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <XCircle className="w-4 h-4 text-red-600" />
+                      <span className="text-sm">Limited practice problems</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <XCircle className="w-4 h-4 text-red-600" />
+                      <span className="text-sm">No progress tracking</span>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Premium Plan */}
+                <div className="p-4 border-2 border-blue-200 rounded-lg bg-gradient-to-br from-blue-50 to-purple-50">
+                  <div className="text-center mb-4">
+                    <div className="flex items-center justify-center gap-2">
+                      <Crown className="w-5 h-5 text-yellow-600" />
+                      <h3 className="text-lg font-semibold">Premium Plan</h3>
+                    </div>
+                    <div className="text-2xl font-bold">₹50</div>
+                    <div className="text-sm text-muted-foreground">Per month</div>
+                  </div>
+                  <ul className="space-y-2">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-green-600" />
+                      <span className="text-sm">Unlimited topics access</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-green-600" />
+                      <span className="text-sm">Advanced visualizations</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-green-600" />
+                      <span className="text-sm">Unlimited practice problems</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-green-600" />
+                      <span className="text-sm">Progress tracking & analytics</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-green-600" />
+                      <span className="text-sm">Mock interview questions</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-green-600" />
+                      <span className="text-sm">Priority support</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </CardContent>
           </Card>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/auth-context';
-import { Check, Crown, Zap, QrCode, CreditCard, Smartphone, ArrowLeft, Star, Camera, Loader2 } from 'lucide-react';
+import { Check, Crown, Zap, QrCode, CreditCard, Smartphone, ArrowLeft, Star, Camera, Loader2, Shield, AlertCircle, CheckCircle2, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface PricingPlan {
@@ -61,6 +61,21 @@ const plans: PricingPlan[] = [
 
 type UpiProvider = 'gpay' | 'phonepe' | 'paytm' | 'razorpay';
 
+interface PaymentStep {
+  step: number;
+  title: string;
+  description: string;
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+}
+
+interface ValidationErrors {
+  cardNumber?: string;
+  expiry?: string;
+  cvv?: string;
+  name?: string;
+  upiId?: string;
+}
+
 export default function SubscriptionPayment() {
   const [selectedPlan, setSelectedPlan] = useState<PricingPlan>(plans[1]); // Default to yearly
   const [expandedMethod, setExpandedMethod] = useState<'upi' | 'card' | 'qr' | null>(null);
@@ -71,23 +86,216 @@ export default function SubscriptionPayment() {
     cvv: '',
     name: ''
   });
+  const [upiId, setUpiId] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentStep, setPaymentStep] = useState(0);
+  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentSteps, setPaymentSteps] = useState<PaymentStep[]>([]);
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, updateSubscription } = useAuth();
   const { toast } = useToast();
 
-  const handlePayment = async () => {
-    setIsProcessing(true);
+  // Validation functions
+  const validateCardNumber = (number: string): string | null => {
+    const cleaned = number.replace(/\s/g, '');
+    if (!cleaned) return 'Card number is required';
+    if (cleaned.length < 13 || cleaned.length > 19) return 'Invalid card number length';
+    if (!/^\d+$/.test(cleaned)) return 'Card number must contain only digits';
     
-    // Simulate payment processing
-    setTimeout(() => {
+    // Luhn algorithm check
+    let sum = 0;
+    let isEven = false;
+    for (let i = cleaned.length - 1; i >= 0; i--) {
+      let digit = parseInt(cleaned[i]);
+      if (isEven) {
+        digit *= 2;
+        if (digit > 9) digit -= 9;
+      }
+      sum += digit;
+      isEven = !isEven;
+    }
+    
+    if (sum % 10 !== 0) return 'Invalid card number';
+    return null;
+  };
+
+  const validateExpiry = (expiry: string): string | null => {
+    if (!expiry) return 'Expiry date is required';
+    const [month, year] = expiry.split('/');
+    if (!month || !year) return 'Invalid expiry format (MM/YY)';
+    
+    const monthNum = parseInt(month);
+    const yearNum = parseInt('20' + year);
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+    
+    if (monthNum < 1 || monthNum > 12) return 'Invalid month';
+    if (yearNum < currentYear || (yearNum === currentYear && monthNum < currentMonth)) {
+      return 'Card has expired';
+    }
+    
+    return null;
+  };
+
+  const validateCVV = (cvv: string): string | null => {
+    if (!cvv) return 'CVV is required';
+    if (cvv.length < 3 || cvv.length > 4) return 'CVV must be 3-4 digits';
+    if (!/^\d+$/.test(cvv)) return 'CVV must contain only digits';
+    return null;
+  };
+
+  const validateName = (name: string): string | null => {
+    if (!name.trim()) return 'Cardholder name is required';
+    if (name.trim().length < 2) return 'Name must be at least 2 characters';
+    if (!/^[a-zA-Z\s]+$/.test(name)) return 'Name must contain only letters and spaces';
+    return null;
+  };
+
+  const validateUpiId = (upiId: string): string | null => {
+    if (!upiId) return 'UPI ID is required';
+    const upiRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+$/;
+    if (!upiRegex.test(upiId)) return 'Invalid UPI ID format (e.g., user@paytm)';
+    return null;
+  };
+
+  const validatePaymentMethod = (): boolean => {
+    const errors: ValidationErrors = {};
+    
+    if (expandedMethod === 'card') {
+      errors.cardNumber = validateCardNumber(cardDetails.number);
+      errors.expiry = validateExpiry(cardDetails.expiry);
+      errors.cvv = validateCVV(cardDetails.cvv);
+      errors.name = validateName(cardDetails.name);
+    } else if (expandedMethod === 'upi' && selectedUpiProvider === 'razorpay') {
+      errors.upiId = validateUpiId(upiId);
+    }
+    
+    setValidationErrors(errors);
+    return Object.values(errors).every(error => !error);
+  };
+
+  const initializePaymentSteps = (method: string) => {
+    const steps: PaymentStep[] = [
+      {
+        step: 1,
+        title: 'Validating Payment Details',
+        description: 'Checking your payment information...',
+        status: 'processing'
+      },
+      {
+        step: 2,
+        title: 'Processing Payment',
+        description: `Processing payment via ${method}...`,
+        status: 'pending'
+      },
+      {
+        step: 3,
+        title: 'Activating Subscription',
+        description: 'Setting up your premium account...',
+        status: 'pending'
+      },
+      {
+        step: 4,
+        title: 'Complete',
+        description: 'Welcome to premium! Redirecting...',
+        status: 'pending'
+      }
+    ];
+    setPaymentSteps(steps);
+  };
+
+  const updatePaymentStep = (stepIndex: number, status: PaymentStep['status']) => {
+    setPaymentSteps(prev => prev.map((step, index) => 
+      index === stepIndex ? { ...step, status } : step
+    ));
+  };
+
+  const handlePayment = async () => {
+    if (!validatePaymentMethod()) {
       toast({
-        title: "Payment Successful!",
+        title: "Validation Error",
+        description: "Please fix the errors in your payment details.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsProcessing(true);
+    setShowPaymentModal(true);
+    
+    const paymentMethod = expandedMethod === 'card' ? 'Credit/Debit Card' : 
+                         expandedMethod === 'upi' ? selectedUpiProvider?.toUpperCase() || 'UPI' : 
+                         'QR Code';
+    
+    initializePaymentSteps(paymentMethod);
+
+    try {
+      // Step 1: Validation (1 second)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      updatePaymentStep(0, 'completed');
+      updatePaymentStep(1, 'processing');
+
+      // Step 2: Payment Processing (2-3 seconds)
+      await new Promise(resolve => setTimeout(resolve, 2500));
+      
+      // Simulate occasional payment failures (10% chance)
+      if (Math.random() < 0.1) {
+        updatePaymentStep(1, 'failed');
+        throw new Error('Payment declined by bank');
+      }
+      
+      updatePaymentStep(1, 'completed');
+      updatePaymentStep(2, 'processing');
+
+      // Step 3: Account Setup (1.5 seconds)
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Update user subscription
+      if (updateSubscription) {
+        const newSubscription = {
+          id: `sub_${Date.now()}`,
+          userId: user?.id || 'user_1',
+          plan: 'premium' as const,
+          status: 'active' as const,
+          startDate: new Date(),
+          endDate: new Date(Date.now() + (selectedPlan.id === 'yearly' ? 365 : 30) * 24 * 60 * 60 * 1000),
+          paymentMethod: paymentMethod,
+          trialUsed: true
+        };
+        updateSubscription(newSubscription);
+      }
+      
+      updatePaymentStep(2, 'completed');
+      updatePaymentStep(3, 'processing');
+
+      // Step 4: Complete (1 second)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      updatePaymentStep(3, 'completed');
+
+      // Success
+      toast({
+        title: "Payment Successful! 🎉",
         description: `Welcome to ${selectedPlan.name}! You now have full access to all features.`,
       });
-      navigate('/payment-success');
+
+      // Redirect after showing success
+      setTimeout(() => {
+        navigate('/payment-success?plan=' + selectedPlan.id);
+      }, 2000);
+
+    } catch (error) {
+      console.error('Payment failed:', error);
+      toast({
+        title: "Payment Failed",
+        description: error instanceof Error ? error.message : "Please try again or contact support.",
+        variant: "destructive"
+      });
+      setShowPaymentModal(false);
+    } finally {
       setIsProcessing(false);
-    }, 3000);
+    }
   };
 
   const handleSkipTrial = () => {
@@ -104,8 +312,98 @@ export default function SubscriptionPayment() {
   };
 
   const handleCardInputChange = (field: string, value: string) => {
-    setCardDetails(prev => ({ ...prev, [field]: value }));
+    let formattedValue = value;
+    
+    // Format card number with spaces
+    if (field === 'number') {
+      formattedValue = value.replace(/\s/g, '').replace(/(\d{4})/g, '$1 ').trim();
+      if (formattedValue.length > 19) formattedValue = formattedValue.slice(0, 19);
+    }
+    
+    // Format expiry date
+    if (field === 'expiry') {
+      formattedValue = value.replace(/\D/g, '');
+      if (formattedValue.length >= 2) {
+        formattedValue = formattedValue.slice(0, 2) + '/' + formattedValue.slice(2, 4);
+      }
+    }
+    
+    // Format CVV (numbers only)
+    if (field === 'cvv') {
+      formattedValue = value.replace(/\D/g, '').slice(0, 4);
+    }
+    
+    // Format name (letters and spaces only)
+    if (field === 'name') {
+      formattedValue = value.replace(/[^a-zA-Z\s]/g, '').slice(0, 50);
+    }
+    
+    setCardDetails(prev => ({ ...prev, [field]: formattedValue }));
+    
+    // Clear validation error when user starts typing
+    if (validationErrors[field as keyof ValidationErrors]) {
+      setValidationErrors(prev => ({ ...prev, [field]: undefined }));
+    }
   };
+
+  // Real-time validation as user types
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (expandedMethod === 'card') {
+        const errors: ValidationErrors = {};
+        if (cardDetails.number) errors.cardNumber = validateCardNumber(cardDetails.number);
+        if (cardDetails.expiry) errors.expiry = validateExpiry(cardDetails.expiry);
+        if (cardDetails.cvv) errors.cvv = validateCVV(cardDetails.cvv);
+        if (cardDetails.name) errors.name = validateName(cardDetails.name);
+        setValidationErrors(errors);
+      }
+    }, 500);
+    
+    return () => clearTimeout(timeoutId);
+  }, [cardDetails, expandedMethod]);
+
+  // Payment Processing Modal Component
+  const PaymentProcessingModal = () => (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <CardTitle className="flex items-center justify-center gap-2">
+            <Shield className="w-5 h-5 text-blue-600" />
+            Processing Payment
+          </CardTitle>
+          <CardDescription>
+            Please don't close this window or press back button
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {paymentSteps.map((step, index) => (
+            <div key={step.step} className="flex items-center gap-3">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                step.status === 'completed' ? 'bg-green-100 text-green-600' :
+                step.status === 'processing' ? 'bg-blue-100 text-blue-600' :
+                step.status === 'failed' ? 'bg-red-100 text-red-600' :
+                'bg-gray-100 text-gray-400'
+              }`}>
+                {step.status === 'completed' ? <CheckCircle2 className="w-4 h-4" /> :
+                 step.status === 'processing' ? <Loader2 className="w-4 h-4 animate-spin" /> :
+                 step.status === 'failed' ? <X className="w-4 h-4" /> :
+                 <span className="text-xs font-bold">{step.step}</span>}
+              </div>
+              <div className="flex-1">
+                <div className="font-medium text-sm">{step.title}</div>
+                <div className="text-xs text-muted-foreground">{step.description}</div>
+              </div>
+            </div>
+          ))}
+          
+          <div className="text-center text-xs text-muted-foreground mt-4 p-3 bg-blue-50 rounded-lg">
+            <Shield className="w-4 h-4 mx-auto mb-1 text-blue-600" />
+            <p>🔒 Your payment is secured with 256-bit SSL encryption</p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
 
   const upiProviders = [
     {
@@ -313,10 +611,6 @@ export default function SubscriptionPayment() {
                 {/* Payment Methods */}
                 <div className="space-y-4">
                   <h3 className="font-semibold">Choose Payment Method</h3>
-                  {/* Debug info - remove this later */}
-                  <div className="text-xs text-gray-500 p-2 bg-gray-100 rounded">
-                    Debug: Expanded Method = {expandedMethod || 'none'}
-                  </div>
                   
                   {/* UPI Payment */}
                   <Card 
@@ -367,6 +661,34 @@ export default function SubscriptionPayment() {
                               </CardContent>
                             </Card>
                           ))}
+                          
+                          {/* UPI ID Input for RazorPay */}
+                          {selectedUpiProvider === 'razorpay' && (
+                            <div className="mt-3 space-y-2">
+                              <Label htmlFor="upiId">Enter your UPI ID</Label>
+                              <Input
+                                id="upiId"
+                                placeholder="yourname@paytm"
+                                value={upiId}
+                                onChange={(e) => {
+                                  setUpiId(e.target.value);
+                                  if (validationErrors.upiId) {
+                                    setValidationErrors(prev => ({ ...prev, upiId: undefined }));
+                                  }
+                                }}
+                                className={validationErrors.upiId ? 'border-red-500' : ''}
+                              />
+                              {validationErrors.upiId && (
+                                <div className="flex items-center gap-1 text-red-600 text-xs">
+                                  <AlertCircle className="w-3 h-3" />
+                                  {validationErrors.upiId}
+                                </div>
+                              )}
+                              <p className="text-xs text-muted-foreground">
+                                Enter your UPI ID (e.g., 9876543210@paytm, user@googlepay)
+                              </p>
+                            </div>
+                          )}
                           
                           <Button 
                             className="w-full mt-3" 
@@ -452,47 +774,82 @@ export default function SubscriptionPayment() {
                       {expandedMethod === 'card' && (
                         <div className="mt-4 space-y-4 border-t pt-4">
                           <div>
-                            <Label htmlFor="cardNumber">Card Number</Label>
+                            <Label htmlFor="cardNumber">Card Number *</Label>
                             <Input
                               id="cardNumber"
                               placeholder="1234 5678 9012 3456"
                               value={cardDetails.number}
                               onChange={(e) => handleCardInputChange('number', e.target.value)}
                               maxLength={19}
+                              className={validationErrors.cardNumber ? 'border-red-500' : ''}
                             />
+                            {validationErrors.cardNumber && (
+                              <div className="flex items-center gap-1 text-red-600 text-xs mt-1">
+                                <AlertCircle className="w-3 h-3" />
+                                {validationErrors.cardNumber}
+                              </div>
+                            )}
+                            {cardDetails.number && !validationErrors.cardNumber && cardDetails.number.replace(/\s/g, '').length >= 13 && (
+                              <div className="flex items-center gap-1 text-green-600 text-xs mt-1">
+                                <CheckCircle2 className="w-3 h-3" />
+                                Valid card number
+                              </div>
+                            )}
                           </div>
 
                           <div className="grid grid-cols-2 gap-4">
                             <div>
-                              <Label htmlFor="expiry">Expiry Date</Label>
+                              <Label htmlFor="expiry">Expiry Date *</Label>
                               <Input
                                 id="expiry"
                                 placeholder="MM/YY"
                                 value={cardDetails.expiry}
                                 onChange={(e) => handleCardInputChange('expiry', e.target.value)}
                                 maxLength={5}
+                                className={validationErrors.expiry ? 'border-red-500' : ''}
                               />
+                              {validationErrors.expiry && (
+                                <div className="flex items-center gap-1 text-red-600 text-xs mt-1">
+                                  <AlertCircle className="w-3 h-3" />
+                                  {validationErrors.expiry}
+                                </div>
+                              )}
                             </div>
                             <div>
-                              <Label htmlFor="cvv">CVV</Label>
+                              <Label htmlFor="cvv">CVV *</Label>
                               <Input
                                 id="cvv"
                                 placeholder="123"
                                 value={cardDetails.cvv}
                                 onChange={(e) => handleCardInputChange('cvv', e.target.value)}
                                 maxLength={4}
+                                type="password"
+                                className={validationErrors.cvv ? 'border-red-500' : ''}
                               />
+                              {validationErrors.cvv && (
+                                <div className="flex items-center gap-1 text-red-600 text-xs mt-1">
+                                  <AlertCircle className="w-3 h-3" />
+                                  {validationErrors.cvv}
+                                </div>
+                              )}
                             </div>
                           </div>
 
                           <div>
-                            <Label htmlFor="cardName">Cardholder Name</Label>
+                            <Label htmlFor="cardName">Cardholder Name *</Label>
                             <Input
                               id="cardName"
                               placeholder="John Doe"
                               value={cardDetails.name}
                               onChange={(e) => handleCardInputChange('name', e.target.value)}
+                              className={validationErrors.name ? 'border-red-500' : ''}
                             />
+                            {validationErrors.name && (
+                              <div className="flex items-center gap-1 text-red-600 text-xs mt-1">
+                                <AlertCircle className="w-3 h-3" />
+                                {validationErrors.name}
+                              </div>
+                            )}
                           </div>
 
                           <Button 
@@ -564,6 +921,9 @@ export default function SubscriptionPayment() {
           </div>
         </div>
       </div>
+      
+      {/* Payment Processing Modal */}
+      {showPaymentModal && <PaymentProcessingModal />}
     </div>
   );
 }

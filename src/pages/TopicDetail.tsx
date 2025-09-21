@@ -468,6 +468,7 @@ import { VisualizationAutoNarrator } from '@/components/visualizer/visualization
 import { TeachingCards } from '@/components/teaching-cards';
 import { AdvancedCodePlayground } from '@/components/advanced-code-playground';
 import { WebPlayground } from '@/components/web-playground';
+import { TopicAccessGuard } from '@/components/auth/topic-access-guard';
 
 export default function TopicDetail() {
   const [currentExplanationStep, setCurrentExplanationStep] = useState(0);
@@ -1499,7 +1500,8 @@ arr.findIndex(v => v === 7); // search`,
   };
 
   return (
-    <div className="p-6 space-y-6 animate-fade-in">
+    <TopicAccessGuard topicId={topicId!}>
+      <div className="p-6 space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
         <NavLink to="/">
@@ -1779,6 +1781,7 @@ arr.findIndex(v => v === 7); // search`,
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </TopicAccessGuard>
   );
 }

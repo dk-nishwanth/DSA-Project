@@ -9,17 +9,16 @@ import { useToast } from '@/hooks/use-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/auth-context';
 
-interface SignupFormProps {
-  onSwitchToAdmin?: () => void;
-}
+interface SignupFormProps {}
 
-export function SignupForm({ onSwitchToAdmin }: SignupFormProps) {
+export function SignupForm({}: SignupFormProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
-    class: ''
+    class: '',
+    department: ''
   });
   const { register, isLoading } = useAuth();
   const { toast } = useToast();
@@ -56,6 +55,16 @@ export function SignupForm({ onSwitchToAdmin }: SignupFormProps) {
         return;
       }
 
+      // Validate department selection
+      if (!formData.department) {
+        toast({
+          title: "Department required",
+          description: "Please select your department.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       await register(formData.name, formData.email, formData.password);
       
       toast({
@@ -83,19 +92,7 @@ export function SignupForm({ onSwitchToAdmin }: SignupFormProps) {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="space-y-1">
-        <div className="flex justify-between items-center">
-          <CardTitle className="text-2xl font-bold">Get Started Now</CardTitle>
-          {onSwitchToAdmin && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onSwitchToAdmin}
-              className="text-xs"
-            >
-              Admin Signup
-            </Button>
-          )}
-        </div>
+        <CardTitle className="text-2xl font-bold">Get Started Now</CardTitle>
         <CardDescription>
           Create your account to start learning DSA
         </CardDescription>
@@ -136,6 +133,30 @@ export function SignupForm({ onSwitchToAdmin }: SignupFormProps) {
                 <SelectItem value="1C">1st Year C</SelectItem>
                 <SelectItem value="2A">2nd Year A</SelectItem>
                 <SelectItem value="2B">2nd Year B</SelectItem>
+                <SelectItem value="3A">3rd Year A</SelectItem>
+                <SelectItem value="3B">3rd Year B</SelectItem>
+                <SelectItem value="4A">4th Year A</SelectItem>
+                <SelectItem value="4B">4th Year B</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="department">Department</Label>
+            <Select value={formData.department} onValueChange={(value) => handleInputChange('department', value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select Department" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="CSE">Computer Science Engineering</SelectItem>
+                <SelectItem value="IT">Information Technology</SelectItem>
+                <SelectItem value="ECE">Electronics & Communication Engineering</SelectItem>
+                <SelectItem value="EEE">Electrical & Electronics Engineering</SelectItem>
+                <SelectItem value="MECH">Mechanical Engineering</SelectItem>
+                <SelectItem value="CIVIL">Civil Engineering</SelectItem>
+                <SelectItem value="CHEM">Chemical Engineering</SelectItem>
+                <SelectItem value="AERO">Aeronautical Engineering</SelectItem>
+                <SelectItem value="AUTO">Automobile Engineering</SelectItem>
+                <SelectItem value="BIO">Biotechnology</SelectItem>
               </SelectContent>
             </Select>
           </div>

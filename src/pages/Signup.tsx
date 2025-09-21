@@ -1,20 +1,12 @@
-import { useState } from 'react';
 import { SignupForm } from '@/components/auth/signup-form';
-import { AdminSignupForm } from '@/components/auth/admin-signup-form';
 
 export default function Signup() {
-  const [isAdminSignup, setIsAdminSignup] = useState(false);
-
   return (
     <div className="min-h-screen flex">
       {/* Left Section - Form */}
       <div className="flex-1 flex items-center justify-center p-8 bg-white">
         <div className="w-full max-w-md">
-          {isAdminSignup ? (
-            <AdminSignupForm onSwitchToUser={() => setIsAdminSignup(false)} />
-          ) : (
-            <SignupForm onSwitchToAdmin={() => setIsAdminSignup(true)} />
-          )}
+          <SignupForm />
         </div>
       </div>
 

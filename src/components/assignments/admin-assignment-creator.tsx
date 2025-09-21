@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Plus, 
@@ -23,6 +24,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Switch } from '@/components/ui/switch';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Assignment, 
   AssignmentQuestion, 
@@ -33,8 +35,11 @@ import {
   createAssignment
 } from '@/data/assignmentData';
 import { dsaTopics } from '@/data/dsaTopics';
+import { AdminHeader } from '@/components/admin/admin-header';
 
 export function AdminAssignmentCreator() {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('basic');
   const [questionType, setQuestionType] = useState<Assignment['questionType']>('problem');
   const [title, setTitle] = useState('');
@@ -162,15 +167,29 @@ export function AdminAssignmentCreator() {
       setSavedAssignmentId(assignment.id);
       setSaveSuccess(true);
       
+      // Show success toast
+      toast({
+        title: "Assignment Created Successfully!",
+        description: `"${assignment.title}" has been created and is now available to students.`,
+      });
+      
       // Reset form after successful save
       setTimeout(() => {
-        if (confirm('Assignment created successfully! Create another assignment?')) {
+        const createAnother = confirm('Assignment created successfully! Would you like to create another assignment?');
+        if (createAnother) {
           resetForm();
+        } else {
+          // Navigate back to admin dashboard
+          navigate('/admin/dashboard');
         }
-      }, 500);
+      }, 1000);
     } catch (error) {
       console.error('Error saving assignment:', error);
-      alert('Failed to save assignment. Please try again.');
+      toast({
+        title: "Error Creating Assignment",
+        description: "Failed to save assignment. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsSaving(false);
     }
@@ -501,8 +520,10 @@ export function AdminAssignmentCreator() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      {/* Header */}
+    <div className="min-h-screen bg-gray-50">
+      <AdminHeader />
+      <div className="container mx-auto p-6 space-y-6">
+        {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Create Assignment</h1>
@@ -513,9 +534,9 @@ export function AdminAssignmentCreator() {
             <Eye className="h-4 w-4 mr-2" />
             Preview
           </Button>
-          <Button onClick={handleSave}>
+          <Button onClick={handleSave} disabled={isSaving || !title.trim() || !description.trim() || !questionContent.trim()}>
             <Save className="h-4 w-4 mr-2" />
-            Save Assignment
+            {isSaving ? 'Saving...' : saveSuccess ? 'Assignment Saved!' : 'Save Assignment'}
           </Button>
         </div>
       </div>
@@ -756,6 +777,7 @@ export function AdminAssignmentCreator() {
             </CardContent>
           </Card>
         </div>
+      </div>
       </div>
     </div>
   );

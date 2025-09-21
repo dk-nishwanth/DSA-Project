@@ -21,11 +21,14 @@ import {
   Shuffle,
   User,
   ClipboardList,
-  CheckCircle
+  CheckCircle,
+  Lock,
+  Crown
 } from 'lucide-react';
 import { dsaCategories, dsaTopics } from '@/data/dsaTopics';
 import { SearchBar } from '@/components/search-bar';
 import { ProgressTracker } from '@/components/progress-tracker';
+import { useAuth } from '@/contexts/auth-context';
 import { cn } from '@/lib/utils';
 
 const categoryIcons: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -46,8 +49,10 @@ const categoryIcons: Record<string, React.ComponentType<{ className?: string }>>
 };
 
 export function Sidebar() {
+  const { user, isPremium } = useAuth();
   const [expandedCategories, setExpandedCategories] = useState<string[]>(['Arrays']);
   const [filteredTopics, setFilteredTopics] = useState(dsaTopics);
+  const [accessedTopicsThisMonth, setAccessedTopicsThisMonth] = useState<string[]>([]);
   const [completedTopicIds, setCompletedTopicIds] = useState<Set<string>>(new Set());
   const [isCollapsed, setIsCollapsed] = useState(false);
   
@@ -60,16 +65,55 @@ export function Sidebar() {
         setCompletedTopicIds(new Set());
         return;
       }
-      const items = JSON.parse(saved) as Array<{ topicId: string; completed: boolean }>;
-      const completed = new Set(items.filter(i => i.completed).map(i => i.topicId));
-      setCompletedTopicIds(completed);
-    } catch {
+      const progress = JSON.parse(saved);
+      setCompletedTopicIds(new Set(progress.completedTopics || []));
+    } catch (error) {
+      console.error('Error loading progress from storage:', error);
       setCompletedTopicIds(new Set());
     }
   };
 
+  const loadAccessedTopicsThisMonth = () => {
+    try {
+      const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM format
+      const storageKey = `dsa-accessed-topics-${currentMonth}`;
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        setAccessedTopicsThisMonth(JSON.parse(saved));
+      } else {
+        setAccessedTopicsThisMonth([]);
+      }
+    } catch (error) {
+      console.error('Error loading accessed topics:', error);
+      setAccessedTopicsThisMonth([]);
+    }
+  };
+
+  const canAccessTopic = (topicId: string): boolean => {
+    // Premium users have unlimited access
+    if (isPremium) return true;
+    
+    // If topic is already accessed this month, allow access
+    if (accessedTopicsThisMonth.includes(topicId)) return true;
+    
+    // Free users can access up to 5 topics per month
+    return accessedTopicsThisMonth.length < 5;
+  };
+
+  const trackTopicAccess = (topicId: string) => {
+    if (isPremium || accessedTopicsThisMonth.includes(topicId)) return;
+    
+    const currentMonth = new Date().toISOString().slice(0, 7);
+    const storageKey = `dsa-accessed-topics-${currentMonth}`;
+    const updatedAccessed = [...accessedTopicsThisMonth, topicId];
+    
+    setAccessedTopicsThisMonth(updatedAccessed);
+    localStorage.setItem(storageKey, JSON.stringify(updatedAccessed));
+  };
+
   useEffect(() => {
     refreshCompletedFromStorage();
+    loadAccessedTopicsThisMonth();
     const onProgressUpdate = () => refreshCompletedFromStorage();
     window.addEventListener('dsa-progress-updated', onProgressUpdate as EventListener);
     window.addEventListener('storage', onProgressUpdate as EventListener);
@@ -131,6 +175,33 @@ export function Sidebar() {
         {!isCollapsed && (
           <div className="mt-4 space-y-3">
             <progressTracker.ProgressBadge />
+            
+            {/* Free tier usage indicator */}
+            {!isPremium && (
+              <div className="bg-gradient-to-r from-orange-100 to-red-100 border border-orange-200 rounded-lg p-3">
+                <div className="flex items-center gap-2 mb-1">
+                  <Crown className="h-4 w-4 text-orange-600" />
+                  <span className="text-sm font-medium text-orange-800">Free Plan</span>
+                </div>
+                <div className="text-xs text-orange-700">
+                  {accessedTopicsThisMonth.length}/5 topics this month
+                </div>
+                <div className="w-full bg-orange-200 rounded-full h-1.5 mt-2">
+                  <div 
+                    className="bg-orange-500 h-1.5 rounded-full transition-all duration-300"
+                    style={{ width: `${(accessedTopicsThisMonth.length / 5) * 100}%` }}
+                  />
+                </div>
+                {accessedTopicsThisMonth.length >= 5 && (
+                  <div className="mt-2">
+                    <button className="text-xs bg-orange-600 text-white px-2 py-1 rounded hover:bg-orange-700 transition-colors">
+                      Upgrade to Premium
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+            
             <SearchBar 
               topics={dsaTopics} 
               onFilter={setFilteredTopics}
@@ -213,10 +284,31 @@ export function Sidebar() {
                     {isExpanded && (
                       <div className="ml-6 space-y-1 animate-fade-in">
                         {categoryTopics.map(topic => {
+                          const hasAccess = canAccessTopic(topic.id);
+                          const isCompleted = completedTopicIds.has(topic.id);
+                          
+                          if (!hasAccess) {
+                            // Show locked topic for free users
+                            return (
+                              <div
+                                key={topic.id}
+                                className="block px-3 py-2 text-sm rounded-lg transition-colors duration-200 opacity-60 cursor-not-allowed"
+                                title="Upgrade to Premium to access this topic"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <Lock className="h-3 w-3 text-gray-400" />
+                                  <span className="flex-1 text-gray-400">{topic.title}</span>
+                                  <Crown className="h-3 w-3 text-yellow-500" />
+                                </div>
+                              </div>
+                            );
+                          }
+                          
                           return (
                             <NavLink
                               key={topic.id}
                               to={`/topic/${topic.id}`}
+                              onClick={() => trackTopicAccess(topic.id)}
                               className={({ isActive }) => cn(
                                 "block px-3 py-2 text-sm rounded-lg transition-colors duration-200",
                                 "hover:bg-sidebar-accent hover:text-sidebar-primary",
@@ -224,6 +316,9 @@ export function Sidebar() {
                               )}
                             >
                               <div className="flex items-center gap-2">
+                                {isCompleted && (
+                                  <CheckCircle className="h-3 w-3 text-success" />
+                                )}
                                 <span className="flex-1">{topic.title}</span>
                                 <span className={cn(
                                   "text-xs px-2 py-0.5 rounded-full",

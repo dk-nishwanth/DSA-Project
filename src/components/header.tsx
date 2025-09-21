@@ -7,9 +7,14 @@ import { ProfileButton } from '@/components/profile/profile-button';
 import { dsaCategories } from '@/data/dsaTopics';
 import { NotificationPanel } from '@/components/notification-panel';
 import { useNotifications } from '@/contexts/notification-context';
+import { useAuth } from '@/contexts/auth-context';
+import { useNavigate } from 'react-router-dom';
 
 export function Header() {
   const { notifications, markAsRead, markAllAsRead, clearAll } = useNotifications();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  
   return (
     <header className="h-16 bg-card border-b border-border px-6 flex items-center justify-between">
       <div className="flex items-center gap-6 flex-1">
@@ -42,26 +47,14 @@ export function Header() {
         />
         
         <ProfileButton 
-          onNavigateToProfile={() => window.location.href = '/profile'}
-          onNavigateToProgress={() => window.location.href = '/profile?tab=progress'}
-          onNavigateToAchievements={() => window.location.href = '/profile?tab=achievements'}
-          onNavigateToSettings={() => window.location.href = '/profile?tab=settings'}
+          onNavigateToProfile={() => navigate('/profile')}
+          onNavigateToProgress={() => navigate('/profile?tab=progress')}
+          onNavigateToAchievements={() => navigate('/profile?tab=achievements')}
+          onNavigateToSettings={() => navigate('/profile?tab=settings')}
           onLogout={() => {
-            // Handle logout logic here
             console.log('Logout clicked');
-            
-            // Clear any stored user data (localStorage, sessionStorage, etc.)
-            localStorage.removeItem('user');
-            localStorage.removeItem('authToken');
-            sessionStorage.clear();
-            
-            // Clear any cookies if needed
-            document.cookie.split(";").forEach(function(c) { 
-              document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
-            });
-            
-            // Navigate to login page
-            window.location.href = '/login';
+            logout();
+            navigate('/login');
           }}
         />
       </div>

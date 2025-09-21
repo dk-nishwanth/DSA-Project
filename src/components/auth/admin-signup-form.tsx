@@ -9,11 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { Link, useNavigate } from 'react-router-dom';
 
-interface AdminSignupFormProps {
-  onSwitchToUser?: () => void;
-}
+interface AdminSignupFormProps {}
 
-export function AdminSignupForm({ onSwitchToUser }: AdminSignupFormProps) {
+export function AdminSignupForm({}: AdminSignupFormProps) {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -108,19 +106,7 @@ export function AdminSignupForm({ onSwitchToUser }: AdminSignupFormProps) {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="space-y-1">
-        <div className="flex justify-between items-center">
-          <CardTitle className="text-2xl font-bold">Admin Registration</CardTitle>
-          {onSwitchToUser && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onSwitchToUser}
-              className="text-xs"
-            >
-              Back to Admin Login
-            </Button>
-          )}
-        </div>
+        <CardTitle className="text-2xl font-bold">Admin Registration</CardTitle>
         <CardDescription>
           Create your admin account to manage student progress
         </CardDescription>
@@ -161,6 +147,10 @@ export function AdminSignupForm({ onSwitchToUser }: AdminSignupFormProps) {
                 <SelectItem value="1C">1st Year C</SelectItem>
                 <SelectItem value="2A">2nd Year A</SelectItem>
                 <SelectItem value="2B">2nd Year B</SelectItem>
+                <SelectItem value="3A">3rd Year A</SelectItem>
+                <SelectItem value="3B">3rd Year B</SelectItem>
+                <SelectItem value="4A">4th Year A</SelectItem>
+                <SelectItem value="4B">4th Year B</SelectItem>
               </SelectContent>
             </Select>
           </div>

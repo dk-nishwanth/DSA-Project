@@ -13,7 +13,7 @@ export function AdminHeader() {
     navigate('/');
   };
 
-  const isOnDashboard = location.pathname === '/admin' || location.pathname === '/admin/';
+  const isOnDashboard = location.pathname === '/admin' || location.pathname === '/admin/' || location.pathname === '/admin/dashboard';
   const showBackButton = !isOnDashboard;
 
   return (

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User, Subscription } from '@/types/subscription';
 import { authService } from '@/services/authService';
+import { User, Subscription } from '@/types/subscription';
 
 interface AuthContextType {
   user: User | null;
@@ -8,8 +8,8 @@ interface AuthContextType {
   isLoading: boolean;
   isPremium: boolean;
   subscription: Subscription | null;
-  login: (email: string, password: string) => Promise<any>;
-  register: (name: string, email: string, password: string) => Promise<any>;
+  login: (email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   updateSubscription: (subscription: Subscription) => void;
   checkFeatureAccess: (feature: string) => boolean;
@@ -30,27 +30,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         
         if (storedUser && storedToken) {
           const userData = JSON.parse(storedUser);
+          // Validate token expiry if needed
+          const tokenData = JSON.parse(atob(storedToken.split('.')[1] || '{}'));
+          const isTokenValid = tokenData.exp ? tokenData.exp * 1000 > Date.now() : true;
           
-          // Simple token validation - check if it exists and is not expired
-          try {
-            const tokenData = JSON.parse(atob(storedToken.split('.')[1] || '{}'));
-            const isTokenValid = tokenData.exp ? tokenData.exp * 1000 > Date.now() : true;
-            
-            if (isTokenValid) {
-              console.log('Loading stored user:', userData.email);
-              setUser(userData);
-            } else {
-              console.log('Token expired, clearing storage');
-              localStorage.removeItem('dsa_user');
-              localStorage.removeItem('dsa_token');
-            }
-          } catch (tokenError) {
-            // If token parsing fails, assume it's valid (for mock tokens)
-            console.log('Loading stored user (token parsing failed, assuming valid):', userData.email);
+          if (isTokenValid) {
             setUser(userData);
+          } else {
+            // Token expired, clear storage
+            localStorage.removeItem('dsa_user');
+            localStorage.removeItem('dsa_token');
           }
-        } else {
-          console.log('No stored user or token found');
         }
       } catch (error) {
         console.error('Error loading stored user:', error);
@@ -61,22 +51,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     };
 
-    // Add a small delay to ensure DOM is ready
-    const timer = setTimeout(loadStoredUser, 100);
-    return () => clearTimeout(timer);
+    loadStoredUser();
+  }, []);
+
+  useEffect(() => {
+    // Check if user is already logged in
+    const checkAuthStatus = async () => {
+      try {
+        const currentUser = await authService.getCurrentUser();
+        setUser(currentUser);
+      } catch (error) {
+        console.error('Error checking auth status:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthStatus();
   }, []);
 
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
       const response = await authService.login({ email, password });
-      
       // Convert the response to match our User type
       const fullUser: User = {
         id: response.user.id,
         email: response.user.email,
         name: response.user.name,
-        role: response.user.role || 'user',
         createdAt: new Date(),
         lastLoginAt: new Date(),
         preferences: {
@@ -96,29 +98,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         },
         progress: {
           topicsCompleted: [],
-          challengesSolved: [],
-          totalTimeSpent: 0,
-          currentStreak: 0,
-          longestStreak: 0,
-          skillLevel: {
-            arrays: 0, strings: 0, linkedLists: 0, trees: 0, graphs: 0,
-            sorting: 0, searching: 0, dynamicProgramming: 0, overall: 0
-          },
-          achievements: []
-        }
-      };
-      
-      setUser(fullUser);
-      
-      // Store user and token in localStorage for persistence
-      localStorage.setItem('dsa_user', JSON.stringify(fullUser));
-      if (response.token) {
-        localStorage.setItem('dsa_token', response.token);
-      }
-      
-      return response;
-    } catch (error) {
-      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -127,19 +106,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const register = async (name: string, email: string, password: string) => {
     setIsLoading(true);
     try {
-      const response = await authService.register({ name, email, password });
+      const response = await authService.register(email, password, name);
+      setUser(response.user);
       
-      // Convert the response to match our User type
-      const fullUser: User = {
-        id: response.user.id,
-        email: response.user.email,
-        name: response.user.name,
-        role: response.user.role || 'user',
-        createdAt: new Date(),
-        lastLoginAt: new Date(),
-        preferences: {
-          theme: 'system',
-          language: 'javascript',
+      // Store user and token in localStorage for persistence
+      localStorage.setItem('dsa_user', JSON.stringify(response.user));
+      if (response.token) {
+        localStorage.setItem('dsa_token', response.token);
+      }
+      
+      return response;
+    } catch (error) {
+      throw error;
           difficulty: 'beginner',
           notifications: { email: true, push: false, reminders: true }
         },
@@ -165,38 +143,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           achievements: []
         }
       };
-      
       setUser(fullUser);
-      
-      // Store user and token in localStorage for persistence
-      localStorage.setItem('dsa_user', JSON.stringify(fullUser));
-      if (response.token) {
-        localStorage.setItem('dsa_token', response.token);
-      }
-      
-      return response;
-    } catch (error) {
-      throw error;
     } finally {
       setIsLoading(false);
     }
   };
 
   const logout = () => {
-    setUser(null);
-    // Clear stored data
-    localStorage.removeItem('dsa_user');
-    localStorage.removeItem('dsa_token');
-    localStorage.removeItem('dsa-learning-progress');
     authService.logout();
+    setUser(null);
   };
 
   const updateSubscription = (subscription: Subscription) => {
     if (user) {
-      const updatedUser = { ...user, subscription };
-      setUser(updatedUser);
-      // Update localStorage
-      localStorage.setItem('dsa_user', JSON.stringify(updatedUser));
+      setUser({ ...user, subscription });
     }
   };
 

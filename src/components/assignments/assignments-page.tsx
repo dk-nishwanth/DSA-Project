@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   BookOpen, 
@@ -35,8 +35,41 @@ export function AssignmentsPage() {
   const [difficultyFilter, setDifficultyFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [topicFilter, setTopicFilter] = useState<string>('all');
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
 
-  const assignments = getActiveAssignments();
+  // Load assignments from both sample data and localStorage (admin-created)
+  const loadAssignments = () => {
+    // Get sample assignments
+    const sampleAssignments = getActiveAssignments();
+    
+    // Get admin-created assignments from localStorage
+    const adminAssignments = JSON.parse(localStorage.getItem('dsa_assignments') || '[]') as Assignment[];
+    
+    // Combine both sets of assignments
+    const allAssignments = [...sampleAssignments, ...adminAssignments.filter(a => a.isActive)];
+    
+    setAssignments(allAssignments);
+    console.log('Loaded assignments:', allAssignments.length, 'total assignments');
+  };
+
+  useEffect(() => {
+    loadAssignments();
+    
+    // Listen for storage changes to update assignments when admin creates new ones
+    const handleStorageChange = () => {
+      loadAssignments();
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also listen for focus events to refresh when user comes back to tab
+    window.addEventListener('focus', loadAssignments);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('focus', loadAssignments);
+    };
+  }, []);
 
   const filteredAssignments = assignments.filter(assignment => {
     const matchesSearch = assignment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -108,10 +141,16 @@ export function AssignmentsPage() {
           <h1 className="text-3xl font-bold">Assignments</h1>
           <p className="text-muted-foreground">Complete assignments to test your knowledge and earn points</p>
         </div>
-        <Button>
-          <BookOpen className="h-4 w-4 mr-2" />
-          View My Submissions
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={loadAssignments}>
+            <Search className="h-4 w-4 mr-2" />
+            Refresh
+          </Button>
+          <Button>
+            <BookOpen className="h-4 w-4 mr-2" />
+            View My Submissions
+          </Button>
+        </div>
       </div>
 
       {/* Stats Overview */}
