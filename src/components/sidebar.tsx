@@ -231,6 +231,7 @@ export function Sidebar() {
             <SearchBar 
               topics={dsaTopics} 
               onFilter={setFilteredTopics}
+              placeholder="Search concepts & definitions..."
             />
           </div>
         )}
