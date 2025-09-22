@@ -125,7 +125,7 @@ const App = () => (
             
             <Route path="/code-editor" element={
               <ProtectedRoute>
-                <div className="min-h-screen bg-gray-50 p-6">
+                <div className="min-h-screen bg-gray-50 p-3 sm:p-4 lg:p-6">
                   <EnhancedCodeEditor />
                 </div>
               </ProtectedRoute>
@@ -135,10 +135,12 @@ const App = () => (
             <Route path="/dashboard" element={
               <ProtectedRoute>
                 <div className="flex h-screen w-full bg-background">
-                  <Sidebar />
+                  <div className="hidden lg:block">
+                    <Sidebar />
+                  </div>
                   <div className="flex-1 flex flex-col overflow-hidden">
                     <Header />
-                    <main className="flex-1 overflow-y-auto">
+                    <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
                       <Dashboard />
                     </main>
                   </div>
@@ -148,10 +150,12 @@ const App = () => (
             <Route path="/topic/:topicId" element={
               <ProtectedRoute>
                 <div className="flex h-screen w-full bg-background">
-                  <Sidebar />
+                  <div className="hidden lg:block">
+                    <Sidebar />
+                  </div>
                   <div className="flex-1 flex flex-col overflow-hidden">
                     <Header />
-                    <main className="flex-1 overflow-y-auto">
+                    <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
                       <TopicDetail />
                     </main>
                   </div>
@@ -161,10 +165,12 @@ const App = () => (
             <Route path="/profile" element={
               <ProtectedRoute>
                 <div className="flex h-screen w-full bg-background">
-                  <Sidebar />
+                  <div className="hidden lg:block">
+                    <Sidebar />
+                  </div>
                   <div className="flex-1 flex flex-col overflow-hidden">
                     <Header />
-                    <main className="flex-1 overflow-y-auto">
+                    <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
                       <Profile />
                     </main>
                   </div>
@@ -174,10 +180,12 @@ const App = () => (
             <Route path="/assignments" element={
               <ProtectedRoute>
                 <div className="flex h-screen w-full bg-background">
-                  <Sidebar />
+                  <div className="hidden lg:block">
+                    <Sidebar />
+                  </div>
                   <div className="flex-1 flex flex-col overflow-hidden">
                     <Header />
-                    <main className="flex-1 overflow-y-auto">
+                    <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
                       <Assignments />
                     </main>
                   </div>
@@ -187,10 +195,12 @@ const App = () => (
             <Route path="/assignment/:assignmentId" element={
               <ProtectedRoute>
                 <div className="flex h-screen w-full bg-background">
-                  <Sidebar />
+                  <div className="hidden lg:block">
+                    <Sidebar />
+                  </div>
                   <div className="flex-1 flex flex-col overflow-hidden">
                     <Header />
-                    <main className="flex-1 overflow-y-auto">
+                    <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
                       <AssignmentDetail />
                     </main>
                   </div>

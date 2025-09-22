@@ -11,23 +11,21 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import {
   Play,
   Save,
-  RotateCcw,
-  Code2,
-  Terminal,
-  Settings,
   Download,
-  Upload,
+  RotateCcw,
+  Settings,
   Maximize2,
   Minimize2,
-  FileText,
-  Globe,
-  Palette,
-  Database,
+  Terminal,
   Keyboard,
-  Eye
+  Eye,
+  Clock,
+  ExternalLink,
+  Code2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { runCodeWithPiston, PistonLanguages } from '@/lib/piston';
+import { toast } from 'sonner';
 
 interface AdvancedCodePlaygroundProps {
   topicId: string;
@@ -55,97 +53,35 @@ const LANGUAGE_CONFIG = {
     name: 'JavaScript',
     extension: '.js',
     judge0Id: 63,
-    template: `// JavaScript Code
-console.log("Hello, World!");
-
-// Your code here
-function solution() {
-    // Implementation
-    console.log("Solution executed!");
-}
-
-solution();`
+    template: ``
   },
   python: {
     icon: '🐍',
     name: 'Python',
     extension: '.py',
     judge0Id: 71,
-    template: `# Python Code
-print("Hello, World!")
-
-# Your code here
-def solution():
-    # Implementation
-    print("Solution executed!")
-
-solution()`
+    template: ``
   },
   java: {
     icon: '☕',
     name: 'Java',
     extension: '.java',
     judge0Id: 62,
-    template: `// Java Code
-public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello, World!");
-        
-        // Your code here
-        solution();
-    }
-    
-    public static void solution() {
-        // Implementation
-        System.out.println("Solution executed!");
-    }
-}`
+    template: ``
   },
   cpp: {
     icon: '⚡',
     name: 'C++',
     extension: '.cpp',
     judge0Id: 54,
-    template: `// C++ Code
-#include <iostream>
-#include <vector>
-#include <string>
-using namespace std;
-
-int main() {
-    cout << "Hello, World!" << endl;
-    
-    // Your code here
-    solution();
-    return 0;
-}
-
-void solution() {
-    // Implementation
-    cout << "Solution executed!" << endl;
-}`
+    template: ``
   },
   c: {
     icon: '🔧',
     name: 'C',
     extension: '.c',
     judge0Id: 50,
-    template: `// C Code
-#include <stdio.h>
-#include <stdlib.h>
-
-int main() {
-    printf("Hello, World!\\n");
-    
-    // Your code here
-    solution();
-    return 0;
-}
-
-void solution() {
-    // Implementation
-    printf("Solution executed!\\n");
-}`
+    template: ``
   },
   webdev: {
     icon: '🌐',
@@ -153,88 +89,9 @@ void solution() {
     extension: '.html',
     judge0Id: null,
     template: {
-      html: `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Development</title>
-</head>
-<body>
-    <div class="container">
-        <h1>Hello, World!</h1>
-        <p>Edit HTML, CSS, and JavaScript together!</p>
-        <button id="clickBtn" class="btn">Click me!</button>
-        <div id="output"></div>
-    </div>
-</body>
-</html>`,
-      css: `/* CSS Styles */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    margin: 0;
-    padding: 20px;
-    color: white;
-    min-height: 100vh;
-}
-
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 40px;
-    border-radius: 20px;
-    backdrop-filter: blur(10px);
-    text-align: center;
-}
-
-h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-}
-
-.btn {
-    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    font-size: 1.1em;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-}
-
-#output {
-    margin-top: 20px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    min-height: 50px;
-}`,
-      js: `// JavaScript Code
-console.log("Web page loaded!");
-
-document.addEventListener('DOMContentLoaded', function() {
-    const button = document.getElementById('clickBtn');
-    const output = document.getElementById('output');
-    
-    button.addEventListener('click', function() {
-        const messages = [
-            '🎉 Great job!',
-            '✨ You clicked the button!',
-            '🚀 JavaScript is working!',
-            '💫 Keep coding!'
-        ];
-        
-        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-        output.innerHTML = '<h3>' + randomMessage + '</h3><p>Clicked at: ' + new Date().toLocaleTimeString() + '</p>';
-    });
-});`
+      html: ``,
+      css: ``,
+      js: ``
     }
   },
   php: {
@@ -242,118 +99,42 @@ document.addEventListener('DOMContentLoaded', function() {
     name: 'PHP',
     extension: '.php',
     judge0Id: 68,
-    template: `<?php
-// PHP Code
-echo "Hello, World!\\n";
-
-// Your code here
-function solution() {
-    // Implementation
-    echo "Solution executed!\\n";
-}
-
-solution();
-?>`
+    template: ``
   },
   ruby: {
     icon: '💎',
     name: 'Ruby',
     extension: '.rb',
     judge0Id: 72,
-    template: `# Ruby Code
-puts "Hello, World!"
-
-# Your code here
-def solution
-    # Implementation
-    puts "Solution executed!"
-end
-
-solution`
+    template: ``
   },
   go: {
     icon: '🐹',
     name: 'Go',
     extension: '.go',
     judge0Id: 60,
-    template: `// Go Code
-package main
-
-import "fmt"
-
-func main() {
-    fmt.Println("Hello, World!")
-    
-    // Your code here
-    solution()
-}
-
-func solution() {
-    // Implementation
-    fmt.Println("Solution executed!")
-}`
+    template: ``
   },
   rust: {
     icon: '🦀',
     name: 'Rust',
     extension: '.rs',
     judge0Id: 73,
-    template: `// Rust Code
-fn main() {
-    println!("Hello, World!");
-    
-    // Your code here
-    solution();
-}
-
-fn solution() {
-    // Implementation
-    println!("Solution executed!");
-}`
+    template: ``
   },
   csharp: {
     icon: '🔷',
     name: 'C#',
     extension: '.cs',
     judge0Id: 51,
-    template: `// C# Code
-using System;
-
-class Program {
-    static void Main() {
-        Console.WriteLine("Hello, World!");
-        
-        // Your code here
-        Solution();
-    }
-    
-    static void Solution() {
-        // Implementation
-        Console.WriteLine("Solution executed!");
-    }
-}`
+    template: ``
   },
   sql: {
     icon: '🗄️',
     name: 'SQL',
     extension: '.sql',
     judge0Id: 82,
-    template: `-- SQL Code
--- Create sample table
-CREATE TABLE users (
-    id INTEGER PRIMARY KEY,
-    name TEXT NOT NULL,
-    age INTEGER
-);
-
--- Insert sample data
-INSERT INTO users (name, age) VALUES 
-    ('Alice', 25),
-    ('Bob', 30),
-    ('Charlie', 35);
-
--- Your SQL queries here
-SELECT * FROM users WHERE age > 25;`
+    template: ``
   }
 };
 
@@ -392,22 +173,76 @@ export function AdvancedCodePlayground({ topicId, topicTitle, initialCode }: Adv
   const [activeWebTab, setActiveWebTab] = useState<'html' | 'css' | 'js'>('html');
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  // Initialize code for all languages
+  // Initialize code for all languages - always start with empty editors
   useEffect(() => {
-    const savedData = localStorage.getItem(`advanced-codespace-${topicId}`);
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        if (parsed.code) setCode(parsed.code);
-        if (parsed.webCode) setWebCode(parsed.webCode);
-        if (parsed.input) setInput(parsed.input);
-      } catch {
-        initializeDefaultCode();
-      }
-    } else {
-      initializeDefaultCode();
+    initializeDefaultCode();
+  }, [topicId, topicTitle]);
+
+  // Function to update web preview
+  const updateWebPreview = () => {
+    if (!iframeRef.current) return;
+    
+    const combinedHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Preview - ${topicTitle}</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+        }
+        
+        /* User CSS */
+        ${webCode.css || ''}
+    </style>
+</head>
+<body>
+    ${webCode.html || '<p style="color: #666; text-align: center; margin-top: 50px;">Start typing HTML in the editor to see your preview here...</p>'}
+    
+    <script>
+        try {
+            ${webCode.js || ''}
+        } catch (error) {
+            console.error('JavaScript Error:', error);
+            document.body.innerHTML += '<div style="position: fixed; top: 10px; right: 10px; background: #ff4444; color: white; padding: 8px 12px; border-radius: 4px; z-index: 9999; font-family: monospace; font-size: 12px; max-width: 300px; word-wrap: break-word;">JS Error: ' + error.message + '</div>';
+        }
+    </script>
+</body>
+</html>`;
+
+    const doc = iframeRef.current.contentDocument;
+    if (doc) {
+      doc.open();
+      doc.write(combinedHTML);
+      doc.close();
     }
-  }, [topicId, topicTitle, initialCode]);
+  };
+
+  // Update web preview in real-time when webCode changes
+  useEffect(() => {
+    if (activeLanguage === 'webdev') {
+      const timeoutId = setTimeout(updateWebPreview, 300);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [webCode.html, webCode.css, webCode.js, activeLanguage, topicTitle]);
+
+  // Initialize preview when switching to webdev mode
+  useEffect(() => {
+    if (activeLanguage === 'webdev' && iframeRef.current) {
+      // Small delay to ensure iframe is ready
+      setTimeout(updateWebPreview, 100);
+    }
+  }, [activeLanguage]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -440,13 +275,13 @@ export function AdvancedCodePlayground({ topicId, topicTitle, initialCode }: Adv
       if (lang === 'webdev') {
         const webTemplate = config.template as { html: string; css: string; js: string };
         setWebCode({
-          html: webTemplate.html.replace('Hello, World!', `Hello from ${topicTitle}!`),
+          html: webTemplate.html,
           css: webTemplate.css,
           js: webTemplate.js
         });
       } else {
         const template = typeof config.template === 'string' ? config.template : '';
-        defaultCode[lang] = initialCode?.[lang] || template.replace('Hello, World!', `Hello from ${topicTitle}!`);
+        defaultCode[lang] = template;
       }
     });
     setCode(defaultCode);
@@ -637,13 +472,13 @@ ${webCode.js}
       isMaximized && "fixed inset-0 z-[100] bg-background border-0 rounded-none shadow-2xl"
     )}>
       <CardHeader className={cn(isMaximized && "pt-4 pb-3 border-b")}>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <Code2 className="h-5 w-5" />
-              Advanced Code Playground - {topicTitle}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="min-w-0 flex-1">
+            <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+              <Code2 className="h-5 w-5 flex-shrink-0" />
+              <span className="truncate">Advanced Code Playground - {topicTitle}</span>
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-sm">
               Full-featured IDE with syntax highlighting, multiple languages, and real execution
             </CardDescription>
           </div>
@@ -697,55 +532,55 @@ ${webCode.js}
       <CardContent className={cn("space-y-4", isMaximized && "max-h-[calc(100vh-6.5rem)] overflow-auto")}>
         {/* Language Tabs */}
         <Tabs value={activeLanguage} onValueChange={(value) => setActiveLanguage(value as SupportedLanguage)}>
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex flex-wrap gap-2">
-              <TabsList className="grid grid-cols-4">
-                <TabsTrigger value="javascript" className="flex items-center gap-1">
-                  <span>🟨</span> JS
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-4 gap-4">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-2">
+              <TabsList className="grid grid-cols-2 sm:grid-cols-4 w-full sm:w-auto">
+                <TabsTrigger value="javascript" className="flex items-center gap-1 text-xs sm:text-sm px-2 sm:px-3">
+                  <span>🟨</span> <span className="hidden xs:inline">JS</span>
                 </TabsTrigger>
-                <TabsTrigger value="python" className="flex items-center gap-1">
-                  <span>🐍</span> Python
+                <TabsTrigger value="python" className="flex items-center gap-1 text-xs sm:text-sm px-2 sm:px-3">
+                  <span>🐍</span> <span className="hidden xs:inline">Python</span>
                 </TabsTrigger>
-                <TabsTrigger value="java" className="flex items-center gap-1">
-                  <span>☕</span> Java
+                <TabsTrigger value="java" className="flex items-center gap-1 text-xs sm:text-sm px-2 sm:px-3">
+                  <span>☕</span> <span className="hidden xs:inline">Java</span>
                 </TabsTrigger>
-                <TabsTrigger value="cpp" className="flex items-center gap-1">
-                  <span>⚡</span> C++
-                </TabsTrigger>
-              </TabsList>
-              <TabsList className="grid grid-cols-4">
-                <TabsTrigger value="c" className="flex items-center gap-1">
-                  <span>🔧</span> C
-                </TabsTrigger>
-                <TabsTrigger value="webdev" className="flex items-center gap-1">
-                  <span>🌐</span> Web
-                </TabsTrigger>
-                <TabsTrigger value="csharp" className="flex items-center gap-1">
-                  <span>🔷</span> C#
-                </TabsTrigger>
-                <TabsTrigger value="sql" className="flex items-center gap-1">
-                  <span>🗄️</span> SQL
+                <TabsTrigger value="cpp" className="flex items-center gap-1 text-xs sm:text-sm px-2 sm:px-3">
+                  <span>⚡</span> <span className="hidden xs:inline">C++</span>
                 </TabsTrigger>
               </TabsList>
-              <TabsList className="grid grid-cols-4">
-                <TabsTrigger value="php" className="flex items-center gap-1">
-                  <span>🐘</span> PHP
+              <TabsList className="grid grid-cols-2 sm:grid-cols-4 w-full sm:w-auto">
+                <TabsTrigger value="c" className="flex items-center gap-1 text-xs sm:text-sm px-2 sm:px-3">
+                  <span>🔧</span> <span className="hidden xs:inline">C</span>
                 </TabsTrigger>
-                <TabsTrigger value="ruby" className="flex items-center gap-1">
-                  <span>💎</span> Ruby
+                <TabsTrigger value="webdev" className="flex items-center gap-1 text-xs sm:text-sm px-2 sm:px-3">
+                  <span>🌐</span> <span className="hidden xs:inline">Web</span>
                 </TabsTrigger>
-                <TabsTrigger value="go" className="flex items-center gap-1">
-                  <span>🐹</span> Go
+                <TabsTrigger value="csharp" className="flex items-center gap-1 text-xs sm:text-sm px-2 sm:px-3">
+                  <span>🔷</span> <span className="hidden xs:inline">C#</span>
                 </TabsTrigger>
-                <TabsTrigger value="rust" className="flex items-center gap-1">
-                  <span>🦀</span> Rust
+                <TabsTrigger value="sql" className="flex items-center gap-1 text-xs sm:text-sm px-2 sm:px-3">
+                  <span>🗄️</span> <span className="hidden xs:inline">SQL</span>
+                </TabsTrigger>
+              </TabsList>
+              <TabsList className="grid grid-cols-2 sm:grid-cols-4 w-full sm:w-auto">
+                <TabsTrigger value="php" className="flex items-center gap-1 text-xs sm:text-sm px-2 sm:px-3">
+                  <span>🐘</span> <span className="hidden xs:inline">PHP</span>
+                </TabsTrigger>
+                <TabsTrigger value="ruby" className="flex items-center gap-1 text-xs sm:text-sm px-2 sm:px-3">
+                  <span>💎</span> <span className="hidden xs:inline">Ruby</span>
+                </TabsTrigger>
+                <TabsTrigger value="go" className="flex items-center gap-1 text-xs sm:text-sm px-2 sm:px-3">
+                  <span>🐹</span> <span className="hidden xs:inline">Go</span>
+                </TabsTrigger>
+                <TabsTrigger value="rust" className="flex items-center gap-1 text-xs sm:text-sm px-2 sm:px-3">
+                  <span>🦀</span> <span className="hidden xs:inline">Rust</span>
                 </TabsTrigger>
               </TabsList>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               {lastSaved && (
-                <Badge variant="outline" className="text-xs">
+                <Badge variant="outline" className="text-xs hidden sm:inline-flex">
                   Saved {lastSaved.toLocaleTimeString()}
                 </Badge>
               )}
@@ -754,24 +589,25 @@ ${webCode.js}
                   {executionTime}ms
                 </Badge>
               )}
-              <Button size="sm" variant="outline" onClick={downloadCode}>
+              <Button size="sm" variant="outline" onClick={downloadCode} className="hidden sm:flex">
                 <Download className="h-4 w-4 mr-1" />
-                Download
+                <span className="hidden md:inline">Download</span>
               </Button>
               <Button size="sm" variant="outline" onClick={() => setIsMaximized(!isMaximized)}>
                 {isMaximized ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+                <span className="hidden md:inline ml-1">{isMaximized ? 'Minimize' : 'Maximize'}</span>
               </Button>
               <Button size="sm" variant="outline" onClick={saveCode}>
-                <Save className="h-4 w-4 mr-1" />
-                Save
+                <Save className="h-4 w-4" />
+                <span className="hidden sm:inline ml-1">Save</span>
               </Button>
-              <Button size="sm" variant="outline" onClick={resetCode}>
+              <Button size="sm" variant="outline" onClick={resetCode} className="hidden sm:flex">
                 <RotateCcw className="h-4 w-4 mr-1" />
-                Reset
+                <span className="hidden md:inline">Reset</span>
               </Button>
               <Button size="sm" onClick={runCode} disabled={isRunning}>
-                <Play className="h-4 w-4 mr-1" />
-                {isRunning ? 'Running...' : 'Run'}
+                <Play className="h-4 w-4" />
+                <span className="ml-1">{isRunning ? 'Running...' : 'Run'}</span>
               </Button>
               <Button
                 size="sm"
@@ -793,9 +629,9 @@ ${webCode.js}
 
                   if (activeLanguage === 'webdev') {
                     setWebCode({
-                      html: '<div class="container">\n    <h1>✅ Web Development Test</h1>\n    <p>HTML, CSS, and JavaScript working together!</p>\n    <button id="testBtn">Click me!</button>\n    <div id="output"></div>\n</div>',
-                      css: '.container {\n    max-width: 800px;\n    margin: 0 auto;\n    padding: 20px;\n    font-family: Arial, sans-serif;\n    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n    color: white;\n    border-radius: 10px;\n}\n\nbutton {\n    background: #ff6b6b;\n    color: white;\n    border: none;\n    padding: 10px 20px;\n    border-radius: 5px;\n    cursor: pointer;\n}\n\nbutton:hover {\n    background: #ff5252;\n}',
-                      js: 'document.addEventListener("DOMContentLoaded", function() {\n    const button = document.getElementById("testBtn");\n    const output = document.getElementById("output");\n    \n    button.addEventListener("click", function() {\n        output.innerHTML = "<h3>✅ JavaScript is working!</h3><p>Current time: " + new Date().toLocaleString() + "</p>";\n    });\n});'
+                      html: '<div class="container">\n    <h1>Welcome to Web Development!</h1>\n    <p>This is a simple HTML and CSS example.</p>\n    <div class="card">\n        <h2>Features:</h2>\n        <ul>\n            <li>Responsive design</li>\n            <li>Modern CSS styling</li>\n            <li>Interactive JavaScript</li>\n        </ul>\n        <button id="testBtn" class="btn">Click me!</button>\n        <div id="output" class="output"></div>\n    </div>\n</div>',
+                      css: '/* Modern CSS Styling */\n.container {\n    max-width: 800px;\n    margin: 0 auto;\n    padding: 30px;\n    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;\n    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n    color: white;\n    border-radius: 15px;\n    box-shadow: 0 10px 30px rgba(0,0,0,0.3);\n}\n\nh1 {\n    text-align: center;\n    margin-bottom: 20px;\n    font-size: 2.5em;\n    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);\n}\n\n.card {\n    background: rgba(255,255,255,0.1);\n    padding: 25px;\n    border-radius: 10px;\n    margin-top: 20px;\n    backdrop-filter: blur(10px);\n}\n\n.btn {\n    background: #ff6b6b;\n    color: white;\n    border: none;\n    padding: 12px 24px;\n    border-radius: 8px;\n    cursor: pointer;\n    font-size: 16px;\n    font-weight: bold;\n    transition: all 0.3s ease;\n    margin-top: 15px;\n}\n\n.btn:hover {\n    background: #ff5252;\n    transform: translateY(-2px);\n    box-shadow: 0 5px 15px rgba(255,107,107,0.4);\n}\n\n.output {\n    margin-top: 15px;\n    padding: 15px;\n    background: rgba(255,255,255,0.1);\n    border-radius: 8px;\n    min-height: 50px;\n}\n\nul {\n    list-style-type: none;\n    padding: 0;\n}\n\nli {\n    padding: 8px 0;\n    border-bottom: 1px solid rgba(255,255,255,0.2);\n}\n\nli:before {\n    content: "✨ ";\n    margin-right: 10px;\n}',
+                      js: '// Interactive JavaScript\ndocument.addEventListener("DOMContentLoaded", function() {\n    const button = document.getElementById("testBtn");\n    const output = document.getElementById("output");\n    let clickCount = 0;\n    \n    button.addEventListener("click", function() {\n        clickCount++;\n        const messages = [\n            "🎉 JavaScript is working perfectly!",\n            "🚀 This is click number " + clickCount,\n            "⏰ Current time: " + new Date().toLocaleString(),\n            "🌟 HTML, CSS, and JS are working together!"\n        ];\n        \n        output.innerHTML = messages.map(msg => "<p>" + msg + "</p>").join("");\n        \n        // Add some animation\n        output.style.transform = "scale(0.95)";\n        setTimeout(() => {\n            output.style.transform = "scale(1)";\n        }, 150);\n    });\n    \n    // Welcome message\n    output.innerHTML = "<p>👋 Click the button above to test JavaScript functionality!</p>";\n});'
                     });
                   } else {
                     const testCode = testCodes[activeLanguage] || 'console.log("Test code for this language");';
@@ -808,10 +644,12 @@ ${webCode.js}
             </div>
           </div>
 
-          {/* Code Editor and Output */}
+          {/* Code Editor and Output - Responsive Grid */}
           <div className={cn(
             "grid gap-4",
-            activeLanguage === 'webdev' ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1 lg:grid-cols-3"
+            activeLanguage === 'webdev' 
+              ? "grid-cols-1 xl:grid-cols-2" 
+              : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
           )}>
             {/* Code Editor */}
             <div className={cn("space-y-2", activeLanguage === 'webdev' ? "lg:col-span-1" : "lg:col-span-2")}>
@@ -841,8 +679,8 @@ ${webCode.js}
                         value={webCode.html}
                         onChange={(e) => setWebCode(prev => ({ ...prev, html: e.target.value }))}
                         className={cn(
-                          "w-full p-4 border rounded-lg resize-none font-mono",
-                          isMaximized ? "h-[50vh]" : "h-80",
+                          "w-full p-3 sm:p-4 border rounded-lg resize-none font-mono text-sm sm:text-base",
+                          isMaximized ? "h-[40vh] sm:h-[50vh]" : "h-64 sm:h-80",
                           "focus:outline-none focus:ring-2 focus:ring-primary/20"
                         )}
                         style={editorStyle}
@@ -856,8 +694,8 @@ ${webCode.js}
                         value={webCode.css}
                         onChange={(e) => setWebCode(prev => ({ ...prev, css: e.target.value }))}
                         className={cn(
-                          "w-full p-4 border rounded-lg resize-none font-mono",
-                          isMaximized ? "h-[50vh]" : "h-80",
+                          "w-full p-3 sm:p-4 border rounded-lg resize-none font-mono text-sm sm:text-base",
+                          isMaximized ? "h-[40vh] sm:h-[50vh]" : "h-64 sm:h-80",
                           "focus:outline-none focus:ring-2 focus:ring-primary/20"
                         )}
                         style={editorStyle}
@@ -871,8 +709,8 @@ ${webCode.js}
                         value={webCode.js}
                         onChange={(e) => setWebCode(prev => ({ ...prev, js: e.target.value }))}
                         className={cn(
-                          "w-full p-4 border rounded-lg resize-none font-mono",
-                          isMaximized ? "h-[50vh]" : "h-80",
+                          "w-full p-3 sm:p-4 border rounded-lg resize-none font-mono text-sm sm:text-base",
+                          isMaximized ? "h-[40vh] sm:h-[50vh]" : "h-64 sm:h-80",
                           "focus:outline-none focus:ring-2 focus:ring-primary/20"
                         )}
                         style={editorStyle}
@@ -915,16 +753,67 @@ ${webCode.js}
             {activeLanguage === 'webdev' ? (
               // Web Preview
               <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Eye className="h-4 w-4" />
-                  <span className="text-sm font-medium">Live Preview</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Eye className="h-4 w-4" />
+                    <span className="text-sm font-medium">Live Preview</span>
+                    <Badge variant="outline" className="text-xs">
+                      Auto-refresh
+                    </Badge>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        updateWebPreview();
+                        toast.success('Preview refreshed!');
+                      }}
+                      className="h-7 px-2"
+                    >
+                      <RotateCcw className="h-3 w-3 mr-1" />
+                      Refresh
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        const newWindow = window.open('', '_blank');
+                        if (newWindow) {
+                          const combinedHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${topicTitle} - Web Project</title>
+    <style>
+        ${webCode.css}
+    </style>
+</head>
+<body>
+    ${webCode.html.replace(/<html[^>]*>|<\/html>|<head[^>]*>[\s\S]*?<\/head>|<body[^>]*>|<\/body>|<!DOCTYPE[^>]*>/gi, '')}
+    <script>
+        ${webCode.js}
+    </script>
+</body>
+</html>`;
+                          newWindow.document.write(combinedHTML);
+                          newWindow.document.close();
+                        }
+                      }}
+                      className="h-7 px-2"
+                    >
+                      <ExternalLink className="h-3 w-3 mr-1" />
+                      Open
+                    </Button>
+                  </div>
                 </div>
-                <div className="border rounded-lg overflow-hidden">
+                <div className="border rounded-lg overflow-hidden bg-white">
                   <iframe
                     ref={iframeRef}
                     className={cn(
-                      "w-full bg-white",
-                      isMaximized ? "h-[60vh]" : "h-96"
+                      "w-full bg-white border-0",
+                      isMaximized ? "h-[50vh] sm:h-[60vh]" : "h-64 sm:h-80 md:h-96"
                     )}
                     title="Web Preview"
                     sandbox="allow-scripts allow-same-origin"

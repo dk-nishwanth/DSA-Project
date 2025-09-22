@@ -23,7 +23,8 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { executeCodeWithPiston } from '@/lib/piston';
+import { executeCodeWithPiston, testPistonConnection } from '@/lib/piston';
+import { executeCodeLocally, isLocalExecutionAvailable, getSupportedLanguages } from '@/lib/local-execution';
 
 interface CodeEditorProps {
   initialCode?: string;
@@ -76,49 +77,16 @@ const SUPPORTED_LANGUAGES = [
 ];
 
 const CODE_TEMPLATES = {
-  javascript: `// JavaScript DSA Solution
-function solution(input) {
-    // Your code here
-    return input;
-}
-
-// Test the function
-console.log(solution("Hello World"));`,
-  
-  python: `# Python DSA Solution
-def solution(input_data):
-    # Your code here
-    return input_data
-
-# Test the function
-print(solution("Hello World"))`,
-  
-  java: `// Java DSA Solution
-public class Solution {
-    public static String solution(String input) {
-        // Your code here
-        return input;
-    }
-    
-    public static void main(String[] args) {
-        System.out.println(solution("Hello World"));
-    }
-}`,
-  
-  cpp: `// C++ DSA Solution
-#include <iostream>
-#include <string>
-using namespace std;
-
-string solution(string input) {
-    // Your code here
-    return input;
-}
-
-int main() {
-    cout << solution("Hello World") << endl;
-    return 0;
-}`
+  javascript: ``,
+  python: ``,
+  java: ``,
+  cpp: ``,
+  c: ``,
+  csharp: ``,
+  go: ``,
+  rust: ``,
+  typescript: ``,
+  php: ``
 };
 
 export function EnhancedCodeEditor({
@@ -133,7 +101,7 @@ export function EnhancedCodeEditor({
   enableCollaboration = false
 }: CodeEditorProps) {
   const navigate = useNavigate();
-  const [code, setCode] = useState(initialCode || CODE_TEMPLATES[language as keyof typeof CODE_TEMPLATES] || '');
+  const [code, setCode] = useState(initialCode || '');
   const [selectedLanguage, setSelectedLanguage] = useState(language);
   const [isExecuting, setIsExecuting] = useState(false);
   const [executionResult, setExecutionResult] = useState<ExecutionResult | null>(null);
@@ -154,10 +122,9 @@ export function EnhancedCodeEditor({
   }, [code, onCodeChange]);
 
   useEffect(() => {
-    // Load saved code from localStorage
-    const savedCode = localStorage.getItem(`code-editor-${selectedLanguage}`);
-    if (savedCode && !initialCode) {
-      setCode(savedCode);
+    // Always start with empty editor - don't load from localStorage
+    if (!initialCode) {
+      setCode('');
     }
   }, [selectedLanguage, initialCode]);
 
@@ -172,10 +139,7 @@ export function EnhancedCodeEditor({
 
   const handleLanguageChange = (newLanguage: string) => {
     setSelectedLanguage(newLanguage);
-    const template = CODE_TEMPLATES[newLanguage as keyof typeof CODE_TEMPLATES];
-    if (template && !code.trim()) {
-      setCode(template);
-    }
+    // Don't auto-fill templates - start with empty editor
   };
 
   const executeCodeWithTimeout = async () => {
@@ -187,47 +151,147 @@ export function EnhancedCodeEditor({
     try {
       const startTime = Date.now();
       
-      // Set execution timeout
-      executionTimeoutRef.current = setTimeout(() => {
-        setIsExecuting(false);
-        toast.error('Execution timed out after 30 seconds');
-      }, 30000);
-
-      const result = await executeCodeWithPiston({
-        language: selectedLanguage,
-        files: [{ content: code }]
-      });
-      const executionTime = Date.now() - startTime;
+      // Check if local execution is supported for this language
+      const supportedLanguages = getSupportedLanguages();
+      const isLocalSupported = supportedLanguages.includes(selectedLanguage.toLowerCase());
       
-      clearTimeout(executionTimeoutRef.current);
-      
-      const executionResult: ExecutionResult = {
-        success: !result.run.stderr,
-        output: result.run.stdout || '',
-        error: result.run.stderr || undefined,
-        executionTime,
-        memoryUsed: 0, // Piston doesn't provide memory usage
-        language: selectedLanguage,
-        version: result.version || 'Unknown'
-      };
-      
-      setExecutionResult(executionResult);
-      setConsoleOutput(prev => [...prev, result.run.stdout || result.run.stderr || 'No output']);
-      setExecutionHistory(prev => [executionResult, ...prev.slice(0, 9)]); // Keep last 10 executions
-      
-      if (onExecutionComplete) {
-        onExecutionComplete(executionResult);
-      }
-      
-      // Show success/error toast
-      if (executionResult.success) {
-        toast.success(`Code executed successfully in ${executionTime}ms`);
+      if (isLocalSupported && isLocalExecutionAvailable()) {
+        // Use local execution engine (like personal codespace)
+        setConsoleOutput(['🚀 Executing code locally...']);
+        
+        const result = await executeCodeLocally(selectedLanguage, code, '');
+        
+        const executionResult: ExecutionResult = {
+          success: result.success,
+          output: result.output,
+          error: result.error,
+          executionTime: result.executionTime,
+          memoryUsed: 0,
+          language: selectedLanguage,
+          version: result.version
+        };
+        
+        setExecutionResult(executionResult);
+        
+        // Display results
+        const outputLines = [];
+        if (result.output) {
+          outputLines.push('📤 Output:', result.output);
+        }
+        if (result.error) {
+          outputLines.push('❌ Error:', result.error);
+        }
+        if (!result.output && !result.error && result.success) {
+          outputLines.push('✅ Code executed successfully with no output');
+        }
+        outputLines.push(`🔧 Engine: ${result.version}`);
+        outputLines.push(`⚡ Execution time: ${result.executionTime}ms`);
+        
+        setConsoleOutput(outputLines);
+        setExecutionHistory(prev => [executionResult, ...prev.slice(0, 9)]);
+        
+        if (onExecutionComplete) {
+          onExecutionComplete(executionResult);
+        }
+        
+        // Show success/error toast
+        if (executionResult.success) {
+          toast.success(`Code executed locally in ${result.executionTime}ms`);
+        } else {
+          toast.error('Local execution failed - check console for details');
+        }
+        
       } else {
-        toast.error('Execution failed - check console for details');
+        // Fallback to Piston API for unsupported languages
+        setConsoleOutput(['🌐 Using remote execution service...']);
+        
+        // Test connection first
+        const isConnected = await testPistonConnection();
+        
+        if (!isConnected) {
+          setConsoleOutput(prev => [...prev, '⚠️ Remote execution service is currently unavailable.']);
+          throw new Error('Remote execution service unavailable and local execution not supported for this language');
+        }
+        
+        // Set execution timeout
+        executionTimeoutRef.current = setTimeout(() => {
+          setIsExecuting(false);
+          toast.error('Execution timed out after 30 seconds');
+        }, 30000);
+
+        // Map language to Piston-compatible name
+        const languageMapping: Record<string, string> = {
+          'javascript': 'javascript',
+          'python': 'python',
+          'java': 'java',
+          'cpp': 'c++',
+          'c': 'c',
+          'csharp': 'csharp',
+          'go': 'go',
+          'rust': 'rust',
+          'typescript': 'typescript',
+          'php': 'php'
+        };
+
+        const pistonLanguage = languageMapping[selectedLanguage] || selectedLanguage;
+
+        const result = await executeCodeWithPiston({
+          language: pistonLanguage,
+          files: [{ content: code }],
+          stdin: '',
+          compile_timeout: 10000,
+          run_timeout: 3000
+        });
+        
+        clearTimeout(executionTimeoutRef.current);
+        
+        const executionResult: ExecutionResult = {
+          success: !result.run.stderr && result.run.code === 0,
+          output: result.run.stdout || '',
+          error: result.run.stderr || undefined,
+          executionTime: Date.now() - startTime,
+          memoryUsed: 0,
+          language: selectedLanguage,
+          version: result.version || 'Unknown'
+        };
+        
+        setExecutionResult(executionResult);
+        
+        // Display results
+        const outputLines = [];
+        if (result.run.stdout) {
+          outputLines.push('📤 Output:', result.run.stdout);
+        }
+        if (result.run.stderr) {
+          outputLines.push('❌ Error:', result.run.stderr);
+        }
+        if (!result.run.stdout && !result.run.stderr) {
+          outputLines.push('✅ Code executed successfully with no output');
+        }
+        if (result.version && result.version !== 'unknown') {
+          outputLines.push(`🔧 Language: ${result.language} (${result.version})`);
+        }
+        
+        setConsoleOutput(outputLines);
+        setExecutionHistory(prev => [executionResult, ...prev.slice(0, 9)]);
+        
+        if (onExecutionComplete) {
+          onExecutionComplete(executionResult);
+        }
+        
+        // Show success/error toast
+        if (executionResult.success) {
+          toast.success(`Code executed remotely in ${executionResult.executionTime}ms`);
+        } else {
+          toast.error('Remote execution failed - check console for details');
+        }
       }
       
     } catch (error) {
-      clearTimeout(executionTimeoutRef.current);
+      if (executionTimeoutRef.current) {
+        clearTimeout(executionTimeoutRef.current);
+      }
+      
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       setExecutionResult({
@@ -240,8 +304,8 @@ export function EnhancedCodeEditor({
         version: 'Unknown'
       });
       
-      setConsoleOutput(prev => [...prev, `Error: ${errorMessage}`]);
-      toast.error('Execution failed');
+      setConsoleOutput(prev => [...prev, `❌ Execution Error: ${errorMessage}`]);
+      toast.error('Code execution failed');
     } finally {
       setIsExecuting(false);
     }
@@ -266,13 +330,32 @@ export function EnhancedCodeEditor({
 
     for (const testCase of testCases) {
       try {
-        // Create test code with input
-        const testCode = `${code}\n\n// Test input\nconsole.log(${testCase.input});`;
+        // Use the original code for testing
+        const testCode = code;
         
         const startTime = Date.now();
+        // Map language to Piston-compatible name
+        const languageMapping: Record<string, string> = {
+          'javascript': 'javascript',
+          'python': 'python',
+          'java': 'java',
+          'cpp': 'c++',
+          'c': 'c',
+          'csharp': 'csharp',
+          'go': 'go',
+          'rust': 'rust',
+          'typescript': 'typescript',
+          'php': 'php'
+        };
+
+        const pistonLanguage = languageMapping[selectedLanguage] || selectedLanguage;
+
         const result = await executeCodeWithPiston({
-          language: selectedLanguage,
-          files: [{ content: testCode }]
+          language: pistonLanguage,
+          files: [{ content: testCode }],
+          stdin: testCase.input || '',
+          compile_timeout: 10000,
+          run_timeout: 3000
         });
         const executionTime = Date.now() - startTime;
         
@@ -379,25 +462,26 @@ export function EnhancedCodeEditor({
   return (
     <div className="w-full h-full flex flex-col bg-white dark:bg-gray-900 rounded-lg border">
       {/* Header with Back Button */}
-      <div className="flex items-center justify-between p-4 border-b">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 border-b gap-3 sm:gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 min-w-0">
           <Button 
             variant="ghost" 
             size="sm" 
             onClick={() => navigate('/dashboard')}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 self-start"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to Dashboard
+            <span className="hidden sm:inline">Back to Dashboard</span>
+            <span className="sm:hidden">Back</span>
           </Button>
-          <div>
-            <h1 className="text-xl font-bold text-foreground">Enhanced Code Editor</h1>
-            <p className="text-sm text-muted-foreground">Multi-language code editor with real-time execution</p>
+          <div className="min-w-0">
+            <h1 className="text-lg sm:text-xl font-bold text-foreground truncate">Enhanced Code Editor</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground">Multi-language code editor with real-time execution</p>
           </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
           <Select value={selectedLanguage} onValueChange={handleLanguageChange}>
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-32 sm:w-40">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -408,8 +492,11 @@ export function EnhancedCodeEditor({
               ))}
             </SelectContent>
           </Select>
-          <Badge variant="secondary">
+          <Badge variant="secondary" className="text-xs">
             {SUPPORTED_LANGUAGES.find(l => l.id === selectedLanguage)?.version}
+          </Badge>
+          <Badge variant={getSupportedLanguages().includes(selectedLanguage.toLowerCase()) ? "default" : "outline"} className="text-xs">
+            {getSupportedLanguages().includes(selectedLanguage.toLowerCase()) ? "🚀 Local" : "🌐 Remote"}
           </Badge>
         </div>
         
