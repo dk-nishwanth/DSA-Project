@@ -2,9 +2,13 @@ import React, { useState, useCallback } from 'react';
 import { Play, RotateCcw, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { PseudocodeBox } from '@/components/pseudocode-box';
 import { ComplexityBox } from '@/components/complexity-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 type BacktrackProblem = 'n-queens' | 'sudoku' | 'maze';
 
@@ -64,6 +68,21 @@ export function BacktrackingVisualizer() {
   const [currentStepDescription, setCurrentStepDescription] = useState('');
   const [solutions, setSolutions] = useState<QueenPosition[][]>([]);
   const [currentTry, setCurrentTry] = useState<{row: number, col: number} | null>(null);
+  const [showMemory, setShowMemory] = useState(false);
+  
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -105,9 +124,12 @@ export function BacktrackingVisualizer() {
       setSolutions(prev => [...prev, [...currentQueens]]);
       setCurrentStepDescription(`Solution found! Placed all ${boardSize} queens.`);
       setCurrentStep(1);
+      speakStep("", `Base case reached! Successfully placed all ${boardSize} queens without conflicts.`, row, boardSize);
       await sleep(1000);
       return true;
     }
+
+    speakStep("", `Processing row ${row}. Trying to place queen ${row + 1} of ${boardSize}.`, row + 1, boardSize);
 
     for (let col = 0; col < boardSize; col++) {
       setCurrentTry({ row, col });
@@ -122,6 +144,7 @@ export function BacktrackingVisualizer() {
       if (!isSquareAttacked(row, col, currentQueens)) {
         setCurrentStepDescription(`Position (${row}, ${col}) is safe! Placing queen.`);
         setCurrentStep(4);
+        speakStep("", `Position (${row}, ${col}) is safe! No conflicts with existing queens. Placing queen and moving to next row.`, col + 1, boardSize);
         await sleep(600);
         
         const newQueens = [...currentQueens, { row, col }];
@@ -135,11 +158,13 @@ export function BacktrackingVisualizer() {
         // Backtrack
         setCurrentStepDescription(`Backtracking from position (${row}, ${col})`);
         setCurrentStep(8);
+        speakStep("", `Backtracking! Removing queen from (${row}, ${col}) and trying next position.`, col + 1, boardSize);
         setQueens(currentQueens);
         updateAttackedSquares(currentQueens);
         await sleep(600);
       } else {
         setCurrentStepDescription(`Position (${row}, ${col}) is under attack! Trying next position.`);
+        speakStep("", `Position (${row}, ${col}) is under attack by existing queens. Trying next column.`, col + 1, boardSize);
         setQueens(currentQueens);
         updateAttackedSquares(currentQueens);
         await sleep(400);
@@ -149,9 +174,10 @@ export function BacktrackingVisualizer() {
     setCurrentTry(null);
     setCurrentStepDescription(`No valid position found in row ${row}. Backtracking...`);
     setCurrentStep(9);
+    speakStep("", `No valid position found in row ${row}. Backtracking to previous row.`, row + 1, boardSize);
     await sleep(600);
     return false;
-  }, [boardSize, isSquareAttacked, updateAttackedSquares]);
+  }, [boardSize, isSquareAttacked, updateAttackedSquares, speakStep]);
 
   const runBacktracking = useCallback(async () => {
     if (boardSize < 1 || boardSize > 8) {
@@ -167,24 +193,29 @@ export function BacktrackingVisualizer() {
     setCurrentStepDescription('Starting N-Queens backtracking algorithm...');
     setCurrentStep(0);
     
+    speakOperation("N-Queens Backtracking", `Starting N-Queens backtracking algorithm for ${boardSize}x${boardSize} board. We'll try to place ${boardSize} queens so that none attack each other.`);
     await sleep(800);
 
     try {
       const foundSolution = await solveNQueens();
       
       if (foundSolution) {
+        setCurrentStepDescription(`Solution found! Successfully placed all ${boardSize} queens.`);
+        speakResult(`Success! Found a valid solution for the ${boardSize}-Queens problem. All queens are placed safely without attacking each other.`);
         toast.success(`Found solution for ${boardSize}-Queens!`);
       } else {
         setCurrentStepDescription(`No solution exists for ${boardSize}-Queens problem.`);
+        speakResult(`No solution exists for the ${boardSize}-Queens problem. This configuration is impossible to solve.`);
         toast.error('No solution found');
       }
     } catch (error) {
       toast.error('Algorithm failed');
+      speakResult('Algorithm execution failed. Please try again.');
     }
 
     setCurrentTry(null);
     setIsAnimating(false);
-  }, [boardSize, solveNQueens]);
+  }, [boardSize, solveNQueens, speakOperation, speakResult]);
 
   const resetBacktracking = useCallback(() => {
     setQueens([]);

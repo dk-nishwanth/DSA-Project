@@ -610,7 +610,7 @@ export default function TopicDetail() {
       case 'fractional-knapsack':
       case 'job-scheduling':
         return <GreedyVisualizer />;
-      case 'n-queens':
+      case 'backtracking-intro':
       case 'subset-generation':
       case 'permutation-generation':
         return <BacktrackingVisualizer />;

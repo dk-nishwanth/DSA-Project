@@ -76,7 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         id: response.user.id,
         email: response.user.email,
         name: response.user.name,
-        role: response.user.role || 'user',
+        role: (response.user.role as 'user' | 'admin') || 'user',
         createdAt: new Date(),
         lastLoginAt: new Date(),
         preferences: {
@@ -134,7 +134,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         id: response.user.id,
         email: response.user.email,
         name: response.user.name,
-        role: response.user.role || 'user',
+        role: (response.user.role as 'user' | 'admin') || 'user',
         createdAt: new Date(),
         lastLoginAt: new Date(),
         preferences: {
@@ -192,68 +192,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateSubscription = (subscription: Subscription) => {
-    if (user) {
-      const updatedUser = { ...user, subscription };
-      setUser(updatedUser);
-      // Update localStorage
-      localStorage.setItem('dsa_user', JSON.stringify(updatedUser));
-    }
+    // SUBSCRIPTION FEATURES DISABLED - Function preserved for future use
+    // if (user) {
+    //   const updatedUser = { ...user, subscription };
+    //   setUser(updatedUser);
+    //   // Update localStorage
+    //   localStorage.setItem('dsa_user', JSON.stringify(updatedUser));
+    // }
   };
 
   const checkFeatureAccess = (feature: string): boolean => {
-    if (!user) return false;
-    
-    const subscription = user.subscription;
-    
-    // Check if subscription has expired
-    if (subscription && subscription.status === 'active') {
-      const now = new Date();
-      const endDate = new Date(subscription.endDate);
-      
-      if (now > endDate) {
-        // Subscription has expired, treat as free user
-        switch (feature) {
-          case 'unlimited_topics':
-          case 'advanced_visualizations':
-          case 'practice_problems':
-          case 'progress_tracking':
-          case 'mock_interviews':
-            return false;
-          default:
-            return true;
-        }
-      }
-    }
-    
-    if (!subscription || subscription.status !== 'active') {
-      // Free tier limitations
-      switch (feature) {
-        case 'unlimited_topics':
-        case 'advanced_visualizations':
-        case 'practice_problems':
-        case 'progress_tracking':
-        case 'mock_interviews':
-          return false;
-        default:
-          return true;
-      }
-    }
-    
-    return true; // Premium users have access to all features
+    // SUBSCRIPTION FEATURES DISABLED - All features are now free and accessible
+    return true; // All users have access to all features
   };
 
-  // Check if user has premium access (including expiry check)
-  const isPremium = (() => {
-    if (!user?.subscription || user.subscription.plan !== 'premium' || user.subscription.status !== 'active') {
-      return false;
-    }
-    
-    // Check if subscription has expired
-    const now = new Date();
-    const endDate = new Date(user.subscription.endDate);
-    
-    return now <= endDate;
-  })();
+  // SUBSCRIPTION FEATURES DISABLED - All users are treated as premium
+  const isPremium = true; // All users have premium access
 
   const value = {
     user,

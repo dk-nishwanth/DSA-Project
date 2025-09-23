@@ -1,8 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { PseudocodeBox } from '@/components/pseudocode-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 function buildFreq(s: string): number[] {
   const freq = new Array(26).fill(0);
@@ -21,27 +25,30 @@ export function AnagramVisualizer() {
   const [diffIdx, setDiffIdx] = useState<number[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
   const [stepDesc, setStepDesc] = useState('');
-  const [voiceExplain, setVoiceExplain] = useState<boolean>(() => {
-    try { return localStorage.getItem('dsa_voice_explain') === '1'; } catch { return false; }
-  });
-  useEffect(() => {
-    if (!voiceExplain || !stepDesc) return;
-    try {
-      const u = new SpeechSynthesisUtterance(stepDesc);
-      u.rate = 1.05; u.pitch = 1.0; u.volume = 0.85;
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(u);
-    } catch {}
-  }, [voiceExplain, stepDesc]);
-  const setVoice = (on: boolean) => {
-    setVoiceExplain(on);
-    try { localStorage.setItem('dsa_voice_explain', on ? '1' : '0'); } catch {}
-  };
+  const [showMemory, setShowMemory] = useState(false);
+
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
+
+  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
   const run = useCallback(async () => {
     if (isAnimating) return;
     setIsAnimating(true);
     setStepDesc('Build frequency arrays for A and B (lowercase letters only).');
+    speakOperation("Anagram Detection", `Checking if "${a}" and "${b}" are anagrams. We'll compare character frequencies.`);
+    
     const fA = buildFreq(a);
     const fB = buildFreq(b);
     setFreqA(fA); setFreqB(fB);
@@ -52,15 +59,19 @@ export function AnagramVisualizer() {
     }
     setDiffIdx(diffs);
 
-    if (diffs.length === 0 && a.replace(/\W/g,'').length === b.replace(/\W/g,'').length) {
-      setStepDesc('All character counts match and lengths equal → Anagrams!');
-      toast.success('These are anagrams!');
+    await sleep(800);
+    const isAnagram = diffs.length === 0;
+    const resultText = isAnagram ? `"${a}" and "${b}" are anagrams!` : `Not anagrams. Different counts for: ${diffs.map(i => String.fromCharCode(97+i)).join(', ')}`;
+    setStepDesc(resultText);
+    
+    if (isAnagram) {
+      speakResult(`Success! "${a}" and "${b}" are anagrams. All character frequencies match perfectly.`);
     } else {
-      setStepDesc('Character counts differ or lengths unequal → Not anagrams.');
-      toast.error('Not anagrams');
+      speakResult(`"${a}" and "${b}" are not anagrams. Character frequencies differ for letters: ${diffs.map(i => String.fromCharCode(97+i)).join(', ')}.`);
     }
+    
     setIsAnimating(false);
-  }, [a, b, isAnimating]);
+  }, [a, b, isAnimating, speakOperation, speakResult]);
 
   const reset = useCallback(() => {
     setFreqA([]); setFreqB([]); setDiffIdx([]); setIsAnimating(false);
@@ -82,8 +93,18 @@ export function AnagramVisualizer() {
         <Button onClick={run} disabled={isAnimating}>Check</Button>
         <Button onClick={reset} variant="outline" disabled={isAnimating}>Reset</Button>
         <div className="flex items-center gap-2 ml-auto">
-          <label className="text-sm">Voice Explain</label>
-          <input type="checkbox" checked={voiceExplain} onChange={(e)=>setVoice(e.target.checked)} />
+          <VisualizerControls
+            showMemory={showMemory}
+            onToggleMemory={setShowMemory}
+            voiceEnabled={voiceEnabled}
+            onToggleVoice={setVoiceEnabled}
+            voiceSpeed={speed}
+            onVoiceSpeedChange={setSpeed}
+            isSpeaking={isSpeaking}
+            onPauseSpeech={pauseSpeech}
+            onResumeSpeech={resumeSpeech}
+            onStopSpeech={stopSpeech}
+          />
         </div>
       </div>
 

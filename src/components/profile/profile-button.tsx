@@ -33,30 +33,30 @@ export function ProfileButton({
   const profile = SAMPLE_PROFILE;
   const unlockedAchievements = profile.achievements.filter(a => a.unlockedDate).length;
   
-  // Get subscription display info
-  const getSubscriptionInfo = () => {
-    if (!user || !subscription) return { plan: 'Free', color: 'bg-gray-500' };
-    
-    if (subscription.plan === 'premium') {
-      if (subscription.endDate) {
-        const endDate = new Date(subscription.endDate);
-        const startDate = new Date(subscription.startDate);
-        const diffTime = endDate.getTime() - startDate.getTime();
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
-        if (diffDays >= 365) {
-          return { plan: '₹500/year', color: 'bg-gradient-to-r from-purple-500 to-pink-500' };
-        } else {
-          return { plan: '₹50/month', color: 'bg-gradient-to-r from-blue-500 to-cyan-500' };
-        }
-      }
-      return { plan: 'Premium', color: 'bg-gradient-to-r from-amber-500 to-orange-500' };
-    }
-    
-    return { plan: 'Free', color: 'bg-gray-500' };
-  };
+  // SUBSCRIPTION FEATURES DISABLED - Hide subscription display
+  // const getSubscriptionInfo = () => {
+  //   if (!user || !subscription) return { plan: 'Free', color: 'bg-gray-500' };
+  //   
+  //   if (subscription.plan === 'premium') {
+  //     if (subscription.endDate) {
+  //       const endDate = new Date(subscription.endDate);
+  //       const startDate = new Date(subscription.startDate);
+  //       const diffTime = endDate.getTime() - startDate.getTime();
+  //       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  //       
+  //       if (diffDays >= 365) {
+  //         return { plan: '₹500/year', color: 'bg-gradient-to-r from-purple-500 to-pink-500' };
+  //       } else {
+  //         return { plan: '₹50/month', color: 'bg-gradient-to-r from-blue-500 to-cyan-500' };
+  //       }
+  //     }
+  //     return { plan: 'Premium', color: 'bg-gradient-to-r from-amber-500 to-orange-500' };
+  //   }
+  //   
+  //   return { plan: 'Free', color: 'bg-gray-500' };
+  // };
   
-  const subscriptionInfo = getSubscriptionInfo();
+  // const subscriptionInfo = getSubscriptionInfo();
 
   return (
     <DropdownMenu>
@@ -77,16 +77,18 @@ export function ProfileButton({
               <p className="text-sm font-medium leading-none">
                 {user?.name || profile.username}
               </p>
-              {isPremium && <Crown className="w-3 h-3 text-amber-500" />}
+              {/* SUBSCRIPTION FEATURES DISABLED - Hide crown icon */}
+              {/* {isPremium && <Crown className="w-3 h-3 text-amber-500" />} */}
             </div>
             <p className="text-xs leading-none text-muted-foreground">
               {user?.email || profile.email}
             </p>
-            <Badge 
+            {/* SUBSCRIPTION FEATURES DISABLED - Hide subscription badge */}
+            {/* <Badge 
               className={`text-xs ${subscriptionInfo.color} text-white border-0 w-fit`}
             >
               {subscriptionInfo.plan}
-            </Badge>
+            </Badge> */}
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

@@ -27,8 +27,9 @@ import Assignments from "./pages/Assignments";
 import AssignmentDetail from "./pages/AssignmentDetail";
 import AdminAssignmentCreator from "./pages/AdminAssignmentCreator";
 import { WorkingAssignmentCreator } from "./components/assignments/working-assignment-creator";
-import SubscriptionPayment from "./pages/SubscriptionPayment";
-import PaymentSuccess from "./pages/PaymentSuccess";
+// SUBSCRIPTION/PAYMENT FEATURES DISABLED
+// import SubscriptionPayment from "./pages/SubscriptionPayment";
+// import PaymentSuccess from "./pages/PaymentSuccess";
 import { VoiceSpeedTest } from "./components/voice-speed-test";
 import TestAuth from "./pages/TestAuth";
 import { AdvancedLearningDashboard } from "./components/advanced-learning-dashboard";
@@ -68,9 +69,9 @@ const App = () => (
             <Route path="/admin/signup" element={<AdminSignup />} />
             <Route path="/authorization" element={<Authorization />} />
             
-            {/* Payment Routes */}
-            <Route path="/subscription-payment" element={<SubscriptionPayment />} />
-            <Route path="/payment-success" element={<PaymentSuccess />} />
+            {/* SUBSCRIPTION/PAYMENT ROUTES DISABLED */}
+            {/* <Route path="/subscription-payment" element={<SubscriptionPayment />} /> */}
+            {/* <Route path="/payment-success" element={<PaymentSuccess />} /> */}
             
             {/* Admin Routes */}
             <Route path="/admin" element={

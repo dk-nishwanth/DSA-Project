@@ -1,3 +1,4 @@
+// SUBSCRIPTION FEATURES DISABLED - Service preserved for future use
 import { User, Subscription, PaymentPlan, SUBSCRIPTION_PLANS } from '@/types/subscription';
 import { API_BASE_URL } from '@/lib/api';
 

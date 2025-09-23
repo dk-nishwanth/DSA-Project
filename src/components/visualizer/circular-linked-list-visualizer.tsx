@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import { PseudocodeBox } from '@/components/pseudocode-box';
 import { ComplexityBox } from '@/components/complexity-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
+import { toast } from 'sonner';
 
 interface Node { id: string; value: number; next?: Node; }
 
@@ -11,34 +16,45 @@ export function CircularLinkedListVisualizer() {
   const [values, setValues] = useState<number[]>([]);
   const [val, setVal] = useState('10');
   const [stepDesc, setStepDesc] = useState('');
-  const [voiceExplain, setVoiceExplain] = useState<boolean>(() => {
-    try { return localStorage.getItem('dsa_voice_explain') === '1'; } catch { return false; }
-  });
-  useEffect(() => {
-    if (!voiceExplain || !stepDesc) return;
-    try {
-      const u = new SpeechSynthesisUtterance(stepDesc);
-      u.rate = 1.05; u.pitch = 1.0; u.volume = 0.85;
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(u);
-    } catch {}
-  }, [voiceExplain, stepDesc]);
-  const setVoice = (on: boolean) => {
-    setVoiceExplain(on);
-    try { localStorage.setItem('dsa_voice_explain', on ? '1' : '0'); } catch {}
-  };
+  const [showMemory, setShowMemory] = useState(false);
+  const [currentOperation, setCurrentOperation] = useState('');
+  
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const insertEnd = () => {
     const v = parseInt(val) || 0;
+    setCurrentOperation('Insert at End');
+    speakOperation("Circular List Insert", `Inserting ${v} at the end of circular linked list. In a circular list, the last node points back to the head.`);
+    
     const n: Node = { id: Math.random().toString(36).slice(2), value: v };
     if (!head) {
-      n.next = n; setHead(n); setValues([v]); setStepDesc(`List empty: insert ${v} as head; next points to itself.`); return;
+      n.next = n; 
+      setHead(n); 
+      setValues([v]); 
+      setStepDesc(`List empty: insert ${v} as head; next points to itself.`);
+      speakResult(`Inserted ${v} as the first node. The node points to itself, creating a circular structure.`);
+      return;
     }
     // find tail (node whose next is head)
     let cur = head;
     while (cur.next && cur.next !== head) cur = cur.next;
-    cur.next = n; n.next = head; setValues(prev => [...prev, v]);
+    cur.next = n; 
+    n.next = head; 
+    setValues(prev => [...prev, v]);
     setStepDesc(`Inserted ${v} at end. Tail now points to new node; new node points to head.`);
+    speakResult(`Successfully inserted ${v} at the end. The new node now points back to the head, maintaining the circular structure.`);
   };
 
   const deleteHead = () => {
@@ -94,8 +110,18 @@ export function CircularLinkedListVisualizer() {
         <Button onClick={deleteHead} variant="outline">Delete Head</Button>
         <Button onClick={deleteValue} variant="outline">Delete Value</Button>
         <div className="flex items-center gap-2 ml-auto">
-          <label className="text-sm">Voice Explain</label>
-          <input type="checkbox" checked={voiceExplain} onChange={(e)=>setVoice(e.target.checked)} />
+          <VisualizerControls
+            showMemory={showMemory}
+            onToggleMemory={setShowMemory}
+            voiceEnabled={voiceEnabled}
+            onToggleVoice={setVoiceEnabled}
+            voiceSpeed={speed}
+            onVoiceSpeedChange={setSpeed}
+            isSpeaking={isSpeaking}
+            onPauseSpeech={pauseSpeech}
+            onResumeSpeech={resumeSpeech}
+            onStopSpeech={stopSpeech}
+          />
         </div>
       </div>
 

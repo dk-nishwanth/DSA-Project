@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/auth-context';
 
 interface AdminLoginFormProps {
   onSwitchToUser?: () => void;
@@ -21,6 +22,7 @@ export function AdminLoginForm({ onSwitchToUser }: AdminLoginFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({
@@ -33,41 +35,23 @@ export function AdminLoginForm({ onSwitchToUser }: AdminLoginFormProps) {
     e.preventDefault();
     setIsLoading(true);
 
-    // Hardcoded credentials for demonstration
-    const correctUsername = 'Nishwanth';
-    const correctPassword = 'Nishwanth';
-    const isAdmin = true; // Assuming these credentials belong to an admin
-
     try {
-      // Simulate a network request with a delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      if (formData.username === correctUsername && formData.password === correctPassword) {
-        if (isAdmin) {
-          toast({
-            title: "Admin login successful",
-            description: "Welcome to the admin dashboard!",
-          });
-          // Send admin straight to the Teach tab so they can start a session
-          navigate('/admin/dashboard?tab=teach');
-        } else {
-          toast({
-            title: "Login failed",
-            description: "You do not have admin privileges.",
-            variant: "destructive",
-          });
-        }
-      } else {
-        toast({
-          title: "Login failed",
-          description: "Please check your admin credentials.",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
+      // Use the auth context login method with admin credentials
+      // The authService already has admin credentials configured
+      await login(formData.username, formData.password);
+      
       toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
+        title: "Admin login successful",
+        description: "Welcome to the admin dashboard!",
+      });
+      
+      // Navigate to admin dashboard with teach tab
+      navigate('/admin/dashboard?tab=teach');
+    } catch (error: any) {
+      console.error('Admin login error:', error);
+      toast({
+        title: "Login failed",
+        description: error.message || "Please check your admin credentials.",
         variant: "destructive",
       });
     } finally {

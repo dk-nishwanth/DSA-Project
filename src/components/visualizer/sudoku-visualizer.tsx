@@ -1,7 +1,12 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { PseudocodeBox } from '@/components/pseudocode-box';
 import { ComplexityBox } from '@/components/complexity-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
+import { toast } from 'sonner';
 
 type Grid = number[][]; // 0 denotes empty
 
@@ -32,11 +37,30 @@ export function SudokuVisualizer() {
   const [isRunning, setIsRunning] = useState(false);
   const [step, setStep] = useState(0);
   const [stepDesc, setStepDesc] = useState('');
+  const [showMemory, setShowMemory] = useState(false);
+  const [currentValue, setCurrentValue] = useState<number | null>(null);
+  
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const sleep = (ms:number)=>new Promise(r=>setTimeout(r,ms));
 
   const solve = useCallback(async () => {
-    if (isRunning) return; setIsRunning(true);
+    if (isRunning) return; 
+    setIsRunning(true);
+    speakOperation("Sudoku Solver", `Starting Sudoku backtracking algorithm. We'll fill empty cells systematically, backtracking when constraints are violated.`);
+    
     const g = clone(grid);
     const cells: Array<[number, number]> = [];
     for (let r=0;r<9;r++) for (let c=0;c<9;c++) if (g[r][c]===0) cells.push([r,c]);

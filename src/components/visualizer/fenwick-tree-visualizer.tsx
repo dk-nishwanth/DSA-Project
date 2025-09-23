@@ -1,6 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 function lsb(x: number) { return x & -x; }
 
@@ -13,24 +17,60 @@ export function FenwickTreeVisualizer() {
   const [delta, setDelta] = useState('3');
   const [queryIdx, setQueryIdx] = useState('6');
   const [isBusy, setIsBusy] = useState(false);
+  const [currentStep, setCurrentStep] = useState('');
+  const [showMemory, setShowMemory] = useState(false);
+  const [operation, setOperation] = useState<string>('');
+  
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
 
   const build = useCallback(async (a: number[]) => {
     setIsBusy(true);
+    setOperation('Building Fenwick Tree');
+    speakOperation("Fenwick Tree Build", `Building Fenwick Tree (Binary Indexed Tree) from array [${a.join(', ')}]. We'll propagate each element's contribution using least significant bit jumps.`);
+    
     const n = a.length;
     const t = new Array(n+1).fill(0);
+    setCurrentStep('Initializing Fenwick Tree with zeros...');
+    setBit([...t]);
+    await sleep(800);
+    
     for (let i = 1; i <= n; i++) {
+      setCurrentStep(`Processing element ${a[i-1]} at position ${i}`);
+      speakStep("", `Processing element ${a[i-1]} at position ${i}. Adding its value to all responsible positions using LSB jumps.`, i, n);
       let j = i;
       while (j <= n) {
         t[j] += a[i-1];
-        setBit([...t]); await sleep(60);
+        setCurrentStep(`Adding ${a[i-1]} to BIT[${j}]. Next position: ${j + lsb(j)}`);
+        setBit([...t]); 
+        await sleep(300);
         j += lsb(j);
       }
     }
+    
     setBit(t);
-    setIsBusy(false);
-  }, []);
+    setCurrentStep('Fenwick Tree construction complete!');
+    speakResult(`Fenwick Tree built successfully! Ready for O(log n) range queries and updates.`);
+    
+    setTimeout(() => {
+      setIsBusy(false);
+      setCurrentStep('');
+      setOperation('');
+    }, 2000);
+  }, [speakOperation, speakStep, speakResult]);
 
   const rebuild = useCallback(() => {
     const nums = input.split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n));
@@ -41,30 +81,80 @@ export function FenwickTreeVisualizer() {
 
   const prefixSum = useCallback(async (i: number) => {
     setIsBusy(true);
-    let sum = 0; const n = arr.length; const t = [...bit];
+    setOperation(`Computing prefix sum for index ${i}`);
+    speakOperation("Prefix Sum Query", `Computing prefix sum from index 1 to ${i} using Fenwick Tree. We'll traverse using LSB jumps to collect partial sums.`);
+    
+    let sum = 0; 
+    const n = arr.length; 
+    const t = [...bit];
     let j = Math.max(0, Math.min(n, i));
     const hl: number[] = [];
+    let stepCount = 0;
+    
+    setCurrentStep(`Starting prefix sum query for index ${i}`);
+    
     while (j > 0) {
-      hl.push(j); setHighlight([...hl]); await sleep(120);
+      stepCount++;
+      hl.push(j); 
+      setHighlight([...hl]); 
+      setCurrentStep(`Adding BIT[${j}] = ${t[j]} to sum. Current sum: ${sum + t[j]}`);
+      speakStep("", `Adding value ${t[j]} from position ${j}. Next position: ${j - lsb(j)}.`, stepCount, Math.ceil(Math.log2(i + 1)));
       sum += t[j];
       j -= lsb(j);
+      await sleep(600);
     }
-    setIsBusy(false);
+    
+    setCurrentStep(`Prefix sum query complete! Result: ${sum}`);
+    speakResult(`Prefix sum from 1 to ${i} equals ${sum}. Query completed in O(log n) time.`);
+    
+    setTimeout(() => {
+      setIsBusy(false);
+      setCurrentStep('');
+      setOperation('');
+      setHighlight([]);
+    }, 2000);
+    
     return sum;
-  }, [bit, arr.length]);
+  }, [bit, arr.length, speakOperation, speakStep, speakResult]);
 
   const pointUpdate = useCallback(async (i: number, d: number) => {
     setIsBusy(true);
-    const n = arr.length; const a = [...arr]; a[i-1] += d; setArr(a);
+    setOperation(`Updating position ${i} by ${d}`);
+    speakOperation("Point Update", `Updating element at position ${i} by adding ${d}. We'll propagate this change through all affected positions using LSB jumps.`);
+    
+    const n = arr.length; 
+    const a = [...arr]; 
+    a[i-1] += d; 
+    setArr(a);
     const t = [...bit];
     let j = i;
     const hl: number[] = [];
+    let stepCount = 0;
+    
+    setCurrentStep(`Updating array[${i}] by adding ${d}`);
+    
     while (j <= n) {
-      t[j] += d; hl.push(j); setHighlight([...hl]); setBit([...t]); await sleep(120);
+      stepCount++;
+      t[j] += d; 
+      hl.push(j); 
+      setHighlight([...hl]); 
+      setBit([...t]); 
+      setCurrentStep(`Updated BIT[${j}] by adding ${d}. Next position: ${j + lsb(j)}`);
+      speakStep("", `Adding ${d} to position ${j}. Next position to update: ${j + lsb(j)}.`, stepCount, Math.ceil(Math.log2(n + 1)));
+      await sleep(600);
       j += lsb(j);
     }
-    setIsBusy(false);
-  }, [bit, arr]);
+    
+    setCurrentStep(`Point update complete! Position ${i} updated by ${d}`);
+    speakResult(`Point update completed in O(log n) time. All affected positions in Fenwick Tree have been updated.`);
+    
+    setTimeout(() => {
+      setIsBusy(false);
+      setCurrentStep('');
+      setOperation('');
+      setHighlight([]);
+    }, 2000);
+  }, [bit, arr, speakOperation, speakStep, speakResult]);
 
   return (
     <div className="w-full space-y-4">

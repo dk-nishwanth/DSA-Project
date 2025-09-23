@@ -1,9 +1,14 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Binary, Calculator, RotateCcw } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
+import { toast } from 'sonner';
 
 interface BitOperation {
   operation: string;
@@ -22,6 +27,21 @@ export function BitManipulationVisualizer() {
   const [operation, setOperation] = useState('AND');
   const [result, setResult] = useState<BitOperation | null>(null);
   const [position, setPosition] = useState(2);
+  const [showMemory, setShowMemory] = useState(false);
+  
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const operations = [
     'AND', 'OR', 'XOR', 'NOT', 'LEFT_SHIFT', 'RIGHT_SHIFT',
@@ -29,6 +49,8 @@ export function BitManipulationVisualizer() {
   ];
 
   const performOperation = () => {
+    speakOperation("Bit Manipulation", `Performing ${operation.replace('_', ' ')} operation on binary numbers. Let's see how bits interact at the binary level.`);
+    
     let res: number;
     let explanation: string;
     const binaryOp1 = operand1.toString(2).padStart(8, '0');
@@ -109,6 +131,9 @@ export function BitManipulationVisualizer() {
       binaryOperand2: binaryOp2,
       binaryResult: binaryRes
     });
+
+    speakResult(`${operation.replace('_', ' ')} operation completed! Result: ${res}. ${explanation}`);
+    toast.success(`${operation} operation completed`);
   };
 
   const reset = () => {

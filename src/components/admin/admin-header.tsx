@@ -3,13 +3,15 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { LogOut, User, Settings, Bell, ArrowLeft, LayoutDashboard } from 'lucide-react';
+import { useAuth } from '@/contexts/auth-context';
 
 export function AdminHeader() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { logout, user } = useAuth();
 
   const handleLogout = () => {
-    // In a real app, you would clear auth tokens here
+    logout();
     navigate('/');
   };
 
@@ -51,9 +53,9 @@ export function AdminHeader() {
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">Admin User</p>
+                  <p className="text-sm font-medium leading-none">{user?.name || 'Admin User'}</p>
                   <p className="text-xs leading-none text-muted-foreground">
-                    admin@company.com
+                    {user?.email || 'admin@company.com'}
                   </p>
                 </div>
               </DropdownMenuLabel>

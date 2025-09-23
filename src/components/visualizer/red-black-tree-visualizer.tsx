@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
+import { toast } from 'sonner';
 
 type Color = 'R'|'B';
 interface Node { id: string; val: number; color: Color; left?: Node; right?: Node; parent?: Node; }
@@ -80,37 +85,145 @@ function collect(n: Node|undefined, x=300, y=40, dx=120, nodes:any[]=[], edges:a
 export function RedBlackTreeVisualizer(){
   const [root, setRoot] = useState<Node|undefined>(undefined);
   const [val, setVal] = useState('10');
+  const [showMemory, setShowMemory] = useState(false);
+  const [currentStep, setCurrentStep] = useState('');
+  const [isAnimating, setIsAnimating] = useState(false);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2500 });
 
-  const insert = ()=>{
+  const insert = async ()=>{
     const v = parseInt(val)||0;
+    if (isNaN(v)) {
+      toast.error('Please enter a valid number');
+      return;
+    }
+    
+    setIsAnimating(true);
+    speakOperation("Red-Black Tree Insert", `Inserting ${v} into red-black tree. Red-black trees maintain balance using color properties and rotations.`);
+    setCurrentStep(`Inserting ${v} into red-black tree...`);
+    
     const newRoot = insertRBT(root, v);
     setRoot(newRoot? {...newRoot} : undefined);
+    
+    const resultText = `Successfully inserted ${v}. Tree maintains red-black properties with automatic color changes and rotations.`;
+    setCurrentStep(resultText);
+    speakResult(resultText);
+    toast.success(`Inserted ${v} into red-black tree`);
+    
+    setTimeout(() => {
+      setIsAnimating(false);
+      setCurrentStep('');
+    }, 2000);
   };
 
   const {nodes, edges} = collect(root);
 
   return (
-    <div className="w-full space-y-4">
-      <div className="flex gap-2 items-center p-4 bg-muted/30 rounded-xl border">
-        <Input className="w-28" type="number" value={val} onChange={e=>setVal(e.target.value)} />
-        <Button onClick={insert}>Insert</Button>
-        <Button variant="outline" onClick={()=>setRoot(undefined)}>Reset</Button>
+    <div className="w-full space-y-6">
+      {/* Header */}
+      <div className="text-center">
+        <h2 className="text-2xl font-bold mb-2">Red-Black Tree Visualizer</h2>
+        <p className="text-muted-foreground">
+          Self-balancing binary search tree using color properties
+        </p>
       </div>
-      <div className="p-4 bg-card rounded-xl border">
+
+      {/* Controls */}
+      <div className="flex gap-2 items-center p-4 bg-muted/30 rounded-xl border">
+        <Input 
+          className="w-28" 
+          type="number" 
+          value={val} 
+          onChange={e=>setVal(e.target.value)} 
+          placeholder="Value"
+          disabled={isAnimating}
+        />
+        <Button onClick={insert} disabled={isAnimating}>
+          {isAnimating ? 'Inserting...' : 'Insert'}
+        </Button>
+        <Button variant="outline" onClick={()=>setRoot(undefined)} disabled={isAnimating}>
+          Reset
+        </Button>
+      </div>
+
+      {/* Current Step Display */}
+      {currentStep && (
+        <div className="text-center p-4 bg-muted rounded-lg">
+          <Badge className="mb-2" variant={isAnimating ? 'default' : 'secondary'}>
+            Red-Black Operation
+          </Badge>
+          <p className="text-sm">{currentStep}</p>
+        </div>
+      )}
+
+      {/* Tree Visualization */}
+      <div className="p-6 bg-gradient-visualization rounded-xl border-2 border-primary/20">
+        <h3 className="text-lg font-semibold mb-4 text-center">Red-Black Tree Structure</h3>
         <svg width="640" height="360" className="mx-auto">
           {edges.map((e,i)=>(<line key={i} x1={e.x1} y1={e.y1} x2={e.x2} y2={e.y2} stroke="hsl(var(--border))" strokeWidth="2" />))}
           {nodes.map((n,i)=>(
             <g key={i}>
-              <circle cx={n.x} cy={n.y} r={20} fill={n.color==='R'?"#ef444433":"#22c55e33"} stroke={n.color==='R'?"#ef4444":"#22c55e"} strokeWidth="2" />
-              <text x={n.x} y={n.y+5} textAnchor="middle" fontSize="14" fontWeight="bold">{n.val}</text>
+              <circle cx={n.x} cy={n.y} r={20} fill={n.color==='R'?"#ef444433":"#22c55e33"} stroke={n.color==='R'?"#ef4444":"#22c55e"} strokeWidth="3" />
+              <text x={n.x} y={n.y+5} textAnchor="middle" fontSize="14" fontWeight="bold" fill="hsl(var(--foreground))">{n.val}</text>
               <text x={n.x} y={n.y+34} textAnchor="middle" fontSize="10" className="fill-muted-foreground">{n.color==='R'?'RED':'BLACK'}</text>
             </g>
           ))}
         </svg>
+        {!root && (
+          <div className="text-center py-12 text-muted-foreground">
+            <div className="text-lg mb-2">Red-Black Tree is empty</div>
+            <div className="text-sm">Insert values to see the color-balanced tree structure</div>
+          </div>
+        )}
       </div>
-      <div className="bg-muted/20 rounded-lg p-3 text-sm text-muted-foreground">
-        <div>• Red-Black tree keeps approximately balanced height using colors and rotations.</div>
-        <div>• Properties: root black, no two consecutive reds, equal black height along paths.</div>
+
+      {/* Algorithm Information */}
+      <div className="bg-muted/20 rounded-lg p-4">
+        <h4 className="font-semibold mb-2">Red-Black Tree Properties</h4>
+        <div className="text-sm text-muted-foreground space-y-1">
+          <div>• <strong>Root Property:</strong> Root is always black</div>
+          <div>• <strong>Red Property:</strong> Red nodes cannot have red children (no two red nodes adjacent)</div>
+          <div>• <strong>Black Property:</strong> All paths from root to leaves have same number of black nodes</div>
+          <div>• <strong>Leaf Property:</strong> All leaves (NIL nodes) are black</div>
+          <div>• <strong>Time Complexity:</strong> O(log n) for insert, delete, and search operations</div>
+          <div>• <strong>Applications:</strong> Java TreeMap, C++ map, Linux kernel scheduler</div>
+        </div>
+      </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <MemoryLayout
+          title="Red-Black Tree Memory Layout"
+          data={nodes.map(n => `Node(${n.val}, ${n.color === 'R' ? 'RED' : 'BLACK'})`)}
+          baseAddress={0x7000}
+        />
+      )}
+
+      {/* Visualizer Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
       </div>
     </div>
   );

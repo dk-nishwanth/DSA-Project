@@ -4,6 +4,9 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Play, RotateCcw, StepForward } from 'lucide-react';
 import { toast } from 'sonner';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface GraphNode {
   id: number;
@@ -75,6 +78,22 @@ export function DFSBFSVisualizer() {
   const [visitOrder, setVisitOrder] = useState<number[]>([]);
   const [queue, setQueue] = useState<number[]>([]);
   const [stack, setStack] = useState<number[]>([]);
+  const [showMemory, setShowMemory] = useState(false);
+  const [currentStepText, setCurrentStepText] = useState('');
+  
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2500 });
 
   const pseudocodeDFS = [
     "function DFS(graph, startNode):",
@@ -202,10 +221,20 @@ export function DFSBFSVisualizer() {
   const handleStart = useCallback(() => {
     if (generator) handleReset();
     const start = parseInt(startNode);
+    
+    const algorithmName = algorithm === 'dfs' ? 'Depth-First Search' : 'Breadth-First Search';
+    const dataStructure = algorithm === 'dfs' ? 'stack (LIFO)' : 'queue (FIFO)';
+    const explanation = algorithm === 'dfs' 
+      ? 'DFS explores as far as possible along each branch before backtracking, using a stack to remember where to go next.'
+      : 'BFS explores all neighbors at the current depth before moving to nodes at the next depth level, using a queue to process nodes in order.';
+    
+    setCurrentStepText(`Starting ${algorithmName} from node ${start}`);
+    speakOperation(algorithmName, `Starting ${algorithmName} from node ${start}. ${explanation} We'll use a ${dataStructure} to keep track of nodes to visit.`);
+    
     const gen = algorithm === 'dfs' ? runDFS(start) : runBFS(start);
     setGenerator(gen);
     gen.next();
-  }, [algorithm, startNode, generator]);
+  }, [algorithm, startNode, generator, speakOperation]);
 
   const handleNext = useCallback(() => {
     if (generator) {

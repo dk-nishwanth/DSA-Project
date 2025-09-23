@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { PseudocodeBox } from '@/components/pseudocode-box';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
 import { MemoryLayout } from '@/components/memory-layout';
-import { useVoiceExplain } from '@/hooks/useVoiceExplain';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 export function PalindromeVisualizer() {
   const [text, setText] = useState('racecar');
@@ -17,7 +17,20 @@ export function PalindromeVisualizer() {
   const [result, setResult] = useState<boolean | null>(null);
   const [currentStep, setCurrentStep] = useState('');
   const [showMemory, setShowMemory] = useState(false);
-  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(currentStep);
+  
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -35,6 +48,8 @@ export function PalindromeVisualizer() {
     setCurrentStep('Starting palindrome check...');
     
     const cleanText = text.toLowerCase().replace(/[^a-z0-9]/g, '');
+    speakOperation("Palindrome Check", `Starting palindrome check for "${text}". Using two pointers technique - one from start and one from end, comparing characters as they move toward center.`);
+    
     let left = 0;
     let right = cleanText.length - 1;
     let isPalindrome = true;
@@ -46,6 +61,7 @@ export function PalindromeVisualizer() {
       setLeftPointer(left);
       setRightPointer(right);
       setCurrentStep(`Comparing characters at positions ${left} and ${right}: '${cleanText[left]}' vs '${cleanText[right]}'`);
+      speakStep("", `Comparing characters at positions ${left} and ${right}: '${cleanText[left]}' versus '${cleanText[right]}'`, left + 1, Math.ceil(cleanText.length / 2));
       
       await sleep(800);
 
@@ -55,11 +71,13 @@ export function PalindromeVisualizer() {
 
       if (!match) {
         isPalindrome = false;
-        setCurrentStep(`Characters don't match! Not a palindrome.`);
+        setCurrentStep(`Characters don't match! '${cleanText[left]}' ≠ '${cleanText[right]}' - Not a palindrome`);
+        speakStep("", `Characters don't match! '${cleanText[left]}' is not equal to '${cleanText[right]}'. This means the text is not a palindrome.`, left + 1, Math.ceil(cleanText.length / 2));
         await sleep(1000);
         break;
       } else {
-        setCurrentStep(`Characters match! Continue checking...`);
+        setCurrentStep(`Characters match! '${cleanText[left]}' = '${cleanText[right]}' - Continue checking`);
+        speakStep("", `Characters match! '${cleanText[left]}' equals '${cleanText[right]}'. Moving pointers closer to center.`, left + 1, Math.ceil(cleanText.length / 2));
         await sleep(600);
       }
 

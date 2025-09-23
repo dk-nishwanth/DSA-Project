@@ -9,7 +9,7 @@ import { PseudocodeBox } from '@/components/pseudocode-box';
 import { ComplexityBox } from '@/components/complexity-box';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
 import { MemoryLayout } from '@/components/memory-layout';
-import { useVoiceExplain } from '@/hooks/useVoiceExplain';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface DoublyNode {
   id: string;
@@ -35,7 +35,20 @@ export function DoublyLinkedListVisualizer() {
   const [animationSteps, setAnimationSteps] = useState<any[]>([]);
   const [currentStepDescription, setCurrentStepDescription] = useState('');
   const [showMemory, setShowMemory] = useState(false);
-  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(currentStepDescription);
+  
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const pseudocode: Record<Operation, string[]> = {
     'insert-head': [
@@ -167,6 +180,19 @@ export function DoublyLinkedListVisualizer() {
     setAnimationSteps(steps);
     setCurrentStep(0);
 
+    const operationNames = {
+      'insert-head': 'Insert at Head',
+      'insert-tail': 'Insert at Tail', 
+      'insert-position': 'Insert at Position',
+      'delete-head': 'Delete Head',
+      'delete-tail': 'Delete Tail',
+      'delete-value': 'Delete by Value',
+      'search': 'Search Value'
+    };
+
+    const operationName = operationNames[operation];
+    speakOperation(operationName, `Starting ${operationName} operation on doubly linked list. This data structure allows bidirectional traversal with both next and previous pointers.`);
+
     try {
       switch (operation) {
         case 'insert-head':
@@ -182,8 +208,11 @@ export function DoublyLinkedListVisualizer() {
           await deleteHead(steps);
           break;
       }
+      
+      speakResult(`${operationName} operation completed successfully!`);
     } catch (error) {
       toast.error('Operation failed');
+      speakResult(`${operationName} operation failed. Please try again.`);
     }
 
     setIsAnimating(false);

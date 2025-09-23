@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { PseudocodeBox } from '@/components/pseudocode-box';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
 import { MemoryLayout } from '@/components/memory-layout';
-import { useVoiceExplain } from '@/hooks/useVoiceExplain';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface WindowStep {
   array: number[];
@@ -31,7 +31,20 @@ export function SlidingWindowVisualizer() {
   const [mode, setMode] = useState<'fixed-max'|'kadane'>('fixed-max');
   const [showMemory, setShowMemory] = useState(false);
   const stepDesc = (steps[currentStep]?.message) || '';
-  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(stepDesc);
+  
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const generateSteps = (arr: number[], k: number): WindowStep[] => {
     const steps: WindowStep[] = [];
@@ -157,15 +170,24 @@ export function SlidingWindowVisualizer() {
       return;
     }
     
+    const modeText = mode === 'fixed-max' ? 'Fixed Window Maximum' : "Kadane's Algorithm";
+    speakOperation(`Sliding Window - ${modeText}`, `Starting ${modeText} visualization. ${mode === 'fixed-max' ? `We'll slide a window of size ${windowSize} across the array to find maximum in each window.` : "We'll find the maximum sum subarray using dynamic programming."}`);
+    
     setIsPlaying(true);
+    let stepIndex = 0;
     const interval = setInterval(() => {
       setCurrentStep(prev => {
         if (prev >= steps.length - 1) {
           setIsPlaying(false);
           clearInterval(interval);
+          speakResult(`${modeText} completed! ${mode === 'fixed-max' ? `Found maximum values for all windows of size ${windowSize}.` : 'Found the maximum sum subarray.'}`);
           return prev;
         }
-        return prev + 1;
+        const nextStep = prev + 1;
+        if (steps[nextStep]) {
+          speakStep("", steps[nextStep].message, nextStep + 1, steps.length);
+        }
+        return nextStep;
       });
     }, 1500);
   };
@@ -393,6 +415,12 @@ export function SlidingWindowVisualizer() {
           onToggleMemory={setShowMemory}
           voiceEnabled={voiceEnabled}
           onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
         />
       </div>
 

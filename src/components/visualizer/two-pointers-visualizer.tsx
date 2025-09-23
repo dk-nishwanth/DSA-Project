@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import { Play, Pause, RotateCcw, Target } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
+import { toast } from 'sonner';
 
 interface TwoPointersStep {
   array: number[];
@@ -22,6 +27,21 @@ export function TwoPointersVisualizer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [inputArray, setInputArray] = useState('1,2,3,4,6,8,9,14,15');
   const [inputTarget, setInputTarget] = useState('10');
+  const [showMemory, setShowMemory] = useState(false);
+  
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const generateSteps = (arr: number[], targetSum: number): TwoPointersStep[] => {
     const steps: TwoPointersStep[] = [];
@@ -117,15 +137,30 @@ export function TwoPointersVisualizer() {
       return;
     }
     
+    speakOperation("Two Pointers Technique", `Starting two pointers algorithm to find pair that sums to ${target}. We'll use left and right pointers moving towards each other.`);
+    
     setIsPlaying(true);
     const interval = setInterval(() => {
       setCurrentStep(prev => {
+        const nextStep = prev + 1;
+        if (nextStep < steps.length) {
+          const stepData = steps[nextStep];
+          speakStep("", stepData.message, nextStep + 1, steps.length);
+          
+          if (stepData.found) {
+            speakResult(`Success! Found pair at indices ${stepData.left} and ${stepData.right}: ${stepData.array[stepData.left]} + ${stepData.array[stepData.right]} = ${stepData.sum}`);
+          }
+        }
+        
         if (prev >= steps.length - 1) {
           setIsPlaying(false);
           clearInterval(interval);
+          if (!steps[steps.length - 1].found) {
+            speakResult(`No pair found that sums to ${target}. Two pointers technique completed.`);
+          }
           return prev;
         }
-        return prev + 1;
+        return nextStep;
       });
     }, 1500);
   };

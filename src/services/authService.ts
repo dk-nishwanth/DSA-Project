@@ -48,32 +48,14 @@ const USER_KEY = 'dsa_user';
 
 export const authService = {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-
-    // Special case for Nishwanth user as student
-    if (credentials.email === 'Nishwanth' && credentials.password === 'Nishwanth') {
-      const nishwanthUser = {
-        id: 'student-nishwanth',
-        name: 'Nishwanth',
-        email: 'Nishwanth',
-        role: 'student'
-      };
-      
-      const response = {
-        user: nishwanthUser,
-        token: 'nishwanth-mock-token'
-      };
-      
-      this.setToken(response.token);
-      this.setUser(response.user);
-      return response;
-    }
     
     // Special case for admin users
-    if (credentials.email === 'admin' && credentials.password === 'admin' ||
-        credentials.email === 'NishwanthAdmin' && credentials.password === 'Nishwanth') {
+    if ((credentials.email === 'admin' && credentials.password === 'admin') ||
+        (credentials.email === 'NishwanthAdmin' && credentials.password === 'Nishwanth') ||
+        (credentials.email === 'Nishwanth' && credentials.password === 'Nishwanth')) {
       const adminUser = {
         id: 'admin-1',
-        name: credentials.email === 'NishwanthAdmin' ? 'Nishwanth' : 'Administrator',
+        name: credentials.email === 'NishwanthAdmin' || credentials.email === 'Nishwanth' ? 'Nishwanth' : 'Administrator',
         email: credentials.email,
         role: 'admin'
       };

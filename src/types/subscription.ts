@@ -1,3 +1,4 @@
+// SUBSCRIPTION FEATURES DISABLED - Types preserved for future use
 export interface User {
   id: string;
   email: string;

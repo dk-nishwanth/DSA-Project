@@ -4,6 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Minus, Play, RotateCcw } from 'lucide-react';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface TreeNode {
   id: string;
@@ -39,6 +42,20 @@ export function BinaryTreeVisualizer() {
   const [lcaInputs, setLcaInputs] = useState<{a: string, b: string}>({ a: '', b: '' });
   const [lcaMode, setLcaMode] = useState<'bst' | 'general'>('bst');
   const [treeHeight, setTreeHeight] = useState<number | null>(null);
+  const [showMemory, setShowMemory] = useState(false);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2500 });
 
   const computeHeight = (node: TreeNode | null): number => {
     if (!node) return -1;
@@ -49,23 +66,30 @@ export function BinaryTreeVisualizer() {
     if (!root) return;
     const h = computeHeight(root);
     setTreeHeight(h);
-    setOperation(`Height = ${h}`);
+    const opText = `Computing tree height: ${h}`;
+    setOperation(opText);
+    speakOperation("Height Calculation", `Computing the height of the binary tree. The height is the longest path from root to leaf, which is ${h} levels.`);
   };
 
   const handleLevelOrder = async () => {
     if (!root || isAnimating) return;
     setIsAnimating(true);
-    setOperation('Level Order Traversal');
+    const opText = 'Level Order Traversal (BFS)';
+    setOperation(opText);
+    speakOperation("Level Order Traversal", "Starting level order traversal using breadth-first search. We'll visit nodes level by level from left to right.");
     setHighlightedNodes([]);
     setTraversalOrder([]);
     const queue: (TreeNode | null)[] = [root];
     const order: number[] = [];
+    let stepCount = 0;
     while (queue.length > 0) {
       const node = queue.shift();
       if (!node) continue;
       setHighlightedNodes(prev => [...prev, node.id]);
       order.push(node.value);
       setTraversalOrder([...order]);
+      stepCount++;
+      speakStep("", `Visiting node ${node.value} at step ${stepCount}`, stepCount, 7);
       await new Promise(r => setTimeout(r, 600));
       if (node.left) queue.push(node.left);
       if (node.right) queue.push(node.right);
@@ -74,6 +98,7 @@ export function BinaryTreeVisualizer() {
       setHighlightedNodes([]);
       setIsAnimating(false);
       setOperation(null);
+      speakResult(`Level order traversal complete! Visited nodes in order: ${order.join(', ')}`);
     }, 1200);
   };
 
@@ -145,16 +170,19 @@ export function BinaryTreeVisualizer() {
     if (isNaN(a) || isNaN(b)) return;
     setIsAnimating(true);
     setOperation(`Finding LCA(${a}, ${b})`);
+    speakOperation("Lowest Common Ancestor", `Finding the lowest common ancestor of ${a} and ${b}. ${lcaMode === 'bst' ? 'Using BST property for efficient O(log n) search.' : 'Using general tree algorithm with parent tracking.'}`);
     setHighlightedNodes([]);
     const lca = lcaMode === 'bst'
       ? await findLCAInBST(root, Math.min(a,b), Math.max(a,b))
       : await findLCAInGeneral(root, a, b);
     if (lca) {
       setOperation(`LCA is ${lca.value}`);
+      speakResult(`Found the lowest common ancestor! The LCA of ${a} and ${b} is ${lca.value}.`);
       // pulse highlight
       setHighlightedNodes(prev => Array.from(new Set([...prev, lca.id])));
     } else {
       setOperation('LCA not found');
+      speakResult(`Could not find LCA. One or both values ${a} and ${b} may not exist in the tree.`);
     }
     setTimeout(() => {
       setIsAnimating(false);
@@ -181,10 +209,12 @@ export function BinaryTreeVisualizer() {
 
     setIsAnimating(true);
     setOperation(`Inserting ${value}`);
+    speakOperation("BST Insert", `Inserting ${value} into binary search tree. Following BST property: left subtree < root < right subtree.`);
 
     const newRoot = insertNode(root, value);
     setRoot({ ...newRoot });
     setInputValue('');
+    speakResult(`Successfully inserted ${value} into the tree maintaining BST property.`);
 
     setTimeout(() => {
       setIsAnimating(false);
@@ -213,10 +243,12 @@ export function BinaryTreeVisualizer() {
 
     setIsAnimating(true);
     setOperation('Inorder Traversal (Left → Root → Right)');
+    speakOperation("Inorder Traversal", "Starting inorder traversal: Left subtree, Root, Right subtree. For BST, this gives sorted order.");
     setHighlightedNodes([]);
     setTraversalOrder([]);
 
-    await inorderTraversal(root);
+    const result = await inorderTraversal(root);
+    speakResult(`Inorder traversal complete! Visited nodes in order: ${result.join(', ')}. ${result.every((val, i) => i === 0 || val >= result[i-1]) ? 'Notice the sorted order - this confirms BST property!' : ''}`);
 
     setTimeout(() => {
       setHighlightedNodes([]);
@@ -447,6 +479,31 @@ export function BinaryTreeVisualizer() {
           />
           <Button onClick={handleLCA} disabled={isAnimating || !root} size="sm">Find LCA</Button>
         </div>
+      </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <MemoryLayout
+          title="Binary Tree Memory Layout"
+          data={traversalOrder.length > 0 ? traversalOrder : [50, 30, 70, 20, 40, 60, 80]}
+          baseAddress={0x5000}
+        />
+      )}
+
+      {/* Visualizer Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
       </div>
     </div>
   );

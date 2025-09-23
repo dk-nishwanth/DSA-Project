@@ -4,6 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Minus, Eye, RotateCcw } from 'lucide-react';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface QueueItem {
   id: string;
@@ -20,13 +23,28 @@ export function QueueVisualizer() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const [operation, setOperation] = useState<string | null>(null);
+  const [showMemory, setShowMemory] = useState(false);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const handleEnqueue = () => {
     const value = parseInt(inputValue);
     if (isNaN(value)) return;
 
     setIsAnimating(true);
-    setOperation(`Enqueueing ${value}`);
+    const opText = `Enqueueing ${value} to the rear of the queue`;
+    setOperation(opText);
+    speakOperation("Enqueue Operation", `Adding ${value} to the back of the queue. Queue follows FIFO - First In, First Out principle.`);
 
     const newItem: QueueItem = {
       id: Date.now().toString(),
@@ -41,6 +59,7 @@ export function QueueVisualizer() {
       setHighlightedIndex(null);
       setIsAnimating(false);
       setOperation(null);
+      speakResult(`Successfully enqueued ${value}. Queue now has ${queue.length + 1} elements.`);
     }, 1000);
   };
 
@@ -48,7 +67,10 @@ export function QueueVisualizer() {
     if (queue.length === 0) return;
 
     setIsAnimating(true);
-    setOperation(`Dequeuing ${queue[0].value}`);
+    const frontValue = queue[0].value;
+    const opText = `Dequeuing ${frontValue} from the front of the queue`;
+    setOperation(opText);
+    speakOperation("Dequeue Operation", `Removing ${frontValue} from the front of the queue. This is the first element that was added.`);
     setHighlightedIndex(0);
 
     setTimeout(() => {
@@ -56,6 +78,7 @@ export function QueueVisualizer() {
       setHighlightedIndex(null);
       setIsAnimating(false);
       setOperation(null);
+      speakResult(`Successfully dequeued ${frontValue}. Queue now has ${queue.length - 1} elements.`);
     }, 800);
   };
 
@@ -63,13 +86,17 @@ export function QueueVisualizer() {
     if (queue.length === 0) return;
 
     setIsAnimating(true);
-    setOperation(`Front element: ${queue[0].value}`);
+    const frontValue = queue[0].value;
+    const opText = `Front element: ${frontValue}`;
+    setOperation(opText);
+    speakOperation("Peek Operation", `Looking at the front element without removing it. The front element is ${frontValue}.`);
     setHighlightedIndex(0);
 
     setTimeout(() => {
       setHighlightedIndex(null);
       setIsAnimating(false);
       setOperation(null);
+      speakResult(`Peek complete. Front element is ${frontValue}, queue remains unchanged.`);
     }, 1500);
   };
 
@@ -226,6 +253,31 @@ export function QueueVisualizer() {
             </Badge>
           )}
         </div>
+      </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <MemoryLayout
+          title="Queue Memory Layout"
+          data={queue.map(item => item.value)}
+          baseAddress={0x3000}
+        />
+      )}
+
+      {/* Visualizer Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
       </div>
     </div>
   );

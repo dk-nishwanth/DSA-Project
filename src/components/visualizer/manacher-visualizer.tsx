@@ -1,7 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import { PseudocodeBox } from '@/components/pseudocode-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 function preprocess(s: string): string {
   return `^#${s.split('').join('#')}#$`;
@@ -17,22 +21,20 @@ export function ManacherVisualizer() {
   const [longest, setLongest] = useState('');
   const [isAnimating, setIsAnimating] = useState(false);
   const [stepDesc, setStepDesc] = useState('');
-  const [voiceExplain, setVoiceExplain] = useState<boolean>(() => {
-    try { return localStorage.getItem('dsa_voice_explain') === '1'; } catch { return false; }
-  });
-  useEffect(() => {
-    if (!voiceExplain || !stepDesc) return;
-    try {
-      const u = new SpeechSynthesisUtterance(stepDesc);
-      u.rate = 1.05; u.pitch = 1.0; u.volume = 0.85;
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(u);
-    } catch {}
-  }, [voiceExplain, stepDesc]);
-  const setVoice = (on: boolean) => {
-    setVoiceExplain(on);
-    try { localStorage.setItem('dsa_voice_explain', on ? '1' : '0'); } catch {}
-  };
+  const [showMemory, setShowMemory] = useState(false);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2500 });
 
   const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
 
@@ -86,19 +88,42 @@ export function ManacherVisualizer() {
   }, []);
 
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-6">
+      {/* Header */}
+      <div className="text-center">
+        <h2 className="text-2xl font-bold mb-2">Manacher's Algorithm Visualizer</h2>
+        <p className="text-muted-foreground">
+          Linear time algorithm to find all palindromes in a string
+        </p>
+      </div>
+
+      {/* Controls */}
       <div className="flex flex-wrap gap-3 p-4 bg-muted/30 rounded-xl border">
         <div className="flex items-center gap-2">
           <span className="text-sm">Text:</span>
-          <Input className="w-64" value={text} onChange={e => setText(e.target.value)} disabled={isAnimating} />
+          <Input 
+            className="w-64" 
+            value={text} 
+            onChange={e => setText(e.target.value)} 
+            disabled={isAnimating}
+            placeholder="Enter string to find palindromes"
+          />
         </div>
-        <Button onClick={run} disabled={isAnimating}>Run</Button>
+        <Button onClick={run} disabled={isAnimating}>
+          {isAnimating ? 'Running...' : 'Run Manacher\'s Algorithm'}
+        </Button>
         <Button onClick={reset} variant="outline" disabled={isAnimating}>Reset</Button>
-        <div className="flex items-center gap-2 ml-auto">
-          <label className="text-sm">Voice Explain</label>
-          <input type="checkbox" checked={voiceExplain} onChange={(e)=>setVoice(e.target.checked)} />
-        </div>
       </div>
+
+      {/* Current Step Display */}
+      {stepDesc && (
+        <div className="text-center p-4 bg-muted rounded-lg">
+          <Badge className="mb-2" variant={isAnimating ? 'default' : 'secondary'}>
+            Manacher's Algorithm Step
+          </Badge>
+          <p className="text-sm">{stepDesc}</p>
+        </div>
+      )}
 
       <div className="p-3 bg-card border rounded">
         <div className="text-sm text-muted-foreground mb-1">Processed (with sentinels):</div>
@@ -124,14 +149,26 @@ export function ManacherVisualizer() {
         </div>
       )}
 
-      <div className="bg-muted/20 rounded-lg p-3">
-        <div className="font-medium mb-2">Algorithm Info</div>
+      <div className="bg-muted/20 rounded-lg p-4">
+        <h4 className="font-semibold mb-2">Manacher's Algorithm Properties</h4>
         <div className="text-sm text-muted-foreground space-y-1">
-          <div>• Preprocess to handle even/odd palindromes uniformly</div>
-          <div>• Mirror property reduces redundant comparisons</div>
-          <div>• Time: O(n), Space: O(n)</div>
+          <div>• <strong>Preprocessing:</strong> Insert special characters to handle even/odd palindromes uniformly</div>
+          <div>• <strong>Mirror Property:</strong> Uses previously computed values to avoid redundant comparisons</div>
+          <div>• <strong>Center & Right:</strong> Maintains rightmost palindrome boundary for optimization</div>
+          <div>• <strong>Time Complexity:</strong> O(n) linear time - each character processed at most twice</div>
+          <div>• <strong>Space Complexity:</strong> O(n) for storing palindrome radius array</div>
+          <div>• <strong>Applications:</strong> Longest palindromic substring, palindrome counting, DNA analysis</div>
         </div>
       </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <MemoryLayout
+          title="Manacher's Algorithm Memory Layout"
+          data={p.map((val, i) => `P[${i}]=${val}`)}
+          baseAddress={0xA000}
+        />
+      )}
 
       <PseudocodeBox
         title="Manacher's Algorithm - Pseudocode"
@@ -150,6 +187,22 @@ export function ManacherVisualizer() {
           (current > 1 && current < processed.length-1 ? (current < right ? 5 : 6) : 0)
         }
       />
+
+      {/* Visualizer Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
+      </div>
     </div>
   );
 }

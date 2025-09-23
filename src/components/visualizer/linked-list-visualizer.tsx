@@ -42,7 +42,9 @@ export function LinkedListVisualizer() {
     pauseSpeech,
     resumeSpeech,
     stopSpeech,
-    speakOperation
+    speakOperation,
+    speakStep,
+    speakResult
   } = useVisualizerVoice({ minInterval: 2000 });
 
   const sleep = (ms: number) => new Promise(res => setTimeout(res, ms));
@@ -53,6 +55,7 @@ export function LinkedListVisualizer() {
 
     setIsAnimating(true);
     setOperation(`Inserting ${value} at ${pos}`);
+    speakOperation("Linked List Insert", `Inserting ${value} at ${pos}. ${pos === 'head' ? 'This will be O(1) operation as we just update the head pointer.' : 'This requires traversing to the tail, making it O(n) operation.'}`);
     setPseudoTitle(`Insert ${pos === 'head' ? 'Head' : 'Tail'} - Pseudocode`);
     const code = pos==='head' ? [
       'newNode = create(value)',
@@ -65,6 +68,7 @@ export function LinkedListVisualizer() {
     ];
     setPseudoCode(code); setPseudoLine(1);
     setStepDesc(`Create new node with value ${value}.`);
+    speakStep("", `Creating new node with value ${value}. This node will be linked into our list.`, 1, 3);
 
     const newNode: Node = {
       id: Date.now().toString(),
@@ -74,16 +78,19 @@ export function LinkedListVisualizer() {
     if (pos === 'head') {
       await sleep(400);
       setPseudoLine(2); setStepDesc('Link newNode.next to current head.');
+      speakStep("", `Setting new node's next pointer to point to current head. This maintains the chain.`, 2, 3);
       newNode.next = nodes.length > 0 ? nodes[0].id : undefined;
       setNodes(prev => [newNode, ...prev]);
       setHighlightedNode(newNode.id);
       await sleep(400);
       setPseudoLine(3); setStepDesc('Move head pointer to new node.');
+      speakStep("", `Moving head pointer to new node. Insert at head complete in O(1) time!`, 3, 3);
     } else if (pos === 'tail') {
       await sleep(400);
       setPseudoLine(2);
       if (nodes.length > 0) {
         setStepDesc('Traverse to tail and connect new node.');
+        speakStep("", `Traversing to the tail node and connecting new node. This requires O(n) traversal.`, 2, 3);
         setNodes(prev => {
           const updated = [...prev];
           updated[updated.length - 1].next = newNode.id;
@@ -91,10 +98,12 @@ export function LinkedListVisualizer() {
         });
       } else {
         setNodes([newNode]);
+        speakStep("", `List is empty, making new node the head. This is O(1) operation.`, 2, 3);
       }
       setHighlightedNode(newNode.id);
       await sleep(400);
       setPseudoLine(3);
+      speakStep("", `Insert at tail complete! New node is now the last element in the list.`, 3, 3);
     }
 
     setInputValue('');
@@ -110,6 +119,7 @@ export function LinkedListVisualizer() {
 
     setIsAnimating(true);
     setOperation(`Deleting from ${pos}`);
+    speakOperation("Linked List Delete", `Deleting from ${pos}. ${pos === 'head' ? 'This is O(1) operation as we just move the head pointer.' : 'This requires O(n) traversal to find the second-to-last node.'}`);
     setPseudoTitle(`Delete ${pos==='head'?'Head':'Tail'} - Pseudocode`);
     const code = pos==='head' ? [
       'if head == null: return',
@@ -120,13 +130,16 @@ export function LinkedListVisualizer() {
       'secondLast.next = null'
     ];
     setPseudoCode(code); setPseudoLine(1);
+    speakStep("", `Checking if list is empty before deletion.`, 1, pos === 'head' ? 2 : 3);
 
     if (pos === 'head') {
       setHighlightedNode(nodes[0].id);
       setStepDesc('Move head to next node.');
+      speakStep("", `Moving head pointer to the next node. The current head will be removed.`, 2, 2);
       await sleep(600);
       setPseudoLine(2);
       setNodes(prev => prev.slice(1));
+      speakResult(`Head deletion complete! Head moved to next node in O(1) time.`);
       setHighlightedNode(null);
       setIsAnimating(false);
       setOperation(null);
@@ -135,8 +148,10 @@ export function LinkedListVisualizer() {
       const lastNode = nodes[nodes.length - 1];
       setHighlightedNode(lastNode.id);
       setStepDesc('Detach last node by setting previous next to null.');
+      speakStep("", `Traversing to second-to-last node to update its next pointer to null.`, 2, 3);
       await sleep(600);
       setPseudoLine(3);
+      speakStep("", `Setting second-to-last node's next pointer to null, effectively removing the tail.`, 3, 3);
       setNodes(prev => {
         const updated = prev.slice(0, -1);
         if (updated.length > 0) {
@@ -144,6 +159,7 @@ export function LinkedListVisualizer() {
         }
         return updated;
       });
+      speakResult(`Tail deletion complete! Removed last node after O(n) traversal.`);
       setHighlightedNode(null);
       setIsAnimating(false);
       setOperation(null);
@@ -157,6 +173,7 @@ export function LinkedListVisualizer() {
 
     setIsAnimating(true);
     setOperation(`Searching for ${value}`);
+    speakOperation("Linked List Search", `Searching for ${value} in linked list. This requires O(n) linear traversal from head to tail.`);
     setPseudoTitle('Search - Pseudocode');
     setPseudoCode([
       'current = head',
@@ -166,16 +183,19 @@ export function LinkedListVisualizer() {
       'return false'
     ]);
     setPseudoLine(1);
+    speakStep("", `Starting search from head node. Will traverse each node until target is found.`, 1, nodes.length);
 
     for (let i = 0; i < nodes.length; i++) {
       setHighlightedNode(nodes[i].id);
       setStepDesc(`Visit node ${i} (value=${nodes[i].value}).`);
       setPseudoLine(2);
+      speakStep("", `Checking node ${i + 1} with value ${nodes[i].value}. ${nodes[i].value === value ? 'Found the target!' : 'Not a match, moving to next node.'}`, i + 1, nodes.length);
       await new Promise(resolve => setTimeout(resolve, 600));
       
       if (nodes[i].value === value) {
         setPseudoLine(3);
         setOperation(`Found ${value}!`);
+        speakResult(`Success! Found ${value} at position ${i + 1} after checking ${i + 1} nodes.`);
         setTimeout(() => {
           setHighlightedNode(null);
           setIsAnimating(false);
@@ -188,6 +208,7 @@ export function LinkedListVisualizer() {
     }
 
     setOperation(`${value} not found`);
+    speakResult(`${value} not found after traversing all ${nodes.length} nodes in the linked list.`);
     setTimeout(() => {
       setHighlightedNode(null);
       setIsAnimating(false);

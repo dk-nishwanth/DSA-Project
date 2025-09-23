@@ -2,8 +2,12 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { PseudocodeBox } from '@/components/pseudocode-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 export function ZAlgorithmVisualizer() {
   const [text, setText] = useState('ABCDABCDABCD');
@@ -17,22 +21,20 @@ export function ZAlgorithmVisualizer() {
   const [L, setL] = useState(0);
   const [R, setR] = useState(0);
   const [stepDesc, setStepDesc] = useState('');
-  const [voiceExplain, setVoiceExplain] = useState<boolean>(() => {
-    try { return localStorage.getItem('dsa_voice_explain') === '1'; } catch { return false; }
-  });
-  useEffect(() => {
-    if (!voiceExplain || !stepDesc) return;
-    try {
-      const u = new SpeechSynthesisUtterance(stepDesc);
-      u.rate = 1.05; u.pitch = 1.0; u.volume = 0.85;
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(u);
-    } catch {}
-  }, [voiceExplain, stepDesc]);
-  const setVoice = (on: boolean) => {
-    setVoiceExplain(on);
-    try { localStorage.setItem('dsa_voice_explain', on ? '1' : '0'); } catch {}
-  };
+  const [showMemory, setShowMemory] = useState(false);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2500 });
 
   const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
 
@@ -43,7 +45,9 @@ export function ZAlgorithmVisualizer() {
 
     for (let i = 1; i < n; i++) {
       setCurrentIndex(i);
-      setStepDesc(`i=${i}. Inside Z-box? Compare with [L=${l}, R=${r}].`);
+      const stepText = `i=${i}. Inside Z-box? Compare with [L=${l}, R=${r}].`;
+      setStepDesc(stepText);
+      speakStep("", stepText, i, n);
       if (i <= r) {
         z[i] = Math.min(r - i + 1, z[i - l]);
       }
@@ -104,30 +108,76 @@ export function ZAlgorithmVisualizer() {
   }, []);
 
   return (
-    <div className="w-full space-y-4">
-      <div className="flex flex-wrap gap-3 p-4 bg-muted/30 rounded-xl border">
-        <Select value={mode} onValueChange={(v: 'zonly' | 'search') => setMode(v)}>
-          <SelectTrigger className="w-48"><SelectValue /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="search">Pattern Search (P$T)</SelectItem>
-            <SelectItem value="zonly">Z on Text Only</SelectItem>
-          </SelectContent>
-        </Select>
-        <div className="flex items-center gap-2">
-          <span className="text-sm">Text:</span>
-          <Input className="w-64" value={text} onChange={e => setText(e.target.value)} disabled={isAnimating} />
+    <div className="w-full space-y-6">
+      {/* Header */}
+      <div className="text-center">
+        <h2 className="text-2xl font-bold mb-2">Z Algorithm Visualizer</h2>
+        <p className="text-muted-foreground">
+          Linear time string matching using Z array preprocessing
+        </p>
+      </div>
+
+      {/* Controls */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="space-y-3 p-4 bg-muted/30 rounded-xl border">
+          <h4 className="font-semibold">Algorithm Mode</h4>
+          <Select value={mode} onValueChange={(v: 'zonly'|'search') => setMode(v)}>
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="zonly">Z Array Construction Only</SelectItem>
+              <SelectItem value="search">Pattern Search with Z Array</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-sm">Pattern:</span>
-          <Input className="w-48" value={pattern} onChange={e => setPattern(e.target.value)} disabled={isAnimating || mode==='zonly'} />
-        </div>
-        <Button onClick={run} disabled={isAnimating}>Run</Button>
-        <Button onClick={reset} variant="outline" disabled={isAnimating}>Reset</Button>
-        <div className="flex items-center gap-2 ml-auto">
-          <label className="text-sm">Voice Explain</label>
-          <input type="checkbox" checked={voiceExplain} onChange={(e)=>setVoice(e.target.checked)} />
+
+        <div className="space-y-3 p-4 bg-muted/30 rounded-xl border">
+          <h4 className="font-semibold">Input Configuration</h4>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="text-sm w-16">Text:</span>
+              <Input 
+                className="flex-1" 
+                value={text} 
+                onChange={e => setText(e.target.value)} 
+                disabled={isAnimating} 
+                placeholder="Enter text string"
+              />
+            </div>
+            {mode === 'search' && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm w-16">Pattern:</span>
+                <Input 
+                  className="flex-1" 
+                  value={pattern} 
+                  onChange={e => setPattern(e.target.value)} 
+                  disabled={isAnimating} 
+                  placeholder="Enter pattern to search"
+                />
+              </div>
+            )}
+          </div>
+          <div className="flex gap-2">
+            <Button onClick={run} disabled={isAnimating} className="flex-1">
+              {isAnimating ? 'Running...' : 'Run Z Algorithm'}
+            </Button>
+            <Button onClick={reset} variant="outline" disabled={isAnimating}>
+              Reset
+            </Button>
+          </div>
         </div>
       </div>
+
+      {/* Current Step Display */}
+      {stepDesc && (
+        <div className="text-center p-4 bg-muted rounded-lg">
+          <Badge className="mb-2" variant={isAnimating ? 'default' : 'secondary'}>
+            Z Algorithm Step
+          </Badge>
+          <p className="text-sm">{stepDesc}</p>
+        </div>
+      )}
 
       {mode === 'search' && (
         <div className="p-3 bg-card border rounded">
@@ -163,14 +213,26 @@ export function ZAlgorithmVisualizer() {
         </div>
       )}
 
-      <div className="bg-muted/20 rounded-lg p-3">
-        <div className="font-medium mb-2">Algorithm Info</div>
+      <div className="bg-muted/20 rounded-lg p-4">
+        <h4 className="font-semibold mb-2">Z Algorithm Properties</h4>
         <div className="text-sm text-muted-foreground space-y-1">
-          <div>• Builds Z array where Z[i] is LCP of S and S[i:]</div>
-          <div>• Pattern search: build S = P + "$" + T and find Z[i] == |P|</div>
-          <div>• Time: O(n), Space: O(n)</div>
+          <div>• <strong>Z Array:</strong> Z[i] is the length of the longest common prefix of S and S[i:]</div>
+          <div>• <strong>Z-box:</strong> Maintains interval [L,R] of rightmost substring that matches prefix</div>
+          <div>• <strong>Pattern Search:</strong> Construct S = P + "$" + T, find positions where Z[i] = |P|</div>
+          <div>• <strong>Time Complexity:</strong> O(n) linear time preprocessing and search</div>
+          <div>• <strong>Space Complexity:</strong> O(n) for storing Z array</div>
+          <div>• <strong>Applications:</strong> String matching, pattern recognition, bioinformatics</div>
         </div>
       </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <MemoryLayout
+          title="Z Algorithm Memory Layout"
+          data={zArray.map((val, i) => `Z[${i}]=${val}`)}
+          baseAddress={0x9000}
+        />
+      )}
 
       {/* Pseudocode */}
       <PseudocodeBox
@@ -187,6 +249,22 @@ export function ZAlgorithmVisualizer() {
           (currentIndex > 0 && currentIndex <= combined.length ? (L && R && currentIndex<=R ? 3 : 2) : 0)
         }
       />
+
+      {/* Visualizer Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
+      </div>
     </div>
   );
 }

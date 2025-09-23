@@ -3,7 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import { RotateCcw, Play, Pause, SkipForward, SkipBack } from 'lucide-react';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
+import { toast } from 'sonner';
 
 interface TreeNode {
   value: number;
@@ -29,8 +34,23 @@ export function TreeTraversalVisualizer() {
   const [steps, setSteps] = useState<TraversalStep[]>([]);
   const [currentStep, setCurrentStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [speed, setSpeed] = useState(1000);
+  const [animationSpeed, setAnimationSpeed] = useState(1000);
   const [inputValues, setInputValues] = useState('4,2,6,1,3,5,7');
+  const [showMemory, setShowMemory] = useState(false);
+  
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2500 });
 
   // Create a sample binary tree from array
   const createTreeFromArray = useCallback((values: number[]): TreeNode | null => {

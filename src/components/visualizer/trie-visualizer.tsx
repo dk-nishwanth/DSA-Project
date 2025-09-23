@@ -2,6 +2,10 @@ import React, { useState, useCallback } from 'react';
 import { Plus, Search, Trash2, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 import { toast } from 'sonner';
 
 interface TrieNode {
@@ -22,6 +26,22 @@ export function TrieVisualizer() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [highlightedPath, setHighlightedPath] = useState<string[]>([]);
   const [operation, setOperation] = useState<'insert' | 'search' | null>(null);
+  const [showMemory, setShowMemory] = useState(false);
+  const [currentStep, setCurrentStep] = useState('');
+  
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const buildTrie = useCallback(() => {
     const root: TrieNode = {
@@ -88,16 +108,23 @@ export function TrieVisualizer() {
 
     setIsAnimating(true);
     setOperation('insert');
+    setCurrentStep(`Starting insertion of "${word}" into trie`);
+    speakOperation("Trie Insert", `Starting insertion of word "${word}" into trie. We'll traverse character by character, creating new nodes as needed.`);
     
     // Animate insertion path
     const path = ['root'];
     for (let i = 0; i < word.length; i++) {
-      path.push(`${path[path.length - 1]}-${word[i]}`);
+      const char = word[i];
+      path.push(`${path[path.length - 1]}-${char}`);
       setHighlightedPath([...path]);
-      await new Promise(resolve => setTimeout(resolve, 600));
+      setCurrentStep(`Processing character '${char}' at position ${i + 1} of ${word.length}`);
+      speakStep("", `Processing character '${char}'. ${words.some(w => w.startsWith(word.substring(0, i + 1))) ? 'Path exists, following existing branch.' : 'Creating new branch for this character.'}`, i + 1, word.length);
+      await new Promise(resolve => setTimeout(resolve, 800));
     }
     
     setWords(prev => [...prev, word]);
+    setCurrentStep(`Successfully inserted "${word}" and marked end of word`);
+    speakResult(`Successfully inserted "${word}" into trie! The word is now stored and can be searched efficiently.`);
     toast.success(`Inserted "${word}" into trie`);
     
     setTimeout(() => {
@@ -105,8 +132,9 @@ export function TrieVisualizer() {
       setIsAnimating(false);
       setOperation(null);
       setInputWord('');
-    }, 1000);
-  }, [inputWord, words]);
+      setCurrentStep('');
+    }, 1500);
+  }, [inputWord, words, speakOperation, speakStep, speakResult]);
 
   const searchForWord = useCallback(async () => {
     if (!searchWord.trim()) {
@@ -117,20 +145,26 @@ export function TrieVisualizer() {
     const word = searchWord.toUpperCase();
     setIsAnimating(true);
     setOperation('search');
+    setCurrentStep(`Starting search for "${word}" in trie`);
+    speakOperation("Trie Search", `Starting search for word "${word}" in trie. We'll follow the path character by character to see if the word exists.`);
     
     // Animate search path
     const path = ['root'];
     let found = true;
     
     for (let i = 0; i < word.length; i++) {
-      const nextId = `${path[path.length - 1]}-${word[i]}`;
+      const char = word[i];
+      const nextId = `${path[path.length - 1]}-${char}`;
       path.push(nextId);
       setHighlightedPath([...path]);
-      await new Promise(resolve => setTimeout(resolve, 600));
+      setCurrentStep(`Following path for character '${char}' at position ${i + 1}`);
       
       // Check if path exists in our words
-      const wordExists = words.some(w => w.substring(0, i + 1) === word.substring(0, i + 1));
-      if (!wordExists) {
+      const pathExists = words.some(w => w.substring(0, i + 1) === word.substring(0, i + 1));
+      speakStep("", `Checking character '${char}'. ${pathExists ? 'Path exists, continuing search.' : 'Path not found, word does not exist.'}`, i + 1, word.length);
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      if (!pathExists) {
         found = false;
         break;
       }
@@ -139,10 +173,16 @@ export function TrieVisualizer() {
     const wordExists = words.includes(word);
     
     if (wordExists) {
+      setCurrentStep(`"${word}" found! Complete word exists in trie`);
+      speakResult(`Success! "${word}" found in trie. The word exists as a complete entry.`);
       toast.success(`"${word}" found in trie!`);
     } else if (found) {
+      setCurrentStep(`"${word}" is a prefix but not a complete word`);
+      speakResult(`"${word}" is a valid prefix but not stored as a complete word in the trie.`);
       toast.info(`"${word}" is a prefix but not a complete word`);
     } else {
+      setCurrentStep(`"${word}" not found in trie`);
+      speakResult(`"${word}" not found in trie. No path exists for this word.`);
       toast.error(`"${word}" not found in trie`);
     }
     
@@ -150,8 +190,9 @@ export function TrieVisualizer() {
       setHighlightedPath([]);
       setIsAnimating(false);
       setOperation(null);
-    }, 1500);
-  }, [searchWord, words]);
+      setCurrentStep('');
+    }, 2000);
+  }, [searchWord, words, speakOperation, speakStep, speakResult]);
 
   const removeWord = useCallback(() => {
     if (!searchWord.trim()) {
@@ -253,7 +294,15 @@ export function TrieVisualizer() {
   const trieRoot = buildTrie();
 
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-6">
+      {/* Header */}
+      <div className="text-center">
+        <h2 className="text-2xl font-bold mb-2">Trie (Prefix Tree) Visualizer</h2>
+        <p className="text-muted-foreground">
+          Efficient prefix-based string storage and retrieval data structure
+        </p>
+      </div>
+
       {/* Controls */}
       <div className="flex flex-wrap gap-3 p-4 bg-muted/30 rounded-xl border">
         <div className="flex gap-2">
@@ -351,6 +400,41 @@ export function TrieVisualizer() {
         )}
       </div>
 
+      {/* Current Step Display */}
+      {currentStep && (
+        <div className="p-4 bg-muted/20 rounded-lg border">
+          <div className="flex items-center gap-2">
+            <Badge variant="outline">{operation === 'insert' ? 'Insert' : 'Search'}</Badge>
+            <span className="text-sm font-medium">{currentStep}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Algorithm Information */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-card border rounded-lg p-4">
+          <h4 className="font-semibold mb-2">How Trie Works:</h4>
+          <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+            <li>Root node represents empty string</li>
+            <li>Each path from root to node represents a prefix</li>
+            <li>Nodes marked as "end" represent complete words</li>
+            <li>Common prefixes share the same path</li>
+            <li>Efficient for prefix-based operations</li>
+          </ul>
+        </div>
+        
+        <div className="bg-card border rounded-lg p-4">
+          <h4 className="font-semibold mb-2">Complexity Analysis:</h4>
+          <div className="space-y-2 text-sm text-muted-foreground">
+            <div><strong>Insert:</strong> O(m) - m is word length</div>
+            <div><strong>Search:</strong> O(m) - m is word length</div>
+            <div><strong>Delete:</strong> O(m) - may need cleanup</div>
+            <div><strong>Space:</strong> O(ALPHABET_SIZE × N × M)</div>
+            <div><strong>Applications:</strong> Autocomplete, spell checkers, IP routing</div>
+          </div>
+        </div>
+      </div>
+
       {/* Legend */}
       <div className="text-sm text-muted-foreground bg-muted/20 rounded-lg p-3">
         <div className="font-medium mb-2">Trie Legend:</div>
@@ -360,6 +444,31 @@ export function TrieVisualizer() {
           <div>• <span className="text-success">Green dot:</span> Word terminator</div>
           <div>• Each level represents character position</div>
         </div>
+      </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <MemoryLayout
+          title="Trie Node Memory Layout"
+          data={words.map(word => word.length)} // Show word lengths
+          baseAddress={0xB000}
+        />
+      )}
+
+      {/* Visualizer Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
       </div>
     </div>
   );

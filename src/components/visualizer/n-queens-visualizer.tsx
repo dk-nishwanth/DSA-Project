@@ -1,8 +1,13 @@
 import React, { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import { PseudocodeBox } from '@/components/pseudocode-box';
 import { ComplexityBox } from '@/components/complexity-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
+import { toast } from 'sonner';
 
 export function NQueensVisualizer() {
   const [nInput, setNInput] = useState('4');
@@ -13,6 +18,21 @@ export function NQueensVisualizer() {
   const [tryingCol, setTryingCol] = useState<number | null>(null);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [currentStepDescription, setCurrentStepDescription] = useState<string>('');
+  const [showMemory, setShowMemory] = useState(false);
+  
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const sleep = (ms:number)=>new Promise(r=>setTimeout(r,ms));
 
@@ -33,15 +53,19 @@ export function NQueensVisualizer() {
   };
 
   const run = useCallback(async () => {
-    if (isRunning) return; setIsRunning(true);
+    if (isRunning) return; 
+    setIsRunning(true);
     const n = Math.max(4, Math.min(10, parseInt(nInput)||4));
     const b = new Array(n).fill(-1);
-    setBoard([...b]); setSolutions([]);
+    setBoard([...b]); 
+    setSolutions([]);
     const sols: number[][] = [];
     setCurrentRow(0);
     setTryingCol(null);
     setCurrentStep(1);
     setCurrentStepDescription('Start backtracking from row 0');
+    
+    speakOperation("N-Queens Problem", `Starting N-Queens backtracking algorithm for ${n}x${n} board. We need to place ${n} queens so that none attack each other.`);
 
     const backtrack = async (row: number): Promise<boolean> => {
       setCurrentRow(row);
@@ -50,10 +74,12 @@ export function NQueensVisualizer() {
         setSolutions(sols.map(s=>[...s]));
         setCurrentStep(6);
         setCurrentStepDescription('Solution found; backtrack to find more');
+        speakStep("", `Solution found! All ${n} queens placed successfully. This is solution number ${sols.length}.`, row, n);
         return false; // continue to find all solutions
       }
       setCurrentStep(2);
       setCurrentStepDescription(`Try placing a queen in row ${row}`);
+      speakStep("", `Trying to place queen in row ${row}. Checking each column for safe positions.`, row + 1, n);
       for (let col=0; col<n; col++) {
         setTryingCol(col);
         setCurrentStep(3);

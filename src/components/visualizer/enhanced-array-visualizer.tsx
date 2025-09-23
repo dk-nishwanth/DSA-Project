@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus, Minus, Search, RotateCcw, Zap, HardDrive, Info, Play } from 'lucide-react';
 import { toast } from 'sonner';
-import { useVoiceExplain } from '@/hooks/useVoiceExplain';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
 
 interface ArrayVisualizerProps {
@@ -28,7 +28,19 @@ export function EnhancedArrayVisualizer({ initialArray = [64, 25, 12, 22, 11] }:
   const [showMemoryView, setShowMemoryView] = useState(false);
   const [operationCount, setOperationCount] = useState(0);
   const [timeComplexity, setTimeComplexity] = useState('O(1)');
-  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(currentStep);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -51,13 +63,17 @@ export function EnhancedArrayVisualizer({ initialArray = [64, 25, 12, 22, 11] }:
     setIsAnimating(true);
     setOperation('access');
     setTimeComplexity('O(1)');
-    setCurrentStep(`Accessing element at index ${index}`);
+    const stepText = `Accessing element at index ${index}`;
+    setCurrentStep(stepText);
+    speakOperation("Array Access", stepText);
     setOperationCount(1);
 
     setHighlightedIndices([index]);
     await sleep(800);
     
-    setCurrentStep(`Found value ${array[index]} at index ${index}`);
+    const resultText = `Found value ${array[index]} at index ${index}`;
+    setCurrentStep(resultText);
+    speakResult(resultText);
     toast.success(`Array[${index}] = ${array[index]}`);
     
     await sleep(1200);
@@ -86,42 +102,57 @@ export function EnhancedArrayVisualizer({ initialArray = [64, 25, 12, 22, 11] }:
       case 'beginning':
         insertIndex = 0;
         complexity = 'O(n)';
-        setCurrentStep('Inserting at beginning - need to shift all elements');
+        const stepText = 'Inserting at beginning - need to shift all elements';
+        setCurrentStep(stepText);
+        speakOperation("Insert at Beginning", stepText);
         
         // Show shifting animation
         for (let i = array.length - 1; i >= 0; i--) {
           setHighlightedIndices([i, i + 1]);
           setOperationCount(prev => prev + 1);
+          speakStep("", `Shifting element ${array[i]} from position ${i} to position ${i + 1}`, i + 1, array.length);
           await sleep(400);
         }
         
         newArray.unshift(value);
-        setCurrentStep(`Inserted ${value} at beginning`);
+        const resultText = `Inserted ${value} at beginning`;
+        setCurrentStep(resultText);
+        speakResult(resultText);
         break;
         
       case 'end':
         insertIndex = array.length;
         complexity = 'O(1)';
-        setCurrentStep('Inserting at end - direct append');
+        const endStepText = 'Inserting at end - direct append';
+        setCurrentStep(endStepText);
+        speakOperation("Insert at End", endStepText);
         newArray.push(value);
         setOperationCount(1);
+        const endResultText = `Inserted ${value} at end`;
+        setCurrentStep(endResultText);
+        speakResult(endResultText);
         break;
         
       case 'middle':
         const middleIndex = Math.floor(array.length / 2);
         insertIndex = middleIndex;
         complexity = 'O(n)';
-        setCurrentStep(`Inserting at middle (index ${middleIndex}) - need to shift elements`);
+        const middleStepText = `Inserting at middle (index ${middleIndex}) - need to shift elements`;
+        setCurrentStep(middleStepText);
+        speakOperation("Insert at Middle", middleStepText);
         
         // Show shifting animation
         for (let i = array.length - 1; i >= middleIndex; i--) {
           setHighlightedIndices([i, i + 1]);
           setOperationCount(prev => prev + 1);
+          speakStep("", `Shifting element ${array[i]} from position ${i} to position ${i + 1}`, i - middleIndex + 1, array.length - middleIndex);
           await sleep(400);
         }
         
         newArray.splice(middleIndex, 0, value);
-        setCurrentStep(`Inserted ${value} at index ${middleIndex}`);
+        const middleResultText = `Inserted ${value} at index ${middleIndex}`;
+        setCurrentStep(middleResultText);
+        speakResult(middleResultText);
         break;
     }
 
@@ -430,15 +461,6 @@ export function EnhancedArrayVisualizer({ initialArray = [64, 25, 12, 22, 11] }:
         )}
       </div>
 
-      {/* Controls */}
-      <div className="flex justify-center">
-        <VisualizerControls
-          showMemory={showMemoryView}
-          onToggleMemory={setShowMemoryView}
-          voiceEnabled={voiceEnabled}
-          onToggleVoice={setVoiceEnabled}
-        />
-      </div>
 
       {/* Memory Layout View */}
       {showMemoryView && (
@@ -517,6 +539,22 @@ export function EnhancedArrayVisualizer({ initialArray = [64, 25, 12, 22, 11] }:
           <li>• <strong>Bounds checking:</strong> Accessing array[length] will cause an error - last valid index is length-1</li>
           <li>• <strong>Fixed size:</strong> In some languages, arrays have fixed size - you can't just keep adding elements</li>
         </ul>
+      </div>
+
+      {/* Visualizer Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemoryView}
+          onToggleMemory={setShowMemoryView}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
       </div>
     </div>
   );

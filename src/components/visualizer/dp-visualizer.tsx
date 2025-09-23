@@ -1,9 +1,12 @@
 import React, { useState, useCallback } from 'react';
-import { Play, RotateCcw, Grid3x3 } from 'lucide-react';
+import { Play, RotateCcw, Grid3x3, HardDrive } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
 
 type DPProblem = 'lcs' | 'knapsack' | 'coin-change' | 'lis';
 
@@ -23,6 +26,21 @@ export function DPVisualizer() {
   const [currentCell, setCurrentCell] = useState<{row: number, col: number} | null>(null);
   const [currentStep, setCurrentStep] = useState('');
   const [result, setResult] = useState<any>(null);
+  const [showMemory, setShowMemory] = useState(false);
+
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2500 });
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -50,6 +68,7 @@ export function DPVisualizer() {
     const table = initializeDPTable(m + 1, n + 1);
     setDpTable(table);
     
+    speakOperation("Longest Common Subsequence", `Starting LCS algorithm for strings "${string1}" and "${string2}". We'll build a DP table where each cell represents the LCS length for substrings.`);
     setCurrentStep('Initializing DP table for Longest Common Subsequence');
     await sleep(800);
 
@@ -64,11 +83,13 @@ export function DPVisualizer() {
           const calculation = `${char1}==${char2}: dp[${i-1}][${j-1}] + 1 = ${value}`;
           await updateCell(i, j, value, calculation);
           setCurrentStep(`Match found: ${char1} == ${char2}. LCS length = ${value}`);
+          speakStep("", `Characters match! ${char1} equals ${char2}. We extend the diagonal LCS by 1, making the length ${value}.`, i * n + j, m * n);
         } else {
           const value = Math.max(table[i - 1][j].value, table[i][j - 1].value);
           const calculation = `${char1}!=${char2}: max(${table[i-1][j].value}, ${table[i][j-1].value}) = ${value}`;
           await updateCell(i, j, value, calculation);
           setCurrentStep(`No match: taking max of left (${table[i][j-1].value}) and top (${table[i-1][j].value})`);
+          speakStep("", `Characters don't match. ${char1} is not equal to ${char2}. Taking maximum from left cell (${table[i][j-1].value}) and top cell (${table[i-1][j].value}), which is ${value}.`, i * n + j, m * n);
         }
         
         await sleep(300);
@@ -87,8 +108,9 @@ export function DPVisualizer() {
     const lcsLength = table[m][n].value;
     setResult({ type: 'LCS Length', value: lcsLength });
     setCurrentStep(`Longest Common Subsequence length: ${lcsLength}`);
+    speakResult(`LCS algorithm complete! The longest common subsequence between "${string1}" and "${string2}" has length ${lcsLength}. The DP table shows how we built this solution step by step.`);
     setCurrentCell(null);
-  }, [string1, string2, initializeDPTable, updateCell]);
+  }, [string1, string2, initializeDPTable, updateCell, speakOperation, speakStep, speakResult]);
 
   const solve01Knapsack = useCallback(async () => {
     // Simplified knapsack with predefined values
@@ -99,6 +121,7 @@ export function DPVisualizer() {
     const table = initializeDPTable(weights.length + 1, capacity + 1);
     setDpTable(table);
     
+    speakOperation("0/1 Knapsack Problem", `Solving 0/1 Knapsack with capacity ${capacity}. We have ${weights.length} items with different weights and values. Each cell will store the maximum value achievable.`);
     setCurrentStep('Solving 0/1 Knapsack Problem');
     await sleep(800);
 
@@ -126,8 +149,9 @@ export function DPVisualizer() {
     }
 
     setResult({ type: 'Max Value', value: table[weights.length][capacity].value });
+    speakResult(`Knapsack algorithm complete! Maximum value achievable with capacity ${capacity} is ${table[weights.length][capacity].value}. The DP table shows optimal decisions for each item and capacity combination.`);
     setCurrentCell(null);
-  }, [initializeDPTable, updateCell]);
+  }, [initializeDPTable, updateCell, speakOperation, speakResult]);
 
   const runDP = useCallback(async () => {
     if (problem === 'lcs' && (!string1.trim() || !string2.trim())) {

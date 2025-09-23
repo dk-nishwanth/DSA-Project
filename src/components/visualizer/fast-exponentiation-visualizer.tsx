@@ -1,6 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
+import { toast } from 'sonner';
 
 export function FastExponentiationVisualizer() {
   const [base, setBase] = useState('2');
@@ -9,19 +14,45 @@ export function FastExponentiationVisualizer() {
   const [steps, setSteps] = useState<string[]>([]);
   const [result, setResult] = useState<string>('');
   const [isRunning, setIsRunning] = useState(false);
+  const [showMemory, setShowMemory] = useState(false);
+  const [currentStep, setCurrentStep] = useState('');
+  
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const sleep = (ms:number)=>new Promise(r=>setTimeout(r,ms));
 
   const run = useCallback( async () => {
-    if (isRunning) return; setIsRunning(true);
+    if (isRunning) return; 
+    setIsRunning(true);
+    setSteps([]);
+    setResult('');
+    
     const a0 = parseInt(base) || 0;
     let b = Math.max(0, parseInt(exp) || 0);
     const hasMod = mod.trim().length>0;
     const m = hasMod ? Math.max(2, parseInt(mod)||2) : undefined;
+    
+    speakOperation("Fast Exponentiation", `Computing ${a0} to the power ${b}${hasMod ? ` modulo ${m}` : ''} using binary exponentiation. This reduces O(n) to O(log n) complexity.`);
+    
     let a = hasMod ? ((a0 % (m!)) + (m!)) % (m!) : a0;
     let ans = 1;
     const S: string[] = [];
+    let stepCount = 0;
+    
     while (b > 0) {
+      stepCount++;
       if (b & 1) {
         ans = hasMod ? (ans * a) % (m!) : (ans * a);
         S.push(`b odd → ans = ans * a = ${ans}`);

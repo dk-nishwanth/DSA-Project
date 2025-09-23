@@ -3,8 +3,12 @@ import { Play, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { PseudocodeBox } from '@/components/pseudocode-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface GraphNode {
   id: string;
@@ -48,6 +52,23 @@ export function GraphVisualizer() {
   ]);
   
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<Algorithm>('bfs');
+  const [showMemory, setShowMemory] = useState(false);
+  const [currentStepText, setCurrentStepText] = useState('');
+  const [isRunning, setIsRunning] = useState(false);
+  
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2500 });
   const [isDirected, setIsDirected] = useState(false);
   const [showWeights, setShowWeights] = useState(true);
   const [animationSpeed, setAnimationSpeed] = useState(800);
@@ -268,10 +289,12 @@ export function GraphVisualizer() {
     const visited = new Set<string>();
     const parent = new Map<string, string>();
     
+    speakOperation("Breadth First Search", `Starting BFS from node ${sourceNode}. We'll explore all neighbors at current depth before moving to next depth level.`);
     setVisitedNodes([sourceNode]);
     highlightNode(sourceNode, true);
     setCurrentStep(1);
     setCurrentStepDescription(`Enqueue start node ${sourceNode}`);
+    speakStep("", `Starting BFS from node ${sourceNode}. Adding it to the queue for processing.`, 1, nodes.length);
     setQueueState([...queue]);
     
     while (queue.length > 0) {
@@ -295,6 +318,7 @@ export function GraphVisualizer() {
           highlightEdge(path[i], path[i + 1], true);
         }
         
+        speakResult(`BFS complete! Found shortest path from ${sourceNode} to ${targetNode}: ${path.join(' → ')}. Path length is ${path.length - 1} edges.`);
         toast.success(`Path found: ${path.join(' → ')}`);
         setCurrentStep(6);
         setCurrentStepDescription(`Path found: ${path.join(' → ')}`);
@@ -318,6 +342,7 @@ export function GraphVisualizer() {
           highlightEdge(current, neighbor, true);
           setCurrentStep(3);
           setCurrentStepDescription(`Discovered ${neighbor} from ${current} → enqueue ${neighbor}`);
+          speakStep("", `Exploring neighbor ${neighbor} from ${current}. Adding ${neighbor} to queue for later processing.`, visited.size + 1, nodes.length);
           setQueueState([...queue]);
           
           await sleep(animationSpeed);
@@ -788,6 +813,21 @@ export function GraphVisualizer() {
     setIsAnimating(true);
     resetGraph();
     
+    const algorithmNames = {
+      'bfs': 'Breadth-First Search',
+      'dfs': 'Depth-First Search', 
+      'dijkstra': "Dijkstra's Algorithm",
+      'bellman-ford': 'Bellman-Ford Algorithm',
+      'floyd-warshall': 'Floyd-Warshall Algorithm',
+      'prim': "Prim's Algorithm",
+      'kruskal': "Kruskal's Algorithm",
+      'topological-sort': 'Topological Sort'
+    };
+    
+    const algorithmName = algorithmNames[selectedAlgorithm] || selectedAlgorithm;
+    setCurrentStepText(`Starting ${algorithmName} on the graph`);
+    speakOperation(algorithmName, `Starting ${algorithmName} algorithm on the graph. This will demonstrate how the algorithm explores or processes the graph structure.`);
+    
     try {
       switch (selectedAlgorithm) {
         case 'bfs':
@@ -817,11 +857,15 @@ export function GraphVisualizer() {
         default:
           toast.error('Algorithm not implemented');
       }
+      
+      speakResult(`${algorithmName} completed successfully! The algorithm has finished processing the graph.`);
     } catch (error) {
       toast.error('Algorithm execution failed');
       console.error(error);
+      speakResult(`${algorithmName} execution failed. Please check the graph configuration and try again.`);
     } finally {
       setIsAnimating(false);
+      setCurrentStepText('');
     }
   }, [
     isAnimating, selectedAlgorithm, resetGraph, runBFS, runDFS, runDijkstra, 

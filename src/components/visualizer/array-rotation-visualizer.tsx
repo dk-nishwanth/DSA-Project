@@ -16,7 +16,7 @@ import { ComplexityBox } from "@/components/complexity-box";
 import { PseudocodeBox } from "@/components/pseudocode-box";
 import { MemoryLayout } from "@/components/memory-layout";
 import { VisualizerControls } from "@/components/visualizer/visualizer-controls";
-import { useVoiceExplain } from "@/hooks/useVoiceExplain";
+import { useVisualizerVoice } from "@/hooks/useVisualizerVoice";
 
 type RotationMethod = "temp-array" | "reversal" | "cyclic";
 type Direction = "left" | "right";
@@ -35,7 +35,19 @@ export function ArrayRotationVisualizer() {
   const [currentArray, setCurrentArray] = useState<number[]>([]);
   const [showMemory, setShowMemory] = useState(false);
 
-  const { enabled: voiceEnabled, setEnabled: setVoiceEnabled } = useVoiceExplain(currentStep);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakStep,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const pseudocode = useMemo(() => ({
     reversal: [
@@ -108,6 +120,8 @@ export function ArrayRotationVisualizer() {
     }
     if (direction === "right") k = n - k;
 
+    speakOperation("Array Rotation - Reversal Method", `Rotating array ${direction} by ${rotateBy} positions using the reversal method. This method uses three reversal operations to achieve rotation in O(n) time with O(1) space.`);
+    
     setCurrentArray([...arr]);
     setCurrentStep("Starting reversal method rotation");
     setStepCount(0);
@@ -115,13 +129,19 @@ export function ArrayRotationVisualizer() {
     await sleep(500);
 
     await reverseArray(arr, 0, n - 1, `Step 1: Reverse entire array`);
+    speakStep("", "First, we reverse the entire array. This puts elements in reverse order.", 1, 3);
+    
     await reverseArray(arr, 0, k - 1, `Step 2: Reverse first ${k} elements`);
+    speakStep("", `Next, we reverse the first ${k} elements to get them in correct relative order.`, 2, 3);
+    
     await reverseArray(arr, k, n - 1, `Step 3: Reverse remaining elements`);
+    speakStep("", "Finally, we reverse the remaining elements to complete the rotation.", 3, 3);
 
     setHighlightedIndices([]);
     setCurrentStep("✅ Rotation completed using reversal method");
+    speakResult(`Array rotation completed! The reversal method successfully rotated the array ${direction} by ${rotateBy} positions in O(n) time with O(1) space complexity.`);
     toast.success(`Array rotated ${direction} by ${rotateBy} positions`);
-  }, [array, rotateBy, direction]);
+  }, [array, rotateBy, direction, speakOperation, speakStep, speakResult]);
 
   const rotateArrayTempArray = useCallback(async () => {
     const arr = [...array];
@@ -134,6 +154,8 @@ export function ArrayRotationVisualizer() {
     }
     if (direction === "right") k = n - k;
 
+    speakOperation("Array Rotation - Temporary Array Method", `Rotating array ${direction} by ${rotateBy} positions using temporary array. This method calculates new positions directly and uses O(n) extra space.`);
+
     setCurrentArray([...arr]);
     setCurrentStep("Creating temporary array");
     setStepCount(0);
@@ -142,6 +164,7 @@ export function ArrayRotationVisualizer() {
 
     const temp = new Array(n);
 
+    speakStep("", "Phase 1: Copying elements to temporary array with calculated new positions.", 1, 2);
     for (let i = 0; i < n; i++) {
       setHighlightedIndices([i]);
       setCurrentStep(
@@ -152,6 +175,7 @@ export function ArrayRotationVisualizer() {
       await sleep(400);
     }
 
+    speakStep("", "Phase 2: Copying elements back from temporary array to original array.", 2, 2);
     for (let i = 0; i < n; i++) {
       setHighlightedIndices([i]);
       arr[i] = temp[i];
@@ -162,8 +186,9 @@ export function ArrayRotationVisualizer() {
 
     setHighlightedIndices([]);
     setCurrentStep("✅ Rotation completed using temporary array");
+    speakResult(`Temporary array method completed! Array rotated ${direction} by ${rotateBy} positions in O(n) time with O(n) space complexity.`);
     toast.success(`Array rotated ${direction} by ${rotateBy} positions`);
-  }, [array, rotateBy, direction]);
+  }, [array, rotateBy, direction, speakOperation, speakStep, speakResult]);
 
   const rotateArrayCyclic = useCallback(async () => {
     const arr = [...array];
@@ -176,6 +201,7 @@ export function ArrayRotationVisualizer() {
     }
     if (direction === "right") k = n - k;
 
+    speakOperation("Array Rotation - Cyclic Replacement", `Rotating array ${direction} by ${rotateBy} positions using cyclic replacement. This method moves elements directly to their final positions in cycles.`);
     setCurrentArray([...arr]);
     setCurrentStep("Starting cyclic replacement");
     setStepCount(0);
@@ -202,8 +228,9 @@ export function ArrayRotationVisualizer() {
 
     setHighlightedIndices([]);
     setCurrentStep("✅ Rotation completed using cyclic replacement");
+    speakResult(`Cyclic replacement completed! Array rotated ${direction} by ${rotateBy} positions by moving elements directly to their final positions in cycles.`);
     toast.success(`Array rotated ${direction} by ${rotateBy} positions`);
-  }, [array, rotateBy, direction]);
+  }, [array, rotateBy, direction, speakOperation, speakResult]);
 
   const rotateArray = useCallback(async () => {
     if (rotateBy <= 0) {
@@ -427,6 +454,31 @@ export function ArrayRotationVisualizer() {
           )
         }
       />
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <MemoryLayout
+          title="Array Memory Layout"
+          data={currentArray.length > 0 ? currentArray : array}
+          baseAddress={0x1000}
+        />
+      )}
+
+      {/* Visualizer Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
+      </div>
     </div>
   );
 }
