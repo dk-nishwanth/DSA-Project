@@ -45,6 +45,7 @@ import { TreeTraversalVisualizer } from '@/components/visualizer/tree-traversal-
 import { ZAlgorithmVisualizer } from '@/components/visualizer/z-algorithm-visualizer';
 import { ManacherVisualizer } from '@/components/visualizer/manacher-visualizer';
 import { AnagramVisualizer } from '@/components/visualizer/anagram-visualizer';
+import { ThreeSumVisualizer } from '@/components/visualizer/three-sum-visualizer';
 import { OpenAddressingVisualizer } from '@/components/visualizer/open-addressing-visualizer';
 import { TopologicalSortVisualizer } from '@/components/visualizer/topological-sort-visualizer';
 import { FloydWarshallVisualizer } from '@/components/visualizer/floyd-warshall-visualizer';
@@ -584,6 +585,8 @@ export default function TopicDetail() {
         return <SearchVisualizer />;
 
       // Two Pointers (per-problem)
+      case 'three-sum':
+        return <ThreeSumVisualizer />;
       case 'container-with-most-water':
         return <ContainerWithMostWaterVisualizer />;
       case 'trapping-rain-water':

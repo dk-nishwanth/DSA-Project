@@ -808,6 +808,12 @@ console.log(maxSubarraySum(nums)); // 6 (subarray [4, -1, 2, 1])`,
         options: ["Sorting algorithms", "Hash table implementation", "Stock trading for maximum profit periods", "Binary tree traversal"],
         correctAnswer: 2,
         explanation: "Maximum subarray problems are commonly used in stock trading to find the period that would yield maximum profit from buying and selling."
+      },
+      {
+        question: "In the sliding window technique, when do you expand vs shrink the window?",
+        options: ["Always expand first, then shrink", "Expand when condition not met, shrink when condition met", "Shrink when condition not met, expand when condition met", "Randomly expand and shrink"],
+        correctAnswer: 1,
+        explanation: "In sliding window technique, you typically expand the window by moving the right pointer when the current condition is not satisfied, and shrink by moving the left pointer when you need to maintain or optimize the condition."
       }
     ]
   },
@@ -1110,6 +1116,17 @@ How it works: preprocesses pattern to create failure function, then uses it to s
 
 When to use: text editors, DNA analysis, large text searches, when pattern occurs frequently.`,
     voiceExplanation: `Think of the KMP algorithm like a smart detective who learns from past mistakes. Imagine you're searching for the word "ABABACA" in a long text. When you find a mismatch, instead of starting over from the next character like a naive approach, KMP is clever - it remembers the pattern it just saw and uses that knowledge to skip ahead intelligently. The secret is the "failure function" or LPS array, which is like a cheat sheet that tells you: "Hey, if you fail at position 5, don't start from scratch - you can safely jump to position 2 because you already know positions 0-1 match what you just saw." It's like having a memory of partial matches that prevents you from doing redundant work. This makes KMP incredibly efficient for text editors when you're searching for patterns, or in DNA analysis where you're looking for specific genetic sequences.`,
+    realWorldApplications: `**Industry Applications:**
+- **Text Editors**: Find/replace functionality, syntax highlighting, code search
+- **Bioinformatics**: DNA sequence matching, protein pattern analysis, genome research
+- **Web Search Engines**: Content indexing, keyword matching, document retrieval
+- **Antivirus Software**: Malware signature detection, pattern-based threat identification
+- **Data Mining**: Log file analysis, pattern discovery in large datasets
+- **Network Security**: Intrusion detection, packet filtering, protocol analysis
+- **Digital Forensics**: Evidence search, file recovery, data pattern matching
+- **Plagiarism Detection**: Text similarity analysis, academic integrity checking
+- **Compiler Design**: Lexical analysis, token recognition, syntax parsing
+- **Database Systems**: Full-text search, query optimization, index matching`,
     keyConcepts: `**Essential Concepts:**
 1. **Failure Function (LPS)**: Longest Proper Prefix which is also Suffix
 2. **Pattern Preprocessing**: Building the LPS array in O(m) time
@@ -1367,14 +1384,18 @@ What it does: finds pattern occurrences in text using rolling hash technique to 
 
 How it works: computes hash values for pattern and text substrings, uses rolling hash to update window hash in O(1) time, verifies matches with character comparison.
 
-When to use: multiple pattern searches, plagiarism detection, DNA sequence analysis, large text processing where hash-based matching is beneficial.
-
-**Applications:**
-- Plagiarism detection systems
-- DNA sequence matching
-- Image pattern recognition
-- Duplicate file detection
-- Web crawling and indexing`,
+When to use: multiple pattern searches, plagiarism detection, DNA sequence analysis, large text processing where hash-based matching is beneficial.`,
+    realWorldApplications: `**Industry Applications:**
+- **Plagiarism Detection**: Academic integrity systems, content similarity analysis
+- **Bioinformatics**: DNA sequence matching, genetic pattern analysis, protein research
+- **Image Processing**: Template matching, pattern recognition, computer vision
+- **File Systems**: Duplicate file detection, data deduplication, backup optimization
+- **Web Search**: Content indexing, keyword matching, document retrieval systems
+- **Security Systems**: Malware signature detection, intrusion detection systems
+- **Data Mining**: Log analysis, pattern discovery, large dataset processing
+- **Version Control**: File difference detection, change tracking, merge operations
+- **Network Monitoring**: Packet analysis, protocol detection, traffic pattern matching
+- **Digital Forensics**: Evidence search, data recovery, pattern-based investigations`,
     keyConcepts: `**Essential Concepts:**
 1. **Rolling Hash Function**: Polynomial hash that can be updated in O(1) time
 2. **Hash Collision Handling**: Verification step when hash values match
@@ -1656,6 +1677,262 @@ What it does: constructs Z array where each position stores length of longest pr
 How it works: maintains Z-box representing rightmost matching segment, uses previously computed information to avoid redundant comparisons.
 
 When to use: pattern matching, string analysis, text processing where prefix-based matching is needed with linear time complexity.`,
+    realWorldApplications: `**Industry Applications:**
+- **Text Editors**: Find/replace operations, syntax highlighting, code analysis
+- **Bioinformatics**: DNA sequence analysis, genetic pattern matching, genome research
+- **Data Compression**: Pattern recognition, redundancy detection, compression algorithms
+- **Web Search**: Content indexing, document similarity, search optimization
+- **Compiler Design**: Lexical analysis, token recognition, parsing optimization
+- **Network Security**: Intrusion detection, packet analysis, protocol matching
+- **Digital Forensics**: Evidence search, data recovery, pattern-based investigations
+- **Version Control**: File difference detection, merge conflict resolution
+- **Natural Language Processing**: Text analysis, linguistic pattern recognition
+- **Database Systems**: String matching in queries, full-text search optimization`,
+    keyConcepts: `**Essential Concepts:**
+1. **Z Array**: Array where Z[i] stores length of longest prefix match starting at position i
+2. **Z-Box [L, R]**: Rightmost segment that matches a prefix, used for optimization
+3. **Linear Time Complexity**: Each character examined at most twice during entire process
+4. **Prefix Matching**: Efficiently finds all occurrences of prefixes within the string
+5. **Memory Optimization**: Reuses previously computed information to avoid redundant work
+6. **Pattern Concatenation**: Combines pattern and text with separator for matching
+7. **Incremental Processing**: Builds Z array incrementally using previous computations`,
+    pseudocode: `**Z Algorithm Pseudocode:**
+
+ALGORITHM BuildZArray(string)
+INPUT: string - the input string
+OUTPUT: z - array where z[i] is length of longest prefix match at position i
+BEGIN
+    n = string.length
+    z = array of size n, initialized to 0
+    l = 0  // left boundary of Z-box
+    r = 0  // right boundary of Z-box
+    
+    FOR i = 1 TO n - 1 DO
+        // If i is within current Z-box, use previously computed information
+        IF i <= r THEN
+            z[i] = MIN(r - i + 1, z[i - l])
+        END IF
+        
+        // Extend the match as far as possible
+        WHILE i + z[i] < n AND string[z[i]] = string[i + z[i]] DO
+            z[i] = z[i] + 1
+        END WHILE
+        
+        // Update Z-box if we extended beyond current right boundary
+        IF i + z[i] - 1 > r THEN
+            l = i
+            r = i + z[i] - 1
+        END IF
+    END FOR
+    
+    RETURN z
+END
+
+ALGORITHM ZPatternMatching(text, pattern)
+INPUT: text - the text to search in, pattern - the pattern to find
+OUTPUT: positions - array of starting positions where pattern is found
+BEGIN
+    // Concatenate pattern and text with separator
+    combined = pattern + "$" + text
+    z = BuildZArray(combined)
+    positions = []
+    
+    // Check for pattern matches in the Z array
+    FOR i = pattern.length + 1 TO z.length - 1 DO
+        IF z[i] = pattern.length THEN
+            positions.append(i - pattern.length - 1)
+        END IF
+    END FOR
+    
+    RETURN positions
+END`,
+    implementationCode: `// Comprehensive Z Algorithm Implementation
+
+class ZAlgorithm {
+    // Build Z array for given string
+    static buildZArray(str) {
+        const n = str.length;
+        const z = new Array(n).fill(0);
+        let l = 0, r = 0;
+        
+        for (let i = 1; i < n; i++) {
+            // If i is within current Z-box, use previously computed info
+            if (i <= r) {
+                z[i] = Math.min(r - i + 1, z[i - l]);
+            }
+            
+            // Extend the match as far as possible
+            while (i + z[i] < n && str[z[i]] === str[i + z[i]]) {
+                z[i]++;
+            }
+            
+            // Update Z-box if we extended beyond current right boundary
+            if (i + z[i] - 1 > r) {
+                l = i;
+                r = i + z[i] - 1;
+            }
+        }
+        
+        return z;
+    }
+    
+    // Pattern matching using Z algorithm
+    static patternMatch(text, pattern) {
+        if (!pattern || pattern.length === 0) return [];
+        if (!text || text.length === 0) return [];
+        
+        // Concatenate pattern and text with separator
+        const combined = pattern + "$" + text;
+        const z = this.buildZArray(combined);
+        const matches = [];
+        
+        // Find all positions where Z value equals pattern length
+        for (let i = pattern.length + 1; i < z.length; i++) {
+            if (z[i] === pattern.length) {
+                matches.push(i - pattern.length - 1);
+            }
+        }
+        
+        return matches;
+    }
+    
+    // Count occurrences of pattern
+    static countMatches(text, pattern) {
+        return this.patternMatch(text, pattern).length;
+    }
+    
+    // Check if pattern exists in text
+    static contains(text, pattern) {
+        return this.patternMatch(text, pattern).length > 0;
+    }
+    
+    // Find all prefixes that are also suffixes
+    static findPrefixSuffixMatches(str) {
+        const z = this.buildZArray(str);
+        const matches = [];
+        
+        for (let i = 1; i < z.length; i++) {
+            if (i + z[i] === str.length) {
+                matches.push({
+                    length: z[i],
+                    prefix: str.substring(0, z[i]),
+                    position: i
+                });
+            }
+        }
+        
+        return matches;
+    }
+    
+    // Find longest common prefix between string and its suffix
+    static longestCommonPrefixSuffix(str) {
+        const z = this.buildZArray(str);
+        let maxLength = 0;
+        let position = -1;
+        
+        for (let i = 1; i < z.length; i++) {
+            if (i + z[i] === str.length && z[i] > maxLength) {
+                maxLength = z[i];
+                position = i;
+            }
+        }
+        
+        return { length: maxLength, position, prefix: str.substring(0, maxLength) };
+    }
+    
+    // Multiple pattern matching
+    static multiPatternMatch(text, patterns) {
+        const results = {};
+        
+        for (const pattern of patterns) {
+            results[pattern] = this.patternMatch(text, pattern);
+        }
+        
+        return results;
+    }
+    
+    // Z algorithm with step-by-step visualization
+    static buildZArrayWithSteps(str) {
+        const n = str.length;
+        const z = new Array(n).fill(0);
+        const steps = [];
+        let l = 0, r = 0;
+        
+        steps.push({
+            step: 0,
+            description: \`Starting Z algorithm for string: "\${str}"\`,
+            z: [...z],
+            l, r,
+            currentIndex: 0
+        });
+        
+        for (let i = 1; i < n; i++) {
+            let initialZ = 0;
+            
+            // If i is within current Z-box
+            if (i <= r) {
+                initialZ = Math.min(r - i + 1, z[i - l]);
+                z[i] = initialZ;
+                steps.push({
+                    step: steps.length,
+                    description: \`Position \${i}: Within Z-box [\${l}, \${r}], using Z[\${i - l}] = \${z[i - l]}, setting Z[\${i}] = \${initialZ}\`,
+                    z: [...z],
+                    l, r,
+                    currentIndex: i
+                });
+            }
+            
+            // Extend the match
+            let extensions = 0;
+            while (i + z[i] < n && str[z[i]] === str[i + z[i]]) {
+                z[i]++;
+                extensions++;
+            }
+            
+            if (extensions > 0) {
+                steps.push({
+                    step: steps.length,
+                    description: \`Position \${i}: Extended match by \${extensions} characters, Z[\${i}] = \${z[i]}\`,
+                    z: [...z],
+                    l, r,
+                    currentIndex: i
+                });
+            }
+            
+            // Update Z-box if necessary
+            if (i + z[i] - 1 > r) {
+                l = i;
+                r = i + z[i] - 1;
+                steps.push({
+                    step: steps.length,
+                    description: \`Position \${i}: Updated Z-box to [\${l}, \${r}]\`,
+                    z: [...z],
+                    l, r,
+                    currentIndex: i
+                });
+            }
+        }
+        
+        return { z, steps };
+    }
+}
+
+// Usage Examples
+const text = "ababcababa";
+const pattern = "aba";
+
+console.log("Z Array for 'ababa':", ZAlgorithm.buildZArray("ababa"));
+console.log("Pattern matches:", ZAlgorithm.patternMatch(text, pattern));
+console.log("Pattern count:", ZAlgorithm.countMatches(text, pattern));
+console.log("Contains pattern:", ZAlgorithm.contains(text, pattern));
+
+// Multiple patterns
+const patterns = ["aba", "bab", "cab"];
+console.log("Multiple patterns:", ZAlgorithm.multiPatternMatch(text, patterns));
+
+// Prefix-suffix analysis
+console.log("Prefix-suffix matches:", ZAlgorithm.findPrefixSuffixMatches("abcabcab"));
+console.log("Longest common prefix-suffix:", ZAlgorithm.longestCommonPrefixSuffix("abcabcab"));`,
     example: `// Z Algorithm Implementation
 function zAlgorithm(s) {
     const n = s.length;
@@ -1768,6 +2045,17 @@ What it does: finds all palindromic substrings in linear time using mirror symme
 How it works: transforms string with special characters, maintains palindrome radius array, uses previously computed information to avoid redundant checks.
 
 When to use: longest palindromic substring problems, DNA sequence analysis, text processing requiring all palindromes, competitive programming.`,
+    realWorldApplications: `**Industry Applications:**
+- **Bioinformatics**: DNA palindrome detection, genetic sequence analysis, restriction enzyme sites
+- **Text Processing**: Document analysis, linguistic pattern recognition, content similarity
+- **Competitive Programming**: Contest problems, algorithm optimization challenges
+- **Data Compression**: Pattern recognition, redundancy detection in text data
+- **Cryptography**: Palindromic cipher analysis, cryptographic pattern detection
+- **Natural Language Processing**: Text analysis, linguistic structure recognition
+- **Web Development**: Input validation, text pattern matching, search optimization
+- **Game Development**: Word games, puzzle generation, pattern-based challenges
+- **Database Systems**: String matching queries, text search optimization
+- **Digital Forensics**: Pattern analysis in digital evidence, text-based investigations`,
     voiceExplanation: `Think of Manacher's algorithm like a master palindrome detective with a perfect memory. Imagine you're walking down a street looking for houses that are perfectly symmetrical. Instead of checking each house from scratch, this detective is incredibly smart - when he finds a symmetrical house, he remembers that everything inside that house is also symmetrical. So when he moves to the next position, if it's still within a house he's already checked, he can use his memory to instantly know how much symmetry to expect. The brilliant preprocessing trick is like adding streetlights between every house - this way, whether the original palindrome was even or odd length, everything becomes odd length with a clear center. It's like having X-ray vision that can see all palindromes at once, making it the fastest way to find every single palindromic pattern in a string, which is why it's used in DNA analysis and advanced text processing.`,
     keyConcepts: `**Essential Concepts:**
 1. **String Preprocessing**: Adding separators to handle even/odd length uniformly
@@ -4862,6 +5150,17 @@ What it does: stores elements in FIFO order where the first added element is the
 How it works: maintains front and rear pointers, enqueue adds at rear, dequeue removes from front in O(1) time.
 
 When to use: task scheduling, breadth-first search, handling requests, buffering data streams.`,
+    realWorldApplications: `**Industry Applications:**
+- **Operating Systems**: Process scheduling, CPU task management, print job queues
+- **Web Servers**: Request handling, load balancing, connection management
+- **Breadth-First Search**: Graph traversal, shortest path algorithms, level-order processing
+- **Buffering Systems**: Data streaming, I/O operations, network packet handling
+- **Task Scheduling**: Job queues, background processing, asynchronous operations
+- **Call Centers**: Customer service queues, call routing, wait time management
+- **Gaming**: Turn-based games, event processing, animation queues
+- **Database Systems**: Transaction processing, query scheduling, buffer management
+- **Network Protocols**: Message queuing, packet routing, flow control
+- **Real-time Systems**: Event handling, interrupt processing, priority-based scheduling`,
     example: `// Basic Queue Operations
 const queue = [];
 
@@ -16811,6 +17110,97 @@ What it does: selects maximum number of non-overlapping activities from a given 
 How it works: sorts activities by finish time, then greedily selects activities that start after the previous selected activity ends.
 
 When to use: scheduling problems, resource allocation, interval optimization where you want maximum non-overlapping selections.`,
+    voiceExplanation: `Think of the Activity Selection problem like being a super-efficient event coordinator at a busy conference center! You have one main auditorium and a bunch of different events that want to use it - workshops, presentations, meetings, etc. Each event has a start time and end time, and some of them overlap. Your job is to fit in as many events as possible without any conflicts. The brilliant insight of the greedy approach is this: always pick the event that ends the earliest! Why? Because finishing early gives you the most flexibility for future events. It's like being the person who always leaves parties early - you have more time for other activities! This same principle works everywhere: scheduling meetings in your calendar, assigning tasks to workers, booking time slots for anything. The greedy choice of "earliest finish time first" is mathematically proven to give you the maximum number of non-overlapping activities. It's simple, elegant, and optimal!`,
+    realWorldApplications: `**Industry Applications:**
+- **Meeting Scheduling**: Conference room booking, calendar optimization, appointment scheduling
+- **Resource Management**: Machine scheduling, equipment allocation, facility booking
+- **Project Management**: Task scheduling, milestone planning, resource allocation
+- **Transportation**: Flight scheduling, train timetabling, delivery route optimization
+- **Healthcare**: Operating room scheduling, appointment booking, staff shift planning
+- **Broadcasting**: TV program scheduling, radio show planning, content scheduling
+- **Manufacturing**: Production line scheduling, maintenance windows, quality control slots
+- **Education**: Classroom scheduling, exam timetabling, course planning
+- **Event Management**: Venue booking, speaker scheduling, activity coordination
+- **Cloud Computing**: Job scheduling, resource allocation, server time management`,
+    keyConcepts: `**Essential Concepts:**
+1. **Greedy Choice Property**: Selecting earliest finishing activity is always optimal
+2. **Optimal Substructure**: Problem can be solved by combining optimal solutions of subproblems
+3. **Interval Scheduling**: Managing overlapping time intervals efficiently
+4. **Sorting Strategy**: Sorting by finish time is crucial for the greedy approach
+5. **Non-overlapping Constraint**: Activities cannot share any time period
+6. **Maximization Objective**: Goal is to maximize count, not duration or value
+7. **Single Resource**: One resource (person/room) can handle one activity at a time
+8. **Proof of Correctness**: Mathematical proof that greedy choice leads to optimal solution`,
+    pseudocode: `**Activity Selection Pseudocode:**
+
+ALGORITHM ActivitySelection(activities)
+INPUT: activities - array of (start, finish) pairs
+OUTPUT: maximum set of non-overlapping activities
+BEGIN
+    // Sort activities by finish time
+    SORT activities BY finish time
+    
+    selected = []
+    lastFinishTime = 0
+    
+    FOR each activity IN activities DO
+        IF activity.start >= lastFinishTime THEN
+            ADD activity TO selected
+            lastFinishTime = activity.finish
+        END IF
+    END FOR
+    
+    RETURN selected
+END
+
+ALGORITHM ActivitySelectionRecursive(activities, i, n)
+INPUT: activities - sorted by finish time, i - current index, n - total activities
+OUTPUT: maximum number of activities from index i onwards
+BEGIN
+    // Base case
+    IF i >= n THEN
+        RETURN 0
+    END IF
+    
+    // Find next compatible activity
+    j = i + 1
+    WHILE j < n AND activities[j].start < activities[i].finish DO
+        j = j + 1
+    END WHILE
+    
+    // Choice: include current activity or skip it
+    include = 1 + ActivitySelectionRecursive(activities, j, n)
+    exclude = ActivitySelectionRecursive(activities, i + 1, n)
+    
+    RETURN MAX(include, exclude)
+END
+
+ALGORITHM WeightedActivitySelection(activities)
+INPUT: activities with start, finish, and weight/value
+OUTPUT: maximum weight of non-overlapping activities
+BEGIN
+    SORT activities BY finish time
+    n = length of activities
+    CREATE dp[0...n-1]
+    
+    dp[0] = activities[0].weight
+    
+    FOR i = 1 TO n-1 DO
+        // Include current activity
+        includeWeight = activities[i].weight
+        
+        // Find latest non-overlapping activity
+        latest = FindLatestNonOverlapping(activities, i)
+        IF latest != -1 THEN
+            includeWeight = includeWeight + dp[latest]
+        END IF
+        
+        // Take maximum of include vs exclude
+        dp[i] = MAX(includeWeight, dp[i-1])
+    END FOR
+    
+    RETURN dp[n-1]
+END`,
     example: `// Activity Selection Problem Implementation
 function activitySelection(activities) {
     // Sort activities by finish time
@@ -16896,7 +17286,307 @@ activities.forEach(act => selector.addActivity(act.name, act.start, act.finish))
 
 const result = selector.selectActivities();
 console.log('Selected activities:', result.selected.length);
-console.log('Schedule:', selector.getSchedule());
+console.log('Schedule:', selector.getSchedule());`,
+    implementationCode: `// Comprehensive Activity Selection Implementation
+
+class ActivitySelectionSolver {
+    constructor() {
+        this.activities = [];
+        this.solutions = [];
+        this.comparisons = 0;
+    }
+    
+    // Add activity with validation
+    addActivity(id, start, finish, weight = 1) {
+        if (start >= finish) {
+            throw new Error('Start time must be before finish time');
+        }
+        
+        this.activities.push({
+            id: id,
+            start: start,
+            finish: finish,
+            weight: weight,
+            duration: finish - start
+        });
+    }
+    
+    // Classic Activity Selection (Greedy)
+    greedyActivitySelection() {
+        this.comparisons = 0;
+        
+        // Sort by finish time
+        const sorted = [...this.activities].sort((a, b) => {
+            this.comparisons++;
+            return a.finish - b.finish;
+        });
+        
+        const selected = [];
+        let lastFinishTime = 0;
+        
+        for (const activity of sorted) {
+            this.comparisons++;
+            if (activity.start >= lastFinishTime) {
+                selected.push(activity);
+                lastFinishTime = activity.finish;
+            }
+        }
+        
+        return {
+            activities: selected,
+            count: selected.length,
+            totalDuration: selected.reduce((sum, act) => sum + act.duration, 0),
+            comparisons: this.comparisons
+        };
+    }
+    
+    // Weighted Activity Selection (Dynamic Programming)
+    weightedActivitySelection() {
+        if (this.activities.length === 0) return { activities: [], totalWeight: 0 };
+        
+        // Sort by finish time
+        const sorted = [...this.activities].sort((a, b) => a.finish - b.finish);
+        const n = sorted.length;
+        
+        // DP array to store maximum weight ending at each position
+        const dp = new Array(n);
+        const parent = new Array(n).fill(-1);
+        
+        dp[0] = sorted[0].weight;
+        
+        for (let i = 1; i < n; i++) {
+            // Option 1: Include current activity
+            let includeWeight = sorted[i].weight;
+            let latestCompatible = this.findLatestCompatible(sorted, i);
+            
+            if (latestCompatible !== -1) {
+                includeWeight += dp[latestCompatible];
+                parent[i] = latestCompatible;
+            }
+            
+            // Option 2: Exclude current activity
+            const excludeWeight = dp[i - 1];
+            
+            if (includeWeight > excludeWeight) {
+                dp[i] = includeWeight;
+                // parent[i] already set if there was a compatible activity
+            } else {
+                dp[i] = excludeWeight;
+                parent[i] = i - 1;
+            }
+        }
+        
+        // Reconstruct solution
+        const selected = this.reconstructWeightedSolution(sorted, dp, parent, n - 1);
+        
+        return {
+            activities: selected,
+            totalWeight: dp[n - 1],
+            count: selected.length
+        };
+    }
+    
+    findLatestCompatible(activities, index) {
+        for (let i = index - 1; i >= 0; i--) {
+            if (activities[i].finish <= activities[index].start) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    reconstructWeightedSolution(activities, dp, parent, index) {
+        if (index === -1) return [];
+        
+        const currentActivity = activities[index];
+        const latestCompatible = this.findLatestCompatible(activities, index);
+        
+        // Check if current activity was included
+        let expectedWeight = currentActivity.weight;
+        if (latestCompatible !== -1) {
+            expectedWeight += dp[latestCompatible];
+        }
+        
+        if (index === 0 || expectedWeight > dp[index - 1]) {
+            // Current activity was included
+            const prevSolution = latestCompatible !== -1 ? 
+                this.reconstructWeightedSolution(activities, dp, parent, latestCompatible) : [];
+            return [...prevSolution, currentActivity];
+        } else {
+            // Current activity was not included
+            return this.reconstructWeightedSolution(activities, dp, parent, index - 1);
+        }
+    }
+    
+    // Recursive solution with memoization
+    recursiveActivitySelection(memo = {}) {
+        const sorted = [...this.activities].sort((a, b) => a.finish - b.finish);
+        
+        const solve = (index, lastFinish) => {
+            const key = \`\${index}-\${lastFinish}\`;
+            if (key in memo) return memo[key];
+            
+            if (index >= sorted.length) return 0;
+            
+            // Option 1: Skip current activity
+            let maxCount = solve(index + 1, lastFinish);
+            
+            // Option 2: Include current activity if compatible
+            if (sorted[index].start >= lastFinish) {
+                maxCount = Math.max(maxCount, 1 + solve(index + 1, sorted[index].finish));
+            }
+            
+            memo[key] = maxCount;
+            return maxCount;
+        };
+        
+        return solve(0, 0);
+    }
+    
+    // Find all possible maximum selections
+    findAllMaximalSelections() {
+        const maxCount = this.greedyActivitySelection().count;
+        const allSelections = [];
+        
+        const backtrack = (index, selected, lastFinish) => {
+            if (selected.length === maxCount) {
+                allSelections.push([...selected]);
+                return;
+            }
+            
+            if (index >= this.activities.length) return;
+            if (selected.length + (this.activities.length - index) < maxCount) return;
+            
+            const sorted = [...this.activities].sort((a, b) => a.finish - b.finish);
+            
+            for (let i = index; i < sorted.length; i++) {
+                if (sorted[i].start >= lastFinish) {
+                    selected.push(sorted[i]);
+                    backtrack(i + 1, selected, sorted[i].finish);
+                    selected.pop();
+                }
+            }
+        };
+        
+        backtrack(0, [], 0);
+        return allSelections;
+    }
+    
+    // Performance comparison
+    compareAlgorithms() {
+        console.log('\\n=== Activity Selection Performance Comparison ===');
+        
+        const start1 = performance.now();
+        const greedyResult = this.greedyActivitySelection();
+        const end1 = performance.now();
+        
+        const start2 = performance.now();
+        const weightedResult = this.weightedActivitySelection();
+        const end2 = performance.now();
+        
+        const start3 = performance.now();
+        const recursiveCount = this.recursiveActivitySelection();
+        const end3 = performance.now();
+        
+        return {
+            greedy: {
+                ...greedyResult,
+                time: end1 - start1
+            },
+            weighted: {
+                ...weightedResult,
+                time: end2 - start2
+            },
+            recursive: {
+                count: recursiveCount,
+                time: end3 - start3
+            }
+        };
+    }
+    
+    // Visualization helper
+    visualizeSchedule(result) {
+        console.log('\\n=== Activity Schedule Visualization ===');
+        console.log(\`Selected \${result.count} activities:\`);
+        
+        result.activities.forEach((activity, index) => {
+            const bar = '█'.repeat(activity.duration);
+            console.log(\`\${activity.id}: \${activity.start}-\${activity.finish} \${bar} (weight: \${activity.weight})\`);
+        });
+        
+        if (result.totalWeight) {
+            console.log(\`Total Weight: \${result.totalWeight}\`);
+        }
+        if (result.totalDuration) {
+            console.log(\`Total Duration: \${result.totalDuration}\`);
+        }
+    }
+    
+    // Clear all activities
+    clear() {
+        this.activities = [];
+        this.solutions = [];
+        this.comparisons = 0;
+    }
+    
+    // Get statistics
+    getStatistics() {
+        return {
+            totalActivities: this.activities.length,
+            averageDuration: this.activities.reduce((sum, act) => sum + act.duration, 0) / this.activities.length,
+            totalTimeSpan: Math.max(...this.activities.map(act => act.finish)) - Math.min(...this.activities.map(act => act.start)),
+            overlapCount: this.countOverlaps()
+        };
+    }
+    
+    countOverlaps() {
+        let overlaps = 0;
+        for (let i = 0; i < this.activities.length; i++) {
+            for (let j = i + 1; j < this.activities.length; j++) {
+                if (this.activitiesOverlap(this.activities[i], this.activities[j])) {
+                    overlaps++;
+                }
+            }
+        }
+        return overlaps;
+    }
+    
+    activitiesOverlap(a1, a2) {
+        return a1.start < a2.finish && a2.start < a1.finish;
+    }
+}
+
+// Usage Examples
+console.log('=== Activity Selection Examples ===');
+
+const solver = new ActivitySelectionSolver();
+
+// Example 1: Conference Room Scheduling
+console.log('\\n1. Conference Room Scheduling:');
+solver.addActivity('Meeting A', 1, 4, 10);
+solver.addActivity('Meeting B', 3, 5, 20);
+solver.addActivity('Meeting C', 0, 6, 30);
+solver.addActivity('Meeting D', 5, 7, 15);
+solver.addActivity('Meeting E', 8, 9, 25);
+solver.addActivity('Meeting F', 5, 9, 35);
+
+const greedyResult = solver.greedyActivitySelection();
+solver.visualizeSchedule(greedyResult);
+
+const weightedResult = solver.weightedActivitySelection();
+console.log('\\nWeighted Selection:');
+solver.visualizeSchedule(weightedResult);
+
+// Example 2: Performance Analysis
+console.log('\\n2. Performance Analysis:');
+const performance = solver.compareAlgorithms();
+console.log('Greedy Algorithm:', performance.greedy.count, 'activities in', performance.greedy.time.toFixed(2), 'ms');
+console.log('Weighted DP:', performance.weighted.count, 'activities in', performance.weighted.time.toFixed(2), 'ms');
+console.log('Recursive:', performance.recursive.count, 'activities in', performance.recursive.time.toFixed(2), 'ms');
+
+// Example 3: Statistics
+console.log('\\n3. Problem Statistics:');
+console.log(solver.getStatistics());`,
 // Output: Meeting A: 1-4, Meeting D: 5-7, Meeting E: 8-9`,
     syntax: `// Activity Selection Pattern
 function activitySelection(activities) {
@@ -16914,6 +17604,38 @@ function activitySelection(activities) {
     }
     return selected;
 }`,
+    quizQuestions: [
+      {
+        question: "What is the key greedy choice in the Activity Selection problem?",
+        options: ["Select activity with earliest start time", "Select activity with earliest finish time", "Select activity with longest duration", "Select activity with highest value"],
+        correctAnswer: 1,
+        explanation: "The greedy choice is to always select the activity that finishes earliest among remaining activities, as this leaves maximum room for future activities."
+      },
+      {
+        question: "What is the time complexity of the Activity Selection algorithm?",
+        options: ["O(n)", "O(n log n)", "O(n²)", "O(2ⁿ)"],
+        correctAnswer: 1,
+        explanation: "The time complexity is O(n log n) due to the initial sorting by finish time. The greedy selection itself is O(n)."
+      },
+      {
+        question: "Why do we sort activities by finish time rather than start time?",
+        options: ["It's easier to implement", "Start time doesn't matter", "Early finish leaves more room for future activities", "It reduces space complexity"],
+        correctAnswer: 2,
+        explanation: "Sorting by finish time ensures that selecting the earliest-finishing activity leaves the maximum amount of time available for scheduling future activities."
+      },
+      {
+        question: "What type of problem structure does Activity Selection exhibit?",
+        options: ["Overlapping subproblems only", "Optimal substructure only", "Both optimal substructure and greedy choice property", "Neither property"],
+        correctAnswer: 2,
+        explanation: "Activity Selection has both optimal substructure (optimal solution contains optimal solutions to subproblems) and the greedy choice property (local optimal choice leads to global optimum)."
+      },
+      {
+        question: "What is a real-world application of the Activity Selection problem?",
+        options: ["Sorting algorithms", "Hash table design", "Conference room scheduling", "Binary tree balancing"],
+        correctAnswer: 2,
+        explanation: "Conference room scheduling is a classic application where you want to schedule the maximum number of non-overlapping meetings in a single room."
+      }
+    ]
   },
   {
     id: 'huffman-coding',
@@ -18142,7 +18864,345 @@ What it does: efficiently handles range queries and updates on arrays, supportin
 
 How it works: recursively divides array into segments, stores aggregate information at internal nodes, queries traverse tree to combine relevant segments.
 
-When to use: frequent range queries needed, range updates required, competitive programming, when Fenwick tree limitations are restrictive.`
+When to use: frequent range queries needed, range updates required, competitive programming, when Fenwick tree limitations are restrictive.`,
+    voiceExplanation: `Think of a Segment Tree like a smart filing system for a massive library! Imagine you're managing a library with millions of books, and people constantly ask questions like "What's the total value of books from shelf 100 to shelf 500?" or "What's the most expensive book between sections A and M?" A naive approach would be to manually check every single book, but that's incredibly slow. A Segment Tree is like having a brilliant organizational system where you pre-calculate and store summary information at different levels. At the top level, you know the total for the entire library. One level down, you know totals for the left half and right half. Keep dividing until you reach individual books. When someone asks a range question, you cleverly combine just the relevant pre-calculated summaries instead of checking every item. It's like having a pyramid of knowledge where each level contains increasingly detailed breakdowns, allowing you to answer any range query lightning-fast!`,
+    realWorldApplications: `**Industry Applications:**
+- **Database Systems**: Range queries, indexing, OLAP operations, data warehousing
+- **Computer Graphics**: 2D range queries, collision detection, spatial indexing
+- **Computational Geometry**: Range searching, nearest neighbor queries, geometric algorithms
+- **Financial Systems**: Portfolio analysis, risk calculations, time-series range queries
+- **Game Development**: Spatial partitioning, collision detection, range-based AI queries
+- **Network Monitoring**: Traffic analysis, bandwidth utilization, performance metrics
+- **Scientific Computing**: Statistical analysis, simulation data processing, range aggregations
+- **Image Processing**: Region-based operations, histogram queries, pixel range analysis
+- **Competitive Programming**: Contest problems, algorithmic challenges, optimization tasks
+- **Real-time Analytics**: Stream processing, sliding window calculations, live dashboards`,
+    keyConcepts: `**Essential Concepts:**
+1. **Binary Tree Structure**: Complete binary tree with array segments at leaves
+2. **Recursive Decomposition**: Dividing array into smaller segments recursively
+3. **Aggregate Information**: Storing combined data (sum, min, max) at internal nodes
+4. **Lazy Propagation**: Delaying updates for efficiency in range update operations
+5. **Query Decomposition**: Breaking range queries into tree node combinations
+6. **Build Complexity**: O(n) construction time with O(n) space requirements
+7. **Update Propagation**: Efficiently updating parent nodes after modifications
+8. **Range Operations**: Supporting both point updates and range updates efficiently`,
+    pseudocode: `**Segment Tree Pseudocode:**
+
+ALGORITHM BuildSegmentTree(array, tree, node, start, end)
+INPUT: array - original array, tree - segment tree array, node - current node, start/end - range
+OUTPUT: segment tree with aggregate values
+BEGIN
+    IF start = end THEN
+        tree[node] = array[start]
+    ELSE
+        mid = (start + end) / 2
+        BuildSegmentTree(array, tree, 2*node, start, mid)
+        BuildSegmentTree(array, tree, 2*node+1, mid+1, end)
+        tree[node] = tree[2*node] + tree[2*node+1]
+    END IF
+END
+
+ALGORITHM QueryRange(tree, node, start, end, left, right)
+INPUT: tree - segment tree, node - current node, start/end - node range, left/right - query range
+OUTPUT: aggregate value for query range
+BEGIN
+    IF right < start OR left > end THEN
+        RETURN 0  // Outside range
+    END IF
+    
+    IF left <= start AND end <= right THEN
+        RETURN tree[node]  // Completely inside range
+    END IF
+    
+    mid = (start + end) / 2
+    leftSum = QueryRange(tree, 2*node, start, mid, left, right)
+    rightSum = QueryRange(tree, 2*node+1, mid+1, end, left, right)
+    RETURN leftSum + rightSum
+END
+
+ALGORITHM UpdatePoint(tree, node, start, end, index, value)
+INPUT: tree - segment tree, node - current node, start/end - range, index - update position, value - new value
+OUTPUT: updated segment tree
+BEGIN
+    IF start = end THEN
+        tree[node] = value
+    ELSE
+        mid = (start + end) / 2
+        IF index <= mid THEN
+            UpdatePoint(tree, 2*node, start, mid, index, value)
+        ELSE
+            UpdatePoint(tree, 2*node+1, mid+1, end, index, value)
+        END IF
+        tree[node] = tree[2*node] + tree[2*node+1]
+    END IF
+END`,
+    implementationCode: `// Comprehensive Segment Tree Implementation
+
+class SegmentTree {
+    constructor(array) {
+        this.n = array.length;
+        this.tree = new Array(4 * this.n).fill(0);
+        this.lazy = new Array(4 * this.n).fill(0);
+        this.originalArray = [...array];
+        this.build(array, 1, 0, this.n - 1);
+    }
+    
+    // Build segment tree - O(n)
+    build(array, node, start, end) {
+        if (start === end) {
+            this.tree[node] = array[start];
+        } else {
+            const mid = Math.floor((start + end) / 2);
+            this.build(array, 2 * node, start, mid);
+            this.build(array, 2 * node + 1, mid + 1, end);
+            this.tree[node] = this.tree[2 * node] + this.tree[2 * node + 1];
+        }
+    }
+    
+    // Range sum query - O(log n)
+    queryRange(left, right) {
+        return this._queryRange(1, 0, this.n - 1, left, right);
+    }
+    
+    _queryRange(node, start, end, left, right) {
+        if (right < start || left > end) {
+            return 0; // Outside range
+        }
+        
+        if (left <= start && end <= right) {
+            return this.tree[node]; // Completely inside
+        }
+        
+        const mid = Math.floor((start + end) / 2);
+        const leftSum = this._queryRange(2 * node, start, mid, left, right);
+        const rightSum = this._queryRange(2 * node + 1, mid + 1, end, left, right);
+        return leftSum + rightSum;
+    }
+    
+    // Point update - O(log n)
+    updatePoint(index, value) {
+        this._updatePoint(1, 0, this.n - 1, index, value);
+        this.originalArray[index] = value;
+    }
+    
+    _updatePoint(node, start, end, index, value) {
+        if (start === end) {
+            this.tree[node] = value;
+        } else {
+            const mid = Math.floor((start + end) / 2);
+            if (index <= mid) {
+                this._updatePoint(2 * node, start, mid, index, value);
+            } else {
+                this._updatePoint(2 * node + 1, mid + 1, end, index, value);
+            }
+            this.tree[node] = this.tree[2 * node] + this.tree[2 * node + 1];
+        }
+    }
+    
+    // Range update with lazy propagation - O(log n)
+    updateRange(left, right, value) {
+        this._updateRange(1, 0, this.n - 1, left, right, value);
+    }
+    
+    _updateRange(node, start, end, left, right, value) {
+        this._pushLazy(node, start, end);
+        
+        if (start > right || end < left) {
+            return;
+        }
+        
+        if (start >= left && end <= right) {
+            this.lazy[node] += value;
+            this._pushLazy(node, start, end);
+            return;
+        }
+        
+        const mid = Math.floor((start + end) / 2);
+        this._updateRange(2 * node, start, mid, left, right, value);
+        this._updateRange(2 * node + 1, mid + 1, end, left, right, value);
+        
+        this._pushLazy(2 * node, start, mid);
+        this._pushLazy(2 * node + 1, mid + 1, end);
+        
+        this.tree[node] = this.tree[2 * node] + this.tree[2 * node + 1];
+    }
+    
+    // Lazy propagation helper
+    _pushLazy(node, start, end) {
+        if (this.lazy[node] !== 0) {
+            this.tree[node] += this.lazy[node] * (end - start + 1);
+            
+            if (start !== end) {
+                this.lazy[2 * node] += this.lazy[node];
+                this.lazy[2 * node + 1] += this.lazy[node];
+            }
+            
+            this.lazy[node] = 0;
+        }
+    }
+    
+    // Range minimum query variant
+    queryMin(left, right) {
+        return this._queryMin(1, 0, this.n - 1, left, right);
+    }
+    
+    _queryMin(node, start, end, left, right) {
+        if (right < start || left > end) {
+            return Infinity;
+        }
+        
+        if (left <= start && end <= right) {
+            return this.tree[node];
+        }
+        
+        const mid = Math.floor((start + end) / 2);
+        const leftMin = this._queryMin(2 * node, start, mid, left, right);
+        const rightMin = this._queryMin(2 * node + 1, mid + 1, end, left, right);
+        return Math.min(leftMin, rightMin);
+    }
+    
+    // Get tree statistics
+    getStatistics() {
+        return {
+            size: this.n,
+            treeSize: this.tree.length,
+            height: Math.ceil(Math.log2(this.n)) + 1,
+            memoryUsage: (this.tree.length + this.lazy.length) * 4, // bytes
+            originalArray: this.originalArray
+        };
+    }
+    
+    // Visualize tree structure (for debugging)
+    visualizeTree() {
+        const result = [];
+        const height = Math.ceil(Math.log2(this.n)) + 1;
+        
+        for (let level = 0; level < height; level++) {
+            const levelNodes = [];
+            const start = Math.pow(2, level);
+            const end = Math.min(Math.pow(2, level + 1), this.tree.length);
+            
+            for (let i = start; i < end; i++) {
+                if (this.tree[i] !== undefined) {
+                    levelNodes.push(this.tree[i]);
+                }
+            }
+            
+            if (levelNodes.length > 0) {
+                result.push(\`Level \${level}: [\${levelNodes.join(', ')}]\`);
+            }
+        }
+        
+        return result;
+    }
+}
+
+// Usage Examples
+console.log('=== Segment Tree Examples ===');
+
+// Example 1: Basic Range Sum Queries
+const array1 = [1, 3, 5, 7, 9, 11];
+const segTree = new SegmentTree(array1);
+
+console.log('Original array:', array1);
+console.log('Range sum [1, 3]:', segTree.queryRange(1, 3)); // 3 + 5 + 7 = 15
+console.log('Range sum [0, 2]:', segTree.queryRange(0, 2)); // 1 + 3 + 5 = 9
+
+// Example 2: Point Updates
+segTree.updatePoint(1, 10);
+console.log('After updating index 1 to 10:');
+console.log('Range sum [0, 2]:', segTree.queryRange(0, 2)); // 1 + 10 + 5 = 16
+
+// Example 3: Range Updates
+segTree.updateRange(2, 4, 5);
+console.log('After adding 5 to range [2, 4]:');
+console.log('Range sum [2, 4]:', segTree.queryRange(2, 4));
+
+// Example 4: Statistics and Visualization
+console.log('Tree statistics:', segTree.getStatistics());
+console.log('Tree visualization:');
+segTree.visualizeTree().forEach(level => console.log(level));`,
+    example: `// Segment Tree for Range Sum Queries
+class SimpleSegmentTree {
+    constructor(arr) {
+        this.n = arr.length;
+        this.tree = new Array(4 * this.n);
+        this.build(arr, 1, 0, this.n - 1);
+    }
+    
+    build(arr, node, start, end) {
+        if (start === end) {
+            this.tree[node] = arr[start];
+        } else {
+            const mid = Math.floor((start + end) / 2);
+            this.build(arr, 2 * node, start, mid);
+            this.build(arr, 2 * node + 1, mid + 1, end);
+            this.tree[node] = this.tree[2 * node] + this.tree[2 * node + 1];
+        }
+    }
+    
+    query(left, right) {
+        return this._query(1, 0, this.n - 1, left, right);
+    }
+    
+    _query(node, start, end, left, right) {
+        if (right < start || left > end) return 0;
+        if (left <= start && end <= right) return this.tree[node];
+        
+        const mid = Math.floor((start + end) / 2);
+        return this._query(2 * node, start, mid, left, right) + 
+               this._query(2 * node + 1, mid + 1, end, left, right);
+    }
+}
+
+// Example usage
+const arr = [1, 3, 5, 7, 9, 11];
+const st = new SimpleSegmentTree(arr);
+console.log(st.query(1, 3)); // Sum from index 1 to 3: 15`,
+    syntax: `// Segment Tree Pattern
+class SegmentTree {
+    constructor(arr) {
+        this.n = arr.length;
+        this.tree = new Array(4 * this.n);
+        this.build(arr, 1, 0, this.n - 1);
+    }
+    
+    build(arr, node, start, end) { /* Build tree */ }
+    query(left, right) { /* Range query */ }
+    update(index, value) { /* Point update */ }
+}`,
+    quizQuestions: [
+      {
+        question: "What is the time complexity of building a segment tree?",
+        options: ["O(log n)", "O(n)", "O(n log n)", "O(n²)"],
+        correctAnswer: 1,
+        explanation: "Building a segment tree takes O(n) time because we visit each node exactly once during the recursive construction process."
+      },
+      {
+        question: "What is the space complexity of a segment tree?",
+        options: ["O(log n)", "O(n)", "O(2n)", "O(4n)"],
+        correctAnswer: 3,
+        explanation: "A segment tree requires O(4n) space in the worst case. While the tree has at most 2n-1 nodes, we typically allocate 4n space for implementation simplicity."
+      },
+      {
+        question: "What is the main advantage of segment trees over simple arrays for range queries?",
+        options: ["Less memory usage", "Faster range queries", "Simpler implementation", "Better cache locality"],
+        correctAnswer: 1,
+        explanation: "Segment trees provide O(log n) range queries compared to O(n) for simple arrays, making them much faster for frequent range operations."
+      },
+      {
+        question: "What is lazy propagation in segment trees?",
+        options: ["A way to build the tree faster", "Delaying updates until they're needed", "A method to reduce space usage", "A technique for parallel processing"],
+        correctAnswer: 1,
+        explanation: "Lazy propagation delays range updates until they're actually needed during queries, improving the efficiency of range update operations from O(n) to O(log n)."
+      },
+      {
+        question: "Which operations can segment trees efficiently support?",
+        options: ["Only range sum queries", "Only point updates", "Both range queries and updates", "Only minimum/maximum queries"],
+        correctAnswer: 2,
+        explanation: "Segment trees efficiently support both range queries (sum, min, max, etc.) and updates (point updates and range updates with lazy propagation), all in O(log n) time."
+      }
+    ]
   },
   {
     id: 'fenwick-tree',
@@ -18158,7 +19218,361 @@ What it does: efficiently maintains cumulative frequency table supporting prefix
 
 How it works: uses binary representation of indices to store partial sums, leverages bit manipulation for tree traversal and updates.
 
-When to use: prefix sum queries needed, cumulative frequency tables, range sum queries, when space efficiency important over segment trees.`
+When to use: prefix sum queries needed, cumulative frequency tables, range sum queries, when space efficiency important over segment trees.`,
+    voiceExplanation: `Think of a Fenwick Tree like a clever accounting system for a chain of stores! Imagine you're managing 100 stores and need to quickly answer questions like "What's the total sales from store 1 to store 50?" The naive approach would be to add up all individual store sales, which is slow. A Fenwick Tree is like having a smart bookkeeping system that maintains running totals in a very specific pattern. Each "account" in your system doesn't just store one store's data - it stores the sum of a specific range of stores based on a binary pattern. The brilliant insight is using the binary representation of store numbers to determine which ranges each account covers. When you need a prefix sum, you cleverly combine just a few of these pre-calculated accounts using bit manipulation tricks. It's like having a pyramid of partial sums where each level covers different ranges, but organized in such a way that you can get any prefix sum by adding just a few numbers. The magic is in the binary indexing - it's mathematically elegant and incredibly efficient!`,
+    realWorldApplications: `**Industry Applications:**
+- **Database Systems**: Indexing, range queries, OLAP cubes, data warehousing
+- **Financial Systems**: Portfolio tracking, cumulative returns, risk analysis
+- **Gaming**: Leaderboards, score tracking, ranking systems, achievement progress
+- **E-commerce**: Inventory management, sales analytics, revenue tracking
+- **Network Monitoring**: Bandwidth utilization, packet counting, traffic analysis
+- **Scientific Computing**: Statistical analysis, experimental data processing
+- **Real-time Analytics**: Stream processing, sliding window calculations, metrics aggregation
+- **Competitive Programming**: Contest problems, algorithmic challenges, optimization
+- **Image Processing**: Histogram calculations, pixel intensity analysis, region queries
+- **Social Media**: Engagement metrics, follower counts, activity tracking`,
+    keyConcepts: `**Essential Concepts:**
+1. **Binary Indexing**: Using binary representation of indices for tree structure
+2. **Partial Sum Storage**: Each node stores sum of specific range based on binary pattern
+3. **Bit Manipulation**: Using bitwise operations for efficient tree traversal
+4. **Prefix Sum Queries**: Combining partial sums to get cumulative totals
+5. **Point Updates**: Efficiently updating single elements and propagating changes
+6. **Space Efficiency**: Using only O(n) space compared to segment tree's O(4n)
+7. **LSB Operations**: Leveraging least significant bit for index calculations
+8. **1-based Indexing**: Traditional implementation uses 1-based array indexing`,
+    pseudocode: `**Fenwick Tree Pseudocode:**
+
+ALGORITHM BuildFenwickTree(array)
+INPUT: array - original array of values
+OUTPUT: Fenwick tree for prefix sum queries
+BEGIN
+    n = length(array)
+    tree = Array of size (n + 1) initialized to 0
+    
+    FOR i = 1 TO n DO
+        Update(tree, i, array[i - 1])
+    END FOR
+    
+    RETURN tree
+END
+
+ALGORITHM Update(tree, index, value)
+INPUT: tree - Fenwick tree, index - position to update, value - value to add
+OUTPUT: updated Fenwick tree
+BEGIN
+    WHILE index < length(tree) DO
+        tree[index] += value
+        index += index & (-index)  // Add LSB
+    END WHILE
+END
+
+ALGORITHM PrefixSum(tree, index)
+INPUT: tree - Fenwick tree, index - position for prefix sum
+OUTPUT: sum from index 1 to index
+BEGIN
+    sum = 0
+    WHILE index > 0 DO
+        sum += tree[index]
+        index -= index & (-index)  // Remove LSB
+    END WHILE
+    RETURN sum
+END
+
+ALGORITHM RangeSum(tree, left, right)
+INPUT: tree - Fenwick tree, left/right - range boundaries
+OUTPUT: sum from left to right (inclusive)
+BEGIN
+    IF left = 1 THEN
+        RETURN PrefixSum(tree, right)
+    ELSE
+        RETURN PrefixSum(tree, right) - PrefixSum(tree, left - 1)
+    END IF
+END
+
+ALGORITHM PointUpdate(tree, index, newValue, oldValue)
+INPUT: tree - Fenwick tree, index - position, newValue - new value, oldValue - previous value
+OUTPUT: updated tree with new value at index
+BEGIN
+    difference = newValue - oldValue
+    Update(tree, index, difference)
+END`,
+    implementationCode: `// Comprehensive Fenwick Tree Implementation
+
+class FenwickTree {
+    constructor(size) {
+        this.size = size;
+        this.tree = new Array(size + 1).fill(0);
+        this.originalArray = new Array(size).fill(0);
+    }
+    
+    // Build from existing array - O(n log n)
+    static fromArray(array) {
+        const ft = new FenwickTree(array.length);
+        for (let i = 0; i < array.length; i++) {
+            ft.update(i + 1, array[i]);
+            ft.originalArray[i] = array[i];
+        }
+        return ft;
+    }
+    
+    // Update element at index (1-based) - O(log n)
+    update(index, value) {
+        const oldValue = this.originalArray[index - 1];
+        const difference = value - oldValue;
+        this.originalArray[index - 1] = value;
+        
+        while (index <= this.size) {
+            this.tree[index] += difference;
+            index += index & (-index); // Add LSB
+        }
+    }
+    
+    // Add value to element at index - O(log n)
+    add(index, value) {
+        this.originalArray[index - 1] += value;
+        
+        while (index <= this.size) {
+            this.tree[index] += value;
+            index += index & (-index);
+        }
+    }
+    
+    // Get prefix sum from 1 to index - O(log n)
+    prefixSum(index) {
+        let sum = 0;
+        while (index > 0) {
+            sum += this.tree[index];
+            index -= index & (-index); // Remove LSB
+        }
+        return sum;
+    }
+    
+    // Get range sum from left to right (1-based, inclusive) - O(log n)
+    rangeSum(left, right) {
+        if (left === 1) {
+            return this.prefixSum(right);
+        }
+        return this.prefixSum(right) - this.prefixSum(left - 1);
+    }
+    
+    // Get value at specific index (1-based) - O(log n)
+    get(index) {
+        return this.rangeSum(index, index);
+    }
+    
+    // Find index with given prefix sum (binary search) - O(log² n)
+    findIndex(targetSum) {
+        let index = 0;
+        let bitMask = 1;
+        
+        // Find highest power of 2 <= size
+        while (bitMask <= this.size) {
+            bitMask <<= 1;
+        }
+        bitMask >>= 1;
+        
+        while (bitMask > 0) {
+            const nextIndex = index + bitMask;
+            if (nextIndex <= this.size && this.tree[nextIndex] <= targetSum) {
+                targetSum -= this.tree[nextIndex];
+                index = nextIndex;
+            }
+            bitMask >>= 1;
+        }
+        
+        return index;
+    }
+    
+    // Get all prefix sums - O(n log n)
+    getAllPrefixSums() {
+        const result = [];
+        for (let i = 1; i <= this.size; i++) {
+            result.push(this.prefixSum(i));
+        }
+        return result;
+    }
+    
+    // Get tree statistics
+    getStatistics() {
+        return {
+            size: this.size,
+            treeSize: this.tree.length,
+            memoryUsage: this.tree.length * 4, // bytes
+            originalArray: [...this.originalArray],
+            treeArray: [...this.tree]
+        };
+    }
+    
+    // Visualize tree structure
+    visualizeTree() {
+        const result = [];
+        result.push('Index:  ' + Array.from({length: this.size}, (_, i) => (i + 1).toString().padStart(3)).join(' '));
+        result.push('Value:  ' + this.originalArray.map(v => v.toString().padStart(3)).join(' '));
+        result.push('Tree:   ' + this.tree.slice(1).map(v => v.toString().padStart(3)).join(' '));
+        result.push('Prefix: ' + this.getAllPrefixSums().map(v => v.toString().padStart(3)).join(' '));
+        return result;
+    }
+    
+    // Range update using difference array technique
+    rangeUpdate(left, right, value) {
+        this.add(left, value);
+        if (right + 1 <= this.size) {
+            this.add(right + 1, -value);
+        }
+    }
+}
+
+// 2D Fenwick Tree for 2D range queries
+class FenwickTree2D {
+    constructor(rows, cols) {
+        this.rows = rows;
+        this.cols = cols;
+        this.tree = Array.from({length: rows + 1}, () => new Array(cols + 1).fill(0));
+    }
+    
+    // Update point (r, c) with value - O(log n × log m)
+    update(r, c, value) {
+        for (let i = r; i <= this.rows; i += i & (-i)) {
+            for (let j = c; j <= this.cols; j += j & (-j)) {
+                this.tree[i][j] += value;
+            }
+        }
+    }
+    
+    // Query prefix sum from (1,1) to (r,c) - O(log n × log m)
+    query(r, c) {
+        let sum = 0;
+        for (let i = r; i > 0; i -= i & (-i)) {
+            for (let j = c; j > 0; j -= j & (-j)) {
+                sum += this.tree[i][j];
+            }
+        }
+        return sum;
+    }
+    
+    // Range query from (r1,c1) to (r2,c2) - O(log n × log m)
+    rangeQuery(r1, c1, r2, c2) {
+        return this.query(r2, c2) - this.query(r1 - 1, c2) - 
+               this.query(r2, c1 - 1) + this.query(r1 - 1, c1 - 1);
+    }
+}
+
+// Usage Examples
+console.log('=== Fenwick Tree Examples ===');
+
+// Example 1: Basic Operations
+const array = [1, 3, 5, 7, 9, 11, 13, 15];
+const ft = FenwickTree.fromArray(array);
+
+console.log('Original array:', array);
+console.log('Prefix sum [1-4]:', ft.prefixSum(4)); // 1+3+5+7 = 16
+console.log('Range sum [3-6]:', ft.rangeSum(3, 6)); // 5+7+9+11 = 32
+
+// Example 2: Updates
+ft.update(3, 10); // Change index 3 from 5 to 10
+console.log('After updating index 3 to 10:');
+console.log('Range sum [3-6]:', ft.rangeSum(3, 6)); // 10+7+9+11 = 37
+
+// Example 3: Visualization
+console.log('Tree visualization:');
+ft.visualizeTree().forEach(line => console.log(line));
+
+// Example 4: 2D Fenwick Tree
+const ft2d = new FenwickTree2D(4, 4);
+ft2d.update(2, 2, 5);
+ft2d.update(3, 3, 8);
+console.log('2D range query [1,1] to [3,3]:', ft2d.rangeQuery(1, 1, 3, 3));`,
+    example: `// Simple Fenwick Tree for Prefix Sums
+class SimpleFenwickTree {
+    constructor(size) {
+        this.tree = new Array(size + 1).fill(0);
+        this.size = size;
+    }
+    
+    update(index, value) {
+        while (index <= this.size) {
+            this.tree[index] += value;
+            index += index & (-index);
+        }
+    }
+    
+    prefixSum(index) {
+        let sum = 0;
+        while (index > 0) {
+            sum += this.tree[index];
+            index -= index & (-index);
+        }
+        return sum;
+    }
+    
+    rangeSum(left, right) {
+        return this.prefixSum(right) - this.prefixSum(left - 1);
+    }
+}
+
+// Example usage
+const ft = new SimpleFenwickTree(8);
+const arr = [1, 3, 5, 7, 9, 11, 13, 15];
+
+// Build tree
+arr.forEach((val, i) => ft.update(i + 1, val));
+
+console.log(ft.prefixSum(4)); // 16 (sum of first 4 elements)
+console.log(ft.rangeSum(3, 6)); // 32 (sum from index 3 to 6)`,
+    syntax: `// Fenwick Tree Pattern
+class FenwickTree {
+    constructor(size) {
+        this.tree = new Array(size + 1).fill(0);
+    }
+    
+    update(index, value) {
+        while (index <= this.size) {
+            this.tree[index] += value;
+            index += index & (-index); // Add LSB
+        }
+    }
+    
+    prefixSum(index) {
+        let sum = 0;
+        while (index > 0) {
+            sum += this.tree[index];
+            index -= index & (-index); // Remove LSB
+        }
+        return sum;
+    }
+}`,
+    quizQuestions: [
+      {
+        question: "What is the key insight behind Fenwick Tree's efficiency?",
+        options: ["Using recursion", "Binary representation of indices", "Hash tables", "Linked lists"],
+        correctAnswer: 1,
+        explanation: "Fenwick Tree uses the binary representation of indices to determine which ranges each tree node covers, enabling O(log n) operations through bit manipulation."
+      },
+      {
+        question: "What does the operation 'index & (-index)' compute in Fenwick Tree?",
+        options: ["Next power of 2", "Least Significant Bit (LSB)", "Most Significant Bit", "Binary complement"],
+        correctAnswer: 1,
+        explanation: "The operation 'index & (-index)' isolates the least significant bit (LSB) of the index, which is crucial for tree traversal in Fenwick Trees."
+      },
+      {
+        question: "What is the space complexity of a Fenwick Tree?",
+        options: ["O(log n)", "O(n)", "O(n log n)", "O(4n)"],
+        correctAnswer: 1,
+        explanation: "Fenwick Tree has O(n) space complexity, making it more space-efficient than segment trees which require O(4n) space."
+      },
+      {
+        question: "Why does Fenwick Tree traditionally use 1-based indexing?",
+        options: ["Easier to understand", "Bit manipulation works better", "Historical reasons", "Faster operations"],
+        correctAnswer: 1,
+        explanation: "1-based indexing is used because bit manipulation operations (like index & (-index)) work more naturally when index 0 is not used, avoiding edge cases."
+      },
+      {
+        question: "What is the main limitation of Fenwick Tree compared to Segment Tree?",
+        options: ["Slower queries", "More memory usage", "Only works for associative operations", "Complex implementation"],
+        correctAnswer: 2,
+        explanation: "Fenwick Tree only works for operations that are associative and have an inverse (like addition), while Segment Trees can handle any associative operation (like min, max, GCD)."
+      }
+    ]
   },
   {
     id: 'union-find',
@@ -18170,11 +19584,446 @@ When to use: prefix sum queries needed, cumulative frequency tables, range sum q
     spaceComplexity: 'O(n)',
     extendedDefinition: `Union-Find (Disjoint Set Union) is a data structure that keeps track of elements partitioned into disjoint sets and supports union and find operations efficiently.
 
-What it does: maintains collection of disjoint sets with efficient union and find operations, determines connectivity between elements.
+What it does: maintains a collection of disjoint sets with efficient union and find operations, supporting dynamic connectivity queries.
 
-How it works: uses parent pointers to represent trees, path compression flattens trees during find, union by rank keeps trees balanced.
+How it works: uses parent pointers to represent trees, applies path compression and union by rank optimizations for near-constant time operations.
 
-When to use: connectivity problems, cycle detection in graphs, Kruskal's MST algorithm, dynamic connectivity queries, percolation problems.`
+When to use: connectivity problems, cycle detection in graphs, Kruskal's MST algorithm, dynamic equivalence relations, percolation problems.`,
+    voiceExplanation: `Think of Union-Find like managing friendship groups at a massive social event! Imagine you're organizing a conference with thousands of people, and you need to keep track of who knows whom and which groups of friends belong together. Initially, everyone is in their own group (like being their own best friend). As people meet and become friends, you need to merge their friend groups together. The Union-Find data structure is like having a super-efficient system for this! Each person points to their "group representative" - like the most popular person in their friend circle. When two groups become friends, you simply make one group representative point to the other. The brilliant optimizations are: Path Compression (when asking "who's your group leader?", you make everyone directly point to the top leader for faster future queries) and Union by Rank (always make the smaller group join the larger one to keep the hierarchy flat). It's like having a smart social network that can instantly tell you if two people are connected through any chain of friendships, and can merge friend groups lightning-fast!`,
+    realWorldApplications: `**Industry Applications:**
+- **Network Connectivity**: Computer networks, social networks, internet routing, network reliability
+- **Image Processing**: Connected components, image segmentation, region growing, blob detection
+- **Game Development**: Maze generation, procedural terrain, connected regions, multiplayer matchmaking
+- **Database Systems**: Query optimization, join operations, clustering, data partitioning
+- **Compiler Design**: Register allocation, variable aliasing, optimization passes
+- **Bioinformatics**: Protein structure analysis, gene clustering, phylogenetic trees
+- **Machine Learning**: Clustering algorithms, feature selection, dimensionality reduction
+- **Geographic Information Systems**: Land parcel management, watershed analysis, route planning
+- **Financial Systems**: Fraud detection, transaction clustering, risk assessment
+- **Distributed Systems**: Consensus algorithms, partition tolerance, failure detection`,
+    keyConcepts: `**Essential Concepts:**
+1. **Disjoint Sets**: Non-overlapping sets where each element belongs to exactly one set
+2. **Union Operation**: Merging two sets into a single set efficiently
+3. **Find Operation**: Determining which set an element belongs to
+4. **Path Compression**: Flattening tree structure during find operations for efficiency
+5. **Union by Rank**: Merging smaller trees under larger ones to maintain balance
+6. **Representative Element**: Root element that represents the entire set
+7. **Inverse Ackermann Function**: α(n) - extremely slow-growing function for time complexity
+8. **Dynamic Connectivity**: Efficiently handling connectivity queries in changing graphs`,
+    pseudocode: `**Union-Find Pseudocode:**
+
+ALGORITHM InitializeUnionFind(n)
+INPUT: n - number of elements
+OUTPUT: initialized Union-Find structure
+BEGIN
+    parent = Array of size n
+    rank = Array of size n initialized to 0
+    
+    FOR i = 0 TO n-1 DO
+        parent[i] = i  // Each element is its own parent initially
+    END FOR
+    
+    RETURN (parent, rank)
+END
+
+ALGORITHM Find(parent, x)
+INPUT: parent - parent array, x - element to find root of
+OUTPUT: root of set containing x
+BEGIN
+    IF parent[x] ≠ x THEN
+        parent[x] = Find(parent, parent[x])  // Path compression
+    END IF
+    RETURN parent[x]
+END
+
+ALGORITHM Union(parent, rank, x, y)
+INPUT: parent - parent array, rank - rank array, x, y - elements to union
+OUTPUT: updated Union-Find structure
+BEGIN
+    rootX = Find(parent, x)
+    rootY = Find(parent, y)
+    
+    IF rootX = rootY THEN
+        RETURN  // Already in same set
+    END IF
+    
+    // Union by rank
+    IF rank[rootX] < rank[rootY] THEN
+        parent[rootX] = rootY
+    ELSE IF rank[rootX] > rank[rootY] THEN
+        parent[rootY] = rootX
+    ELSE
+        parent[rootY] = rootX
+        rank[rootX] = rank[rootX] + 1
+    END IF
+END
+
+ALGORITHM Connected(parent, x, y)
+INPUT: parent - parent array, x, y - elements to check connectivity
+OUTPUT: true if x and y are in same set, false otherwise
+BEGIN
+    RETURN Find(parent, x) = Find(parent, y)
+END
+
+ALGORITHM CountComponents(parent, n)
+INPUT: parent - parent array, n - number of elements
+OUTPUT: number of disjoint components
+BEGIN
+    count = 0
+    FOR i = 0 TO n-1 DO
+        IF parent[i] = i THEN  // Root element
+            count = count + 1
+        END IF
+    END FOR
+    RETURN count
+END`,
+    implementationCode: `// Comprehensive Union-Find Implementation
+
+class UnionFind {
+    constructor(n) {
+        this.parent = Array.from({length: n}, (_, i) => i);
+        this.rank = new Array(n).fill(0);
+        this.size = new Array(n).fill(1);
+        this.components = n;
+    }
+    
+    // Find with path compression - O(α(n))
+    find(x) {
+        if (this.parent[x] !== x) {
+            this.parent[x] = this.find(this.parent[x]); // Path compression
+        }
+        return this.parent[x];
+    }
+    
+    // Union by rank - O(α(n))
+    union(x, y) {
+        const rootX = this.find(x);
+        const rootY = this.find(y);
+        
+        if (rootX === rootY) {
+            return false; // Already connected
+        }
+        
+        // Union by rank
+        if (this.rank[rootX] < this.rank[rootY]) {
+            this.parent[rootX] = rootY;
+            this.size[rootY] += this.size[rootX];
+        } else if (this.rank[rootX] > this.rank[rootY]) {
+            this.parent[rootY] = rootX;
+            this.size[rootX] += this.size[rootY];
+        } else {
+            this.parent[rootY] = rootX;
+            this.size[rootX] += this.size[rootY];
+            this.rank[rootX]++;
+        }
+        
+        this.components--;
+        return true;
+    }
+    
+    // Check if two elements are connected - O(α(n))
+    connected(x, y) {
+        return this.find(x) === this.find(y);
+    }
+    
+    // Get size of component containing x - O(α(n))
+    getSize(x) {
+        return this.size[this.find(x)];
+    }
+    
+    // Get number of components - O(1)
+    getComponentCount() {
+        return this.components;
+    }
+    
+    // Get all components - O(n)
+    getAllComponents() {
+        const components = new Map();
+        
+        for (let i = 0; i < this.parent.length; i++) {
+            const root = this.find(i);
+            if (!components.has(root)) {
+                components.set(root, []);
+            }
+            components.get(root).push(i);
+        }
+        
+        return Array.from(components.values());
+    }
+    
+    // Reset to initial state - O(n)
+    reset() {
+        for (let i = 0; i < this.parent.length; i++) {
+            this.parent[i] = i;
+            this.rank[i] = 0;
+            this.size[i] = 1;
+        }
+        this.components = this.parent.length;
+    }
+    
+    // Get statistics
+    getStatistics() {
+        const components = this.getAllComponents();
+        const sizes = components.map(comp => comp.length);
+        
+        return {
+            totalElements: this.parent.length,
+            componentCount: this.components,
+            componentSizes: sizes,
+            largestComponent: Math.max(...sizes),
+            smallestComponent: Math.min(...sizes),
+            averageComponentSize: sizes.reduce((a, b) => a + b, 0) / sizes.length
+        };
+    }
+    
+    // Visualize structure
+    visualize() {
+        const components = this.getAllComponents();
+        const result = [];
+        
+        components.forEach((component, index) => {
+            const root = this.find(component[0]);
+            result.push(\`Component \${index + 1} (root: \${root}): [\${component.join(', ')}]\`);
+        });
+        
+        return result;
+    }
+}
+
+// Weighted Union-Find (Union by Size)
+class WeightedUnionFind {
+    constructor(n) {
+        this.parent = Array.from({length: n}, (_, i) => i);
+        this.weight = new Array(n).fill(1);
+        this.components = n;
+    }
+    
+    find(x) {
+        if (this.parent[x] !== x) {
+            this.parent[x] = this.find(this.parent[x]);
+        }
+        return this.parent[x];
+    }
+    
+    union(x, y) {
+        const rootX = this.find(x);
+        const rootY = this.find(y);
+        
+        if (rootX === rootY) return false;
+        
+        // Union by weight (size)
+        if (this.weight[rootX] < this.weight[rootY]) {
+            this.parent[rootX] = rootY;
+            this.weight[rootY] += this.weight[rootX];
+        } else {
+            this.parent[rootY] = rootX;
+            this.weight[rootX] += this.weight[rootY];
+        }
+        
+        this.components--;
+        return true;
+    }
+    
+    getWeight(x) {
+        return this.weight[this.find(x)];
+    }
+}
+
+// Union-Find with Rollback (for online algorithms)
+class RollbackUnionFind {
+    constructor(n) {
+        this.parent = Array.from({length: n}, (_, i) => i);
+        this.rank = new Array(n).fill(0);
+        this.history = [];
+    }
+    
+    find(x) {
+        // No path compression for rollback version
+        while (this.parent[x] !== x) {
+            x = this.parent[x];
+        }
+        return x;
+    }
+    
+    union(x, y) {
+        const rootX = this.find(x);
+        const rootY = this.find(y);
+        
+        if (rootX === rootY) return false;
+        
+        // Save state for rollback
+        this.history.push({
+            type: 'union',
+            parentX: rootX,
+            parentY: rootY,
+            oldParent: this.parent[rootY],
+            oldRank: this.rank[rootX]
+        });
+        
+        if (this.rank[rootX] < this.rank[rootY]) {
+            this.parent[rootX] = rootY;
+        } else if (this.rank[rootX] > this.rank[rootY]) {
+            this.parent[rootY] = rootX;
+        } else {
+            this.parent[rootY] = rootX;
+            this.rank[rootX]++;
+        }
+        
+        return true;
+    }
+    
+    rollback() {
+        if (this.history.length === 0) return false;
+        
+        const operation = this.history.pop();
+        if (operation.type === 'union') {
+            this.parent[operation.parentY] = operation.oldParent;
+            this.rank[operation.parentX] = operation.oldRank;
+        }
+        
+        return true;
+    }
+}
+
+// Usage Examples
+console.log('=== Union-Find Examples ===');
+
+// Example 1: Basic Operations
+const uf = new UnionFind(6);
+console.log('Initial components:', uf.getComponentCount()); // 6
+
+uf.union(0, 1);
+uf.union(2, 3);
+uf.union(4, 5);
+console.log('After unions:', uf.getComponentCount()); // 3
+
+console.log('0 and 1 connected?', uf.connected(0, 1)); // true
+console.log('0 and 2 connected?', uf.connected(0, 2)); // false
+
+// Example 2: Component Analysis
+uf.union(0, 2); // Connect components
+console.log('Component sizes:', uf.getStatistics());
+console.log('Visualization:');
+uf.visualize().forEach(line => console.log(line));
+
+// Example 3: Kruskal's Algorithm Application
+function kruskalMST(edges, n) {
+    const uf = new UnionFind(n);
+    const mst = [];
+    
+    // Sort edges by weight
+    edges.sort((a, b) => a.weight - b.weight);
+    
+    for (const edge of edges) {
+        if (uf.union(edge.u, edge.v)) {
+            mst.push(edge);
+            if (mst.length === n - 1) break;
+        }
+    }
+    
+    return mst;
+}
+
+const edges = [
+    {u: 0, v: 1, weight: 4},
+    {u: 0, v: 2, weight: 3},
+    {u: 1, v: 2, weight: 1},
+    {u: 1, v: 3, weight: 2},
+    {u: 2, v: 3, weight: 4}
+];
+
+console.log('MST edges:', kruskalMST(edges, 4));`,
+    example: `// Simple Union-Find Implementation
+class SimpleUnionFind {
+    constructor(n) {
+        this.parent = Array.from({length: n}, (_, i) => i);
+        this.rank = new Array(n).fill(0);
+    }
+    
+    find(x) {
+        if (this.parent[x] !== x) {
+            this.parent[x] = this.find(this.parent[x]); // Path compression
+        }
+        return this.parent[x];
+    }
+    
+    union(x, y) {
+        const rootX = this.find(x);
+        const rootY = this.find(y);
+        
+        if (rootX === rootY) return;
+        
+        // Union by rank
+        if (this.rank[rootX] < this.rank[rootY]) {
+            this.parent[rootX] = rootY;
+        } else if (this.rank[rootX] > this.rank[rootY]) {
+            this.parent[rootY] = rootX;
+        } else {
+            this.parent[rootY] = rootX;
+            this.rank[rootX]++;
+        }
+    }
+    
+    connected(x, y) {
+        return this.find(x) === this.find(y);
+    }
+}
+
+// Example usage
+const uf = new SimpleUnionFind(5);
+uf.union(0, 1);
+uf.union(2, 3);
+console.log(uf.connected(0, 1)); // true
+console.log(uf.connected(0, 2)); // false`,
+    syntax: `// Union-Find Pattern
+class UnionFind {
+    constructor(n) {
+        this.parent = Array.from({length: n}, (_, i) => i);
+        this.rank = new Array(n).fill(0);
+    }
+    
+    find(x) {
+        if (this.parent[x] !== x) {
+            this.parent[x] = this.find(this.parent[x]); // Path compression
+        }
+        return this.parent[x];
+    }
+    
+    union(x, y) { /* Union by rank */ }
+    connected(x, y) { return this.find(x) === this.find(y); }
+}`,
+    quizQuestions: [
+      {
+        question: "What is the time complexity of Union-Find operations with both path compression and union by rank?",
+        options: ["O(1)", "O(log n)", "O(α(n))", "O(n)"],
+        correctAnswer: 2,
+        explanation: "With both optimizations, Union-Find operations have O(α(n)) time complexity, where α is the inverse Ackermann function, which is effectively constant for all practical purposes."
+      },
+      {
+        question: "What is the purpose of path compression in Union-Find?",
+        options: ["Reduce memory usage", "Flatten tree structure during find operations", "Speed up union operations", "Prevent cycles"],
+        correctAnswer: 1,
+        explanation: "Path compression flattens the tree structure during find operations by making nodes point directly to the root, significantly improving future find operations."
+      },
+      {
+        question: "In union by rank, which tree becomes the subtree of the other?",
+        options: ["Larger tree becomes subtree of smaller", "Smaller tree becomes subtree of larger", "Always the left tree", "Random choice"],
+        correctAnswer: 1,
+        explanation: "In union by rank, the tree with smaller rank (height) becomes a subtree of the tree with larger rank, helping to keep the overall tree height small."
+      },
+      {
+        question: "What is a key application of Union-Find in graph algorithms?",
+        options: ["Shortest path finding", "Topological sorting", "Cycle detection and MST algorithms", "Graph coloring"],
+        correctAnswer: 2,
+        explanation: "Union-Find is crucial for cycle detection in undirected graphs and is used in Kruskal's algorithm for finding Minimum Spanning Trees."
+      },
+      {
+        question: "What does the inverse Ackermann function α(n) represent in Union-Find complexity?",
+        options: ["Worst-case height of trees", "Number of operations", "Extremely slow-growing function", "Space complexity"],
+        correctAnswer: 2,
+        explanation: "α(n) is the inverse Ackermann function, which grows extremely slowly. For all practical values of n (even larger than the number of atoms in the universe), α(n) ≤ 5."
+      }
+    ]
   },
   {
     id: 'avl-tree',
@@ -18190,7 +20039,568 @@ What it does: maintains strict height balance through rotations, guaranteeing O(
 
 How it works: tracks balance factor for each node, performs single or double rotations when balance factor exceeds ±1 after insertions/deletions.
 
-When to use: guaranteed O(log n) performance needed, frequent lookups with occasional updates, real-time systems requiring predictable performance.`
+When to use: guaranteed O(log n) performance needed, frequent lookups with occasional updates, real-time systems requiring predictable performance.`,
+    voiceExplanation: `Think of an AVL Tree like a perfectionist gymnast on a balance beam! Imagine you're coaching a gymnast who is absolutely obsessed with perfect balance - they can't tolerate even the slightest wobble. An AVL Tree is like this gymnast, but for organizing data. Every time you add or remove data (like adding weight to one side), the tree immediately checks: "Am I still perfectly balanced?" If any part becomes more than 1 level taller than its partner, it performs elegant rotations - like a gymnast doing spins to redistribute weight and restore perfect balance. The beauty is in the precision: it never lets any branch get too heavy compared to its sibling. This obsessive balancing means you're guaranteed lightning-fast searches, insertions, and deletions every single time - no worst-case scenarios where one side becomes a long, slow chain. It's like having a self-organizing filing cabinet that automatically rearranges itself to keep everything perfectly accessible, no matter what you add or remove!`,
+    realWorldApplications: `**Industry Applications:**
+- **Database Systems**: Index structures, B+ tree alternatives, query optimization
+- **Computer Graphics**: Spatial indexing, collision detection, 3D scene management
+- **Operating Systems**: Process scheduling, memory management, file system indexing
+- **Compiler Design**: Symbol tables, syntax tree balancing, optimization passes
+- **Real-time Systems**: Guaranteed response times, embedded systems, control systems
+- **Game Development**: Spatial partitioning, AI decision trees, resource management
+- **Network Routing**: Routing tables, network topology management, load balancing
+- **Financial Systems**: High-frequency trading, risk management, transaction processing
+- **Scientific Computing**: Computational geometry, simulation data structures
+- **Machine Learning**: Decision trees, feature indexing, model optimization`,
+    keyConcepts: `**Essential Concepts:**
+1. **Balance Factor**: Height difference between left and right subtrees (-1, 0, or 1)
+2. **Height Balance Property**: |height(left) - height(right)| ≤ 1 for all nodes
+3. **Rotations**: Single (LL, RR) and double (LR, RL) rotations for rebalancing
+4. **Worst-case Guarantee**: O(log n) performance for all operations guaranteed
+5. **Self-balancing**: Automatic rebalancing after every insertion and deletion
+6. **Height Tracking**: Each node maintains height information for balance calculations
+7. **Rotation Types**: Left rotation, right rotation, left-right, right-left rotations
+8. **Strict Balancing**: More rigid than Red-Black trees but guarantees better worst-case performance`,
+    pseudocode: `**AVL Tree Pseudocode:**
+
+ALGORITHM GetHeight(node)
+INPUT: node - tree node
+OUTPUT: height of node
+BEGIN
+    IF node = NULL THEN
+        RETURN -1
+    END IF
+    RETURN node.height
+END
+
+ALGORITHM GetBalanceFactor(node)
+INPUT: node - tree node
+OUTPUT: balance factor of node
+BEGIN
+    IF node = NULL THEN
+        RETURN 0
+    END IF
+    RETURN GetHeight(node.left) - GetHeight(node.right)
+END
+
+ALGORITHM UpdateHeight(node)
+INPUT: node - tree node
+OUTPUT: updated node with correct height
+BEGIN
+    IF node ≠ NULL THEN
+        node.height = 1 + MAX(GetHeight(node.left), GetHeight(node.right))
+    END IF
+END
+
+ALGORITHM RotateRight(y)
+INPUT: y - root of subtree to rotate
+OUTPUT: new root after right rotation
+BEGIN
+    x = y.left
+    T2 = x.right
+    
+    // Perform rotation
+    x.right = y
+    y.left = T2
+    
+    // Update heights
+    UpdateHeight(y)
+    UpdateHeight(x)
+    
+    RETURN x  // New root
+END
+
+ALGORITHM RotateLeft(x)
+INPUT: x - root of subtree to rotate
+OUTPUT: new root after left rotation
+BEGIN
+    y = x.right
+    T2 = y.left
+    
+    // Perform rotation
+    y.left = x
+    x.right = T2
+    
+    // Update heights
+    UpdateHeight(x)
+    UpdateHeight(y)
+    
+    RETURN y  // New root
+END
+
+ALGORITHM Insert(root, key)
+INPUT: root - tree root, key - value to insert
+OUTPUT: new root after insertion and balancing
+BEGIN
+    // Standard BST insertion
+    IF root = NULL THEN
+        RETURN CreateNode(key)
+    END IF
+    
+    IF key < root.key THEN
+        root.left = Insert(root.left, key)
+    ELSE IF key > root.key THEN
+        root.right = Insert(root.right, key)
+    ELSE
+        RETURN root  // Duplicate keys not allowed
+    END IF
+    
+    // Update height
+    UpdateHeight(root)
+    
+    // Get balance factor
+    balance = GetBalanceFactor(root)
+    
+    // Left Left Case
+    IF balance > 1 AND key < root.left.key THEN
+        RETURN RotateRight(root)
+    END IF
+    
+    // Right Right Case
+    IF balance < -1 AND key > root.right.key THEN
+        RETURN RotateLeft(root)
+    END IF
+    
+    // Left Right Case
+    IF balance > 1 AND key > root.left.key THEN
+        root.left = RotateLeft(root.left)
+        RETURN RotateRight(root)
+    END IF
+    
+    // Right Left Case
+    IF balance < -1 AND key < root.right.key THEN
+        root.right = RotateRight(root.right)
+        RETURN RotateLeft(root)
+    END IF
+    
+    RETURN root
+END`,
+    implementationCode: `// Comprehensive AVL Tree Implementation
+
+class AVLNode {
+    constructor(key, value = null) {
+        this.key = key;
+        this.value = value;
+        this.left = null;
+        this.right = null;
+        this.height = 0;
+    }
+}
+
+class AVLTree {
+    constructor() {
+        this.root = null;
+        this.size = 0;
+    }
+    
+    // Get height of node - O(1)
+    getHeight(node) {
+        return node ? node.height : -1;
+    }
+    
+    // Update height of node - O(1)
+    updateHeight(node) {
+        if (node) {
+            node.height = 1 + Math.max(this.getHeight(node.left), this.getHeight(node.right));
+        }
+    }
+    
+    // Get balance factor - O(1)
+    getBalanceFactor(node) {
+        return node ? this.getHeight(node.left) - this.getHeight(node.right) : 0;
+    }
+    
+    // Right rotation - O(1)
+    rotateRight(y) {
+        const x = y.left;
+        const T2 = x.right;
+        
+        // Perform rotation
+        x.right = y;
+        y.left = T2;
+        
+        // Update heights
+        this.updateHeight(y);
+        this.updateHeight(x);
+        
+        return x;
+    }
+    
+    // Left rotation - O(1)
+    rotateLeft(x) {
+        const y = x.right;
+        const T2 = y.left;
+        
+        // Perform rotation
+        y.left = x;
+        x.right = T2;
+        
+        // Update heights
+        this.updateHeight(x);
+        this.updateHeight(y);
+        
+        return y;
+    }
+    
+    // Insert key - O(log n)
+    insert(key, value = null) {
+        this.root = this._insert(this.root, key, value);
+        this.size++;
+    }
+    
+    _insert(root, key, value) {
+        // Standard BST insertion
+        if (!root) {
+            return new AVLNode(key, value);
+        }
+        
+        if (key < root.key) {
+            root.left = this._insert(root.left, key, value);
+        } else if (key > root.key) {
+            root.right = this._insert(root.right, key, value);
+        } else {
+            // Update existing key
+            root.value = value;
+            this.size--; // Don't increment size for updates
+            return root;
+        }
+        
+        // Update height
+        this.updateHeight(root);
+        
+        // Get balance factor
+        const balance = this.getBalanceFactor(root);
+        
+        // Left Left Case
+        if (balance > 1 && key < root.left.key) {
+            return this.rotateRight(root);
+        }
+        
+        // Right Right Case
+        if (balance < -1 && key > root.right.key) {
+            return this.rotateLeft(root);
+        }
+        
+        // Left Right Case
+        if (balance > 1 && key > root.left.key) {
+            root.left = this.rotateLeft(root.left);
+            return this.rotateRight(root);
+        }
+        
+        // Right Left Case
+        if (balance < -1 && key < root.right.key) {
+            root.right = this.rotateRight(root.right);
+            return this.rotateLeft(root);
+        }
+        
+        return root;
+    }
+    
+    // Delete key - O(log n)
+    delete(key) {
+        const initialSize = this.size;
+        this.root = this._delete(this.root, key);
+        return this.size < initialSize;
+    }
+    
+    _delete(root, key) {
+        if (!root) return root;
+        
+        if (key < root.key) {
+            root.left = this._delete(root.left, key);
+        } else if (key > root.key) {
+            root.right = this._delete(root.right, key);
+        } else {
+            // Node to be deleted found
+            this.size--;
+            
+            if (!root.left || !root.right) {
+                const temp = root.left || root.right;
+                if (!temp) {
+                    return null;
+                } else {
+                    return temp;
+                }
+            } else {
+                // Node with two children
+                const temp = this._findMin(root.right);
+                root.key = temp.key;
+                root.value = temp.value;
+                root.right = this._delete(root.right, temp.key);
+                this.size++; // Compensate for double decrement
+            }
+        }
+        
+        // Update height
+        this.updateHeight(root);
+        
+        // Get balance factor
+        const balance = this.getBalanceFactor(root);
+        
+        // Left Left Case
+        if (balance > 1 && this.getBalanceFactor(root.left) >= 0) {
+            return this.rotateRight(root);
+        }
+        
+        // Left Right Case
+        if (balance > 1 && this.getBalanceFactor(root.left) < 0) {
+            root.left = this.rotateLeft(root.left);
+            return this.rotateRight(root);
+        }
+        
+        // Right Right Case
+        if (balance < -1 && this.getBalanceFactor(root.right) <= 0) {
+            return this.rotateLeft(root);
+        }
+        
+        // Right Left Case
+        if (balance < -1 && this.getBalanceFactor(root.right) > 0) {
+            root.right = this.rotateRight(root.right);
+            return this.rotateLeft(root);
+        }
+        
+        return root;
+    }
+    
+    // Find minimum node
+    _findMin(node) {
+        while (node.left) {
+            node = node.left;
+        }
+        return node;
+    }
+    
+    // Search for key - O(log n)
+    search(key) {
+        return this._search(this.root, key);
+    }
+    
+    _search(root, key) {
+        if (!root || root.key === key) {
+            return root;
+        }
+        
+        if (key < root.key) {
+            return this._search(root.left, key);
+        }
+        
+        return this._search(root.right, key);
+    }
+    
+    // Get tree statistics
+    getStatistics() {
+        return {
+            size: this.size,
+            height: this.getHeight(this.root),
+            isBalanced: this._isBalanced(this.root),
+            minHeight: Math.floor(Math.log2(this.size + 1)),
+            maxHeight: Math.floor(1.44 * Math.log2(this.size + 2) - 0.328)
+        };
+    }
+    
+    // Check if tree is balanced
+    _isBalanced(root) {
+        if (!root) return true;
+        
+        const balance = Math.abs(this.getBalanceFactor(root));
+        return balance <= 1 && this._isBalanced(root.left) && this._isBalanced(root.right);
+    }
+    
+    // Inorder traversal
+    inorderTraversal() {
+        const result = [];
+        this._inorder(this.root, result);
+        return result;
+    }
+    
+    _inorder(root, result) {
+        if (root) {
+            this._inorder(root.left, result);
+            result.push({key: root.key, value: root.value});
+            this._inorder(root.right, result);
+        }
+    }
+    
+    // Visualize tree structure
+    visualize() {
+        if (!this.root) return ['Empty tree'];
+        
+        const result = [];
+        const queue = [{node: this.root, level: 0, position: 'root'}];
+        let currentLevel = -1;
+        
+        while (queue.length > 0) {
+            const {node, level, position} = queue.shift();
+            
+            if (level > currentLevel) {
+                result.push(\`Level \${level}:\`);
+                currentLevel = level;
+            }
+            
+            const balance = this.getBalanceFactor(node);
+            result.push(\`  \${position}: \${node.key} (h:\${node.height}, b:\${balance})\`);
+            
+            if (node.left) {
+                queue.push({node: node.left, level: level + 1, position: 'L'});
+            }
+            if (node.right) {
+                queue.push({node: node.right, level: level + 1, position: 'R'});
+            }
+        }
+        
+        return result;
+    }
+}
+
+// Usage Examples
+console.log('=== AVL Tree Examples ===');
+
+// Example 1: Basic Operations
+const avl = new AVLTree();
+const keys = [10, 20, 30, 40, 50, 25];
+
+console.log('Inserting keys:', keys);
+keys.forEach(key => avl.insert(key));
+
+console.log('Tree visualization:');
+avl.visualize().forEach(line => console.log(line));
+
+console.log('Inorder traversal:', avl.inorderTraversal());
+console.log('Tree statistics:', avl.getStatistics());
+
+// Example 2: Search Operations
+console.log('Search 30:', avl.search(30) ? 'Found' : 'Not found');
+console.log('Search 35:', avl.search(35) ? 'Found' : 'Not found');
+
+// Example 3: Deletion
+avl.delete(30);
+console.log('After deleting 30:');
+avl.visualize().forEach(line => console.log(line));`,
+    example: `// Simple AVL Tree Implementation
+class SimpleAVLTree {
+    constructor() {
+        this.root = null;
+    }
+    
+    insert(key) {
+        this.root = this._insert(this.root, key);
+    }
+    
+    _insert(root, key) {
+        // BST insertion
+        if (!root) return {key, left: null, right: null, height: 0};
+        
+        if (key < root.key) {
+            root.left = this._insert(root.left, key);
+        } else if (key > root.key) {
+            root.right = this._insert(root.right, key);
+        } else {
+            return root;
+        }
+        
+        // Update height
+        root.height = 1 + Math.max(this.getHeight(root.left), this.getHeight(root.right));
+        
+        // Get balance and rotate if needed
+        const balance = this.getBalance(root);
+        
+        // Left Left
+        if (balance > 1 && key < root.left.key) {
+            return this.rotateRight(root);
+        }
+        
+        // Right Right
+        if (balance < -1 && key > root.right.key) {
+            return this.rotateLeft(root);
+        }
+        
+        // Left Right
+        if (balance > 1 && key > root.left.key) {
+            root.left = this.rotateLeft(root.left);
+            return this.rotateRight(root);
+        }
+        
+        // Right Left
+        if (balance < -1 && key < root.right.key) {
+            root.right = this.rotateRight(root.right);
+            return this.rotateLeft(root);
+        }
+        
+        return root;
+    }
+    
+    getHeight(node) { return node ? node.height : -1; }
+    getBalance(node) { return node ? this.getHeight(node.left) - this.getHeight(node.right) : 0; }
+    
+    rotateRight(y) {
+        const x = y.left;
+        y.left = x.right;
+        x.right = y;
+        y.height = 1 + Math.max(this.getHeight(y.left), this.getHeight(y.right));
+        x.height = 1 + Math.max(this.getHeight(x.left), this.getHeight(x.right));
+        return x;
+    }
+    
+    rotateLeft(x) {
+        const y = x.right;
+        x.right = y.left;
+        y.left = x;
+        x.height = 1 + Math.max(this.getHeight(x.left), this.getHeight(x.right));
+        y.height = 1 + Math.max(this.getHeight(y.left), this.getHeight(y.right));
+        return y;
+    }
+}
+
+// Example usage
+const avl = new SimpleAVLTree();
+[10, 20, 30, 40, 50, 25].forEach(key => avl.insert(key));
+console.log('AVL tree created with automatic balancing');`,
+    syntax: `// AVL Tree Pattern
+class AVLTree {
+    insert(key) {
+        this.root = this._insert(this.root, key);
+        // 1. Standard BST insertion
+        // 2. Update heights
+        // 3. Check balance factors
+        // 4. Perform rotations if needed
+    }
+    
+    rotateRight(y) { /* LL rotation */ }
+    rotateLeft(x) { /* RR rotation */ }
+    getBalance(node) { return height(left) - height(right); }
+}`,
+    quizQuestions: [
+      {
+        question: "What is the maximum allowed balance factor in an AVL tree?",
+        options: ["0", "1", "2", "log n"],
+        correctAnswer: 1,
+        explanation: "AVL trees maintain the balance factor (height difference between left and right subtrees) within the range [-1, 0, 1]. If it exceeds ±1, rotations are performed to restore balance."
+      },
+      {
+        question: "Which rotation is needed for a Left-Right (LR) imbalance?",
+        options: ["Single left rotation", "Single right rotation", "Left rotation then right rotation", "Right rotation then left rotation"],
+        correctAnswer: 2,
+        explanation: "For LR imbalance, we first perform a left rotation on the left child, then a right rotation on the root. This converts the LR case to LL case, then fixes it."
+      },
+      {
+        question: "What is the worst-case time complexity for search in an AVL tree?",
+        options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+        correctAnswer: 1,
+        explanation: "AVL trees guarantee O(log n) worst-case time complexity for all operations (search, insert, delete) due to strict height balancing."
+      },
+      {
+        question: "How does AVL tree height compare to a regular BST in worst case?",
+        options: ["Same height", "AVL is always shorter", "AVL can be taller", "No relationship"],
+        correctAnswer: 1,
+        explanation: "AVL trees maintain height close to log n, while unbalanced BSTs can degrade to O(n) height. AVL trees are always more balanced and shorter in worst case."
+      },
+      {
+        question: "What information does each AVL tree node typically store?",
+        options: ["Only key and children", "Key, children, and height", "Key, children, and color", "Key, children, and parent"],
+        correctAnswer: 1,
+        explanation: "AVL tree nodes store key, left/right children pointers, and height information. Height is needed to efficiently calculate balance factors during operations."
+      }
+    ]
   },
   {
     id: 'red-black-tree',
@@ -18206,7 +20616,102 @@ What it does: maintains approximate balance using color properties and rotations
 
 How it works: enforces red-black properties through coloring rules, uses rotations and recoloring during insertions and deletions to maintain balance.
 
-When to use: frequent insertions/deletions, standard library implementations, when balance maintenance cost should be minimized, general-purpose balanced BST.`
+When to use: frequent insertions/deletions, standard library implementations, when balance maintenance cost should be minimized, general-purpose balanced BST.`,
+    voiceExplanation: `Think of Red-Black Trees like traffic lights! Each intersection (node) has a red or black light. The rules are simple: no two red lights can be adjacent, and every path from downtown to suburbs passes through the same number of red lights. This creates natural balance with fewer adjustments than AVL trees.`,
+    realWorldApplications: `**Industry Applications:**
+- **Standard Libraries**: C++ std::map, Java TreeMap, .NET SortedDictionary
+- **Database Systems**: MySQL indexing, PostgreSQL B-trees
+- **Operating Systems**: Linux process scheduling, memory management
+- **Compilers**: Symbol tables, syntax trees
+- **Game Development**: Scene graphs, spatial indexing`,
+    keyConcepts: `**Essential Concepts:**
+1. **Node Coloring**: Red or black nodes with specific rules
+2. **Red-Black Properties**: No adjacent red nodes, equal black height
+3. **Rotations**: Left/right rotations for rebalancing
+4. **Insertion Fixup**: Restore properties after insertion
+5. **Deletion Fixup**: Complex rebalancing after deletion`,
+    pseudocode: `**Red-Black Tree Insert:**
+1. Standard BST insertion with RED color
+2. Fix violations using rotations and recoloring
+3. Ensure root is BLACK`,
+    implementationCode: `class RBNode {
+    constructor(key) {
+        this.key = key;
+        this.color = 'RED';
+        this.left = this.right = this.parent = null;
+    }
+}
+
+class RedBlackTree {
+    constructor() {
+        this.NIL = new RBNode(null);
+        this.NIL.color = 'BLACK';
+        this.root = this.NIL;
+    }
+    
+    insert(key) {
+        const node = new RBNode(key);
+        node.left = node.right = this.NIL;
+        this.bstInsert(node);
+        this.insertFixup(node);
+    }
+    
+    insertFixup(node) {
+        while (node.parent && node.parent.color === 'RED') {
+            // Fix red-red violations through rotations and recoloring
+            if (node.parent === node.parent.parent.left) {
+                const uncle = node.parent.parent.right;
+                if (uncle.color === 'RED') {
+                    node.parent.color = 'BLACK';
+                    uncle.color = 'BLACK';
+                    node.parent.parent.color = 'RED';
+                    node = node.parent.parent;
+                } else {
+                    if (node === node.parent.right) {
+                        node = node.parent;
+                        this.leftRotate(node);
+                    }
+                    node.parent.color = 'BLACK';
+                    node.parent.parent.color = 'RED';
+                    this.rightRotate(node.parent.parent);
+                }
+            }
+            // Symmetric case for right subtree
+        }
+        this.root.color = 'BLACK';
+    }
+}`,
+    example: `const rbt = new RedBlackTree();
+[10, 5, 15, 3, 7].forEach(key => rbt.insert(key));
+console.log('Balanced red-black tree created');`,
+    syntax: `// Red-Black Tree Pattern
+class RedBlackTree {
+    insert(key) {
+        // 1. BST insertion with RED color
+        // 2. Fix violations with rotations
+        // 3. Maintain red-black properties
+    }
+}`,
+    quizQuestions: [
+      {
+        question: "What is the key property that differentiates Red-Black trees from other BSTs?",
+        options: ["Height balancing", "Node coloring with specific rules", "Rotation frequency", "Memory usage"],
+        correctAnswer: 1,
+        explanation: "Red-Black trees use node coloring (red/black) with specific rules: no adjacent red nodes and equal black height on all paths."
+      },
+      {
+        question: "Why do Red-Black trees perform fewer rotations than AVL trees?",
+        options: ["They're unbalanced", "Less strict balancing rules", "Different insertion method", "No rotations needed"],
+        correctAnswer: 1,
+        explanation: "Red-Black trees have less strict balancing requirements than AVL trees, allowing some imbalance but guaranteeing no path is more than twice as long as another."
+      },
+      {
+        question: "Which standard libraries commonly use Red-Black trees?",
+        options: ["Only academic implementations", "C++ std::map and Java TreeMap", "Database systems only", "Graphics libraries"],
+        correctAnswer: 1,
+        explanation: "Red-Black trees are widely used in standard libraries like C++ std::map/set and Java TreeMap/TreeSet due to their efficient insertion/deletion performance."
+      }
+    ]
   },
   {
     id: 'b-tree',
@@ -18222,7 +20727,155 @@ What it does: maintains sorted data in multi-way tree structure optimized for di
 
 How it works: stores multiple keys per node, maintains balance through splitting and merging nodes, keeps all leaves at same level.
 
-When to use: database indexing, file systems, external storage systems, when minimizing disk I/O is critical, large datasets that don't fit in memory.`
+When to use: database indexing, file systems, external storage systems, when minimizing disk I/O is critical, large datasets that don't fit in memory.`,
+    voiceExplanation: `Think of B-Trees like a super-efficient library system! Instead of storing one book per shelf (like binary trees), each shelf holds multiple books sorted alphabetically. When you need more space, you split the shelf in half and promote the middle book to the upper level. This minimizes trips between floors (disk reads) - perfect for databases where each "floor visit" is expensive!`,
+    realWorldApplications: `**Industry Applications:**
+- **Database Systems**: MySQL InnoDB, PostgreSQL indexes, Oracle B+ trees
+- **File Systems**: NTFS, ext4, HFS+ directory structures
+- **Storage Systems**: SSDs, hard drives, distributed databases
+- **Search Engines**: Index structures, document retrieval
+- **Big Data**: Hadoop, Cassandra, MongoDB indexing`,
+    keyConcepts: `**Essential Concepts:**
+1. **Multi-way Nodes**: Each node contains multiple keys and children
+2. **Balanced Height**: All leaves at the same level
+3. **Node Splitting**: Split full nodes during insertion
+4. **Node Merging**: Combine sparse nodes during deletion
+5. **Disk Optimization**: Minimize expensive disk I/O operations`,
+    pseudocode: `**B-Tree Operations:**
+INSERT(key):
+1. Find leaf node for insertion
+2. If leaf not full, insert key
+3. If leaf full, split node and promote middle key
+4. Recursively split parent if needed
+
+SEARCH(key):
+1. Start from root
+2. Binary search within node
+3. Follow appropriate child pointer
+4. Repeat until key found or leaf reached`,
+    implementationCode: `class BTreeNode {
+    constructor(degree, isLeaf = false) {
+        this.degree = degree;
+        this.keys = [];
+        this.children = [];
+        this.isLeaf = isLeaf;
+    }
+    
+    isFull() {
+        return this.keys.length === 2 * this.degree - 1;
+    }
+}
+
+class BTree {
+    constructor(degree = 3) {
+        this.degree = degree;
+        this.root = new BTreeNode(degree, true);
+    }
+    
+    search(key, node = this.root) {
+        let i = 0;
+        while (i < node.keys.length && key > node.keys[i]) {
+            i++;
+        }
+        
+        if (i < node.keys.length && key === node.keys[i]) {
+            return {node, index: i};
+        }
+        
+        if (node.isLeaf) {
+            return null;
+        }
+        
+        return this.search(key, node.children[i]);
+    }
+    
+    insert(key) {
+        if (this.root.isFull()) {
+            const newRoot = new BTreeNode(this.degree);
+            newRoot.children.push(this.root);
+            this.splitChild(newRoot, 0);
+            this.root = newRoot;
+        }
+        
+        this.insertNonFull(this.root, key);
+    }
+    
+    insertNonFull(node, key) {
+        let i = node.keys.length - 1;
+        
+        if (node.isLeaf) {
+            node.keys.push(null);
+            while (i >= 0 && key < node.keys[i]) {
+                node.keys[i + 1] = node.keys[i];
+                i--;
+            }
+            node.keys[i + 1] = key;
+        } else {
+            while (i >= 0 && key < node.keys[i]) {
+                i--;
+            }
+            i++;
+            
+            if (node.children[i].isFull()) {
+                this.splitChild(node, i);
+                if (key > node.keys[i]) {
+                    i++;
+                }
+            }
+            
+            this.insertNonFull(node.children[i], key);
+        }
+    }
+    
+    splitChild(parent, index) {
+        const fullNode = parent.children[index];
+        const newNode = new BTreeNode(this.degree, fullNode.isLeaf);
+        const midIndex = this.degree - 1;
+        
+        // Move half the keys to new node
+        newNode.keys = fullNode.keys.splice(midIndex + 1);
+        
+        if (!fullNode.isLeaf) {
+            newNode.children = fullNode.children.splice(midIndex + 1);
+        }
+        
+        // Promote middle key to parent
+        const midKey = fullNode.keys.pop();
+        parent.keys.splice(index, 0, midKey);
+        parent.children.splice(index + 1, 0, newNode);
+    }
+}`,
+    example: `const btree = new BTree(3); // Degree 3 B-Tree
+[10, 20, 5, 6, 12, 30, 7, 17].forEach(key => btree.insert(key));
+console.log('B-Tree optimized for disk storage');`,
+    syntax: `// B-Tree Pattern
+class BTree {
+    insert(key) {
+        // 1. Find insertion point
+        // 2. Split full nodes
+        // 3. Maintain balance
+    }
+}`,
+    quizQuestions: [
+      {
+        question: "What is the main advantage of B-Trees over binary search trees?",
+        options: ["Faster search", "Multiple keys per node reducing disk I/O", "Less memory usage", "Simpler implementation"],
+        correctAnswer: 1,
+        explanation: "B-Trees store multiple keys per node, which reduces the number of disk reads needed - crucial for database and file system performance."
+      },
+      {
+        question: "When does a B-Tree node split?",
+        options: ["When it's half full", "When it reaches maximum capacity", "Randomly", "Never"],
+        correctAnswer: 1,
+        explanation: "B-Tree nodes split when they reach maximum capacity (2*degree-1 keys), promoting the middle key to the parent level."
+      },
+      {
+        question: "Why are B-Trees particularly suitable for databases?",
+        options: ["They use less memory", "They minimize expensive disk I/O operations", "They're easier to implement", "They support only integers"],
+        correctAnswer: 1,
+        explanation: "B-Trees are designed to minimize disk I/O by storing multiple keys per node, making them ideal for database systems where disk access is the bottleneck."
+      }
+    ]
   },
   {
     id: 'splay-tree',
@@ -18238,7 +20891,251 @@ What it does: optimizes for locality of reference by moving accessed nodes to ro
 
 How it works: performs splay operation after each access, uses rotations to move target node to root, naturally adapts to access patterns.
 
-When to use: temporal locality in access patterns, caching applications, when recently accessed items likely to be accessed again, simple implementation preferred.`
+When to use: temporal locality in access patterns, caching applications, when recently accessed items likely to be accessed again, simple implementation preferred.`,
+    voiceExplanation: `Think of Splay Trees like a smart bookshelf that automatically reorganizes itself! Every time you grab a book, the shelf magically moves that book to eye level (the root) for easy access next time. If you're reading a series, the current book stays at the top. This "splaying" makes frequently accessed items super fast to find - perfect for caches and systems with predictable access patterns!`,
+    realWorldApplications: `**Industry Applications:**
+- **Caching Systems**: LRU caches, web browsers, memory management
+- **Compilers**: Symbol tables with locality, parser optimization
+- **Database Systems**: Buffer pools, query optimization
+- **Operating Systems**: Page replacement, file system caches
+- **Network Systems**: Routing caches, DNS lookups`,
+    keyConcepts: `**Essential Concepts:**
+1. **Splaying Operation**: Move accessed node to root via rotations
+2. **Temporal Locality**: Recently accessed items likely accessed again
+3. **Self-Optimization**: Tree adapts to access patterns automatically
+4. **Amortized Analysis**: Average performance over sequence of operations
+5. **Simple Implementation**: No balance factors or colors needed`,
+    pseudocode: `**Splay Tree Operations:**
+SPLAY(node):
+1. While node is not root:
+   - Perform zig, zig-zig, or zig-zag rotation
+   - Move node closer to root
+2. Node becomes new root
+
+SEARCH(key):
+1. Perform standard BST search
+2. Splay the found node (or last accessed)
+3. Return result
+
+INSERT(key):
+1. Standard BST insertion
+2. Splay the new node to root`,
+    implementationCode: `class SplayNode {
+    constructor(key, value = null) {
+        this.key = key;
+        this.value = value;
+        this.left = null;
+        this.right = null;
+        this.parent = null;
+    }
+}
+
+class SplayTree {
+    constructor() {
+        this.root = null;
+        this.size = 0;
+    }
+    
+    // Right rotation
+    rightRotate(y) {
+        const x = y.left;
+        y.left = x.right;
+        if (x.right) x.right.parent = y;
+        x.parent = y.parent;
+        if (!y.parent) this.root = x;
+        else if (y === y.parent.left) y.parent.left = x;
+        else y.parent.right = x;
+        x.right = y;
+        y.parent = x;
+        return x;
+    }
+    
+    // Left rotation
+    leftRotate(x) {
+        const y = x.right;
+        x.right = y.left;
+        if (y.left) y.left.parent = x;
+        y.parent = x.parent;
+        if (!x.parent) this.root = y;
+        else if (x === x.parent.left) x.parent.left = y;
+        else x.parent.right = y;
+        y.left = x;
+        x.parent = y;
+        return y;
+    }
+    
+    // Splay operation - move node to root
+    splay(node) {
+        while (node.parent) {
+            const parent = node.parent;
+            const grandparent = parent.parent;
+            
+            if (!grandparent) {
+                // Zig case - parent is root
+                if (node === parent.left) {
+                    this.rightRotate(parent);
+                } else {
+                    this.leftRotate(parent);
+                }
+            } else if ((node === parent.left) === (parent === grandparent.left)) {
+                // Zig-zig case - same direction
+                if (node === parent.left) {
+                    this.rightRotate(grandparent);
+                    this.rightRotate(parent);
+                } else {
+                    this.leftRotate(grandparent);
+                    this.leftRotate(parent);
+                }
+            } else {
+                // Zig-zag case - opposite directions
+                if (node === parent.left) {
+                    this.rightRotate(parent);
+                    this.leftRotate(grandparent);
+                } else {
+                    this.leftRotate(parent);
+                    this.rightRotate(grandparent);
+                }
+            }
+        }
+    }
+    
+    // Search and splay
+    search(key) {
+        let current = this.root;
+        let lastNode = null;
+        
+        while (current) {
+            lastNode = current;
+            if (key === current.key) {
+                this.splay(current);
+                return current;
+            } else if (key < current.key) {
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+        
+        // Splay the last accessed node
+        if (lastNode) {
+            this.splay(lastNode);
+        }
+        
+        return null;
+    }
+    
+    // Insert and splay
+    insert(key, value = null) {
+        if (!this.root) {
+            this.root = new SplayNode(key, value);
+            this.size++;
+            return;
+        }
+        
+        let current = this.root;
+        let parent = null;
+        
+        while (current) {
+            parent = current;
+            if (key === current.key) {
+                current.value = value;
+                this.splay(current);
+                return;
+            } else if (key < current.key) {
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+        
+        const newNode = new SplayNode(key, value);
+        newNode.parent = parent;
+        
+        if (key < parent.key) {
+            parent.left = newNode;
+        } else {
+            parent.right = newNode;
+        }
+        
+        this.size++;
+        this.splay(newNode);
+    }
+    
+    // Delete and splay
+    delete(key) {
+        const node = this.search(key); // This splays the node
+        if (!node) return false;
+        
+        if (!node.left) {
+            this.root = node.right;
+            if (this.root) this.root.parent = null;
+        } else if (!node.right) {
+            this.root = node.left;
+            if (this.root) this.root.parent = null;
+        } else {
+            // Find predecessor and splay it
+            let pred = node.left;
+            while (pred.right) pred = pred.right;
+            
+            this.splay(pred);
+            pred.right = node.right;
+            if (node.right) node.right.parent = pred;
+        }
+        
+        this.size--;
+        return true;
+    }
+    
+    // Inorder traversal
+    inorderTraversal() {
+        const result = [];
+        this._inorder(this.root, result);
+        return result;
+    }
+    
+    _inorder(node, result) {
+        if (node) {
+            this._inorder(node.left, result);
+            result.push({key: node.key, value: node.value});
+            this._inorder(node.right, result);
+        }
+    }
+}`,
+    example: `const splay = new SplayTree();
+[10, 5, 15, 3, 7, 12, 18].forEach(key => splay.insert(key));
+
+// Accessing 7 multiple times - it stays near root
+splay.search(7);
+splay.search(7);
+console.log('Splay tree adapts to access patterns');`,
+    syntax: `// Splay Tree Pattern
+class SplayTree {
+    search(key) {
+        // 1. Standard BST search
+        // 2. Splay accessed node to root
+        // 3. Return result
+    }
+}`,
+    quizQuestions: [
+      {
+        question: "What happens when you access a node in a Splay Tree?",
+        options: ["Nothing changes", "Node moves to root via splaying", "Tree rebalances completely", "Node gets deleted"],
+        correctAnswer: 1,
+        explanation: "Splay Trees move the accessed node to the root through a series of rotations called splaying, optimizing for future access."
+      },
+      {
+        question: "What type of applications benefit most from Splay Trees?",
+        options: ["Random access patterns", "Applications with temporal locality", "Write-heavy workloads", "Memory-constrained systems"],
+        correctAnswer: 1,
+        explanation: "Splay Trees excel when there's temporal locality - recently accessed items are likely to be accessed again soon."
+      },
+      {
+        question: "What is the time complexity of Splay Tree operations?",
+        options: ["O(1)", "O(log n) worst case", "O(log n) amortized", "O(n)"],
+        correctAnswer: 2,
+        explanation: "Splay Tree operations have O(log n) amortized time complexity, meaning the average over a sequence of operations is logarithmic."
+      }
+    ]
   },
 
   // Two Pointers
@@ -18257,6 +21154,337 @@ What it does: uses two pointers moving in coordinated patterns to solve problems
 How it works: pointers start at different positions and move based on problem conditions, eliminating redundant comparisons.
 
 When to use: sorted arrays, palindrome checking, finding pairs/triplets, cycle detection, merging operations.`,
+    voiceExplanation: `Think of Two Pointers like a synchronized dance between two partners! Imagine you're at opposite ends of a dance floor (array) and need to meet in the middle to solve a problem. One dancer starts from the left, another from the right, and they move toward each other following specific choreography rules. Sometimes they move at the same speed, sometimes one waits for the other, but they're always coordinated! This elegant dance eliminates the need for clunky nested loops - instead of checking every possible pair individually (which would be like having everyone dance with everyone), our two dancers intelligently navigate the floor, making smart decisions about where to step next based on what they find. It's like having GPS for algorithm efficiency!`,
+    realWorldApplications: `**Industry Applications:**
+- **Database Systems**: Query optimization, index scanning, range queries
+- **Search Engines**: Document similarity, duplicate detection, ranking algorithms
+- **Social Networks**: Friend suggestions, mutual connections, relationship analysis
+- **E-commerce**: Product recommendations, price comparison, inventory matching
+- **Financial Systems**: Portfolio optimization, risk analysis, arbitrage detection
+- **Gaming**: Collision detection, pathfinding, AI decision making
+- **Data Processing**: Stream processing, real-time analytics, data deduplication
+- **Network Security**: Intrusion detection, pattern matching, anomaly detection
+- **Image Processing**: Feature matching, object detection, similarity analysis
+- **Bioinformatics**: DNA sequence alignment, protein folding, genetic analysis`,
+    keyConcepts: `**Essential Concepts:**
+1. **Pointer Positioning**: Strategic placement of pointers based on problem requirements
+2. **Movement Patterns**: Coordinated pointer movement (converging, same direction, different speeds)
+3. **Termination Conditions**: When to stop the algorithm (pointers meet, cross, or reach boundaries)
+4. **Decision Logic**: Rules for moving pointers based on current values and target conditions
+5. **Space Optimization**: Achieving O(1) space complexity by avoiding extra data structures
+6. **Sorted Array Advantage**: Leveraging sorted properties for efficient pointer movement
+7. **Multiple Variants**: Different patterns for different problem types (two sum, three sum, palindromes)
+8. **Time Complexity**: Linear time O(n) instead of quadratic O(n²) nested loops`,
+    pseudocode: `**Two Pointers Algorithm Patterns:**
+
+ALGORITHM TwoPointersConverging(array, target)
+INPUT: sorted array, target value
+OUTPUT: indices or values meeting condition
+BEGIN
+    left = 0
+    right = array.length - 1
+    
+    WHILE left < right DO
+        current_sum = array[left] + array[right]
+        
+        IF current_sum = target THEN
+            RETURN [left, right]
+        ELSE IF current_sum < target THEN
+            left = left + 1  // Need larger value
+        ELSE
+            right = right - 1  // Need smaller value
+        END IF
+    END WHILE
+    
+    RETURN null  // Not found
+END
+
+ALGORITHM TwoPointersSameDirection(array)
+INPUT: array to process
+OUTPUT: processed result
+BEGIN
+    slow = 0
+    fast = 0
+    
+    WHILE fast < array.length DO
+        IF condition_met(array[fast]) THEN
+            array[slow] = array[fast]
+            slow = slow + 1
+        END IF
+        fast = fast + 1
+    END WHILE
+    
+    RETURN slow  // New length or position
+END
+
+ALGORITHM PalindromeCheck(string)
+INPUT: string to check
+OUTPUT: boolean indicating if palindrome
+BEGIN
+    left = 0
+    right = string.length - 1
+    
+    WHILE left < right DO
+        IF string[left] ≠ string[right] THEN
+            RETURN false
+        END IF
+        left = left + 1
+        right = right - 1
+    END WHILE
+    
+    RETURN true
+END`,
+    implementationCode: `// Comprehensive Two Pointers Implementation
+
+class TwoPointersToolkit {
+    // Pattern 1: Converging Two Pointers (for sorted arrays)
+    static twoSum(nums, target) {
+        let left = 0;
+        let right = nums.length - 1;
+        
+        while (left < right) {
+            const sum = nums[left] + nums[right];
+            
+            if (sum === target) {
+                return [left, right];
+            } else if (sum < target) {
+                left++; // Need larger sum
+            } else {
+                right--; // Need smaller sum
+            }
+        }
+        
+        return [-1, -1]; // Not found
+    }
+    
+    // Pattern 2: Same Direction Two Pointers (slow-fast)
+    static removeDuplicates(nums) {
+        if (nums.length <= 1) return nums.length;
+        
+        let slow = 0;
+        
+        for (let fast = 1; fast < nums.length; fast++) {
+            if (nums[fast] !== nums[slow]) {
+                slow++;
+                nums[slow] = nums[fast];
+            }
+        }
+        
+        return slow + 1; // New length
+    }
+    
+    // Pattern 3: Palindrome Check
+    static isPalindrome(s) {
+        // Clean string: remove non-alphanumeric and convert to lowercase
+        const cleaned = s.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+        
+        let left = 0;
+        let right = cleaned.length - 1;
+        
+        while (left < right) {
+            if (cleaned[left] !== cleaned[right]) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        
+        return true;
+    }
+    
+    // Pattern 4: Container With Most Water
+    static maxArea(heights) {
+        let left = 0;
+        let right = heights.length - 1;
+        let maxWater = 0;
+        
+        while (left < right) {
+            const width = right - left;
+            const height = Math.min(heights[left], heights[right]);
+            const area = width * height;
+            
+            maxWater = Math.max(maxWater, area);
+            
+            // Move pointer with smaller height
+            if (heights[left] < heights[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        
+        return maxWater;
+    }
+    
+    // Pattern 5: Three Sum (extends two pointers)
+    static threeSum(nums, target = 0) {
+        nums.sort((a, b) => a - b);
+        const result = [];
+        
+        for (let i = 0; i < nums.length - 2; i++) {
+            // Skip duplicates for first element
+            if (i > 0 && nums[i] === nums[i - 1]) continue;
+            
+            let left = i + 1;
+            let right = nums.length - 1;
+            
+            while (left < right) {
+                const sum = nums[i] + nums[left] + nums[right];
+                
+                if (sum === target) {
+                    result.push([nums[i], nums[left], nums[right]]);
+                    
+                    // Skip duplicates
+                    while (left < right && nums[left] === nums[left + 1]) left++;
+                    while (left < right && nums[right] === nums[right - 1]) right--;
+                    
+                    left++;
+                    right--;
+                } else if (sum < target) {
+                    left++;
+                } else {
+                    right--;
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    // Pattern 6: Merge Two Sorted Arrays
+    static mergeSortedArrays(nums1, m, nums2, n) {
+        let i = m - 1; // Last element in nums1
+        let j = n - 1; // Last element in nums2
+        let k = m + n - 1; // Last position in merged array
+        
+        // Merge from the end to avoid overwriting
+        while (i >= 0 && j >= 0) {
+            if (nums1[i] > nums2[j]) {
+                nums1[k] = nums1[i];
+                i--;
+            } else {
+                nums1[k] = nums2[j];
+                j--;
+            }
+            k--;
+        }
+        
+        // Copy remaining elements from nums2
+        while (j >= 0) {
+            nums1[k] = nums2[j];
+            j--;
+            k--;
+        }
+        
+        return nums1;
+    }
+    
+    // Pattern 7: Valid Palindrome with One Deletion
+    static validPalindromeWithOneDeletion(s) {
+        const isPalindromeRange = (left, right) => {
+            while (left < right) {
+                if (s[left] !== s[right]) return false;
+                left++;
+                right--;
+            }
+            return true;
+        };
+        
+        let left = 0;
+        let right = s.length - 1;
+        
+        while (left < right) {
+            if (s[left] !== s[right]) {
+                // Try skipping either left or right character
+                return isPalindromeRange(left + 1, right) || 
+                       isPalindromeRange(left, right - 1);
+            }
+            left++;
+            right--;
+        }
+        
+        return true; // Already a palindrome
+    }
+    
+    // Utility: Demonstrate all patterns
+    static demonstratePatterns() {
+        console.log('=== Two Pointers Demonstrations ===');
+        
+        // Two Sum
+        console.log('1. Two Sum:', this.twoSum([2, 7, 11, 15], 9));
+        
+        // Remove Duplicates
+        const nums = [1, 1, 2, 2, 3];
+        console.log('2. Remove Duplicates:', this.removeDuplicates(nums), nums.slice(0, 3));
+        
+        // Palindrome
+        console.log('3. Palindrome Check:', this.isPalindrome("A man, a plan, a canal: Panama"));
+        
+        // Container Water
+        console.log('4. Max Water Area:', this.maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7]));
+        
+        // Three Sum
+        console.log('5. Three Sum:', this.threeSum([-1, 0, 1, 2, -1, -4]));
+        
+        // Merge Arrays
+        const arr1 = [1, 2, 3, 0, 0, 0];
+        console.log('6. Merge Arrays:', this.mergeSortedArrays(arr1, 3, [2, 5, 6], 3));
+    }
+}
+
+// Usage Examples
+console.log('=== Two Pointers Examples ===');
+
+// Example 1: Basic Two Sum
+const sortedArray = [2, 7, 11, 15];
+const target = 9;
+console.log(\`Two Sum in [\${sortedArray}] with target \${target}:\`, 
+            TwoPointersToolkit.twoSum(sortedArray, target));
+
+// Example 2: Palindrome Check
+const testString = "racecar";
+console.log(\`Is "\${testString}" a palindrome?\`, 
+            TwoPointersToolkit.isPalindrome(testString));
+
+// Example 3: Container With Most Water
+const heights = [1, 8, 6, 2, 5, 4, 8, 3, 7];
+console.log(\`Max water area for heights [\${heights}]:\`, 
+            TwoPointersToolkit.maxArea(heights));
+
+// Run all demonstrations
+TwoPointersToolkit.demonstratePatterns();`,
+    quizQuestions: [
+      {
+        question: "What is the main advantage of using Two Pointers technique over nested loops?",
+        options: ["Uses less memory", "Reduces time complexity from O(n²) to O(n)", "Easier to implement", "Works with unsorted arrays"],
+        correctAnswer: 1,
+        explanation: "Two Pointers technique reduces time complexity from O(n²) to O(n) by eliminating the need for nested loops, making algorithms significantly more efficient."
+      },
+      {
+        question: "In the converging two pointers pattern, when do you move the left pointer?",
+        options: ["Always move left first", "When current sum is less than target", "When current sum equals target", "Randomly"],
+        correctAnswer: 1,
+        explanation: "In converging two pointers (like Two Sum), you move the left pointer when the current sum is less than the target, as you need a larger value to reach the target."
+      },
+      {
+        question: "Which type of arrays work best with the converging two pointers technique?",
+        options: ["Unsorted arrays", "Sorted arrays", "Arrays with duplicates only", "Empty arrays"],
+        correctAnswer: 1,
+        explanation: "Sorted arrays work best with converging two pointers because the sorted property allows you to make intelligent decisions about which pointer to move based on the current sum."
+      },
+      {
+        question: "What is the space complexity of most two pointers algorithms?",
+        options: ["O(n)", "O(log n)", "O(1)", "O(n²)"],
+        correctAnswer: 2,
+        explanation: "Most two pointers algorithms achieve O(1) space complexity because they only use a constant amount of extra space (the two pointers), regardless of input size."
+      },
+      {
+        question: "In the palindrome checking pattern, when do the pointers stop moving?",
+        options: ["When they find a mismatch", "When left pointer >= right pointer", "After n iterations", "When they reach the middle"],
+        correctAnswer: 1,
+        explanation: "In palindrome checking, pointers stop when left >= right, meaning they've either met in the middle or crossed over, indicating the entire string has been checked."
+      }
+    ],
     example: `// Two Sum in Sorted Array
 function twoSum(nums, target) {
     let left = 0, right = nums.length - 1;
@@ -18324,6 +21552,270 @@ What it does: finds two numbers in a sorted array that sum to a specific target 
 How it works: uses two pointers starting from opposite ends, moving them inward based on sum comparison with target.
 
 When to use: sorted arrays, finding pairs with specific sum, avoiding O(n²) brute force approach.`,
+    voiceExplanation: `Think of the Two Sum problem like two people standing at opposite ends of a line of numbers, trying to find the perfect pair that adds up to your target. One person starts at the smallest number (left end), and another starts at the largest number (right end). They work together like a team - if their combined numbers are too small, the left person moves to a bigger number. If their sum is too big, the right person moves to a smaller number. They keep moving toward each other until they find the exact pair that adds up to the target, or until they meet in the middle and realize no such pair exists. This dance-like coordination is much smarter than checking every possible pair individually!`,
+    realWorldApplications: `**Industry Applications:**
+- **Financial Systems**: Finding transactions that sum to specific amounts, budget balancing
+- **E-commerce**: Product bundling, discount calculations, price matching
+- **Gaming**: Resource allocation, inventory management, achievement systems
+- **Data Analytics**: Statistical analysis, correlation finding, data validation
+- **Accounting**: Reconciliation processes, audit trails, expense matching
+- **Investment**: Portfolio optimization, risk assessment, asset allocation
+- **Logistics**: Load balancing, capacity planning, route optimization
+- **Social Networks**: Friend matching, compatibility scores, recommendation systems
+- **Quality Control**: Error detection, anomaly identification, threshold monitoring
+- **Scientific Computing**: Experimental data analysis, hypothesis testing, model validation`,
+    keyConcepts: `**Essential Concepts:**
+1. **Two Pointers Pattern**: Using left and right pointers moving toward each other
+2. **Sorted Array Requirement**: Algorithm only works on sorted data
+3. **Sum Comparison Logic**: Moving pointers based on current sum vs target
+4. **Convergence Principle**: Pointers eventually meet or cross
+5. **Space Optimization**: O(1) space complexity using only two pointers
+6. **Early Termination**: Stop as soon as valid pair is found
+7. **Edge Cases**: Empty arrays, no valid pairs, duplicate values
+8. **Index vs Value**: Returning indices vs actual values based on requirements`,
+    pseudocode: `**Two Sum Algorithm Pseudocode:**
+
+ALGORITHM TwoSumSorted(array, target)
+INPUT: sorted array of integers, target sum value
+OUTPUT: indices of two numbers that sum to target, or empty if not found
+BEGIN
+    left = 0
+    right = array.length - 1
+    
+    WHILE left < right DO
+        currentSum = array[left] + array[right]
+        
+        IF currentSum = target THEN
+            RETURN [left, right]
+        ELSE IF currentSum < target THEN
+            left = left + 1  // Need larger sum
+        ELSE
+            right = right - 1  // Need smaller sum
+        END IF
+    END WHILE
+    
+    RETURN []  // No valid pair found
+END
+
+ALGORITHM TwoSumUnsorted(array, target)
+INPUT: unsorted array of integers, target sum value
+OUTPUT: indices of two numbers that sum to target, or empty if not found
+BEGIN
+    seen = new HashMap()
+    
+    FOR i = 0 TO array.length - 1 DO
+        complement = target - array[i]
+        
+        IF seen.contains(complement) THEN
+            RETURN [seen.get(complement), i]
+        END IF
+        
+        seen.put(array[i], i)
+    END FOR
+    
+    RETURN []  // No valid pair found
+END`,
+    implementationCode: `// Comprehensive Two Sum Implementation
+
+class TwoSumSolver {
+    // Two Sum for sorted array - O(n) time, O(1) space
+    static twoSumSorted(numbers, target) {
+        let left = 0;
+        let right = numbers.length - 1;
+        
+        while (left < right) {
+            const sum = numbers[left] + numbers[right];
+            
+            if (sum === target) {
+                return [left, right];
+            } else if (sum < target) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        
+        return []; // No solution found
+    }
+    
+    // Two Sum for unsorted array - O(n) time, O(n) space
+    static twoSumUnsorted(numbers, target) {
+        const seen = new Map();
+        
+        for (let i = 0; i < numbers.length; i++) {
+            const complement = target - numbers[i];
+            
+            if (seen.has(complement)) {
+                return [seen.get(complement), i];
+            }
+            
+            seen.set(numbers[i], i);
+        }
+        
+        return []; // No solution found
+    }
+    
+    // Find all pairs that sum to target
+    static twoSumAll(numbers, target) {
+        const pairs = [];
+        const sorted = [...numbers].sort((a, b) => a - b);
+        let left = 0;
+        let right = sorted.length - 1;
+        
+        while (left < right) {
+            const sum = sorted[left] + sorted[right];
+            
+            if (sum === target) {
+                pairs.push([sorted[left], sorted[right]]);
+                
+                // Skip duplicates
+                const leftVal = sorted[left];
+                const rightVal = sorted[right];
+                while (left < right && sorted[left] === leftVal) left++;
+                while (left < right && sorted[right] === rightVal) right--;
+            } else if (sum < target) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        
+        return pairs;
+    }
+    
+    // Two Sum with custom target for each element
+    static twoSumCustomTarget(numbers, targetFunction) {
+        const results = [];
+        
+        for (let i = 0; i < numbers.length - 1; i++) {
+            for (let j = i + 1; j < numbers.length; j++) {
+                const target = targetFunction(numbers[i], numbers[j]);
+                if (numbers[i] + numbers[j] === target) {
+                    results.push([i, j]);
+                }
+            }
+        }
+        
+        return results;
+    }
+    
+    // Two Sum closest to target
+    static twoSumClosest(numbers, target) {
+        numbers.sort((a, b) => a - b);
+        let left = 0;
+        let right = numbers.length - 1;
+        let closestSum = numbers[left] + numbers[right];
+        let result = [left, right];
+        
+        while (left < right) {
+            const sum = numbers[left] + numbers[right];
+            
+            if (Math.abs(sum - target) < Math.abs(closestSum - target)) {
+                closestSum = sum;
+                result = [left, right];
+            }
+            
+            if (sum < target) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        
+        return result;
+    }
+    
+    // Two Sum with statistics
+    static twoSumWithStats(numbers, target) {
+        let comparisons = 0;
+        let left = 0;
+        let right = numbers.length - 1;
+        
+        while (left < right) {
+            comparisons++;
+            const sum = numbers[left] + numbers[right];
+            
+            if (sum === target) {
+                return { 
+                    indices: [left, right], 
+                    values: [numbers[left], numbers[right]],
+                    comparisons,
+                    found: true 
+                };
+            } else if (sum < target) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        
+        return { indices: [], values: [], comparisons, found: false };
+    }
+    
+    // Validate if array is suitable for two pointers approach
+    static isSorted(array) {
+        for (let i = 1; i < array.length; i++) {
+            if (array[i] < array[i - 1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+// Usage Examples
+console.log('=== Two Sum Examples ===');
+
+// Sorted array example
+const sortedNums = [2, 7, 11, 15];
+console.log('Two Sum Sorted [2,7,11,15], target 9:', 
+            TwoSumSolver.twoSumSorted(sortedNums, 9)); // [0, 1]
+
+// Unsorted array example  
+const unsortedNums = [3, 2, 4];
+console.log('Two Sum Unsorted [3,2,4], target 6:', 
+            TwoSumSolver.twoSumUnsorted(unsortedNums, 6)); // [1, 2]
+
+// Find all pairs
+const nums = [1, 1, 2, 2, 3, 4];
+console.log('All pairs that sum to 4:', 
+            TwoSumSolver.twoSumAll(nums, 4)); // [[1,3], [2,2]]
+
+// Closest sum
+console.log('Closest sum to 10:', 
+            TwoSumSolver.twoSumClosest([1, 3, 4, 7, 10], 10)); // indices of 3 and 7`,
+    quizQuestions: [
+      {
+        question: "What is the time complexity of the two pointers approach for Two Sum on a sorted array?",
+        options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+        correctAnswer: 2,
+        explanation: "The two pointers approach visits each element at most once, making it O(n) time complexity."
+      },
+      {
+        question: "Why does the Two Sum two pointers approach only work on sorted arrays?",
+        options: ["It doesn't work on sorted arrays", "Sorting makes it faster", "We need predictable movement direction", "It reduces space complexity"],
+        correctAnswer: 2,
+        explanation: "We need sorted arrays to make predictable decisions about which pointer to move based on whether the current sum is too large or too small."
+      },
+      {
+        question: "In the two pointers Two Sum approach, when do we move the left pointer?",
+        options: ["When sum equals target", "When sum is greater than target", "When sum is less than target", "Always move left first"],
+        correctAnswer: 2,
+        explanation: "We move the left pointer (to a larger value) when the current sum is less than the target, as we need to increase the sum."
+      },
+      {
+        question: "What is the space complexity of the two pointers Two Sum approach?",
+        options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+        correctAnswer: 0,
+        explanation: "The two pointers approach uses only constant extra space for the left and right pointer variables, making it O(1) space complexity."
+      },
+      {
+        question: "For unsorted arrays, what data structure is commonly used for Two Sum in O(n) time?",
+        options: ["Array", "Stack", "Hash Map", "Queue"],
+        correctAnswer: 2,
+        explanation: "Hash Map allows O(1) lookup of complements, enabling O(n) time complexity for unsorted arrays by storing seen values and their indices."
+      }
+    ],
     example: `function twoSum(numbers, target) {
     let left = 0, right = numbers.length - 1;
     
@@ -18354,6 +21846,245 @@ What it does: finds all unique triplets in an array that sum to zero using two p
 How it works: sorts array, fixes one element, then uses two pointers on remaining elements to find valid triplets.
 
 When to use: triplet sum problems, three-element combinations, extending two-sum solutions, avoiding duplicate results.`,
+    voiceExplanation: `Think of the Three Sum problem like organizing a dinner party where you need exactly three people whose ages add up to zero (or any target). Imagine you have a list of people with different ages, some positive, some negative. First, you'd sort them by age to make things organized. Then, you'd pick one person as the "anchor" and try to find two others whose ages, when combined with the anchor's age, give you exactly zero. Here's the clever part: once you've chosen your anchor person, finding the other two becomes a Two Sum problem! You use two pointers - one starting from the person right after your anchor (younger ages) and another from the oldest person. If the three ages add up to more than zero, you need someone younger, so you move the right pointer. If it's less than zero, you need someone older, so you move the left pointer. The key insight is avoiding duplicates - if you've already considered someone of a particular age as an anchor, skip others with the same age. This transforms a potentially O(n³) brute force approach into an elegant O(n²) solution.`,
+    realWorldApplications: `**Industry Applications:**
+- **Financial Trading**: Finding three assets that hedge each other (sum to zero risk)
+- **Chemistry**: Balancing chemical equations with three reactants
+- **Resource Allocation**: Distributing three types of resources to achieve balance
+- **Game Development**: Finding three-player combinations for balanced teams
+- **Supply Chain**: Optimizing three-warehouse distribution for zero net cost
+- **Data Analysis**: Finding three variables that correlate to a target outcome
+- **Portfolio Management**: Three-asset combinations for risk neutrality
+- **Manufacturing**: Three-component mixtures achieving target properties
+- **Network Routing**: Three-path routing for load balancing
+- **Machine Learning**: Feature triplet selection for model optimization`,
+    keyConcepts: `**Essential Concepts:**
+1. **Sorting Prerequisite**: Array must be sorted for two-pointer technique to work
+2. **Anchor Element**: Fix one element, solve Two Sum for remaining elements
+3. **Duplicate Avoidance**: Skip duplicate anchors and pointer values to ensure uniqueness
+4. **Two-Pointer Movement**: Move left for larger sum, right for smaller sum
+5. **O(n²) Optimization**: Reduces from O(n³) brute force to efficient solution
+6. **Triple Pointer Management**: Coordinate three pointers (anchor, left, right)
+7. **Boundary Conditions**: Handle edge cases with fewer than 3 elements`,
+    pseudocode: `**Three Sum Algorithm:**
+
+ALGORITHM ThreeSum(array, target)
+INPUT: array - array of integers, target - target sum (usually 0)
+OUTPUT: list of unique triplets that sum to target
+BEGIN
+    result = []
+    SORT array in ascending order
+    
+    FOR i = 0 TO array.length - 3 DO
+        // Skip duplicate anchors
+        IF i > 0 AND array[i] = array[i-1] THEN
+            CONTINUE
+        END IF
+        
+        left = i + 1
+        right = array.length - 1
+        
+        WHILE left < right DO
+            currentSum = array[i] + array[left] + array[right]
+            
+            IF currentSum = target THEN
+                result.add([array[i], array[left], array[right]])
+                
+                // Skip duplicates for left pointer
+                WHILE left < right AND array[left] = array[left+1] DO
+                    left = left + 1
+                END WHILE
+                
+                // Skip duplicates for right pointer
+                WHILE left < right AND array[right] = array[right-1] DO
+                    right = right - 1
+                END WHILE
+                
+                left = left + 1
+                right = right - 1
+                
+            ELSE IF currentSum < target THEN
+                left = left + 1
+            ELSE
+                right = right - 1
+            END IF
+        END WHILE
+    END FOR
+    
+    RETURN result
+END`,
+    implementationCode: `// Comprehensive Three Sum Implementation
+
+class ThreeSumSolver {
+    // Main three sum algorithm - O(n²) time, O(1) extra space
+    static threeSum(nums, target = 0) {
+        if (nums.length < 3) return [];
+        
+        const result = [];
+        nums.sort((a, b) => a - b);
+        
+        for (let i = 0; i < nums.length - 2; i++) {
+            // Skip duplicate anchors
+            if (i > 0 && nums[i] === nums[i - 1]) continue;
+            
+            let left = i + 1;
+            let right = nums.length - 1;
+            
+            while (left < right) {
+                const currentSum = nums[i] + nums[left] + nums[right];
+                
+                if (currentSum === target) {
+                    result.push([nums[i], nums[left], nums[right]]);
+                    
+                    // Skip duplicates
+                    while (left < right && nums[left] === nums[left + 1]) left++;
+                    while (left < right && nums[right] === nums[right - 1]) right--;
+                    
+                    left++;
+                    right--;
+                } else if (currentSum < target) {
+                    left++;
+                } else {
+                    right--;
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    // Three sum closest to target
+    static threeSumClosest(nums, target) {
+        nums.sort((a, b) => a - b);
+        let closestSum = nums[0] + nums[1] + nums[2];
+        
+        for (let i = 0; i < nums.length - 2; i++) {
+            let left = i + 1;
+            let right = nums.length - 1;
+            
+            while (left < right) {
+                const currentSum = nums[i] + nums[left] + nums[right];
+                
+                if (Math.abs(currentSum - target) < Math.abs(closestSum - target)) {
+                    closestSum = currentSum;
+                }
+                
+                if (currentSum < target) left++;
+                else if (currentSum > target) right--;
+                else return currentSum; // Exact match
+            }
+        }
+        
+        return closestSum;
+    }
+    
+    // Three sum with multiplicity (count occurrences)
+    static threeSumMulti(arr, target) {
+        const MOD = 1000000007;
+        const count = new Array(101).fill(0);
+        
+        for (let num of arr) count[num]++;
+        
+        let result = 0;
+        
+        for (let i = 0; i <= 100; i++) {
+            for (let j = i; j <= 100; j++) {
+                let k = target - i - j;
+                if (k < 0 || k > 100) continue;
+                
+                if (i === j && j === k) {
+                    result = (result + this.combination(count[i], 3)) % MOD;
+                } else if (i === j && j !== k) {
+                    result = (result + this.combination(count[i], 2) * count[k]) % MOD;
+                } else if (i < j && j < k) {
+                    result = (result + count[i] * count[j] * count[k]) % MOD;
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    // Helper: Calculate combination C(n, k)
+    static combination(n, k) {
+        if (n < k) return 0;
+        if (k === 0 || k === n) return 1;
+        if (k === 1) return n;
+        if (k === 2) return Math.floor(n * (n - 1) / 2);
+        if (k === 3) return Math.floor(n * (n - 1) * (n - 2) / 6);
+        return 0;
+    }
+    
+    // Find all unique triplets with different target
+    static threeSumTarget(nums, target) {
+        return this.threeSum(nums, target);
+    }
+    
+    // Count unique triplets
+    static countThreeSum(nums, target = 0) {
+        return this.threeSum(nums, target).length;
+    }
+}
+
+// Usage Examples
+const nums = [-1, 0, 1, 2, -1, -4];
+console.log(ThreeSumSolver.threeSum(nums)); // [[-1,-1,2],[-1,0,1]]
+console.log(ThreeSumSolver.threeSumClosest(nums, 1)); // 2
+console.log(ThreeSumSolver.countThreeSum(nums)); // 2`,
+    quizQuestions: [
+      {
+        question: "Why must the array be sorted before applying the three sum algorithm?",
+        options: ["To improve time complexity", "To enable two-pointer technique", "To avoid duplicates", "To handle negative numbers"],
+        correctAnswer: 1,
+        explanation: "Sorting enables the two-pointer technique by creating a predictable order where we can move pointers based on sum comparison."
+      },
+      {
+        question: "What is the time complexity of the optimized three sum algorithm?",
+        options: ["O(n)", "O(n²)", "O(n³)", "O(n log n)"],
+        correctAnswer: 1,
+        explanation: "The algorithm has O(n²) time complexity: O(n log n) for sorting + O(n²) for the nested loops with two pointers."
+      },
+      {
+        question: "How do we avoid duplicate triplets in the three sum solution?",
+        options: ["Use a HashSet", "Skip duplicate anchor and pointer values", "Sort the result", "Use three nested loops"],
+        correctAnswer: 1,
+        explanation: "We skip duplicate values for the anchor element and both pointers to ensure unique triplets without extra space."
+      },
+      {
+        question: "When should we move the left pointer in the two-pointer phase?",
+        options: ["When sum is too large", "When sum is too small", "When sum equals target", "Always move left first"],
+        correctAnswer: 1,
+        explanation: "Move the left pointer when the current sum is smaller than the target to increase the sum."
+      },
+      {
+        question: "What is a real-world application of the three sum problem?",
+        options: ["Binary search", "Finding three assets that hedge each other", "Sorting algorithms", "Hash table implementation"],
+        correctAnswer: 1,
+        explanation: "In financial trading, three sum helps find three assets whose combined risk or return equals a target value."
+      }
+    ],
+    syntax: `// Three Sum Pattern
+function threeSum(nums, target = 0) {
+    nums.sort((a, b) => a - b);
+    const result = [];
+    
+    for (let i = 0; i < nums.length - 2; i++) {
+        if (i > 0 && nums[i] === nums[i-1]) continue;
+        
+        let left = i + 1, right = nums.length - 1;
+        while (left < right) {
+            const sum = nums[i] + nums[left] + nums[right];
+            if (sum === target) {
+                result.push([nums[i], nums[left], nums[right]]);
+                while (nums[left] === nums[left+1]) left++;
+                while (nums[right] === nums[right-1]) right--;
+                left++; right--;
+            } else if (sum < target) left++;
+            else right--;
+        }
+    }
+    return result;
+}`,
     example: `function threeSum(nums) {
     const result = [];
     nums.sort((a, b) => a - b);
@@ -18391,6 +22122,226 @@ What it does: finds two lines that form a container holding the maximum amount o
 How it works: starts with widest container, then moves the pointer at the shorter line inward to potentially find larger areas.
 
 When to use: optimization problems with two elements, area/volume maximization, two-pointer technique applications.`,
+    voiceExplanation: `Think of the Container With Most Water problem like finding the best swimming pool you can create with a bunch of vertical walls. Imagine you have a row of walls of different heights, and you want to pick two walls to hold the maximum amount of water between them. The water level will be limited by the shorter wall (water would spill over), and the width is the distance between the walls. Here's the brilliant insight: start with the widest possible container (first and last walls). Now, which wall should you move? If you move the taller wall inward, you're guaranteed to get a smaller area because the width decreases and the water level is still limited by the shorter wall. But if you move the shorter wall inward, you might find a taller wall that could hold more water! It's like being a smart architect - you always try to replace the limiting factor (the shorter wall) to potentially improve your design. This greedy approach ensures you never miss the optimal solution while checking each wall only once.`,
+    realWorldApplications: `**Industry Applications:**
+- **Civil Engineering**: Designing water reservoirs and retention ponds for maximum capacity
+- **Architecture**: Optimizing building layouts for maximum enclosed area
+- **Manufacturing**: Container design for shipping and storage optimization
+- **Urban Planning**: Designing flood control systems and drainage basins
+- **Agriculture**: Irrigation system design for maximum water storage
+- **Data Visualization**: Finding optimal chart dimensions for data display
+- **Game Development**: Level design for maximum playable area
+- **Resource Management**: Optimizing warehouse space utilization
+- **Network Design**: Maximizing bandwidth between network nodes
+- **Financial Modeling**: Portfolio optimization for maximum return within constraints`,
+    keyConcepts: `**Essential Concepts:**
+1. **Greedy Strategy**: Always move the pointer at the shorter line to potentially find better solutions
+2. **Area Calculation**: Area = min(height[left], height[right]) × (right - left)
+3. **Optimal Substructure**: Moving the taller line cannot improve the solution
+4. **Two-Pointer Convergence**: Pointers move toward each other until they meet
+5. **Width vs Height Trade-off**: Decreasing width must be compensated by increasing height
+6. **Linear Time Solution**: Each element is visited at most once
+7. **No Backtracking**: Greedy choice ensures we never need to reconsider previous decisions`,
+    pseudocode: `**Container With Most Water Algorithm:**
+
+ALGORITHM MaxArea(heights)
+INPUT: heights - array of positive integers representing wall heights
+OUTPUT: maximum area of water that can be contained
+BEGIN
+    IF heights.length < 2 THEN
+        RETURN 0
+    END IF
+    
+    left = 0
+    right = heights.length - 1
+    maxArea = 0
+    
+    WHILE left < right DO
+        // Calculate current area
+        width = right - left
+        currentHeight = MIN(heights[left], heights[right])
+        currentArea = width × currentHeight
+        
+        // Update maximum area
+        maxArea = MAX(maxArea, currentArea)
+        
+        // Move the pointer at the shorter line
+        IF heights[left] < heights[right] THEN
+            left = left + 1
+        ELSE
+            right = right - 1
+        END IF
+    END WHILE
+    
+    RETURN maxArea
+END`,
+    implementationCode: `// Comprehensive Container With Most Water Implementation
+
+class ContainerSolver {
+    // Main algorithm - O(n) time, O(1) space
+    static maxArea(heights) {
+        if (heights.length < 2) return 0;
+        
+        let left = 0;
+        let right = heights.length - 1;
+        let maxArea = 0;
+        
+        while (left < right) {
+            const width = right - left;
+            const currentHeight = Math.min(heights[left], heights[right]);
+            const currentArea = width * currentHeight;
+            
+            maxArea = Math.max(maxArea, currentArea);
+            
+            // Move the pointer at the shorter line
+            if (heights[left] < heights[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        
+        return maxArea;
+    }
+    
+    // Find the indices of the optimal container
+    static maxAreaWithIndices(heights) {
+        if (heights.length < 2) return { area: 0, leftIndex: -1, rightIndex: -1 };
+        
+        let left = 0;
+        let right = heights.length - 1;
+        let maxArea = 0;
+        let bestLeft = 0;
+        let bestRight = heights.length - 1;
+        
+        while (left < right) {
+            const width = right - left;
+            const currentHeight = Math.min(heights[left], heights[right]);
+            const currentArea = width * currentHeight;
+            
+            if (currentArea > maxArea) {
+                maxArea = currentArea;
+                bestLeft = left;
+                bestRight = right;
+            }
+            
+            if (heights[left] < heights[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        
+        return { area: maxArea, leftIndex: bestLeft, rightIndex: bestRight };
+    }
+    
+    // Find all containers with area >= threshold
+    static findContainersAboveThreshold(heights, threshold) {
+        const containers = [];
+        
+        for (let i = 0; i < heights.length - 1; i++) {
+            for (let j = i + 1; j < heights.length; j++) {
+                const area = Math.min(heights[i], heights[j]) * (j - i);
+                if (area >= threshold) {
+                    containers.push({ leftIndex: i, rightIndex: j, area });
+                }
+            }
+        }
+        
+        return containers.sort((a, b) => b.area - a.area);
+    }
+    
+    // Brute force solution for comparison - O(n²)
+    static maxAreaBruteForce(heights) {
+        let maxArea = 0;
+        
+        for (let i = 0; i < heights.length - 1; i++) {
+            for (let j = i + 1; j < heights.length; j++) {
+                const area = Math.min(heights[i], heights[j]) * (j - i);
+                maxArea = Math.max(maxArea, area);
+            }
+        }
+        
+        return maxArea;
+    }
+    
+    // Calculate area between specific indices
+    static calculateArea(heights, left, right) {
+        if (left >= right || left < 0 || right >= heights.length) return 0;
+        return Math.min(heights[left], heights[right]) * (right - left);
+    }
+    
+    // Find the tallest possible container (maximum height)
+    static maxHeightContainer(heights) {
+        const maxHeight = Math.max(...heights);
+        const indices = [];
+        
+        for (let i = 0; i < heights.length; i++) {
+            if (heights[i] === maxHeight) {
+                indices.push(i);
+            }
+        }
+        
+        if (indices.length < 2) return 0;
+        
+        // Find the widest container with maximum height
+        return maxHeight * (indices[indices.length - 1] - indices[0]);
+    }
+}
+
+// Usage Examples
+const heights = [1, 8, 6, 2, 5, 4, 8, 3, 7];
+console.log(ContainerSolver.maxArea(heights)); // 49
+console.log(ContainerSolver.maxAreaWithIndices(heights)); // {area: 49, leftIndex: 1, rightIndex: 8}
+console.log(ContainerSolver.calculateArea(heights, 1, 8)); // 49
+console.log(ContainerSolver.maxHeightContainer(heights)); // 56`,
+    quizQuestions: [
+      {
+        question: "Why do we always move the pointer at the shorter line in the container problem?",
+        options: ["To increase width", "To potentially find a taller line", "To decrease complexity", "To avoid infinite loops"],
+        correctAnswer: 1,
+        explanation: "Moving the shorter line might lead to a taller line, potentially increasing area. Moving the taller line guarantees a smaller or equal area."
+      },
+      {
+        question: "What is the time complexity of the optimal container with most water algorithm?",
+        options: ["O(1)", "O(n)", "O(n²)", "O(n log n)"],
+        correctAnswer: 1,
+        explanation: "The two-pointer approach visits each element at most once, resulting in O(n) time complexity."
+      },
+      {
+        question: "How is the area of a container calculated?",
+        options: ["max(height[left], height[right]) × width", "min(height[left], height[right]) × width", "(height[left] + height[right]) × width", "height[left] × height[right]"],
+        correctAnswer: 1,
+        explanation: "Area is limited by the shorter wall (minimum height) multiplied by the distance between the walls."
+      },
+      {
+        question: "What happens if we start with pointers at positions other than the ends?",
+        options: ["Algorithm still works", "We might miss the optimal solution", "Time complexity increases", "Space complexity increases"],
+        correctAnswer: 1,
+        explanation: "Starting from the ends ensures we consider the widest possible containers first and don't miss any optimal solutions."
+      },
+      {
+        question: "What is a real-world application of the container problem?",
+        options: ["Sorting arrays", "Designing water reservoirs for maximum capacity", "Binary tree traversal", "Hash table implementation"],
+        correctAnswer: 1,
+        explanation: "The container problem directly applies to designing water storage systems, reservoirs, and other capacity optimization problems."
+      }
+    ],
+    syntax: `// Container With Most Water Pattern
+function maxArea(heights) {
+    let left = 0, right = heights.length - 1;
+    let maxArea = 0;
+    
+    while (left < right) {
+        const area = Math.min(heights[left], heights[right]) * (right - left);
+        maxArea = Math.max(maxArea, area);
+        
+        if (heights[left] < heights[right]) left++;
+        else right--;
+    }
+    
+    return maxArea;
+}`,
     example: `function maxArea(height) {
     let left = 0, right = height.length - 1, maxWater = 0;
     
@@ -18422,6 +22373,181 @@ What it does: removes duplicate elements from sorted array in-place while mainta
 How it works: uses slow pointer to track unique element position, fast pointer scans array, overwrites duplicates with unique elements.
 
 When to use: in-place array modification needed, sorted array deduplication, memory-constrained environments, two pointers pattern practice.`,
+    voiceExplanation: `Think of removing duplicates like organizing a bookshelf where you want only one copy of each book. Imagine you have a sorted shelf with multiple copies of the same books scattered throughout. You use two bookmarks: a "slow" bookmark that points to where the next unique book should go, and a "fast" bookmark that scans through all the books. The fast bookmark moves through every book on the shelf. When it finds a book that's different from the one at the slow bookmark, you know you've found a new unique book! You then move the slow bookmark forward and place this new unique book there. It's like having a librarian (fast pointer) who scans the entire shelf and a organizer (slow pointer) who arranges unique books in the front section. By the end, all unique books are neatly arranged at the beginning of the shelf, and you know exactly how many unique books you have. This technique works because the array is already sorted, so all duplicates are grouped together.`,
+    realWorldApplications: `**Industry Applications:**
+- **Database Systems**: Removing duplicate records from sorted query results
+- **Data Processing**: Cleaning datasets with duplicate entries in ETL pipelines
+- **File Systems**: Deduplicating sorted file lists and directory contents
+- **Log Analysis**: Removing duplicate log entries from sorted log files
+- **E-commerce**: Cleaning product catalogs with duplicate items
+- **Social Media**: Removing duplicate posts or comments from sorted feeds
+- **Search Engines**: Deduplicating sorted search results and web pages
+- **Financial Systems**: Removing duplicate transactions from sorted records
+- **Inventory Management**: Cleaning sorted inventory lists with duplicate SKUs
+- **Data Warehousing**: Maintaining data quality in sorted dimension tables`,
+    keyConcepts: `**Essential Concepts:**
+1. **Same-Direction Two Pointers**: Both pointers move in the same direction (left to right)
+2. **Slow-Fast Pointer Pattern**: Slow tracks position for unique elements, fast scans array
+3. **In-Place Modification**: Modifies array without using extra space
+4. **Sorted Array Prerequisite**: Algorithm relies on duplicates being adjacent
+5. **Overwriting Strategy**: Overwrites duplicates with unique elements found later
+6. **Length Tracking**: Returns new length of array with unique elements
+7. **Stable Operation**: Maintains relative order of unique elements`,
+    pseudocode: `**Remove Duplicates Algorithm:**
+
+ALGORITHM RemoveDuplicates(sortedArray)
+INPUT: sortedArray - sorted array with possible duplicates
+OUTPUT: length of array after removing duplicates
+BEGIN
+    IF sortedArray.length <= 1 THEN
+        RETURN sortedArray.length
+    END IF
+    
+    slow = 0  // Position for next unique element
+    
+    FOR fast = 1 TO sortedArray.length - 1 DO
+        // Found a new unique element
+        IF sortedArray[fast] ≠ sortedArray[slow] THEN
+            slow = slow + 1
+            sortedArray[slow] = sortedArray[fast]
+        END IF
+    END FOR
+    
+    // Return length of unique elements
+    RETURN slow + 1
+END`,
+    implementationCode: `// Comprehensive Remove Duplicates Implementation
+
+class DuplicateRemover {
+    // Remove all duplicates - keep only unique elements
+    static removeDuplicates(nums) {
+        if (nums.length <= 1) return nums.length;
+        
+        let slow = 0;
+        
+        for (let fast = 1; fast < nums.length; fast++) {
+            if (nums[fast] !== nums[slow]) {
+                slow++;
+                nums[slow] = nums[fast];
+            }
+        }
+        
+        return slow + 1;
+    }
+    
+    // Remove duplicates - allow at most 2 occurrences
+    static removeDuplicatesII(nums) {
+        if (nums.length <= 2) return nums.length;
+        
+        let slow = 2;
+        
+        for (let fast = 2; fast < nums.length; fast++) {
+            // Allow element if it's different from element 2 positions back
+            if (nums[fast] !== nums[slow - 2]) {
+                nums[slow] = nums[fast];
+                slow++;
+            }
+        }
+        
+        return slow;
+    }
+    
+    // Remove duplicates - allow at most k occurrences
+    static removeDuplicatesK(nums, k) {
+        if (nums.length <= k) return nums.length;
+        
+        let slow = k;
+        
+        for (let fast = k; fast < nums.length; fast++) {
+            if (nums[fast] !== nums[slow - k]) {
+                nums[slow] = nums[fast];
+                slow++;
+            }
+        }
+        
+        return slow;
+    }
+    
+    // Get array of unique elements (non-destructive)
+    static getUniqueElements(nums) {
+        if (nums.length <= 1) return [...nums];
+        
+        const result = [nums[0]];
+        
+        for (let i = 1; i < nums.length; i++) {
+            if (nums[i] !== nums[i - 1]) {
+                result.push(nums[i]);
+            }
+        }
+        
+        return result;
+    }
+    
+    // Count unique elements without modifying array
+    static countUniqueElements(nums) {
+        if (nums.length <= 1) return nums.length;
+        
+        let count = 1;
+        
+        for (let i = 1; i < nums.length; i++) {
+            if (nums[i] !== nums[i - 1]) {
+                count++;
+            }
+        }
+        
+        return count;
+    }
+}
+
+// Usage Examples
+const nums1 = [0, 0, 1, 1, 1, 2, 2, 3, 3, 4];
+console.log(DuplicateRemover.removeDuplicates([...nums1])); // 5
+console.log(DuplicateRemover.getUniqueElements(nums1)); // [0,1,2,3,4]`,
+    quizQuestions: [
+      {
+        question: "Why does the remove duplicates algorithm work only on sorted arrays?",
+        options: ["To improve time complexity", "Because duplicates are adjacent in sorted arrays", "To reduce space complexity", "To handle negative numbers"],
+        correctAnswer: 1,
+        explanation: "In sorted arrays, all duplicate elements are grouped together, making it easy to detect and skip them with a simple comparison."
+      },
+      {
+        question: "What is the time complexity of the two-pointer remove duplicates algorithm?",
+        options: ["O(1)", "O(n)", "O(n²)", "O(n log n)"],
+        correctAnswer: 1,
+        explanation: "The algorithm makes a single pass through the array with both pointers, resulting in O(n) time complexity."
+      },
+      {
+        question: "What is the space complexity of the in-place remove duplicates algorithm?",
+        options: ["O(1)", "O(n)", "O(log n)", "O(n²)"],
+        correctAnswer: 0,
+        explanation: "The algorithm modifies the array in-place using only two pointer variables, requiring O(1) extra space."
+      },
+      {
+        question: "In the slow-fast pointer pattern, when do we increment the slow pointer?",
+        options: ["Always after fast pointer moves", "Only when we find a unique element", "At the beginning of each iteration", "Only at the end"],
+        correctAnswer: 1,
+        explanation: "We increment the slow pointer only when the fast pointer finds an element different from the current slow element."
+      },
+      {
+        question: "What is a real-world application of removing duplicates from sorted arrays?",
+        options: ["Binary search", "Removing duplicate records from sorted database query results", "Hash table implementation", "Tree traversal"],
+        correctAnswer: 1,
+        explanation: "Database systems frequently need to remove duplicate records from sorted query results to maintain data quality."
+      }
+    ],
+    syntax: `// Remove Duplicates Pattern
+function removeDuplicates(nums) {
+    if (nums.length <= 1) return nums.length;
+    
+    let slow = 0;
+    for (let fast = 1; fast < nums.length; fast++) {
+        if (nums[fast] !== nums[slow]) {
+            slow++;
+            nums[slow] = nums[fast];
+        }
+    }
+    return slow + 1;
+}`,
     example: `function removeDuplicates(nums) {
     if (nums.length <= 1) return nums.length;
     
@@ -18486,6 +22612,224 @@ What it does: combines two sorted arrays into one sorted array in-place, maintai
 How it works: uses three pointers starting from end, compares elements from both arrays, places larger element at end position.
 
 When to use: merging sorted data structures, merge sort implementation, combining sorted lists, in-place array operations.`,
+    voiceExplanation: `Think of merging sorted arrays like combining two organized lines of people by height. Imagine you have two lines of people, both already sorted by height from shortest to tallest, and you want to merge them into one line while keeping everyone sorted. The clever trick is to start from the back! Picture yourself as an organizer standing at the end of a long empty space. You look at the tallest person from each line and pick the taller one to place at the very end of your new combined line. Then you look at the next tallest available people and repeat. It's like being a smart event coordinator who works backwards - by starting from the end, you never have to worry about moving people around or losing their spots. This backwards approach is brilliant because you're filling empty spaces and never overwriting anyone who still needs to be compared. By the time you're done, everyone is perfectly arranged in one sorted line!`,
+    realWorldApplications: `**Industry Applications:**
+- **Database Systems**: Merging sorted result sets from multiple queries or partitions
+- **Data Processing**: Combining sorted data streams in ETL pipelines
+- **File Systems**: Merging sorted directory listings and file indexes
+- **Search Engines**: Combining sorted search results from multiple indexes
+- **Distributed Systems**: Merging sorted data from multiple nodes or shards
+- **Version Control**: Merging sorted commit histories and change logs
+- **Financial Systems**: Combining sorted transaction records from multiple sources
+- **Log Analysis**: Merging sorted log files from multiple servers by timestamp
+- **Data Warehousing**: Combining sorted dimension tables during data integration
+- **Machine Learning**: Merging sorted feature vectors from different data sources`,
+    keyConcepts: `**Essential Concepts:**
+1. **Backward Merging**: Start from the end to avoid overwriting unprocessed elements
+2. **Three-Pointer Technique**: Track positions in both arrays and the merge destination
+3. **In-Place Operation**: Merge without requiring additional array space
+4. **Sorted Input Requirement**: Both arrays must be pre-sorted for algorithm to work
+5. **Comparison Strategy**: Always place the larger element at the current merge position
+6. **Remaining Elements**: Handle leftover elements from the second array
+7. **Space Optimization**: Utilizes existing empty space in the first array`,
+    pseudocode: `**Merge Sorted Arrays Algorithm:**
+
+ALGORITHM MergeSortedArrays(nums1, m, nums2, n)
+INPUT: nums1 - first sorted array with extra space, m - size of nums1 data
+       nums2 - second sorted array, n - size of nums2
+OUTPUT: nums1 modified to contain merged sorted arrays
+BEGIN
+    i = m - 1      // Last element in nums1 data
+    j = n - 1      // Last element in nums2
+    k = m + n - 1  // Last position in nums1 total space
+    
+    // Merge from the end, placing larger elements first
+    WHILE i >= 0 AND j >= 0 DO
+        IF nums1[i] > nums2[j] THEN
+            nums1[k] = nums1[i]
+            i = i - 1
+        ELSE
+            nums1[k] = nums2[j]
+            j = j - 1
+        END IF
+        k = k - 1
+    END WHILE
+    
+    // Copy remaining elements from nums2 (if any)
+    WHILE j >= 0 DO
+        nums1[k] = nums2[j]
+        j = j - 1
+        k = k - 1
+    END WHILE
+    
+    // Note: remaining elements in nums1 are already in correct position
+END`,
+    implementationCode: `// Comprehensive Merge Sorted Arrays Implementation
+
+class ArrayMerger {
+    // Main merge algorithm - O(m + n) time, O(1) space
+    static merge(nums1, m, nums2, n) {
+        let i = m - 1;      // Last element in nums1 data
+        let j = n - 1;      // Last element in nums2
+        let k = m + n - 1;  // Last position in merged array
+        
+        // Merge from the end
+        while (i >= 0 && j >= 0) {
+            if (nums1[i] > nums2[j]) {
+                nums1[k--] = nums1[i--];
+            } else {
+                nums1[k--] = nums2[j--];
+            }
+        }
+        
+        // Copy remaining elements from nums2
+        while (j >= 0) {
+            nums1[k--] = nums2[j--];
+        }
+        
+        // nums1 now contains the merged sorted array
+    }
+    
+    // Merge with new array creation (not in-place)
+    static mergeToNewArray(nums1, nums2) {
+        const result = [];
+        let i = 0, j = 0;
+        
+        while (i < nums1.length && j < nums2.length) {
+            if (nums1[i] <= nums2[j]) {
+                result.push(nums1[i++]);
+            } else {
+                result.push(nums2[j++]);
+            }
+        }
+        
+        // Add remaining elements
+        while (i < nums1.length) result.push(nums1[i++]);
+        while (j < nums2.length) result.push(nums2[j++]);
+        
+        return result;
+    }
+    
+    // Merge multiple sorted arrays
+    static mergeMultipleSorted(arrays) {
+        if (arrays.length === 0) return [];
+        if (arrays.length === 1) return arrays[0];
+        
+        let result = arrays[0];
+        
+        for (let i = 1; i < arrays.length; i++) {
+            result = this.mergeToNewArray(result, arrays[i]);
+        }
+        
+        return result;
+    }
+    
+    // Merge k sorted arrays using divide and conquer
+    static mergeKSorted(arrays) {
+        if (arrays.length === 0) return [];
+        
+        while (arrays.length > 1) {
+            const mergedArrays = [];
+            
+            for (let i = 0; i < arrays.length; i += 2) {
+                const arr1 = arrays[i];
+                const arr2 = i + 1 < arrays.length ? arrays[i + 1] : [];
+                mergedArrays.push(this.mergeToNewArray(arr1, arr2));
+            }
+            
+            arrays = mergedArrays;
+        }
+        
+        return arrays[0];
+    }
+    
+    // Check if merge is possible (arrays are sorted)
+    static canMerge(nums1, nums2) {
+        const isSorted = (arr) => {
+            for (let i = 1; i < arr.length; i++) {
+                if (arr[i] < arr[i - 1]) return false;
+            }
+            return true;
+        };
+        
+        return isSorted(nums1) && isSorted(nums2);
+    }
+    
+    // Merge with custom comparator
+    static mergeWithComparator(nums1, m, nums2, n, compare = (a, b) => a - b) {
+        let i = m - 1;
+        let j = n - 1;
+        let k = m + n - 1;
+        
+        while (i >= 0 && j >= 0) {
+            if (compare(nums1[i], nums2[j]) > 0) {
+                nums1[k--] = nums1[i--];
+            } else {
+                nums1[k--] = nums2[j--];
+            }
+        }
+        
+        while (j >= 0) {
+            nums1[k--] = nums2[j--];
+        }
+    }
+}
+
+// Usage Examples
+const nums1 = [1, 2, 3, 0, 0, 0];
+const nums2 = [2, 5, 6];
+ArrayMerger.merge(nums1, 3, nums2, 3);
+console.log(nums1); // [1, 2, 2, 3, 5, 6]
+
+const arr1 = [1, 3, 5];
+const arr2 = [2, 4, 6];
+console.log(ArrayMerger.mergeToNewArray(arr1, arr2)); // [1, 2, 3, 4, 5, 6]
+
+const multipleArrays = [[1, 4, 7], [2, 5, 8], [3, 6, 9]];
+console.log(ArrayMerger.mergeKSorted(multipleArrays)); // [1, 2, 3, 4, 5, 6, 7, 8, 9]`,
+    quizQuestions: [
+      {
+        question: "Why do we merge sorted arrays from the end rather than the beginning?",
+        options: ["To improve time complexity", "To avoid overwriting unprocessed elements", "To handle negative numbers", "To reduce space complexity"],
+        correctAnswer: 1,
+        explanation: "Merging from the end ensures we fill empty spaces without overwriting elements that still need to be compared."
+      },
+      {
+        question: "What is the time complexity of merging two sorted arrays of sizes m and n?",
+        options: ["O(m)", "O(n)", "O(m + n)", "O(m × n)"],
+        correctAnswer: 2,
+        explanation: "We need to examine each element from both arrays exactly once, resulting in O(m + n) time complexity."
+      },
+      {
+        question: "In the merge algorithm, what happens to remaining elements from the first array?",
+        options: ["They need to be copied", "They are already in correct position", "They need to be sorted", "They should be ignored"],
+        correctAnswer: 1,
+        explanation: "Remaining elements from the first array are already in their correct positions since we're merging in-place."
+      },
+      {
+        question: "How many pointers do we need for the in-place merge algorithm?",
+        options: ["Two pointers", "Three pointers", "Four pointers", "One pointer"],
+        correctAnswer: 1,
+        explanation: "We need three pointers: one for each array's current position and one for the merge destination position."
+      },
+      {
+        question: "What is a real-world application of merging sorted arrays?",
+        options: ["Binary search", "Merging sorted result sets from multiple database queries", "Hash table implementation", "Tree traversal"],
+        correctAnswer: 1,
+        explanation: "Database systems frequently merge sorted result sets from multiple queries or partitions to provide unified results."
+      }
+    ],
+    syntax: `// Merge Sorted Arrays Pattern
+function merge(nums1, m, nums2, n) {
+    let i = m - 1, j = n - 1, k = m + n - 1;
+    
+    while (i >= 0 && j >= 0) {
+        if (nums1[i] > nums2[j]) nums1[k--] = nums1[i--];
+        else nums1[k--] = nums2[j--];
+    }
+    
+    while (j >= 0) nums1[k--] = nums2[j--];
+}`,
     example: `function merge(nums1, m, nums2, n) {
     let i = m - 1, j = n - 1, k = m + n - 1;
     
@@ -18516,6 +22860,387 @@ What it does: maintains moving window over data structure to efficiently process
 How it works: expands window by moving right pointer, contracts by moving left pointer, maintains window properties throughout traversal.
 
 When to use: contiguous subarray/substring problems, fixed or variable window size, optimization from O(n²) to O(n), pattern matching.`,
+    voiceExplanation: `Think of the Sliding Window technique like looking through a moving window on a train. Imagine you're on a train with a window that can expand or shrink, and you're trying to find the most interesting view. Instead of stopping at every single spot and looking around (which would be slow), you keep the window moving smoothly along the track. When you see something interesting, you might expand the window to see more, or shrink it to focus on the best part. The brilliant thing is that you never have to go backwards - you just slide the window forward, always building on what you've already seen. This is exactly how sliding window algorithms work: they maintain a "window" of elements and slide it through the data, expanding when conditions are good and contracting when they're not, all while keeping track of the best result they've found so far.`,
+    realWorldApplications: `**Industry Applications:**
+- **Network Traffic Analysis**: Monitoring bandwidth usage, detecting anomalies in data streams
+- **Financial Systems**: Moving averages, stock price analysis, risk assessment windows
+- **Video Streaming**: Buffer management, quality adaptation, frame rate optimization
+- **Database Systems**: Query optimization, index scanning, range-based operations
+- **Web Analytics**: Session tracking, user behavior analysis, conversion funnels
+- **Gaming**: Performance monitoring, lag detection, resource usage optimization
+- **IoT Systems**: Sensor data processing, anomaly detection, real-time monitoring
+- **Text Processing**: Pattern matching, spell checking, natural language processing
+- **Image Processing**: Convolution operations, feature detection, noise reduction
+- **Machine Learning**: Feature extraction, time series analysis, data preprocessing`,
+    keyConcepts: `**Essential Concepts:**
+1. **Window Boundaries**: Left and right pointers defining current window scope
+2. **Window Expansion**: Moving right pointer to include more elements
+3. **Window Contraction**: Moving left pointer to exclude elements and maintain validity
+4. **Window Validity**: Maintaining specific conditions or constraints within window
+5. **Optimal Substructure**: Current window state builds on previous states
+6. **Sliding Mechanism**: Continuous movement without backtracking
+7. **Fixed vs Variable**: Different patterns for fixed-size vs dynamic windows
+8. **State Tracking**: Maintaining additional data structures for window properties`,
+    pseudocode: `**Sliding Window Algorithm Patterns:**
+
+ALGORITHM FixedSizeWindow(array, windowSize)
+INPUT: array of elements, fixed window size k
+OUTPUT: result based on window processing
+BEGIN
+    IF array.length < windowSize THEN
+        RETURN null
+    END IF
+    
+    // Initialize first window
+    windowSum = 0
+    FOR i = 0 TO windowSize - 1 DO
+        windowSum = windowSum + array[i]
+    END FOR
+    
+    result = windowSum
+    
+    // Slide the window
+    FOR i = windowSize TO array.length - 1 DO
+        windowSum = windowSum - array[i - windowSize] + array[i]
+        result = PROCESS(result, windowSum)
+    END FOR
+    
+    RETURN result
+END
+
+ALGORITHM VariableSizeWindow(array, condition)
+INPUT: array of elements, validity condition
+OUTPUT: optimal window meeting condition
+BEGIN
+    left = 0
+    right = 0
+    bestResult = INITIAL_VALUE
+    windowState = INITIAL_STATE
+    
+    WHILE right < array.length DO
+        // Expand window
+        windowState = ADD_ELEMENT(windowState, array[right])
+        
+        // Contract window while invalid
+        WHILE NOT VALID(windowState, condition) DO
+            windowState = REMOVE_ELEMENT(windowState, array[left])
+            left = left + 1
+        END WHILE
+        
+        // Update result if current window is better
+        bestResult = UPDATE_BEST(bestResult, windowState, right - left + 1)
+        right = right + 1
+    END WHILE
+    
+    RETURN bestResult
+END
+
+ALGORITHM SlidingWindowMaximum(array, k)
+INPUT: array of elements, window size k
+OUTPUT: array of maximum elements in each window
+BEGIN
+    result = []
+    deque = []  // Store indices
+    
+    FOR i = 0 TO array.length - 1 DO
+        // Remove indices outside current window
+        WHILE deque is not empty AND deque.front() <= i - k DO
+            deque.removeFront()
+        END WHILE
+        
+        // Remove smaller elements from back
+        WHILE deque is not empty AND array[deque.back()] <= array[i] DO
+            deque.removeBack()
+        END WHILE
+        
+        deque.addBack(i)
+        
+        // Add maximum to result if window is complete
+        IF i >= k - 1 THEN
+            result.add(array[deque.front()])
+        END IF
+    END FOR
+    
+    RETURN result
+END`,
+    implementationCode: `// Comprehensive Sliding Window Implementation
+
+class SlidingWindowSolver {
+    // Fixed Size Window - Maximum sum of k consecutive elements
+    static maxSumFixedWindow(arr, k) {
+        if (arr.length < k) return null;
+        
+        // Calculate sum of first window
+        let windowSum = 0;
+        for (let i = 0; i < k; i++) {
+            windowSum += arr[i];
+        }
+        
+        let maxSum = windowSum;
+        
+        // Slide the window
+        for (let i = k; i < arr.length; i++) {
+            windowSum = windowSum - arr[i - k] + arr[i]; // Remove left, add right
+            maxSum = Math.max(maxSum, windowSum);
+        }
+        
+        return maxSum;
+    }
+    
+    // Variable Size Window - Longest substring without repeating characters
+    static lengthOfLongestSubstring(s) {
+        const charSet = new Set();
+        let left = 0;
+        let maxLength = 0;
+        
+        for (let right = 0; right < s.length; right++) {
+            // Contract window while we have duplicate
+            while (charSet.has(s[right])) {
+                charSet.delete(s[left]);
+                left++;
+            }
+            
+            // Expand window
+            charSet.add(s[right]);
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+        
+        return maxLength;
+    }
+    
+    // Minimum Window Substring - Find minimum window containing all characters
+    static minWindow(s, t) {
+        if (s.length < t.length) return "";
+        
+        const targetCount = {};
+        for (let char of t) {
+            targetCount[char] = (targetCount[char] || 0) + 1;
+        }
+        
+        const windowCount = {};
+        let left = 0;
+        let minLen = Infinity;
+        let minStart = 0;
+        let formed = 0;
+        const required = Object.keys(targetCount).length;
+        
+        for (let right = 0; right < s.length; right++) {
+            // Expand window
+            const char = s[right];
+            windowCount[char] = (windowCount[char] || 0) + 1;
+            
+            if (targetCount[char] && windowCount[char] === targetCount[char]) {
+                formed++;
+            }
+            
+            // Contract window
+            while (formed === required && left <= right) {
+                if (right - left + 1 < minLen) {
+                    minLen = right - left + 1;
+                    minStart = left;
+                }
+                
+                const leftChar = s[left];
+                windowCount[leftChar]--;
+                if (targetCount[leftChar] && windowCount[leftChar] < targetCount[leftChar]) {
+                    formed--;
+                }
+                left++;
+            }
+        }
+        
+        return minLen === Infinity ? "" : s.substring(minStart, minStart + minLen);
+    }
+    
+    // Sliding Window Maximum using Deque
+    static slidingWindowMaximum(nums, k) {
+        const result = [];
+        const deque = []; // Store indices
+        
+        for (let i = 0; i < nums.length; i++) {
+            // Remove indices outside current window
+            while (deque.length && deque[0] <= i - k) {
+                deque.shift();
+            }
+            
+            // Remove smaller elements from back
+            while (deque.length && nums[deque[deque.length - 1]] <= nums[i]) {
+                deque.pop();
+            }
+            
+            deque.push(i);
+            
+            // Add maximum to result if window is complete
+            if (i >= k - 1) {
+                result.push(nums[deque[0]]);
+            }
+        }
+        
+        return result;
+    }
+    
+    // Find all anagrams using sliding window
+    static findAnagrams(s, p) {
+        if (s.length < p.length) return [];
+        
+        const result = [];
+        const pCount = {};
+        const windowCount = {};
+        
+        // Count characters in pattern
+        for (let char of p) {
+            pCount[char] = (pCount[char] || 0) + 1;
+        }
+        
+        const windowSize = p.length;
+        
+        // Initialize first window
+        for (let i = 0; i < windowSize; i++) {
+            const char = s[i];
+            windowCount[char] = (windowCount[char] || 0) + 1;
+        }
+        
+        // Check first window
+        if (this.isAnagram(pCount, windowCount)) {
+            result.push(0);
+        }
+        
+        // Slide the window
+        for (let i = windowSize; i < s.length; i++) {
+            // Add new character
+            const newChar = s[i];
+            windowCount[newChar] = (windowCount[newChar] || 0) + 1;
+            
+            // Remove old character
+            const oldChar = s[i - windowSize];
+            windowCount[oldChar]--;
+            if (windowCount[oldChar] === 0) {
+                delete windowCount[oldChar];
+            }
+            
+            // Check if current window is anagram
+            if (this.isAnagram(pCount, windowCount)) {
+                result.push(i - windowSize + 1);
+            }
+        }
+        
+        return result;
+    }
+    
+    // Helper method to check if two character counts represent anagrams
+    static isAnagram(count1, count2) {
+        const keys1 = Object.keys(count1);
+        const keys2 = Object.keys(count2);
+        
+        if (keys1.length !== keys2.length) return false;
+        
+        for (let key of keys1) {
+            if (count1[key] !== count2[key]) return false;
+        }
+        
+        return true;
+    }
+    
+    // Longest subarray with at most k distinct elements
+    static longestSubarrayWithKDistinct(nums, k) {
+        if (k === 0) return 0;
+        
+        const count = {};
+        let left = 0;
+        let maxLength = 0;
+        
+        for (let right = 0; right < nums.length; right++) {
+            // Expand window
+            count[nums[right]] = (count[nums[right]] || 0) + 1;
+            
+            // Contract window if we have more than k distinct elements
+            while (Object.keys(count).length > k) {
+                count[nums[left]]--;
+                if (count[nums[left]] === 0) {
+                    delete count[nums[left]];
+                }
+                left++;
+            }
+            
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+        
+        return maxLength;
+    }
+    
+    // Demonstration method
+    static demonstratePatterns() {
+        console.log('=== Sliding Window Demonstrations ===');
+        
+        // Fixed window
+        console.log('1. Max Sum Fixed Window [1,2,3,4,5], k=3:', 
+                    this.maxSumFixedWindow([1,2,3,4,5], 3)); // 12
+        
+        // Variable window
+        console.log('2. Longest Unique Substring "abcabcbb":', 
+                    this.lengthOfLongestSubstring("abcabcbb")); // 3
+        
+        // Sliding window maximum
+        console.log('3. Sliding Window Maximum [1,3,-1,-3,5,3,6,7], k=3:', 
+                    this.slidingWindowMaximum([1,3,-1,-3,5,3,6,7], 3)); // [3,3,5,5,6,7]
+        
+        // Find anagrams
+        console.log('4. Find Anagrams "abab", pattern "ab":', 
+                    this.findAnagrams("abab", "ab")); // [0,2]
+    }
+}
+
+// Usage Examples
+console.log('=== Sliding Window Examples ===');
+
+// Fixed size window - maximum sum
+const arr1 = [2, 1, 5, 1, 3, 2];
+console.log(\`Max sum of 3 consecutive elements in [\${arr1}]:\`, 
+            SlidingWindowSolver.maxSumFixedWindow(arr1, 3)); // 9
+
+// Variable size window - longest unique substring
+const str1 = "pwwkew";
+console.log(\`Longest substring without repeating in "\${str1}":\`, 
+            SlidingWindowSolver.lengthOfLongestSubstring(str1)); // 3
+
+// Minimum window substring
+console.log('Minimum window containing "ABC" in "ADOBECODEBANC":', 
+            SlidingWindowSolver.minWindow("ADOBECODEBANC", "ABC")); // "BANC"
+
+// Run all demonstrations
+SlidingWindowSolver.demonstratePatterns();`,
+    quizQuestions: [
+      {
+        question: "What is the main advantage of the sliding window technique over brute force approaches?",
+        options: ["Uses less memory", "Reduces time complexity from O(n²) to O(n)", "Easier to implement", "Works with unsorted data"],
+        correctAnswer: 1,
+        explanation: "Sliding window technique reduces time complexity from O(n²) or O(n³) to O(n) by avoiding redundant calculations and reusing previous computations."
+      },
+      {
+        question: "In a variable-size sliding window, when do you typically expand the window?",
+        options: ["When the window is invalid", "When adding the next element maintains validity", "Always expand first", "When the window is empty"],
+        correctAnswer: 1,
+        explanation: "In variable-size sliding window, you expand by adding the next element, then contract if the window becomes invalid, maintaining the window properties throughout."
+      },
+      {
+        question: "What data structure is commonly used with sliding window for tracking maximum elements?",
+        options: ["Stack", "Queue", "Deque (Double-ended queue)", "Hash Map"],
+        correctAnswer: 2,
+        explanation: "Deque (Double-ended queue) is used for sliding window maximum problems because it allows efficient addition/removal from both ends to maintain decreasing order."
+      },
+      {
+        question: "In a fixed-size sliding window, how do you move from one window to the next?",
+        options: ["Recalculate everything", "Remove leftmost element and add rightmost element", "Sort the new window", "Use binary search"],
+        correctAnswer: 1,
+        explanation: "In fixed-size sliding window, you efficiently move by removing the leftmost element and adding the new rightmost element, avoiding recalculation of the entire window."
+      },
+      {
+        question: "Which type of problems are best suited for sliding window technique?",
+        options: ["Sorting problems", "Contiguous subarray/substring problems", "Graph traversal", "Tree problems"],
+        correctAnswer: 1,
+        explanation: "Sliding window is ideal for contiguous subarray/substring problems where you need to find optimal windows of elements, such as maximum sum, longest substring, etc."
+      }
+    ],
     example: `// Sliding Window Technique Examples
 
 // 1. Fixed Size Window - Maximum sum of k elements
@@ -18662,6 +23387,259 @@ What it does: finds maximum element in every sliding window of size k, maintaini
 How it works: uses deque to store indices in decreasing order of values, removes outdated indices, maintains maximum at front.
 
 When to use: sliding window maximum queries, stock price analysis, real-time data monitoring, competitive programming problems.`,
+    voiceExplanation: `Think of the Sliding Window Maximum problem like being a security guard monitoring a row of buildings through a moving window. Imagine you're in a helicopter with a spotlight that can only illuminate 3 buildings at a time, and you need to report the tallest building in your spotlight as you move along. The naive approach would be to look at all 3 buildings every time you move - but that's inefficient! Instead, you use a clever trick: you keep a list of "potential tallest buildings" in decreasing order of height. When you see a new building, you remove any shorter buildings from your list because they can never be the tallest while this new taller building is in view. You also remove buildings that are now too far behind your spotlight. The brilliant part is that the first building in your list is always the tallest in your current view! It's like having a smart assistant who maintains a ranked list of candidates, automatically removing those who can't possibly win, so you always know the winner instantly.`,
+    realWorldApplications: `**Industry Applications:**
+- **Stock Trading**: Finding maximum price in sliding time windows for technical analysis
+- **Network Monitoring**: Tracking peak bandwidth usage over time intervals
+- **Gaming**: Finding highest score in recent game sessions or leaderboard windows
+- **IoT Systems**: Monitoring maximum sensor readings over sliding time periods
+- **Video Processing**: Finding peak brightness or motion in video frame windows
+- **Weather Analysis**: Tracking maximum temperature/pressure in time windows
+- **Database Systems**: Optimizing range queries with sliding window maximums
+- **Real-time Analytics**: Computing maximum values in streaming data windows
+- **Quality Control**: Monitoring peak defect rates in manufacturing time windows
+- **Financial Risk**: Calculating maximum drawdown in portfolio performance windows`,
+    keyConcepts: `**Essential Concepts:**
+1. **Deque Data Structure**: Double-ended queue for efficient front/back operations
+2. **Monotonic Deque**: Maintaining decreasing order of elements for quick maximum access
+3. **Index Storage**: Storing array indices rather than values for position tracking
+4. **Window Boundary Management**: Removing outdated indices outside current window
+5. **Amortized O(n) Time**: Each element added and removed at most once
+6. **Space-Time Tradeoff**: O(k) space for O(n) time complexity optimization
+7. **Sliding Technique**: Efficiently processing overlapping subarrays`,
+    pseudocode: `**Sliding Window Maximum Algorithm:**
+
+ALGORITHM SlidingWindowMaximum(array, k)
+INPUT: array - input array, k - window size
+OUTPUT: array of maximum values for each window
+BEGIN
+    IF array.length = 0 OR k = 0 THEN
+        RETURN []
+    END IF
+    
+    result = []
+    deque = []  // Store indices in decreasing order of values
+    
+    FOR i = 0 TO array.length - 1 DO
+        // Remove indices outside current window
+        WHILE deque is not empty AND deque.front <= i - k DO
+            deque.removeFront()
+        END WHILE
+        
+        // Remove indices of smaller elements from back
+        WHILE deque is not empty AND array[deque.back] <= array[i] DO
+            deque.removeBack()
+        END WHILE
+        
+        // Add current index
+        deque.addBack(i)
+        
+        // Add maximum to result when window is complete
+        IF i >= k - 1 THEN
+            result.add(array[deque.front])
+        END IF
+    END FOR
+    
+    RETURN result
+END`,
+    implementationCode: `// Comprehensive Sliding Window Maximum Implementation
+
+class SlidingWindowMaximum {
+    // Main deque-based algorithm - O(n) time, O(k) space
+    static maxSlidingWindow(nums, k) {
+        if (nums.length === 0 || k === 0) return [];
+        
+        const result = [];
+        const deque = []; // Store indices
+        
+        for (let i = 0; i < nums.length; i++) {
+            // Remove indices outside current window
+            while (deque.length > 0 && deque[0] <= i - k) {
+                deque.shift();
+            }
+            
+            // Remove indices of smaller elements from back
+            while (deque.length > 0 && nums[deque[deque.length - 1]] <= nums[i]) {
+                deque.pop();
+            }
+            
+            // Add current index
+            deque.push(i);
+            
+            // Add maximum to result when window is complete
+            if (i >= k - 1) {
+                result.push(nums[deque[0]]);
+            }
+        }
+        
+        return result;
+    }
+    
+    // Brute force approach for comparison - O(n*k) time
+    static maxSlidingWindowBruteForce(nums, k) {
+        if (nums.length === 0 || k === 0) return [];
+        
+        const result = [];
+        
+        for (let i = 0; i <= nums.length - k; i++) {
+            let max = nums[i];
+            for (let j = i + 1; j < i + k; j++) {
+                max = Math.max(max, nums[j]);
+            }
+            result.push(max);
+        }
+        
+        return result;
+    }
+    
+    // Enhanced version with detailed window information
+    static maxSlidingWindowDetailed(nums, k) {
+        if (nums.length === 0 || k === 0) return [];
+        
+        const result = [];
+        const deque = [];
+        
+        for (let i = 0; i < nums.length; i++) {
+            // Remove outdated indices
+            while (deque.length > 0 && deque[0] <= i - k) {
+                deque.shift();
+            }
+            
+            // Maintain decreasing order
+            while (deque.length > 0 && nums[deque[deque.length - 1]] <= nums[i]) {
+                deque.pop();
+            }
+            
+            deque.push(i);
+            
+            if (i >= k - 1) {
+                result.push({
+                    windowStart: i - k + 1,
+                    windowEnd: i,
+                    window: nums.slice(i - k + 1, i + 1),
+                    maximum: nums[deque[0]],
+                    maxIndex: deque[0]
+                });
+            }
+        }
+        
+        return result;
+    }
+    
+    // Sliding window maximum for circular array
+    static maxSlidingWindowCircular(nums, k) {
+        if (nums.length === 0 || k === 0) return [];
+        
+        const n = nums.length;
+        const extended = [...nums, ...nums.slice(0, k - 1)];
+        const result = [];
+        const deque = [];
+        
+        for (let i = 0; i < extended.length; i++) {
+            while (deque.length > 0 && deque[0] <= i - k) {
+                deque.shift();
+            }
+            
+            while (deque.length > 0 && extended[deque[deque.length - 1]] <= extended[i]) {
+                deque.pop();
+            }
+            
+            deque.push(i);
+            
+            if (i >= k - 1 && result.length < n) {
+                result.push(extended[deque[0]]);
+            }
+        }
+        
+        return result;
+    }
+    
+    // Find minimum in sliding windows (similar approach)
+    static minSlidingWindow(nums, k) {
+        if (nums.length === 0 || k === 0) return [];
+        
+        const result = [];
+        const deque = [];
+        
+        for (let i = 0; i < nums.length; i++) {
+            while (deque.length > 0 && deque[0] <= i - k) {
+                deque.shift();
+            }
+            
+            // For minimum, maintain increasing order
+            while (deque.length > 0 && nums[deque[deque.length - 1]] >= nums[i]) {
+                deque.pop();
+            }
+            
+            deque.push(i);
+            
+            if (i >= k - 1) {
+                result.push(nums[deque[0]]);
+            }
+        }
+        
+        return result;
+    }
+}
+
+// Usage Examples
+const nums = [1, 3, -1, -3, 5, 3, 6, 7];
+const k = 3;
+
+console.log('Maximum:', SlidingWindowMaximum.maxSlidingWindow(nums, k)); // [3, 3, 5, 5, 6, 7]
+console.log('Minimum:', SlidingWindowMaximum.minSlidingWindow(nums, k)); // [-1, -3, -3, -3, 3, 3]
+console.log('Detailed:', SlidingWindowMaximum.maxSlidingWindowDetailed(nums, k));`,
+    quizQuestions: [
+      {
+        question: "Why do we use a deque instead of a simple array for sliding window maximum?",
+        options: ["To save memory", "For efficient front and back operations", "To handle negative numbers", "To improve readability"],
+        correctAnswer: 1,
+        explanation: "Deque allows efficient O(1) insertion/deletion at both ends, essential for maintaining the monotonic property and window boundaries."
+      },
+      {
+        question: "What is the time complexity of the optimized sliding window maximum algorithm?",
+        options: ["O(n*k)", "O(n log k)", "O(n)", "O(k)"],
+        correctAnswer: 2,
+        explanation: "Each element is added and removed from the deque at most once, resulting in amortized O(n) time complexity."
+      },
+      {
+        question: "In the deque, what order do we maintain for the elements?",
+        options: ["Increasing order of values", "Decreasing order of values", "Increasing order of indices", "Random order"],
+        correctAnswer: 1,
+        explanation: "We maintain decreasing order of values so the maximum element is always at the front of the deque."
+      },
+      {
+        question: "When do we remove elements from the front of the deque?",
+        options: ["When they are smaller than current element", "When they are outside the current window", "When the deque is full", "Never"],
+        correctAnswer: 1,
+        explanation: "We remove elements from the front when their indices are outside the current sliding window (i.e., <= i - k)."
+      },
+      {
+        question: "What is a real-world application of sliding window maximum?",
+        options: ["Sorting arrays", "Finding maximum stock price in sliding time windows", "Binary tree traversal", "Hash table implementation"],
+        correctAnswer: 1,
+        explanation: "Stock trading systems use sliding window maximum to analyze peak prices over specific time intervals for technical analysis."
+      }
+    ],
+    syntax: `// Sliding Window Maximum Pattern
+function maxSlidingWindow(nums, k) {
+    const result = [], deque = [];
+    
+    for (let i = 0; i < nums.length; i++) {
+        // Remove outdated indices
+        while (deque.length && deque[0] <= i - k) deque.shift();
+        
+        // Maintain decreasing order
+        while (deque.length && nums[deque[deque.length-1]] <= nums[i]) {
+            deque.pop();
+        }
+        
+        deque.push(i);
+        if (i >= k - 1) result.push(nums[deque[0]]);
+    }
+    
+    return result;
+}`,
     example: `// Sliding Window Maximum Implementation
 function slidingWindowMaximum(nums, k) {
     if (nums.length === 0 || k === 0) return [];
@@ -18781,6 +23759,305 @@ What it does: finds longest contiguous substring with all unique characters usin
 How it works: expands window with right pointer, contracts with left pointer when duplicates found, tracks characters with set/map.
 
 When to use: unique character substring problems, text analysis, data deduplication, sliding window pattern practice.`,
+    voiceExplanation: `Think of the Longest Substring problem like reading a book with a special rule: you can only remember a certain number of unique words at a time, and you want to find the longest passage where every word is different. Imagine you're reading with two bookmarks - a "start" bookmark and an "end" bookmark. You move the end bookmark forward, word by word, adding each new word to your memory. But here's the catch: if you encounter a word you've already seen in your current passage, you have to move your start bookmark forward until that duplicate word is no longer in your memory! It's like having a sliding window of attention that automatically adjusts its size. When you find duplicates, the window shrinks from the left. When all words are unique, the window grows to the right. Throughout this process, you keep track of the longest unique passage you've found. This technique is brilliant because it ensures you never miss the optimal solution while only scanning the text once!`,
+    realWorldApplications: `**Industry Applications:**
+- **Text Processing**: Finding longest unique character sequences in documents
+- **Data Compression**: Identifying patterns for efficient encoding algorithms
+- **Password Validation**: Ensuring password complexity with unique character requirements
+- **Web Development**: URL validation and unique parameter extraction
+- **Database Systems**: Optimizing string indexing and search operations
+- **Bioinformatics**: Finding unique DNA/RNA sequences without repeating nucleotides
+- **Network Security**: Analyzing packet patterns for intrusion detection
+- **Game Development**: Generating unique character combinations for procedural content
+- **Data Quality**: Detecting and handling duplicate entries in streaming data
+- **Machine Learning**: Feature extraction from text with unique character constraints`,
+    keyConcepts: `**Essential Concepts:**
+1. **Variable-Size Window**: Window expands and contracts based on duplicate detection
+2. **Two-Pointer Technique**: Left and right pointers define current window boundaries
+3. **Hash Set/Map Usage**: Efficient character tracking and duplicate detection
+4. **Window Contraction**: Move left pointer when duplicates are found
+5. **Window Expansion**: Move right pointer to explore new characters
+6. **Optimal Substructure**: Current window state builds on previous valid states
+7. **Linear Time Complexity**: Each character visited at most twice (once by each pointer)`,
+    pseudocode: `**Longest Substring Without Repeating Characters:**
+
+ALGORITHM LongestUniqueSubstring(string)
+INPUT: string - input string to analyze
+OUTPUT: length of longest substring with unique characters
+BEGIN
+    IF string.length = 0 THEN
+        RETURN 0
+    END IF
+    
+    charSet = new Set()
+    left = 0
+    maxLength = 0
+    
+    FOR right = 0 TO string.length - 1 DO
+        // Contract window while duplicate exists
+        WHILE charSet.contains(string[right]) DO
+            charSet.remove(string[left])
+            left = left + 1
+        END WHILE
+        
+        // Expand window
+        charSet.add(string[right])
+        currentLength = right - left + 1
+        maxLength = MAX(maxLength, currentLength)
+    END FOR
+    
+    RETURN maxLength
+END
+
+ALGORITHM LongestSubstringOptimized(string)
+INPUT: string - input string to analyze
+OUTPUT: length of longest substring with unique characters
+BEGIN
+    charMap = new Map()  // character -> last seen index
+    left = 0
+    maxLength = 0
+    
+    FOR right = 0 TO string.length - 1 DO
+        char = string[right]
+        
+        // If character seen before and within current window
+        IF charMap.contains(char) AND charMap.get(char) >= left THEN
+            left = charMap.get(char) + 1
+        END IF
+        
+        charMap.set(char, right)
+        maxLength = MAX(maxLength, right - left + 1)
+    END FOR
+    
+    RETURN maxLength
+END`,
+    implementationCode: `// Comprehensive Longest Substring Implementation
+
+class LongestSubstringProblems {
+    // Main algorithm - longest substring without repeating characters
+    static lengthOfLongestSubstring(s) {
+        if (s.length === 0) return 0;
+        
+        const charSet = new Set();
+        let left = 0;
+        let maxLength = 0;
+        
+        for (let right = 0; right < s.length; right++) {
+            // Contract window while duplicate exists
+            while (charSet.has(s[right])) {
+                charSet.delete(s[left]);
+                left++;
+            }
+            
+            // Expand window
+            charSet.add(s[right]);
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+        
+        return maxLength;
+    }
+    
+    // Optimized version using character index mapping
+    static lengthOfLongestSubstringOptimized(s) {
+        if (s.length === 0) return 0;
+        
+        const charMap = new Map();
+        let left = 0;
+        let maxLength = 0;
+        
+        for (let right = 0; right < s.length; right++) {
+            const char = s[right];
+            
+            // If character seen before and within current window
+            if (charMap.has(char) && charMap.get(char) >= left) {
+                left = charMap.get(char) + 1;
+            }
+            
+            charMap.set(char, right);
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+        
+        return maxLength;
+    }
+    
+    // Return the actual longest substring (not just length)
+    static findLongestSubstring(s) {
+        if (s.length === 0) return "";
+        
+        const charMap = new Map();
+        let left = 0;
+        let maxLength = 0;
+        let maxStart = 0;
+        
+        for (let right = 0; right < s.length; right++) {
+            const char = s[right];
+            
+            if (charMap.has(char) && charMap.get(char) >= left) {
+                left = charMap.get(char) + 1;
+            }
+            
+            charMap.set(char, right);
+            
+            if (right - left + 1 > maxLength) {
+                maxLength = right - left + 1;
+                maxStart = left;
+            }
+        }
+        
+        return {
+            length: maxLength,
+            substring: s.substring(maxStart, maxStart + maxLength),
+            startIndex: maxStart,
+            endIndex: maxStart + maxLength - 1
+        };
+    }
+    
+    // Variation: Longest substring with at most k distinct characters
+    static longestSubstringWithKDistinct(s, k) {
+        if (s.length === 0 || k === 0) return 0;
+        
+        const charCount = new Map();
+        let left = 0;
+        let maxLength = 0;
+        
+        for (let right = 0; right < s.length; right++) {
+            const char = s[right];
+            charCount.set(char, (charCount.get(char) || 0) + 1);
+            
+            // Contract window if more than k distinct characters
+            while (charCount.size > k) {
+                const leftChar = s[left];
+                charCount.set(leftChar, charCount.get(leftChar) - 1);
+                if (charCount.get(leftChar) === 0) {
+                    charCount.delete(leftChar);
+                }
+                left++;
+            }
+            
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+        
+        return maxLength;
+    }
+    
+    // Variation: Longest substring with exactly k distinct characters
+    static longestSubstringWithExactlyKDistinct(s, k) {
+        return this.longestSubstringWithKDistinct(s, k) - 
+               this.longestSubstringWithKDistinct(s, k - 1);
+    }
+    
+    // Variation: Minimum window substring containing all characters of pattern
+    static minWindow(s, t) {
+        if (s.length === 0 || t.length === 0) return "";
+        
+        const targetMap = new Map();
+        for (const char of t) {
+            targetMap.set(char, (targetMap.get(char) || 0) + 1);
+        }
+        
+        let left = 0;
+        let minLength = Infinity;
+        let minStart = 0;
+        let required = targetMap.size;
+        let formed = 0;
+        const windowCounts = new Map();
+        
+        for (let right = 0; right < s.length; right++) {
+            const char = s[right];
+            windowCounts.set(char, (windowCounts.get(char) || 0) + 1);
+            
+            if (targetMap.has(char) && windowCounts.get(char) === targetMap.get(char)) {
+                formed++;
+            }
+            
+            // Contract window while valid
+            while (left <= right && formed === required) {
+                if (right - left + 1 < minLength) {
+                    minLength = right - left + 1;
+                    minStart = left;
+                }
+                
+                const leftChar = s[left];
+                windowCounts.set(leftChar, windowCounts.get(leftChar) - 1);
+                if (targetMap.has(leftChar) && windowCounts.get(leftChar) < targetMap.get(leftChar)) {
+                    formed--;
+                }
+                left++;
+            }
+        }
+        
+        return minLength === Infinity ? "" : s.substring(minStart, minStart + minLength);
+    }
+    
+    // Count all unique substrings
+    static countUniqueSubstrings(s) {
+        const uniqueSubstrings = new Set();
+        
+        for (let i = 0; i < s.length; i++) {
+            const charSet = new Set();
+            for (let j = i; j < s.length; j++) {
+                if (charSet.has(s[j])) break;
+                charSet.add(s[j]);
+                uniqueSubstrings.add(s.substring(i, j + 1));
+            }
+        }
+        
+        return uniqueSubstrings.size;
+    }
+}
+
+// Usage Examples
+console.log(LongestSubstringProblems.lengthOfLongestSubstring("abcabcbb")); // 3
+console.log(LongestSubstringProblems.findLongestSubstring("pwwkew")); // {length: 3, substring: "wke", ...}
+console.log(LongestSubstringProblems.longestSubstringWithKDistinct("eceba", 2)); // 3
+console.log(LongestSubstringProblems.minWindow("ADOBECODEBANC", "ABC")); // "BANC"`,
+    quizQuestions: [
+      {
+        question: "What data structure is most efficient for tracking characters in the sliding window?",
+        options: ["Array", "Hash Set or Hash Map", "Linked List", "Stack"],
+        correctAnswer: 1,
+        explanation: "Hash Set provides O(1) lookup, insertion, and deletion for character tracking, making it ideal for this problem."
+      },
+      {
+        question: "When do we move the left pointer in the sliding window?",
+        options: ["Always after moving right pointer", "When we find a duplicate character", "At the end of iteration", "Never"],
+        correctAnswer: 1,
+        explanation: "We move the left pointer when we encounter a duplicate character to maintain the unique character constraint."
+      },
+      {
+        question: "What is the time complexity of the optimized longest substring algorithm?",
+        options: ["O(n²)", "O(n log n)", "O(n)", "O(1)"],
+        correctAnswer: 2,
+        explanation: "Each character is visited at most twice (once by right pointer, once by left pointer), resulting in O(n) time complexity."
+      },
+      {
+        question: "In the optimized approach, what do we store in the hash map?",
+        options: ["Character frequencies", "Character and its last seen index", "Only characters", "Window boundaries"],
+        correctAnswer: 1,
+        explanation: "We store each character and its most recent index to efficiently jump the left pointer when duplicates are found."
+      },
+      {
+        question: "What is a real-world application of longest substring problems?",
+        options: ["Sorting algorithms", "Finding unique DNA sequences without repeating nucleotides", "Binary tree traversal", "Graph shortest path"],
+        correctAnswer: 1,
+        explanation: "Bioinformatics uses longest substring algorithms to find unique DNA/RNA sequences without repeating nucleotides for genetic analysis."
+      }
+    ],
+    syntax: `// Longest Substring Pattern
+function lengthOfLongestSubstring(s) {
+    const charSet = new Set();
+    let left = 0, maxLength = 0;
+    
+    for (let right = 0; right < s.length; right++) {
+        while (charSet.has(s[right])) {
+            charSet.delete(s[left++]);
+        }
+        charSet.add(s[right]);
+        maxLength = Math.max(maxLength, right - left + 1);
+    }
+    
+    return maxLength;
+}`,
     example: `// Longest Substring Without Repeating Characters
 function lengthOfLongestSubstring(s) {
     const charSet = new Set();
@@ -18933,6 +24210,268 @@ What it does: performs operations directly on binary digits using bitwise operat
 How it works: treats numbers as sequences of bits and applies logical operations bit by bit to achieve desired results.
 
 When to use: optimization problems, checking powers of two, finding unique elements, generating subsets, low-level programming.`,
+    voiceExplanation: `Think of bit manipulation like working with a row of light switches, where each switch can be either ON (1) or OFF (0). Imagine you have a control panel with 8 switches representing the number 5, which looks like: OFF-OFF-OFF-OFF-OFF-1-OFF-1 (that's 00000101 in binary). Now, bit operations are like having different tools to manipulate these switches. The AND operation is like a strict security guard - both switches must be ON for the result to be ON. The OR operation is like a welcoming host - if either switch is ON, the result is ON. XOR is like a picky eater - it only likes when switches are different (one ON, one OFF). The NOT operation is like a rebel - it flips every single switch to the opposite state. Bit shifts are like sliding the entire pattern left or right - shifting left doubles the number (like adding a zero at the end), while shifting right halves it (like removing the last digit). These operations are incredibly fast because computers are literally built to do them!`,
+    realWorldApplications: `**Industry Applications:**
+- **Computer Graphics**: Color manipulation, alpha blending, pixel operations
+- **Cryptography**: Encryption algorithms, hash functions, random number generation
+- **Database Systems**: Bitmap indexes, compression algorithms, bloom filters
+- **Network Programming**: IP address manipulation, subnet calculations, protocol flags
+- **Game Development**: Collision detection, state management, optimization tricks
+- **Operating Systems**: Memory management, file permissions, process scheduling
+- **Embedded Systems**: Hardware control, sensor data processing, power optimization
+- **Compiler Design**: Code optimization, register allocation, instruction encoding
+- **Data Compression**: Huffman coding, LZ algorithms, bit-level packing
+- **Machine Learning**: Feature hashing, dimensionality reduction, neural network optimization`,
+    keyConcepts: `**Essential Concepts:**
+1. **Binary Representation**: Understanding how numbers are stored as sequences of bits
+2. **Bitwise Operators**: AND (&), OR (|), XOR (^), NOT (~), Left Shift (<<), Right Shift (>>)
+3. **Bit Positions**: Each bit has a position (0-indexed from right), representing powers of 2
+4. **Two's Complement**: How negative numbers are represented in binary
+5. **Bit Masks**: Using specific bit patterns to isolate or modify certain bits
+6. **Bit Tricks**: Efficient algorithms using bitwise operations (power of 2, even/odd checks)
+7. **Performance Benefits**: Bitwise operations are among the fastest CPU instructions`,
+    pseudocode: `**Bit Manipulation Algorithms:**
+
+ALGORITHM CheckEvenOdd(number)
+INPUT: number - integer to check
+OUTPUT: true if even, false if odd
+BEGIN
+    RETURN (number & 1) = 0
+END
+
+ALGORITHM IsPowerOfTwo(number)
+INPUT: number - positive integer to check
+OUTPUT: true if power of 2, false otherwise
+BEGIN
+    IF number <= 0 THEN
+        RETURN false
+    END IF
+    RETURN (number & (number - 1)) = 0
+END
+
+ALGORITHM SetBit(number, position)
+INPUT: number - integer, position - bit position to set
+OUTPUT: number with bit at position set to 1
+BEGIN
+    mask = 1 << position
+    RETURN number | mask
+END
+
+ALGORITHM ClearBit(number, position)
+INPUT: number - integer, position - bit position to clear
+OUTPUT: number with bit at position set to 0
+BEGIN
+    mask = ~(1 << position)
+    RETURN number & mask
+END
+
+ALGORITHM CountSetBits(number)
+INPUT: number - integer to count bits in
+OUTPUT: count of 1-bits in binary representation
+BEGIN
+    count = 0
+    WHILE number > 0 DO
+        count = count + (number & 1)
+        number = number >> 1
+    END WHILE
+    RETURN count
+END`,
+    implementationCode: `// Comprehensive Bit Manipulation Implementation
+
+class BitManipulation {
+    // Basic bitwise operations demonstration
+    static bitwiseOperations(a, b) {
+        return {
+            and: a & b,           // Both bits must be 1
+            or: a | b,            // At least one bit must be 1
+            xor: a ^ b,           // Bits must be different
+            notA: ~a,             // Flip all bits of a
+            leftShift: a << 1,    // Multiply by 2
+            rightShift: a >> 1,   // Divide by 2
+            unsignedRightShift: a >>> 1  // Unsigned right shift
+        };
+    }
+    
+    // Check if number is even or odd - O(1)
+    static isEven(n) {
+        return (n & 1) === 0;
+    }
+    
+    static isOdd(n) {
+        return (n & 1) === 1;
+    }
+    
+    // Check if number is power of 2 - O(1)
+    static isPowerOfTwo(n) {
+        return n > 0 && (n & (n - 1)) === 0;
+    }
+    
+    // Set bit at position i - O(1)
+    static setBit(num, i) {
+        return num | (1 << i);
+    }
+    
+    // Clear bit at position i - O(1)
+    static clearBit(num, i) {
+        return num & ~(1 << i);
+    }
+    
+    // Toggle bit at position i - O(1)
+    static toggleBit(num, i) {
+        return num ^ (1 << i);
+    }
+    
+    // Check if bit at position i is set - O(1)
+    static isBitSet(num, i) {
+        return (num & (1 << i)) !== 0;
+    }
+    
+    // Count number of set bits (Brian Kernighan's algorithm) - O(number of set bits)
+    static countSetBits(n) {
+        let count = 0;
+        while (n) {
+            n &= (n - 1); // Removes rightmost set bit
+            count++;
+        }
+        return count;
+    }
+    
+    // Count set bits using built-in method
+    static countSetBitsBuiltIn(n) {
+        return n.toString(2).split('1').length - 1;
+    }
+    
+    // Find position of rightmost set bit - O(1)
+    static rightmostSetBit(n) {
+        return n & -n;
+    }
+    
+    // Find position of rightmost set bit (index)
+    static rightmostSetBitPosition(n) {
+        if (n === 0) return -1;
+        return Math.log2(n & -n);
+    }
+    
+    // Swap two numbers without temporary variable
+    static swapNumbers(a, b) {
+        console.log(\`Before: a=\${a}, b=\${b}\`);
+        a = a ^ b;
+        b = a ^ b;
+        a = a ^ b;
+        console.log(\`After: a=\${a}, b=\${b}\`);
+        return { a, b };
+    }
+    
+    // Check if two numbers have opposite signs
+    static haveOppositeSigns(a, b) {
+        return (a ^ b) < 0;
+    }
+    
+    // Find the only non-repeating element (all others appear twice)
+    static findSingleNumber(nums) {
+        let result = 0;
+        for (let num of nums) {
+            result ^= num;
+        }
+        return result;
+    }
+    
+    // Multiply by 2^n using left shift
+    static multiplyByPowerOf2(num, n) {
+        return num << n;
+    }
+    
+    // Divide by 2^n using right shift
+    static divideByPowerOf2(num, n) {
+        return num >> n;
+    }
+    
+    // Generate all subsets using bit manipulation
+    static generateSubsets(arr) {
+        const n = arr.length;
+        const subsets = [];
+        
+        // 2^n possible subsets
+        for (let i = 0; i < (1 << n); i++) {
+            const subset = [];
+            for (let j = 0; j < n; j++) {
+                // Check if j-th bit is set in i
+                if (i & (1 << j)) {
+                    subset.push(arr[j]);
+                }
+            }
+            subsets.push(subset);
+        }
+        
+        return subsets;
+    }
+    
+    // Convert decimal to binary string
+    static toBinary(n) {
+        return n.toString(2);
+    }
+    
+    // Convert binary string to decimal
+    static fromBinary(binaryStr) {
+        return parseInt(binaryStr, 2);
+    }
+}
+
+// Usage Examples
+console.log(BitManipulation.bitwiseOperations(5, 3)); // Various operations
+console.log(BitManipulation.isEven(4)); // true
+console.log(BitManipulation.isPowerOfTwo(8)); // true
+console.log(BitManipulation.setBit(5, 1)); // 7 (101 -> 111)
+console.log(BitManipulation.countSetBits(7)); // 3
+console.log(BitManipulation.generateSubsets([1, 2, 3])); // All subsets
+console.log(BitManipulation.findSingleNumber([2, 1, 2, 3, 1])); // 3`,
+    quizQuestions: [
+      {
+        question: "What does the expression (n & 1) check?",
+        options: ["If n is positive", "If n is even or odd", "If n is a power of 2", "If n is zero"],
+        correctAnswer: 1,
+        explanation: "The expression (n & 1) checks the least significant bit. If it's 0, the number is even; if it's 1, the number is odd."
+      },
+      {
+        question: "What is the result of 5 ^ 3 (5 XOR 3)?",
+        options: ["8", "6", "2", "15"],
+        correctAnswer: 1,
+        explanation: "5 in binary is 101, 3 in binary is 011. XOR gives 110, which is 6 in decimal."
+      },
+      {
+        question: "How do you check if a number n is a power of 2?",
+        options: ["n & 1 == 0", "n > 0 && (n & (n-1)) == 0", "n % 2 == 0", "n << 1 == n"],
+        correctAnswer: 1,
+        explanation: "A power of 2 has exactly one bit set. The expression (n & (n-1)) removes the rightmost set bit, so it equals 0 only for powers of 2."
+      },
+      {
+        question: "What does left shift (<<) operation do to a number?",
+        options: ["Divides by 2", "Multiplies by 2", "Adds 1", "Subtracts 1"],
+        correctAnswer: 1,
+        explanation: "Left shift by 1 position multiplies the number by 2. Each left shift by n positions multiplies by 2^n."
+      },
+      {
+        question: "What is a real-world application of bit manipulation?",
+        options: ["Sorting arrays", "Color manipulation in computer graphics", "Binary tree traversal", "Linked list operations"],
+        correctAnswer: 1,
+        explanation: "Computer graphics extensively uses bit manipulation for color operations, alpha blending, and pixel-level manipulations."
+      }
+    ],
+    syntax: `// Basic Bitwise Operators
+a & b    // AND - both bits must be 1
+a | b    // OR - at least one bit must be 1
+a ^ b    // XOR - bits must be different
+~a       // NOT - flip all bits
+a << n   // Left shift - multiply by 2^n
+a >> n   // Right shift - divide by 2^n
+
+// Common Bit Manipulation Patterns
+n & 1 === 0        // Check if even
+n & (n-1) === 0    // Check if power of 2
+num | (1 << i)     // Set bit at position i
+num & ~(1 << i)    // Clear bit at position i
+num ^ (1 << i)     // Toggle bit at position i
+(num & (1 << i)) !== 0  // Check if bit i is set`,
     example: `// Bit Manipulation Basics
 
 // Basic Bitwise Operations
@@ -19077,6 +24616,291 @@ What it does: counts number of 1-bits in binary representation of integer, funda
 How it works: uses bit operations like n&1 to check bits, or Brian Kernighan's algorithm n&(n-1) to clear rightmost set bit.
 
 When to use: bit manipulation problems, cryptography, error correction codes, optimization algorithms, competitive programming.`,
+    voiceExplanation: `Think of counting set bits like counting the number of lights that are turned ON in a row of light switches. Imagine you have a binary number like 1011 (which is 11 in decimal) - this represents 4 light switches where the 1st, 3rd, and 4th switches are ON, and the 2nd switch is OFF. Your job is to count how many switches are ON. The naive approach is like walking down the row and checking each switch one by one - "Is this switch ON? Yes, count it. Is the next switch ON? No, skip it." But there's a brilliant trick called Brian Kernighan's algorithm! It's like having a magic wand that can turn OFF the rightmost ON switch with each wave. The magic formula is n & (n-1). Each time you use this formula, one light goes out, and you count how many times you had to wave the wand until all lights are OFF. This is much faster because you only check the switches that are actually ON, not every single switch in the row!`,
+    realWorldApplications: `**Industry Applications:**
+- **Cryptography**: Calculating Hamming distance for error detection and correction
+- **Database Systems**: Bitmap indexes for fast query processing and data compression
+- **Network Security**: Analyzing bit patterns in network packets and intrusion detection
+- **Computer Graphics**: Alpha channel processing and pixel manipulation operations
+- **Machine Learning**: Feature hashing, sparse vector operations, and dimensionality reduction
+- **Compression Algorithms**: Huffman coding and entropy calculation for data compression
+- **Error Correction**: Reed-Solomon codes and parity checking in data transmission
+- **Bioinformatics**: DNA sequence analysis and genetic algorithm implementations
+- **Game Development**: Collision detection masks and state management optimization
+- **Hardware Design**: Circuit optimization and FPGA programming for embedded systems`,
+    keyConcepts: `**Essential Concepts:**
+1. **Hamming Weight**: Technical term for the count of set bits in binary representation
+2. **Brian Kernighan's Algorithm**: Efficient O(k) approach where k is number of set bits
+3. **Bit Manipulation Tricks**: Using n&(n-1) to clear rightmost set bit efficiently
+4. **Lookup Table Optimization**: Precomputing results for faster repeated operations
+5. **Parallel Bit Counting**: Divide-and-conquer approach for constant-time counting
+6. **Performance Trade-offs**: Time vs space complexity in different counting approaches
+7. **Applications in Algorithms**: Foundation for many advanced bit manipulation techniques`,
+    pseudocode: `**Count Set Bits Algorithms:**
+
+ALGORITHM CountSetBitsNaive(number)
+INPUT: number - integer to count bits in
+OUTPUT: count of 1-bits in binary representation
+BEGIN
+    count = 0
+    WHILE number > 0 DO
+        IF (number & 1) = 1 THEN
+            count = count + 1
+        END IF
+        number = number >> 1  // Right shift by 1
+    END WHILE
+    RETURN count
+END
+
+ALGORITHM CountSetBitsBrianKernighan(number)
+INPUT: number - integer to count bits in
+OUTPUT: count of 1-bits in binary representation
+BEGIN
+    count = 0
+    WHILE number > 0 DO
+        number = number & (number - 1)  // Clear rightmost set bit
+        count = count + 1
+    END WHILE
+    RETURN count
+END
+
+ALGORITHM CountSetBitsLookupTable(number)
+INPUT: number - integer to count bits in
+OUTPUT: count of 1-bits using precomputed table
+BEGIN
+    // Precompute lookup table for 8-bit numbers (0-255)
+    lookupTable = PRECOMPUTE_TABLE()
+    count = 0
+    
+    WHILE number > 0 DO
+        count = count + lookupTable[number & 0xFF]  // Count bits in last 8 bits
+        number = number >> 8  // Move to next 8 bits
+    END WHILE
+    
+    RETURN count
+END
+
+ALGORITHM CountSetBitsParallel(number)
+INPUT: number - 32-bit integer to count bits in
+OUTPUT: count of 1-bits using parallel counting
+BEGIN
+    // Count bits in parallel using bit manipulation
+    number = number - ((number >> 1) & 0x55555555)
+    number = (number & 0x33333333) + ((number >> 2) & 0x33333333)
+    number = (number + (number >> 4)) & 0x0F0F0F0F
+    number = number + (number >> 8)
+    number = number + (number >> 16)
+    RETURN number & 0x3F
+END`,
+    implementationCode: `// Comprehensive Count Set Bits Implementation
+
+class SetBitCounter {
+    constructor() {
+        // Precompute lookup table for 8-bit numbers (0-255)
+        this.lookupTable = new Array(256);
+        for (let i = 0; i < 256; i++) {
+            this.lookupTable[i] = this.countBitsNaive(i);
+        }
+    }
+    
+    // Method 1: Naive approach - O(log n) time, O(1) space
+    static countSetBitsNaive(n) {
+        let count = 0;
+        while (n) {
+            count += n & 1; // Check rightmost bit
+            n >>= 1;        // Right shift
+        }
+        return count;
+    }
+    
+    // Method 2: Brian Kernighan's Algorithm - O(k) time where k = number of set bits
+    static countSetBitsBrianKernighan(n) {
+        let count = 0;
+        while (n) {
+            n &= (n - 1); // Remove rightmost set bit
+            count++;
+        }
+        return count;
+    }
+    
+    // Method 3: Lookup table approach - O(log n / 8) time, O(256) space
+    countSetBitsLookup(n) {
+        let count = 0;
+        while (n) {
+            count += this.lookupTable[n & 0xFF]; // Count bits in last 8 bits
+            n >>= 8; // Move to next 8 bits
+        }
+        return count;
+    }
+    
+    // Method 4: Parallel bit counting - O(1) time for 32-bit numbers
+    static countSetBitsParallel(n) {
+        // Count bits in parallel using divide and conquer
+        n = n - ((n >> 1) & 0x55555555);
+        n = (n & 0x33333333) + ((n >> 2) & 0x33333333);
+        n = (n + (n >> 4)) & 0x0F0F0F0F;
+        n = n + (n >> 8);
+        n = n + (n >> 16);
+        return n & 0x3F;
+    }
+    
+    // Method 5: Built-in approach (for comparison)
+    static countSetBitsBuiltIn(n) {
+        return n.toString(2).split('1').length - 1;
+    }
+    
+    // Helper method for naive counting
+    countBitsNaive(n) {
+        let count = 0;
+        while (n) {
+            count += n & 1;
+            n >>= 1;
+        }
+        return count;
+    }
+    
+    // Performance comparison of all methods
+    comparePerformance(n) {
+        const methods = [
+            { name: 'Naive', func: SetBitCounter.countSetBitsNaive },
+            { name: 'Brian Kernighan', func: SetBitCounter.countSetBitsBrianKernighan },
+            { name: 'Lookup Table', func: this.countSetBitsLookup.bind(this) },
+            { name: 'Parallel', func: SetBitCounter.countSetBitsParallel },
+            { name: 'Built-in', func: SetBitCounter.countSetBitsBuiltIn }
+        ];
+        
+        const results = methods.map(method => {
+            const start = performance.now();
+            const count = method.func(n);
+            const time = performance.now() - start;
+            
+            return {
+                method: method.name,
+                count: count,
+                time: time.toFixed(6) + 'ms',
+                binary: n.toString(2)
+            };
+        });
+        
+        return results;
+    }
+    
+    // Count set bits in range [a, b]
+    countSetBitsInRange(a, b) {
+        let totalCount = 0;
+        for (let i = a; i <= b; i++) {
+            totalCount += SetBitCounter.countSetBitsBrianKernighan(i);
+        }
+        return totalCount;
+    }
+    
+    // Find numbers with exactly k set bits in range [0, n]
+    findNumbersWithKBits(n, k) {
+        const result = [];
+        for (let i = 0; i <= n; i++) {
+            if (SetBitCounter.countSetBitsBrianKernighan(i) === k) {
+                result.push({
+                    number: i,
+                    binary: i.toString(2).padStart(8, '0'),
+                    setBits: k
+                });
+            }
+        }
+        return result;
+    }
+    
+    // Calculate Hamming distance between two numbers
+    hammingDistance(a, b) {
+        return SetBitCounter.countSetBitsBrianKernighan(a ^ b);
+    }
+    
+    // Check if number has even or odd number of set bits
+    hasEvenSetBits(n) {
+        return SetBitCounter.countSetBitsBrianKernighan(n) % 2 === 0;
+    }
+    
+    // Find the number with maximum set bits in an array
+    findMaxSetBitsNumber(arr) {
+        let maxBits = -1;
+        let maxNumber = -1;
+        
+        for (let num of arr) {
+            const bits = SetBitCounter.countSetBitsBrianKernighan(num);
+            if (bits > maxBits) {
+                maxBits = bits;
+                maxNumber = num;
+            }
+        }
+        
+        return { number: maxNumber, setBits: maxBits, binary: maxNumber.toString(2) };
+    }
+}
+
+// Usage Examples
+const counter = new SetBitCounter();
+
+console.log(SetBitCounter.countSetBitsNaive(7));  // 3 (binary: 111)
+console.log(SetBitCounter.countSetBitsBrianKernighan(12));  // 2 (binary: 1100)
+console.log(counter.comparePerformance(255));  // Performance comparison
+console.log(counter.findNumbersWithKBits(15, 2));  // Numbers ≤ 15 with exactly 2 set bits
+console.log(counter.hammingDistance(5, 3));  // Hamming distance between 5 and 3`,
+    quizQuestions: [
+      {
+        question: "What is the time complexity of Brian Kernighan's algorithm for counting set bits?",
+        options: ["O(log n)", "O(k) where k is number of set bits", "O(n)", "O(1)"],
+        correctAnswer: 1,
+        explanation: "Brian Kernighan's algorithm runs in O(k) time where k is the number of set bits, because it only loops for each set bit, not for each bit position."
+      },
+      {
+        question: "What does the operation n & (n-1) accomplish?",
+        options: ["Sets the rightmost bit", "Clears the rightmost set bit", "Counts all bits", "Shifts bits left"],
+        correctAnswer: 1,
+        explanation: "The operation n & (n-1) clears the rightmost set bit. This is the key insight behind Brian Kernighan's algorithm."
+      },
+      {
+        question: "For the number 12 (binary: 1100), how many set bits are there?",
+        options: ["1", "2", "3", "4"],
+        correctAnswer: 1,
+        explanation: "The binary representation of 12 is 1100, which has exactly 2 set bits (two 1s)."
+      },
+      {
+        question: "What is the space complexity of the lookup table approach for counting set bits?",
+        options: ["O(1)", "O(log n)", "O(256)", "O(n)"],
+        correctAnswer: 2,
+        explanation: "The lookup table approach uses O(256) space to precompute the bit counts for all 8-bit numbers (0-255)."
+      },
+      {
+        question: "What is a real-world application of counting set bits?",
+        options: ["Sorting arrays", "Calculating Hamming distance in error correction codes", "Binary tree traversal", "Hash table implementation"],
+        correctAnswer: 1,
+        explanation: "Counting set bits is fundamental for calculating Hamming distance, which is crucial in error detection and correction codes used in data transmission."
+      }
+    ],
+    syntax: `// Count Set Bits Patterns
+// Method 1: Naive approach
+function countSetBits(n) {
+    let count = 0;
+    while (n) {
+        count += n & 1;
+        n >>= 1;
+    }
+    return count;
+}
+
+// Method 2: Brian Kernighan's Algorithm
+function countSetBitsBK(n) {
+    let count = 0;
+    while (n) {
+        n &= (n - 1);  // Clear rightmost set bit
+        count++;
+    }
+    return count;
+}
+
+// Method 3: Built-in (for reference)
+function countSetBitsBuiltIn(n) {
+    return n.toString(2).split('1').length - 1;
+}`,
     example: `// Count Set Bits Implementation
 // Method 1: Naive approach - check each bit
 function countSetBitsNaive(n) {
@@ -19221,7 +25045,302 @@ What it does: determines if given positive integer is power of two using efficie
 
 How it works: uses n & (n-1) == 0 property where powers of two have single bit set, subtracting 1 flips all bits after it.
 
-When to use: optimization problems, memory allocation, hash table sizing, binary tree problems, competitive programming.`
+When to use: optimization problems, memory allocation, hash table sizing, binary tree problems, competitive programming.`,
+    voiceExplanation: `Think of checking if a number is a power of two like identifying perfect binary patterns. Imagine you have a row of light switches where only one switch can be ON at a time to represent a power of two. For example, 8 in binary is 1000 - just one switch ON in the 4th position. The brilliant insight is this: when you subtract 1 from a power of two, something magical happens! Take 8 (1000) minus 1, which gives you 7 (0111). Notice how all the bits after the single ON bit get flipped? Now, when you AND these two numbers together (1000 & 0111), you get 0000 - all zeros! This happens because the single ON bit in the original number aligns with a OFF bit in the (n-1) number. It's like having a perfect lock and key mechanism. If the number isn't a power of two, it has multiple ON switches, so when you subtract 1 and AND them together, you won't get all zeros. This elegant trick lets you check power of two in just one operation!`,
+    realWorldApplications: `**Industry Applications:**
+- **Memory Management**: Operating systems use power-of-2 memory allocation for efficiency
+- **Hash Table Sizing**: Hash tables perform best when size is power of 2 for modulo operations
+- **Graphics Programming**: Texture dimensions in games must be powers of 2 for GPU optimization
+- **Database Systems**: Buffer pool sizes and page sizes are typically powers of 2
+- **Network Protocols**: Packet sizes and buffer allocations in networking stacks
+- **Compiler Optimization**: Loop unrolling and vectorization work best with power-of-2 iterations
+- **Cache Design**: CPU cache sizes are always powers of 2 for addressing efficiency
+- **File Systems**: Block sizes and cluster sizes in file systems for optimal performance
+- **Cryptography**: Key sizes and block sizes in encryption algorithms
+- **Embedded Systems**: Hardware registers and memory addressing schemes`,
+    keyConcepts: `**Essential Concepts:**
+1. **Binary Representation**: Powers of 2 have exactly one bit set (1, 10, 100, 1000...)
+2. **Bit Manipulation Trick**: n & (n-1) == 0 for powers of 2 (excluding 0)
+3. **Edge Case Handling**: Zero and negative numbers are not powers of 2
+4. **Mathematical Property**: Powers of 2 are numbers of form 2^k where k ≥ 0
+5. **Performance Optimization**: O(1) time complexity vs O(log n) division approach
+6. **Bit Pattern Recognition**: Understanding how subtraction affects binary representation
+7. **Practical Applications**: Memory alignment, hash table sizing, algorithm optimization`,
+    pseudocode: `**Power of Two Check Algorithm:**
+
+ALGORITHM IsPowerOfTwo(number)
+INPUT: number - integer to check
+OUTPUT: true if number is power of 2, false otherwise
+BEGIN
+    IF number <= 0 THEN
+        RETURN false
+    END IF
+    
+    RETURN (number & (number - 1)) = 0
+END
+
+ALGORITHM IsPowerOfTwoVerbose(number)
+INPUT: number - integer to check
+OUTPUT: true if number is power of 2, false otherwise
+BEGIN
+    IF number <= 0 THEN
+        RETURN false  // Zero and negative numbers are not powers of 2
+    END IF
+    
+    // Check if exactly one bit is set
+    // For power of 2: n & (n-1) clears the single set bit, resulting in 0
+    RETURN (number & (number - 1)) = 0
+END
+
+ALGORITHM FindNextPowerOfTwo(number)
+INPUT: number - positive integer
+OUTPUT: smallest power of 2 greater than or equal to number
+BEGIN
+    IF number <= 1 THEN
+        RETURN 1
+    END IF
+    
+    // Subtract 1 to handle case where number is already power of 2
+    number = number - 1
+    
+    // Set all bits after the highest set bit
+    number = number | (number >> 1)
+    number = number | (number >> 2)
+    number = number | (number >> 4)
+    number = number | (number >> 8)
+    number = number | (number >> 16)
+    
+    RETURN number + 1
+END`,
+    implementationCode: `// Comprehensive Power of Two Implementation
+
+class PowerOfTwoChecker {
+    // Main algorithm - check if number is power of 2
+    static isPowerOfTwo(n) {
+        return n > 0 && (n & (n - 1)) === 0;
+    }
+    
+    // Alternative approach using bit counting
+    static isPowerOfTwoByBitCount(n) {
+        if (n <= 0) return false;
+        let count = 0;
+        while (n) {
+            count += n & 1;
+            n >>= 1;
+        }
+        return count === 1;
+    }
+    
+    // Check using logarithms (less efficient but educational)
+    static isPowerOfTwoByLog(n) {
+        if (n <= 0) return false;
+        return Math.log2(n) % 1 === 0;
+    }
+    
+    // Find the next power of 2 greater than or equal to n
+    static nextPowerOfTwo(n) {
+        if (n <= 1) return 1;
+        
+        // If already power of 2, return it
+        if (this.isPowerOfTwo(n)) return n;
+        
+        // Find the position of the highest set bit
+        let power = 1;
+        while (power < n) {
+            power <<= 1;
+        }
+        return power;
+    }
+    
+    // Find the next power of 2 using bit manipulation
+    static nextPowerOfTwoBitwise(n) {
+        if (n <= 1) return 1;
+        
+        n--; // Handle case where n is already power of 2
+        
+        // Set all bits after the highest set bit
+        n |= n >> 1;
+        n |= n >> 2;
+        n |= n >> 4;
+        n |= n >> 8;
+        n |= n >> 16;
+        
+        return n + 1;
+    }
+    
+    // Find the previous power of 2 less than or equal to n
+    static previousPowerOfTwo(n) {
+        if (n <= 0) return 0;
+        if (n === 1) return 1;
+        
+        let power = 1;
+        while (power <= n) {
+            power <<= 1;
+        }
+        return power >> 1;
+    }
+    
+    // Get the position of the single set bit (for powers of 2)
+    static getPowerOfTwoExponent(n) {
+        if (!this.isPowerOfTwo(n)) return -1;
+        
+        let position = 0;
+        while (n > 1) {
+            n >>= 1;
+            position++;
+        }
+        return position;
+    }
+    
+    // Generate all powers of 2 up to n
+    static generatePowersOfTwo(n) {
+        const powers = [];
+        let power = 1;
+        
+        while (power <= n) {
+            powers.push({
+                value: power,
+                exponent: Math.log2(power),
+                binary: power.toString(2)
+            });
+            power <<= 1;
+        }
+        
+        return powers;
+    }
+    
+    // Check if a number can be expressed as sum of distinct powers of 2
+    static canBeExpressedAsSumOfPowersOfTwo(n) {
+        // Every positive integer can be expressed as sum of distinct powers of 2
+        // This is essentially the binary representation
+        if (n <= 0) return false;
+        
+        const powers = [];
+        let temp = n;
+        let power = 1;
+        
+        while (temp > 0) {
+            if (temp & 1) {
+                powers.push(power);
+            }
+            temp >>= 1;
+            power <<= 1;
+        }
+        
+        return {
+            canExpress: true,
+            powers: powers,
+            sum: powers.reduce((a, b) => a + b, 0),
+            binary: n.toString(2)
+        };
+    }
+    
+    // Find the largest power of 2 less than or equal to n
+    static largestPowerOfTwoLessOrEqual(n) {
+        if (n <= 0) return 0;
+        
+        let power = 1;
+        while (power <= n) {
+            if (power * 2 > n) break;
+            power *= 2;
+        }
+        
+        return power;
+    }
+    
+    // Performance comparison of different methods
+    static comparePerformance(n) {
+        const methods = [
+            { name: 'Bit Manipulation', func: this.isPowerOfTwo },
+            { name: 'Bit Counting', func: this.isPowerOfTwoByBitCount },
+            { name: 'Logarithm', func: this.isPowerOfTwoByLog }
+        ];
+        
+        const results = methods.map(method => {
+            const start = performance.now();
+            const result = method.func(n);
+            const time = performance.now() - start;
+            
+            return {
+                method: method.name,
+                result: result,
+                time: time.toFixed(6) + 'ms',
+                binary: n.toString(2)
+            };
+        });
+        
+        return results;
+    }
+}
+
+// Usage Examples
+console.log(PowerOfTwoChecker.isPowerOfTwo(8));  // true
+console.log(PowerOfTwoChecker.isPowerOfTwo(6));  // false
+console.log(PowerOfTwoChecker.nextPowerOfTwo(10)); // 16
+console.log(PowerOfTwoChecker.generatePowersOfTwo(100)); // All powers of 2 ≤ 100
+console.log(PowerOfTwoChecker.comparePerformance(1024)); // Performance comparison`,
+    quizQuestions: [
+      {
+        question: "What is the key insight behind the n & (n-1) == 0 check for powers of 2?",
+        options: ["It counts the number of bits", "Powers of 2 have exactly one bit set", "It performs division by 2", "It checks for even numbers"],
+        correctAnswer: 1,
+        explanation: "Powers of 2 have exactly one bit set in their binary representation. The operation n & (n-1) clears this single bit, resulting in 0."
+      },
+      {
+        question: "Which of these numbers is a power of 2?",
+        options: ["6", "12", "16", "18"],
+        correctAnswer: 2,
+        explanation: "16 is 2^4, which has binary representation 10000 - exactly one bit set."
+      },
+      {
+        question: "What happens when you subtract 1 from a power of 2 in binary?",
+        options: ["Nothing changes", "All bits after the set bit become 1", "The number becomes 0", "It becomes negative"],
+        correctAnswer: 1,
+        explanation: "Subtracting 1 from a power of 2 flips all the bits after (and including) the single set bit, creating a pattern that ANDs to 0 with the original."
+      },
+      {
+        question: "Why is 0 not considered a power of 2?",
+        options: ["It has no bits set", "It's not positive", "2^k is never 0 for any real k", "All of the above"],
+        correctAnswer: 3,
+        explanation: "0 is not a power of 2 because: it has no bits set, it's not positive, and mathematically 2^k is never 0 for any real exponent k."
+      },
+      {
+        question: "What is a real-world application of power of 2 checking?",
+        options: ["Sorting algorithms", "Hash table sizing for optimal performance", "Binary tree height calculation", "String matching"],
+        correctAnswer: 1,
+        explanation: "Hash tables perform optimally when their size is a power of 2, as it allows for efficient modulo operations using bitwise AND."
+      }
+    ],
+    syntax: `// Power of Two Check Pattern
+function isPowerOfTwo(n) {
+    return n > 0 && (n & (n - 1)) === 0;
+}
+
+// Find next power of 2
+function nextPowerOfTwo(n) {
+    if (n <= 1) return 1;
+    n--;
+    n |= n >> 1;
+    n |= n >> 2;
+    n |= n >> 4;
+    n |= n >> 8;
+    n |= n >> 16;
+    return n + 1;
+}
+
+// Check if exactly one bit is set
+function hasOneBitSet(n) {
+    return n > 0 && (n & (n - 1)) === 0;
+}`,
+    example: `// Power of Two Check Examples
+function isPowerOfTwo(n) {
+    return n > 0 && (n & (n - 1)) === 0;
+}
+
+console.log(isPowerOfTwo(1));   // true  (2^0)
+console.log(isPowerOfTwo(8));   // true  (2^3)
+console.log(isPowerOfTwo(6));   // false
+console.log(isPowerOfTwo(16));  // true  (2^4)`
   },
   {
     id: 'single-number',
@@ -19237,7 +25356,366 @@ What it does: finds single unique number in array where all other numbers appear
 
 How it works: XORs all numbers together, identical numbers cancel out (a ⊕ a = 0), leaving only the unique number.
 
-When to use: finding unique elements, bit manipulation practice, space-efficient solutions, when hash tables not allowed.`
+When to use: finding unique elements, bit manipulation practice, space-efficient solutions, when hash tables not allowed.`,
+    voiceExplanation: `Think of the Single Number problem like finding the one person who doesn't have a twin at a party. Imagine everyone at the party has an identical twin except for one person. The brilliant insight is using XOR operation, which acts like a magical cancellation machine! Picture XOR as a special handshake: when two identical people (twins) shake hands with XOR, they completely disappear - it's like they cancel each other out (a ⊕ a = 0). But when someone shakes hands with "nothing" (0), they remain unchanged (a ⊕ 0 = a). So here's the magic: if you make everyone at the party shake hands with each other using XOR, all the twins will cancel out and disappear, leaving only the unique person standing! It doesn't matter what order they shake hands - XOR is commutative and associative. This elegant solution works in O(n) time with O(1) space, making it incredibly efficient compared to using hash tables or sorting.`,
+    realWorldApplications: `**Industry Applications:**
+- **Error Detection**: Finding corrupted data in transmission where duplicates indicate integrity
+- **Database Deduplication**: Identifying unique records in datasets with paired entries
+- **Memory Management**: Finding memory leaks where objects should be allocated/deallocated in pairs
+- **Network Protocols**: Detecting missing packets in communication where duplicates are retransmitted
+- **Cryptography**: Stream cipher implementations using XOR for encryption/decryption
+- **Game Development**: Finding unique game states or identifying unpaired game objects
+- **Quality Assurance**: Detecting anomalies in manufacturing where items come in pairs
+- **Financial Systems**: Identifying unmatched transactions in double-entry bookkeeping
+- **Data Validation**: Finding inconsistencies in mirrored or backup systems
+- **Hardware Testing**: Identifying faulty components in redundant systems`,
+    keyConcepts: `**Essential Concepts:**
+1. **XOR Properties**: Self-canceling (a ⊕ a = 0), identity (a ⊕ 0 = a), commutative, associative
+2. **Bit Manipulation Elegance**: Using mathematical properties for algorithmic solutions
+3. **Space Optimization**: O(1) space complexity vs O(n) hash table approach
+4. **Order Independence**: XOR operations can be performed in any order
+5. **Mathematical Foundation**: XOR as addition in GF(2) finite field
+6. **Problem Variations**: Extensions to finding elements appearing odd number of times
+7. **Practical Constraints**: Works when exactly one element appears once, others appear even times`,
+    pseudocode: `**Single Number Algorithm:**
+
+ALGORITHM FindSingleNumber(array)
+INPUT: array - array where all elements appear twice except one
+OUTPUT: the single element that appears only once
+BEGIN
+    result = 0
+    
+    FOR each element IN array DO
+        result = result XOR element
+    END FOR
+    
+    RETURN result
+END
+
+ALGORITHM FindSingleNumberVerbose(array)
+INPUT: array - array with paired elements except one unique
+OUTPUT: the unique element
+BEGIN
+    result = 0
+    
+    // XOR all elements together
+    // Identical elements will cancel out (a XOR a = 0)
+    // The unique element will remain (a XOR 0 = a)
+    FOR i = 0 TO array.length - 1 DO
+        result = result XOR array[i]
+    END FOR
+    
+    RETURN result
+END
+
+ALGORITHM FindTwoSingleNumbers(array)
+INPUT: array - array where all elements appear twice except two
+OUTPUT: array containing the two unique elements
+BEGIN
+    // First pass: XOR all elements to get XOR of two unique numbers
+    xorResult = 0
+    FOR each element IN array DO
+        xorResult = xorResult XOR element
+    END FOR
+    
+    // Find rightmost set bit in xorResult
+    rightmostBit = xorResult & (-xorResult)
+    
+    // Divide elements into two groups and XOR each group
+    first = 0
+    second = 0
+    FOR each element IN array DO
+        IF (element & rightmostBit) ≠ 0 THEN
+            first = first XOR element
+        ELSE
+            second = second XOR element
+        END IF
+    END FOR
+    
+    RETURN [first, second]
+END`,
+    implementationCode: `// Comprehensive Single Number Implementation
+
+class SingleNumberSolver {
+    // Main algorithm - find single number where others appear twice
+    static singleNumber(nums) {
+        let result = 0;
+        for (let num of nums) {
+            result ^= num;
+        }
+        return result;
+    }
+    
+    // Alternative implementation with reduce
+    static singleNumberReduce(nums) {
+        return nums.reduce((acc, num) => acc ^ num, 0);
+    }
+    
+    // Find two single numbers where others appear twice
+    static singleNumberII(nums) {
+        // First pass: get XOR of the two unique numbers
+        let xor = 0;
+        for (let num of nums) {
+            xor ^= num;
+        }
+        
+        // Find rightmost set bit
+        let rightmostBit = xor & (-xor);
+        
+        // Divide numbers into two groups and XOR each group
+        let first = 0, second = 0;
+        for (let num of nums) {
+            if (num & rightmostBit) {
+                first ^= num;
+            } else {
+                second ^= num;
+            }
+        }
+        
+        return [first, second];
+    }
+    
+    // Find single number where others appear three times
+    static singleNumberIII(nums) {
+        let ones = 0, twos = 0;
+        
+        for (let num of nums) {
+            // Update twos with bits that appeared twice
+            twos |= ones & num;
+            // Update ones with current number
+            ones ^= num;
+            // Remove bits that appeared three times
+            let threes = ones & twos;
+            ones &= ~threes;
+            twos &= ~threes;
+        }
+        
+        return ones;
+    }
+    
+    // Find single number where others appear k times
+    static singleNumberGeneral(nums, k) {
+        const bitCount = new Array(32).fill(0);
+        
+        // Count occurrences of each bit position
+        for (let num of nums) {
+            for (let i = 0; i < 32; i++) {
+                if (num & (1 << i)) {
+                    bitCount[i]++;
+                }
+            }
+        }
+        
+        // Reconstruct the unique number
+        let result = 0;
+        for (let i = 0; i < 32; i++) {
+            if (bitCount[i] % k !== 0) {
+                result |= (1 << i);
+            }
+        }
+        
+        return result;
+    }
+    
+    // Verify solution by checking all numbers appear correct number of times
+    static verifySolution(nums, single) {
+        const count = new Map();
+        
+        for (let num of nums) {
+            count.set(num, (count.get(num) || 0) + 1);
+        }
+        
+        let singleCount = 0;
+        let doubleCount = 0;
+        
+        for (let [num, freq] of count) {
+            if (freq === 1) {
+                singleCount++;
+                if (num !== single) {
+                    return { valid: false, reason: \`Expected single number \${single}, but \${num} also appears once\` };
+                }
+            } else if (freq === 2) {
+                doubleCount++;
+            } else {
+                return { valid: false, reason: \`Number \${num} appears \${freq} times, expected 1 or 2\` };
+            }
+        }
+        
+        return {
+            valid: singleCount === 1,
+            singleCount,
+            doubleCount,
+            totalNumbers: count.size
+        };
+    }
+    
+    // Generate test cases for single number problem
+    static generateTestCase(size, maxValue = 100) {
+        const pairs = [];
+        const used = new Set();
+        
+        // Generate pairs
+        for (let i = 0; i < Math.floor(size / 2); i++) {
+            let num;
+            do {
+                num = Math.floor(Math.random() * maxValue) + 1;
+            } while (used.has(num));
+            
+            used.add(num);
+            pairs.push(num, num);
+        }
+        
+        // Add single number
+        let single;
+        do {
+            single = Math.floor(Math.random() * maxValue) + 1;
+        } while (used.has(single));
+        
+        pairs.push(single);
+        
+        // Shuffle array
+        for (let i = pairs.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
+        }
+        
+        return { array: pairs, expected: single };
+    }
+    
+    // Performance comparison with hash table approach
+    static comparePerformance(nums) {
+        // XOR approach
+        const startXOR = performance.now();
+        const resultXOR = this.singleNumber([...nums]);
+        const timeXOR = performance.now() - startXOR;
+        
+        // Hash table approach
+        const startHash = performance.now();
+        const count = new Map();
+        for (let num of nums) {
+            count.set(num, (count.get(num) || 0) + 1);
+        }
+        let resultHash = null;
+        for (let [num, freq] of count) {
+            if (freq === 1) {
+                resultHash = num;
+                break;
+            }
+        }
+        const timeHash = performance.now() - startHash;
+        
+        return {
+            xorApproach: { result: resultXOR, time: timeXOR.toFixed(6) + 'ms', space: 'O(1)' },
+            hashApproach: { result: resultHash, time: timeHash.toFixed(6) + 'ms', space: 'O(n)' },
+            arraySize: nums.length
+        };
+    }
+    
+    // Educational step-by-step XOR demonstration
+    static demonstrateXOR(nums) {
+        const steps = [];
+        let result = 0;
+        
+        steps.push({ step: 0, operation: 'Initialize', value: result, binary: result.toString(2) || '0' });
+        
+        for (let i = 0; i < nums.length; i++) {
+            const prevResult = result;
+            result ^= nums[i];
+            steps.push({
+                step: i + 1,
+                operation: \`XOR with \${nums[i]}\`,
+                calculation: \`\${prevResult} ⊕ \${nums[i]} = \${result}\`,
+                binary: \`\${prevResult.toString(2)} ⊕ \${nums[i].toString(2)} = \${result.toString(2)}\`,
+                value: result
+            });
+        }
+        
+        return { steps, finalResult: result };
+    }
+}
+
+// Usage Examples
+const nums = [2, 2, 1, 4, 4, 6, 6];
+console.log(SingleNumberSolver.singleNumber(nums)); // 1
+
+const twoSingles = [1, 2, 1, 3, 2, 5];
+console.log(SingleNumberSolver.singleNumberII(twoSingles)); // [3, 5]
+
+const testCase = SingleNumberSolver.generateTestCase(10);
+console.log('Test case:', testCase);
+console.log('Solution:', SingleNumberSolver.singleNumber(testCase.array));
+
+console.log(SingleNumberSolver.demonstrateXOR([4, 1, 2, 1, 2])); // Step-by-step XOR`,
+    quizQuestions: [
+      {
+        question: "What is the key property of XOR that makes the single number algorithm work?",
+        options: ["XOR is commutative", "XOR is associative", "a ⊕ a = 0 (self-canceling)", "All of the above"],
+        correctAnswer: 3,
+        explanation: "All XOR properties are essential: self-canceling eliminates pairs, while commutative and associative properties allow any order of operations."
+      },
+      {
+        question: "What is the result of 5 ⊕ 3 ⊕ 5?",
+        options: ["0", "3", "5", "8"],
+        correctAnswer: 1,
+        explanation: "5 ⊕ 3 ⊕ 5 = (5 ⊕ 5) ⊕ 3 = 0 ⊕ 3 = 3. The two 5s cancel each other out, leaving 3."
+      },
+      {
+        question: "What is the space complexity of the XOR approach for finding a single number?",
+        options: ["O(n)", "O(log n)", "O(1)", "O(n²)"],
+        correctAnswer: 2,
+        explanation: "The XOR approach uses only one variable to store the result, requiring O(1) constant space."
+      },
+      {
+        question: "Why doesn't the order of XOR operations matter in this algorithm?",
+        options: ["XOR is commutative and associative", "XOR is distributive", "XOR is reflexive", "XOR is symmetric"],
+        correctAnswer: 0,
+        explanation: "XOR is both commutative (a ⊕ b = b ⊕ a) and associative ((a ⊕ b) ⊕ c = a ⊕ (b ⊕ c)), allowing any order of operations."
+      },
+      {
+        question: "What is a real-world application of the single number algorithm?",
+        options: ["Sorting arrays", "Finding corrupted data in transmission systems", "Binary tree traversal", "Hash table implementation"],
+        correctAnswer: 1,
+        explanation: "The algorithm is used in error detection systems where data corruption can be identified by finding unpaired or unique elements in transmitted data."
+      }
+    ],
+    syntax: `// Single Number Pattern
+function singleNumber(nums) {
+    let result = 0;
+    for (let num of nums) {
+        result ^= num;
+    }
+    return result;
+}
+
+// Using reduce
+function singleNumberReduce(nums) {
+    return nums.reduce((acc, num) => acc ^ num, 0);
+}
+
+// Two single numbers
+function singleNumberII(nums) {
+    let xor = nums.reduce((acc, num) => acc ^ num, 0);
+    let rightmostBit = xor & (-xor);
+    
+    let first = 0, second = 0;
+    for (let num of nums) {
+        if (num & rightmostBit) first ^= num;
+        else second ^= num;
+    }
+    return [first, second];
+}`,
+    example: `// Single Number Examples
+function singleNumber(nums) {
+    let result = 0;
+    for (let num of nums) {
+        result ^= num;  // XOR cancels out pairs
+    }
+    return result;
+}
+
+console.log(singleNumber([2, 2, 1]));       // 1
+console.log(singleNumber([4, 1, 2, 1, 2])); // 4
+console.log(singleNumber([1]));             // 1`
   },
   {
     id: 'bit-subset',
@@ -19253,7 +25731,408 @@ What it does: generates all possible subsets of given set using bit patterns to 
 
 How it works: iterates through numbers 0 to 2^n-1, uses each bit position to determine if corresponding element is in subset.
 
-When to use: subset enumeration problems, combinatorial generation, backtracking alternatives, when memory efficiency important.`
+When to use: subset enumeration problems, combinatorial generation, backtracking alternatives, when memory efficiency important.`,
+    voiceExplanation: `Think of generating all subsets like having a magical decision-making machine for a group of friends going to a party. Imagine you have 3 friends: Alice, Bob, and Charlie. For each friend, you have a simple yes/no decision: invite them or not. The brilliant insight is that every possible combination of decisions can be represented by a binary number! Picture this: if you have 3 friends, you need 3 bits. The number 5 in binary is 101, which means "invite Alice (1st bit), don't invite Bob (0 in 2nd bit), invite Charlie (1 in 3rd bit)." By counting from 0 to 7 (which is 2^3 - 1), you get all possible combinations: 000 (invite nobody), 001 (just Charlie), 010 (just Bob), 011 (Bob and Charlie), and so on. Each bit position corresponds to one friend, and each number from 0 to 2^n-1 represents a unique subset. It's like having a systematic way to explore every possible guest list without missing any combination or repeating any!`,
+    realWorldApplications: `**Industry Applications:**
+- **Feature Selection**: Machine learning algorithms selecting optimal feature combinations
+- **Test Case Generation**: Creating all possible test scenarios for software validation
+- **Configuration Management**: Generating all possible system configuration combinations
+- **Combinatorial Optimization**: Exploring solution spaces in optimization problems
+- **Game Development**: Generating all possible item combinations or game states
+- **Database Query Optimization**: Exploring different join order combinations
+- **Network Topology**: Generating all possible network connection configurations
+- **Resource Allocation**: Exploring all possible resource assignment combinations
+- **Cryptographic Analysis**: Brute force key space exploration in security testing
+- **Bioinformatics**: Generating all possible gene combination patterns for analysis`,
+    keyConcepts: `**Essential Concepts:**
+1. **Binary Representation Mapping**: Each bit position maps to one element in the original set
+2. **Exponential Growth**: 2^n total subsets for n elements (including empty set)
+3. **Bit Checking**: Using (i & (1 << j)) to check if j-th element should be included
+4. **Systematic Enumeration**: Counting from 0 to 2^n-1 ensures all combinations covered
+5. **Space Efficiency**: O(1) extra space for generation (excluding output storage)
+6. **Mathematical Foundation**: Bijection between subsets and binary representations
+7. **Combinatorial Completeness**: Generates all 2^n possible subsets without duplicates`,
+    pseudocode: `**Generate All Subsets Algorithm:**
+
+ALGORITHM GenerateAllSubsets(set)
+INPUT: set - array of n elements
+OUTPUT: array containing all 2^n subsets
+BEGIN
+    n = set.length
+    allSubsets = []
+    
+    // Iterate through all possible binary representations
+    FOR i = 0 TO (2^n - 1) DO
+        currentSubset = []
+        
+        // Check each bit position
+        FOR j = 0 TO n - 1 DO
+            // If j-th bit is set in i, include j-th element
+            IF (i & (1 << j)) ≠ 0 THEN
+                currentSubset.add(set[j])
+            END IF
+        END FOR
+        
+        allSubsets.add(currentSubset)
+    END FOR
+    
+    RETURN allSubsets
+END
+
+ALGORITHM GenerateSubsetsIterative(set)
+INPUT: set - array of elements
+OUTPUT: all subsets using iterative approach
+BEGIN
+    subsets = [[]]  // Start with empty subset
+    
+    FOR each element IN set DO
+        newSubsets = []
+        
+        // For each existing subset, create new subset with current element
+        FOR each subset IN subsets DO
+            newSubset = subset.copy()
+            newSubset.add(element)
+            newSubsets.add(newSubset)
+        END FOR
+        
+        // Add new subsets to existing ones
+        subsets.addAll(newSubsets)
+    END FOR
+    
+    RETURN subsets
+END
+
+ALGORITHM GenerateSubsetsRecursive(set, index, currentSubset, allSubsets)
+INPUT: set - array of elements, index - current position, 
+       currentSubset - subset being built, allSubsets - result collection
+OUTPUT: all subsets using recursive backtracking
+BEGIN
+    IF index = set.length THEN
+        allSubsets.add(currentSubset.copy())
+        RETURN
+    END IF
+    
+    // Include current element
+    currentSubset.add(set[index])
+    GenerateSubsetsRecursive(set, index + 1, currentSubset, allSubsets)
+    
+    // Exclude current element (backtrack)
+    currentSubset.removeLast()
+    GenerateSubsetsRecursive(set, index + 1, currentSubset, allSubsets)
+END`,
+    implementationCode: `// Comprehensive Subset Generation Implementation
+
+class SubsetGenerator {
+    // Main bit manipulation approach - O(2^n) time, O(1) extra space
+    static generateSubsets(nums) {
+        const n = nums.length;
+        const subsets = [];
+        
+        // Iterate through all possible binary representations (0 to 2^n - 1)
+        for (let i = 0; i < (1 << n); i++) {
+            const subset = [];
+            
+            // Check each bit position
+            for (let j = 0; j < n; j++) {
+                // If j-th bit is set in i, include j-th element
+                if (i & (1 << j)) {
+                    subset.push(nums[j]);
+                }
+            }
+            
+            subsets.push(subset);
+        }
+        
+        return subsets;
+    }
+    
+    // Iterative approach - building subsets incrementally
+    static generateSubsetsIterative(nums) {
+        let subsets = [[]]; // Start with empty subset
+        
+        for (let num of nums) {
+            const newSubsets = [];
+            
+            // For each existing subset, create new subset with current element
+            for (let subset of subsets) {
+                newSubsets.push([...subset, num]);
+            }
+            
+            // Add new subsets to existing ones
+            subsets = subsets.concat(newSubsets);
+        }
+        
+        return subsets;
+    }
+    
+    // Recursive backtracking approach
+    static generateSubsetsRecursive(nums) {
+        const result = [];
+        
+        function backtrack(index, currentSubset) {
+            if (index === nums.length) {
+                result.push([...currentSubset]);
+                return;
+            }
+            
+            // Include current element
+            currentSubset.push(nums[index]);
+            backtrack(index + 1, currentSubset);
+            
+            // Exclude current element (backtrack)
+            currentSubset.pop();
+            backtrack(index + 1, currentSubset);
+        }
+        
+        backtrack(0, []);
+        return result;
+    }
+    
+    // Generate subsets with specific size k
+    static generateSubsetsOfSizeK(nums, k) {
+        const n = nums.length;
+        const subsets = [];
+        
+        // Only check numbers with exactly k bits set
+        for (let i = 0; i < (1 << n); i++) {
+            if (this.countSetBits(i) === k) {
+                const subset = [];
+                
+                for (let j = 0; j < n; j++) {
+                    if (i & (1 << j)) {
+                        subset.push(nums[j]);
+                    }
+                }
+                
+                subsets.push(subset);
+            }
+        }
+        
+        return subsets;
+    }
+    
+    // Helper: Count set bits
+    static countSetBits(n) {
+        let count = 0;
+        while (n) {
+            n &= (n - 1);
+            count++;
+        }
+        return count;
+    }
+    
+    // Generate subsets with detailed binary representation
+    static generateSubsetsWithBinary(nums) {
+        const n = nums.length;
+        const result = [];
+        
+        for (let i = 0; i < (1 << n); i++) {
+            const subset = [];
+            const binaryRep = i.toString(2).padStart(n, '0');
+            
+            for (let j = 0; j < n; j++) {
+                if (i & (1 << j)) {
+                    subset.push(nums[j]);
+                }
+            }
+            
+            result.push({
+                subset: subset,
+                binaryIndex: i,
+                binaryRepresentation: binaryRep,
+                includedElements: subset.length,
+                excludedElements: n - subset.length
+            });
+        }
+        
+        return result;
+    }
+    
+    // Generate subsets using lexicographic order
+    static generateSubsetsLexicographic(nums) {
+        // Sort input for lexicographic order
+        const sortedNums = [...nums].sort((a, b) => a - b);
+        return this.generateSubsets(sortedNums);
+    }
+    
+    // Generate subsets with sum constraints
+    static generateSubsetsWithSum(nums, targetSum) {
+        const allSubsets = this.generateSubsets(nums);
+        
+        return allSubsets.filter(subset => {
+            const sum = subset.reduce((acc, num) => acc + num, 0);
+            return sum === targetSum;
+        }).map(subset => ({
+            subset: subset,
+            sum: targetSum,
+            length: subset.length
+        }));
+    }
+    
+    // Performance comparison of different approaches
+    static comparePerformance(nums) {
+        const methods = [
+            { name: 'Bit Manipulation', func: this.generateSubsets.bind(this) },
+            { name: 'Iterative', func: this.generateSubsetsIterative.bind(this) },
+            { name: 'Recursive', func: this.generateSubsetsRecursive.bind(this) }
+        ];
+        
+        const results = methods.map(method => {
+            const start = performance.now();
+            const subsets = method.func(nums);
+            const time = performance.now() - start;
+            
+            return {
+                method: method.name,
+                subsetsCount: subsets.length,
+                time: time.toFixed(6) + 'ms',
+                expectedCount: Math.pow(2, nums.length)
+            };
+        });
+        
+        return results;
+    }
+    
+    // Generate power set with string representation
+    static generatePowerSet(set) {
+        const subsets = this.generateSubsets(set);
+        
+        return {
+            powerSet: subsets,
+            cardinality: subsets.length,
+            emptySet: subsets[0],
+            fullSet: subsets[subsets.length - 1],
+            singletonSets: subsets.filter(subset => subset.length === 1),
+            maximalSets: subsets.filter(subset => subset.length === set.length - 1)
+        };
+    }
+    
+    // Educational demonstration of bit patterns
+    static demonstrateBitPatterns(nums) {
+        const n = nums.length;
+        const patterns = [];
+        
+        for (let i = 0; i < (1 << n); i++) {
+            const pattern = [];
+            const binary = i.toString(2).padStart(n, '0');
+            
+            for (let j = 0; j < n; j++) {
+                pattern.push({
+                    element: nums[j],
+                    included: (i & (1 << j)) !== 0,
+                    bitPosition: j,
+                    bitValue: binary[n - 1 - j]
+                });
+            }
+            
+            patterns.push({
+                index: i,
+                binary: binary,
+                pattern: pattern,
+                subset: pattern.filter(p => p.included).map(p => p.element)
+            });
+        }
+        
+        return patterns;
+    }
+}
+
+// Usage Examples
+const nums = [1, 2, 3];
+console.log(SubsetGenerator.generateSubsets(nums));
+// Output: [[], [1], [2], [1,2], [3], [1,3], [2,3], [1,2,3]]
+
+console.log(SubsetGenerator.generateSubsetsOfSizeK([1, 2, 3, 4], 2));
+// All subsets of size 2
+
+console.log(SubsetGenerator.generateSubsetsWithSum([1, 2, 3, 4], 5));
+// Subsets that sum to 5
+
+console.log(SubsetGenerator.demonstrateBitPatterns(['A', 'B', 'C']));
+// Educational bit pattern demonstration`,
+    quizQuestions: [
+      {
+        question: "How many subsets does a set with n elements have?",
+        options: ["n", "n²", "2^n", "n!"],
+        correctAnswer: 2,
+        explanation: "A set with n elements has 2^n subsets, including the empty set and the set itself. Each element can either be included or excluded."
+      },
+      {
+        question: "In bit manipulation subset generation, what does the binary number 101 represent for the set [A, B, C]?",
+        options: ["[A, C]", "[B]", "[A, B]", "[B, C]"],
+        correctAnswer: 0,
+        explanation: "101 in binary means include 1st element (A), exclude 2nd element (B), include 3rd element (C), giving subset [A, C]."
+      },
+      {
+        question: "What is the time complexity of generating all subsets using bit manipulation?",
+        options: ["O(n)", "O(n²)", "O(2^n)", "O(n!)"],
+        correctAnswer: 2,
+        explanation: "We need to generate 2^n subsets, and for each subset we check n bits, resulting in O(n × 2^n) = O(2^n) time complexity."
+      },
+      {
+        question: "What bit operation checks if the j-th element should be included in subset i?",
+        options: ["i | (1 << j)", "i & (1 << j)", "i ^ (1 << j)", "i >> j"],
+        correctAnswer: 1,
+        explanation: "The operation i & (1 << j) checks if the j-th bit is set in i, determining if the j-th element should be included."
+      },
+      {
+        question: "What is a real-world application of subset generation?",
+        options: ["Sorting algorithms", "Feature selection in machine learning", "Binary tree traversal", "Hash table implementation"],
+        correctAnswer: 1,
+        explanation: "Machine learning uses subset generation for feature selection, exploring all possible combinations of features to find optimal sets."
+      }
+    ],
+    syntax: `// Generate All Subsets Pattern
+function generateSubsets(nums) {
+    const n = nums.length;
+    const subsets = [];
+    
+    for (let i = 0; i < (1 << n); i++) {
+        const subset = [];
+        for (let j = 0; j < n; j++) {
+            if (i & (1 << j)) {
+                subset.push(nums[j]);
+            }
+        }
+        subsets.push(subset);
+    }
+    
+    return subsets;
+}
+
+// Check if j-th bit is set
+function isBitSet(i, j) {
+    return (i & (1 << j)) !== 0;
+}
+
+// Count total subsets
+function countSubsets(n) {
+    return 1 << n; // 2^n
+}`,
+    example: `// Generate All Subsets Examples
+function generateSubsets(nums) {
+    const n = nums.length;
+    const subsets = [];
+    
+    // Iterate through all binary numbers from 0 to 2^n - 1
+    for (let i = 0; i < (1 << n); i++) {
+        const subset = [];
+        
+        // Check each bit position
+        for (let j = 0; j < n; j++) {
+            if (i & (1 << j)) {
+                subset.push(nums[j]);
+            }
+        }
+        
+        subsets.push(subset);
+    }
+    
+    return subsets;
+}
+
+console.log(generateSubsets([1, 2]));     // [[], [1], [2], [1,2]]
+console.log(generateSubsets([1, 2, 3])); // [[], [1], [2], [1,2], [3], [1,3], [2,3], [1,2,3]]`
   },
 
   // Mathematical Algorithms
@@ -19331,7 +26210,317 @@ function sieveOfEratosthenes(n) {
    function modularOperation(a, b) {
        return ((a % MOD) + (b % MOD)) % MOD;
    }
-   \`\`\``
+   \`\`\``,
+    voiceExplanation: `Think of mathematical algorithms like having a powerful toolkit for solving numerical puzzles that appear everywhere in computer science. Imagine you're a digital architect who needs to build secure systems, create stunning graphics, or solve complex optimization problems. Mathematical algorithms are your specialized tools! Picture fast exponentiation like having a super-efficient calculator that can compute 2^1000 without breaking a sweat - instead of multiplying 2 by itself 1000 times, it uses clever shortcuts by repeatedly squaring and combining results. Number theory algorithms are like having a master locksmith's tools - they help you understand the fundamental properties of numbers, find greatest common divisors, and work with prime numbers that form the backbone of internet security. Modular arithmetic is like working with a clock - numbers wrap around at a certain point, which is incredibly useful for keeping calculations manageable and preventing overflow. These aren't just abstract math concepts - they're the secret ingredients that make your credit card transactions secure, your video games run smoothly, and your search algorithms lightning-fast!`,
+    realWorldApplications: `**Industry Applications:**
+- **Cryptography**: RSA encryption, elliptic curve cryptography, digital signatures
+- **Computer Graphics**: 3D transformations, ray tracing, procedural generation
+- **Game Development**: Physics simulations, random number generation, AI algorithms
+- **Financial Systems**: Risk analysis, algorithmic trading, fraud detection
+- **Scientific Computing**: Numerical simulations, data analysis, machine learning
+- **Network Security**: Hash functions, key exchange protocols, blockchain technology
+- **Database Systems**: Hashing algorithms, query optimization, data partitioning
+- **Compiler Design**: Optimization algorithms, code generation, register allocation
+- **Image Processing**: Fourier transforms, compression algorithms, filter design
+- **Artificial Intelligence**: Optimization algorithms, neural network training, genetic algorithms`,
+    keyConcepts: `**Essential Concepts:**
+1. **Number Theory**: GCD, LCM, prime numbers, modular arithmetic, Euclidean algorithm
+2. **Fast Exponentiation**: Binary exponentiation, modular exponentiation, matrix exponentiation
+3. **Combinatorics**: Permutations, combinations, binomial coefficients, Catalan numbers
+4. **Algorithmic Optimization**: Using mathematical properties to reduce time complexity
+5. **Modular Arithmetic**: Properties of modular operations, modular inverse, Chinese Remainder Theorem
+6. **Prime Algorithms**: Sieve of Eratosthenes, primality testing, factorization
+7. **Mathematical Induction**: Proving algorithm correctness and analyzing complexity`,
+    pseudocode: `**Mathematical Algorithm Patterns:**
+
+ALGORITHM FastExponentiation(base, exponent, modulus)
+INPUT: base - number to raise, exponent - power, modulus - optional mod value
+OUTPUT: base^exponent (mod modulus)
+BEGIN
+    result = 1
+    base = base mod modulus
+    
+    WHILE exponent > 0 DO
+        IF exponent is odd THEN
+            result = (result * base) mod modulus
+        END IF
+        exponent = exponent / 2
+        base = (base * base) mod modulus
+    END WHILE
+    
+    RETURN result
+END
+
+ALGORITHM EuclideanGCD(a, b)
+INPUT: a, b - two integers
+OUTPUT: greatest common divisor of a and b
+BEGIN
+    WHILE b ≠ 0 DO
+        temp = b
+        b = a mod b
+        a = temp
+    END WHILE
+    
+    RETURN a
+END
+
+ALGORITHM SieveOfEratosthenes(n)
+INPUT: n - upper limit for prime generation
+OUTPUT: array of all prime numbers up to n
+BEGIN
+    isPrime = array of size (n+1) filled with true
+    isPrime[0] = isPrime[1] = false
+    
+    FOR i = 2 TO sqrt(n) DO
+        IF isPrime[i] = true THEN
+            FOR j = i*i TO n STEP i DO
+                isPrime[j] = false
+            END FOR
+        END IF
+    END FOR
+    
+    primes = []
+    FOR i = 2 TO n DO
+        IF isPrime[i] = true THEN
+            primes.add(i)
+        END IF
+    END FOR
+    
+    RETURN primes
+END`,
+    implementationCode: `// Comprehensive Mathematical Algorithms Toolkit
+
+class MathematicalAlgorithms {
+    // Fast Exponentiation - O(log n) time
+    static fastPower(base, exp, mod = null) {
+        let result = 1;
+        base = mod ? base % mod : base;
+        
+        while (exp > 0) {
+            if (exp % 2 === 1) {
+                result = mod ? (result * base) % mod : result * base;
+            }
+            exp = Math.floor(exp / 2);
+            base = mod ? (base * base) % mod : base * base;
+        }
+        
+        return result;
+    }
+    
+    // Euclidean Algorithm for GCD - O(log min(a,b)) time
+    static gcd(a, b) {
+        while (b !== 0) {
+            [a, b] = [b, a % b];
+        }
+        return Math.abs(a);
+    }
+    
+    // Extended Euclidean Algorithm
+    static extendedGCD(a, b) {
+        if (b === 0) {
+            return { gcd: a, x: 1, y: 0 };
+        }
+        
+        const result = this.extendedGCD(b, a % b);
+        const x = result.y;
+        const y = result.x - Math.floor(a / b) * result.y;
+        
+        return { gcd: result.gcd, x, y };
+    }
+    
+    // Least Common Multiple
+    static lcm(a, b) {
+        return Math.abs(a * b) / this.gcd(a, b);
+    }
+    
+    // Sieve of Eratosthenes - O(n log log n) time
+    static sieveOfEratosthenes(n) {
+        const isPrime = new Array(n + 1).fill(true);
+        isPrime[0] = isPrime[1] = false;
+        
+        for (let i = 2; i * i <= n; i++) {
+            if (isPrime[i]) {
+                for (let j = i * i; j <= n; j += i) {
+                    isPrime[j] = false;
+                }
+            }
+        }
+        
+        return isPrime.map((prime, index) => prime ? index : null)
+                     .filter(num => num !== null);
+    }
+    
+    // Modular Inverse using Extended Euclidean Algorithm
+    static modularInverse(a, m) {
+        const result = this.extendedGCD(a, m);
+        if (result.gcd !== 1) {
+            throw new Error('Modular inverse does not exist');
+        }
+        return ((result.x % m) + m) % m;
+    }
+    
+    // Factorial with modular arithmetic
+    static factorialMod(n, mod) {
+        let result = 1;
+        for (let i = 1; i <= n; i++) {
+            result = (result * i) % mod;
+        }
+        return result;
+    }
+    
+    // Binomial Coefficient C(n, k)
+    static binomialCoefficient(n, k) {
+        if (k > n || k < 0) return 0;
+        if (k === 0 || k === n) return 1;
+        
+        k = Math.min(k, n - k); // Take advantage of symmetry
+        
+        let result = 1;
+        for (let i = 0; i < k; i++) {
+            result = result * (n - i) / (i + 1);
+        }
+        
+        return Math.round(result);
+    }
+    
+    // Modular Binomial Coefficient
+    static binomialCoefficientMod(n, k, mod) {
+        if (k > n || k < 0) return 0;
+        if (k === 0 || k === n) return 1;
+        
+        const numerator = this.factorialMod(n, mod);
+        const denominator = (this.factorialMod(k, mod) * this.factorialMod(n - k, mod)) % mod;
+        
+        return (numerator * this.modularInverse(denominator, mod)) % mod;
+    }
+    
+    // Fibonacci using Matrix Exponentiation - O(log n)
+    static fibonacciMatrix(n) {
+        if (n <= 1) return n;
+        
+        const matrixMultiply = (A, B) => [
+            [A[0][0] * B[0][0] + A[0][1] * B[1][0], A[0][0] * B[0][1] + A[0][1] * B[1][1]],
+            [A[1][0] * B[0][0] + A[1][1] * B[1][0], A[1][0] * B[0][1] + A[1][1] * B[1][1]]
+        ];
+        
+        const matrixPower = (matrix, power) => {
+            let result = [[1, 0], [0, 1]]; // Identity matrix
+            let base = matrix;
+            
+            while (power > 0) {
+                if (power % 2 === 1) {
+                    result = matrixMultiply(result, base);
+                }
+                base = matrixMultiply(base, base);
+                power = Math.floor(power / 2);
+            }
+            
+            return result;
+        };
+        
+        const baseMatrix = [[1, 1], [1, 0]];
+        return matrixPower(baseMatrix, n)[0][1];
+    }
+    
+    // Check if number is prime - O(sqrt(n))
+    static isPrime(n) {
+        if (n <= 1) return false;
+        if (n <= 3) return true;
+        if (n % 2 === 0 || n % 3 === 0) return false;
+        
+        for (let i = 5; i * i <= n; i += 6) {
+            if (n % i === 0 || n % (i + 2) === 0) return false;
+        }
+        
+        return true;
+    }
+    
+    // Prime factorization
+    static primeFactorization(n) {
+        const factors = [];
+        
+        // Handle factor 2
+        while (n % 2 === 0) {
+            factors.push(2);
+            n /= 2;
+        }
+        
+        // Handle odd factors
+        for (let i = 3; i * i <= n; i += 2) {
+            while (n % i === 0) {
+                factors.push(i);
+                n /= i;
+            }
+        }
+        
+        // If n is still greater than 2, it's a prime
+        if (n > 2) factors.push(n);
+        
+        return factors;
+    }
+}
+
+// Usage Examples
+console.log(MathematicalAlgorithms.fastPower(2, 10, 1000)); // 24 (1024 % 1000)
+console.log(MathematicalAlgorithms.gcd(48, 18)); // 6
+console.log(MathematicalAlgorithms.sieveOfEratosthenes(30)); // [2,3,5,7,11,13,17,19,23,29]
+console.log(MathematicalAlgorithms.binomialCoefficient(10, 3)); // 120
+console.log(MathematicalAlgorithms.fibonacciMatrix(10)); // 55`,
+    quizQuestions: [
+      {
+        question: "What is the time complexity of the fast exponentiation algorithm?",
+        options: ["O(n)", "O(log n)", "O(n log n)", "O(n²)"],
+        correctAnswer: 1,
+        explanation: "Fast exponentiation uses binary representation of the exponent, halving the exponent in each iteration, resulting in O(log n) time complexity."
+      },
+      {
+        question: "What is the result of gcd(48, 18) using the Euclidean algorithm?",
+        options: ["2", "6", "9", "12"],
+        correctAnswer: 1,
+        explanation: "Using the Euclidean algorithm: gcd(48,18) = gcd(18,12) = gcd(12,6) = gcd(6,0) = 6."
+      },
+      {
+        question: "What is the time complexity of the Sieve of Eratosthenes?",
+        options: ["O(n)", "O(n log n)", "O(n log log n)", "O(n²)"],
+        correctAnswer: 2,
+        explanation: "The Sieve of Eratosthenes has O(n log log n) time complexity due to the harmonic series in the nested loop structure."
+      },
+      {
+        question: "In modular arithmetic, what is (a + b) mod m equivalent to?",
+        options: ["(a mod m + b mod m) mod m", "a mod m + b mod m", "(a + b) mod (m + m)", "a mod b + m"],
+        correctAnswer: 0,
+        explanation: "The modular addition property states that (a + b) mod m = ((a mod m) + (b mod m)) mod m."
+      },
+      {
+        question: "What is a real-world application of mathematical algorithms?",
+        options: ["Sorting arrays", "RSA encryption in cybersecurity", "Binary tree traversal", "Linked list operations"],
+        correctAnswer: 1,
+        explanation: "RSA encryption relies heavily on mathematical algorithms like fast exponentiation, prime number generation, and modular arithmetic for secure communication."
+      }
+    ],
+    syntax: `// Mathematical Algorithm Patterns
+
+// Fast Exponentiation
+function fastPower(base, exp, mod) {
+    let result = 1;
+    while (exp > 0) {
+        if (exp % 2 === 1) result = (result * base) % mod;
+        exp = Math.floor(exp / 2);
+        base = (base * base) % mod;
+    }
+    return result;
+}
+
+// Euclidean GCD
+function gcd(a, b) {
+    while (b !== 0) [a, b] = [b, a % b];
+    return a;
+}
+
+// Modular Arithmetic
+const MOD = 1000000007;
+function modAdd(a, b) { return ((a % MOD) + (b % MOD)) % MOD; }
+function modMul(a, b) { return ((a % MOD) * (b % MOD)) % MOD; }`
   },
   {
     id: 'number-theory-basics',

@@ -183,6 +183,14 @@ export function BitManipulationVisualizer() {
 
   return (
     <div className="space-y-6">
+      {/* Header */}
+      <div className="text-center">
+        <h3 className="text-2xl font-bold mb-2">Bit Manipulation Visualizer</h3>
+        <p className="text-muted-foreground">
+          Interactive binary operations with step-by-step bit-level explanations
+        </p>
+      </div>
+
       {/* Controls */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="space-y-2">
@@ -365,6 +373,22 @@ export function BitManipulationVisualizer() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Visualizer Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
       </div>
     </div>
   );
