@@ -164,10 +164,10 @@ export function Sidebar() {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-sidebar-foreground group-hover:text-sidebar-primary transition-colors">
-                  DSA Learn
+                  AlgoWave
                 </h1>
                 <p className="text-sm text-sidebar-foreground/60">
-                  Interactive Learning
+                  Ride the wave of algorithms
                 </p>
               </div>
             </NavLink>

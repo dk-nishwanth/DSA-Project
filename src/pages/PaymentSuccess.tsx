@@ -33,8 +33,11 @@ export default function PaymentSuccess() {
             <CheckCircle className="w-12 h-12 text-white" />
           </div>
           <h1 className="text-4xl font-bold text-green-800 mb-4">Payment Successful!</h1>
-          <p className="text-xl text-green-700">
-            Welcome to the DSA Learning Platform Premium Experience
+          <p className="text-xl text-green-700 font-medium mb-2">
+            Welcome to AlgoWave Premium
+          </p>
+          <p className="text-green-600">
+            Ride the wave of algorithms with premium access!
           </p>
         </div>
 

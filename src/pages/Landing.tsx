@@ -68,8 +68,11 @@ export default function Landing() {
       <div className="flex-1 flex items-center justify-center p-8 bg-white">
         <div className="w-full max-w-2xl">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold mb-4">Welcome to DSA Learning Platform</h1>
-            <p className="text-lg text-muted-foreground">
+            <h1 className="text-4xl font-bold mb-2">Welcome to AlgoWave</h1>
+            <p className="text-lg text-muted-foreground mb-3">
+              Ride the wave of algorithms
+            </p>
+            <p className="text-muted-foreground">
               Choose your role to get started
             </p>
           </div>
