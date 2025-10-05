@@ -7,6 +7,9 @@ import { Play, RotateCcw, Plus, Trash2 } from 'lucide-react';
 import { PseudocodeBox } from '@/components/pseudocode-box';
 import { ComplexityBox } from '@/components/complexity-box';
 import { toast } from 'sonner';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface Item {
   id: number;
@@ -38,6 +41,20 @@ export function KnapsackVisualizer() {
   const [solution, setSolution] = useState<number[]>([]);
   const [maxValue, setMaxValue] = useState(0);
   const [stepDescription, setStepDescription] = useState('');
+  const [showMemory, setShowMemory] = useState(false);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakOperation,
+    speakStep,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -72,6 +89,7 @@ export function KnapsackVisualizer() {
   };
 
   const solveKnapsack = useCallback(async () => {
+    speakOperation('0/1 Knapsack', 'Filling DP table and then backtracking to retrieve the optimal set.');
     setIsAnimating(true);
     setCurrentStep(0);
     setStepDescription("Initializing DP table...");
@@ -189,6 +207,7 @@ export function KnapsackVisualizer() {
     setIsAnimating(false);
     
     toast.success(`Knapsack solved! Maximum value: ${dp[items.length][capacity].value}`);
+    speakResult(`Knapsack solved. Maximum value ${dp[items.length][capacity].value}.`);
   }, [items, capacity]);
 
   const addItem = () => {
@@ -327,6 +346,34 @@ export function KnapsackVisualizer() {
           ))}
         </div>
       </div>
+
+      {/* Controls below visualization: voice + memory */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
+      </div>
+
+      {showMemory && (
+        <MemoryLayout
+          title="DP Table Memory (flattened row-major)"
+          data={(function(){
+            if (!dpTable || dpTable.length===0) return [] as number[];
+            const vals:number[]=[]; dpTable.forEach(row=>row.forEach(cell=>vals.push(cell.value))); return vals;
+          })()}
+          baseAddress={0x5500}
+          wordSize={4}
+        />
+      )}
 
       {/* Status */}
       {stepDescription && (

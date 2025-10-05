@@ -134,6 +134,25 @@ export function SudokuVisualizer() {
           })}
         </div>
       </div>
+
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {showMemory && (
+        <MemoryLayout
+          data={grid.flat()}
+          title="Grid (flattened)"
+          baseAddress={10000}
+          wordSize={4}
+        />
+      )}
+
       {cur && (
         <div className="bg-muted/20 rounded-lg p-3 text-sm">
           <div className="font-semibold">Current cell: (row {cur.r+1}, col {cur.c+1})</div>

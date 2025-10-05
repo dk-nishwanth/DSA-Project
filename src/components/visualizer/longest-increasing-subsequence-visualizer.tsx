@@ -7,6 +7,9 @@ import { Play, RotateCcw, Shuffle } from 'lucide-react';
 import { PseudocodeBox } from '@/components/pseudocode-box';
 import { ComplexityBox } from '@/components/complexity-box';
 import { toast } from 'sonner';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface ArrayElement {
   value: number;
@@ -25,6 +28,8 @@ export function LongestIncreasingSubsequenceVisualizer() {
   const [stepDescription, setStepDescription] = useState('');
   const [lisLength, setLisLength] = useState(0);
   const [lisSequence, setLisSequence] = useState<number[]>([]);
+  const [showMemory, setShowMemory] = useState(false);
+  const { voiceEnabled, setVoiceEnabled, speakOperation, speakStep, speakResult } = useVisualizerVoice({ minInterval: 1200 });
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -85,6 +90,7 @@ export function LongestIncreasingSubsequenceVisualizer() {
     setIsAnimating(true);
     setCurrentStep(0);
     setStepDescription('Initializing LIS algorithm...');
+    speakOperation('Longest Increasing Subsequence', 'O(n^2) DP demonstration');
 
     // Reset all states
     setArray(prev => prev.map(el => ({
@@ -117,6 +123,7 @@ export function LongestIncreasingSubsequenceVisualizer() {
       })));
 
       setStepDescription(`Processing element at index ${i} (value: ${array[i].value})`);
+      speakStep('', `Process index ${i} value ${array[i].value}`);
       await sleep(800);
 
       setCurrentStep(5);
@@ -131,6 +138,7 @@ export function LongestIncreasingSubsequenceVisualizer() {
         setStepDescription(
           `Comparing arr[${j}] = ${array[j].value} with arr[${i}] = ${array[i].value}`
         );
+        speakStep('', `Compare ${array[j].value} vs ${array[i].value}`);
         await sleep(600);
 
         setCurrentStep(6);
@@ -152,6 +160,7 @@ export function LongestIncreasingSubsequenceVisualizer() {
             setStepDescription(
               `Updated dp[${i}] = max(${dp[i]}, ${dp[j]} + 1) = ${dp[i]}`
             );
+            speakStep('', `Update dp[${i}]`);
           } else {
             setStepDescription(
               `dp[${i}] remains ${dp[i]} (no improvement)`
@@ -210,9 +219,10 @@ export function LongestIncreasingSubsequenceVisualizer() {
       `LIS found! Length: ${maxLength}, Sequence: [${sequence.join(', ')}]`
     );
     setIsAnimating(false);
+    speakResult(`LIS length ${maxLength}`);
     
     toast.success(`LIS length: ${maxLength}, sequence: [${sequence.join(', ')}]`);
-  }, [array]);
+  }, [array, speakOperation, speakStep, speakResult]);
 
   const handleReset = () => {
     if (array.length > 0) {
@@ -271,6 +281,24 @@ export function LongestIncreasingSubsequenceVisualizer() {
           </Button>
         </div>
       </div>
+
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {showMemory && (
+        <MemoryLayout
+          data={array.map(el=>el.dpValue)}
+          title="DP Values (LIS)"
+          baseAddress={6000}
+          wordSize={4}
+        />
+      )}
 
       {/* Status */}
       {stepDescription && (

@@ -4,6 +4,9 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Calculator, RotateCcw, Hash } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface MathStep {
   step: number;
@@ -20,6 +23,21 @@ export function MathematicalVisualizer() {
   const [steps, setSteps] = useState<MathStep[]>([]);
   const [currentStep, setCurrentStep] = useState(0);
   const [result, setResult] = useState<number | null>(null);
+  const [showMemory, setShowMemory] = useState(false);
+
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakOperation,
+    speakStep,
+    speakResult,
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const algorithms = [
     { value: 'gcd', label: 'GCD (Euclidean Algorithm)' },
@@ -201,6 +219,7 @@ export function MathematicalVisualizer() {
   };
 
   const runAlgorithm = () => {
+    speakOperation('Mathematical Visualizer', `Running ${algorithms.find(a=>a.value===algorithm)?.label || 'algorithm'}.`);
     let newSteps: MathStep[] = [];
     let finalResult: number = 0;
 
@@ -239,6 +258,7 @@ export function MathematicalVisualizer() {
     setSteps(newSteps);
     setResult(finalResult);
     setCurrentStep(0);
+    speakResult(`Result: ${finalResult}`);
   };
 
   // Helper functions
@@ -372,6 +392,11 @@ export function MathematicalVisualizer() {
         </div>
       </div>
 
+      {/* Step Panel */}
+      {currentStepText && (
+        <div className="p-2 bg-muted/20 rounded text-sm text-center">{currentStepText}</div>
+      )}
+
       {/* Step Navigation */}
       {steps.length > 0 && (
         <div className="flex items-center justify-center gap-4">
@@ -385,6 +410,46 @@ export function MathematicalVisualizer() {
             Next
           </Button>
         </div>
+      )}
+
+      {/* Controls below visualization: voice + memory */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
+      </div>
+
+      {showMemory && (
+        <MemoryLayout
+          title="Mathematical Memory Layout"
+          data={(function(){
+            if (algorithm==='gcd' || algorithm==='lcm') return [inputA, inputB, result ?? 0];
+            if (algorithm==='fast-exp') return [inputA, inputB, result ?? 0];
+            if (algorithm==='fibonacci') {
+              const n = Math.max(0, Math.min(30, inputN));
+              const arr:number[] = [];
+              let a=0,b=1; for(let i=0;i<=n;i++){ arr.push(i===0?0:(i===1?1:(a+b))); if(i>=1){const c=a+b;a=b;b=c;} }
+              return arr;
+            }
+            if (algorithm==='prime-sieve') {
+              const n = Math.max(2, Math.min(500, inputN));
+              const primes = sieveOfEratosthenes(n);
+              return primes as number[];
+            }
+            return [] as number[];
+          })()}
+          baseAddress={0x5200}
+          wordSize={4}
+        />
       )}
 
       {/* Visualization */}

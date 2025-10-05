@@ -6,6 +6,9 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RotateCcw, Play, Pause, StepForward } from 'lucide-react';
 import { toast } from 'sonner';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface TreeNode {
   id: string;
@@ -42,6 +45,8 @@ export function EnhancedBinaryTree() {
   const [treeHeight, setTreeHeight] = useState(0);
   const [searchPath, setSearchPath] = useState<string[]>([]);
   const [foundNode, setFoundNode] = useState<TreeNode | null>(null);
+  const [showMemory, setShowMemory] = useState(false);
+  const { voiceEnabled, setVoiceEnabled, speakOperation, speakStep, speakResult } = useVisualizerVoice({ minInterval: 1200 });
 
   // Calculate tree properties
   const calculateTreeProperties = useCallback((node: TreeNode | null): { count: number; height: number } => {
@@ -293,6 +298,7 @@ export function EnhancedBinaryTree() {
     }
 
     setIsAnimating(true);
+    speakOperation('BST Insert', `Insert ${value}`);
     const newRoot = insertNode(root, value);
     const positionedRoot = calculatePositions(newRoot);
     setRoot(positionedRoot);
@@ -303,6 +309,7 @@ export function EnhancedBinaryTree() {
     
     setInputValue('');
     toast.success(`Inserted ${value} into the tree`);
+    speakResult(`Inserted ${value}`);
     
     setTimeout(() => setIsAnimating(false), 500);
   };
@@ -315,14 +322,17 @@ export function EnhancedBinaryTree() {
     }
 
     setIsAnimating(true);
+    speakOperation('BST Search', `Search ${value}`);
     const { found, path } = searchNode(root, value);
     setSearchPath(path);
     setFoundNode(found);
     
     if (found) {
       toast.success(`Found ${value} in the tree! Path: ${path.join(' → ')}`);
+      speakResult(`Found ${value}`);
     } else {
       toast.error(`${value} not found in the tree. Search path: ${path.join(' → ')}`);
+      speakResult(`${value} not found`);
     }
     
     setTimeout(() => {
@@ -340,6 +350,7 @@ export function EnhancedBinaryTree() {
     }
 
     setIsAnimating(true);
+    speakOperation('BST Delete', `Delete ${value}`);
     const newRoot = deleteNode(root, value);
     const positionedRoot = calculatePositions(newRoot);
     setRoot(positionedRoot);
@@ -350,6 +361,7 @@ export function EnhancedBinaryTree() {
     
     setDeleteValue('');
     toast.success(`Deleted ${value} from the tree`);
+    speakResult(`Deleted ${value}`);
     
     setTimeout(() => setIsAnimating(false), 500);
   };
@@ -364,6 +376,7 @@ export function EnhancedBinaryTree() {
     setTraversalSteps(steps);
     setCurrentStepIndex(0);
     setTraversalResult([]);
+    speakOperation('BST Traversal', `${traversalType} order`);
   };
 
   const nextStep = () => {
@@ -371,6 +384,7 @@ export function EnhancedBinaryTree() {
       setCurrentStepIndex(currentStepIndex + 1);
       const step = traversalSteps[currentStepIndex + 1];
       setTraversalResult(step.traversalOrder);
+      speakStep('', step.description);
     }
   };
 
@@ -379,6 +393,7 @@ export function EnhancedBinaryTree() {
       setCurrentStepIndex(currentStepIndex - 1);
       const step = traversalSteps[currentStepIndex - 1];
       setTraversalResult(step.traversalOrder);
+      speakStep('', step.description);
     }
   };
 
@@ -631,6 +646,15 @@ export function EnhancedBinaryTree() {
       </div>
 
       {/* Traversal Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
       {traversalSteps.length > 0 && (
         <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
           <div className="flex items-center justify-between mb-4">
@@ -693,6 +717,15 @@ export function EnhancedBinaryTree() {
           </div>
         )}
       </div>
+
+      {showMemory && (
+        <MemoryLayout
+          data={traversalResult}
+          title="Traversal Result Memory"
+          baseAddress={7000}
+          wordSize={4}
+        />
+      )}
 
       {/* Algorithm Info */}
       <div className="bg-card border rounded-lg p-4">

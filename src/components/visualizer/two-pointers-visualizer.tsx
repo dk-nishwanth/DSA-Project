@@ -202,6 +202,52 @@ export function TwoPointersVisualizer() {
   };
 
   return (
+    <div className="w-full space-y-4">
+      <div className="flex flex-wrap gap-3 p-4 bg-muted/30 rounded-xl border">
+        <Input className="w-72" value={inputArray} onChange={(e)=>setInputArray(e.target.value)} />
+        <Input className="w-24" value={inputTarget} onChange={(e)=>setInputTarget(e.target.value)} />
+        <Button onClick={handleInputChange}>Set</Button>
+        <Button onClick={handleSort}>Prepare</Button>
+        <Button onClick={handlePlay} disabled={isPlaying}>Play</Button>
+        <Button onClick={handlePause} variant="outline">Pause</Button>
+        <Button onClick={handleReset} variant="secondary">Reset</Button>
+      </div>
+
+      <div className="p-4 bg-gradient-visualization rounded-xl border-2">
+        <div className="flex items-end gap-2 justify-center">
+          {currentStepData.array.map((val, idx) => (
+            <div key={idx} className={`w-9 h-9 flex items-center justify-center border rounded ${idx===currentStepData.left||idx===currentStepData.right? 'bg-primary/20 border-primary' : 'bg-card'}`}>
+              <span className="font-mono text-sm">{val}</span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-2 text-sm">
+          Step: {currentStep} | Message: <span className="font-mono">{(steps[currentStep]?.message) || 'Ready'}</span>
+        </div>
+      </div>
+
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {showMemory && (
+        <MemoryLayout
+          data={array}
+          title="Array Memory"
+          baseAddress={10200}
+          wordSize={4}
+        />
+      )}
+    </div>
+  );
+}
+
+  return (
     <div className="space-y-6">
       {/* Controls */}
       <div className="flex flex-wrap gap-4 items-center">

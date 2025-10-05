@@ -434,6 +434,13 @@ export function EnhancedArrayVisualizer({ initialArray = [64, 25, 12, 22, 11] }:
           )}
         </div>
         
+        {/* Inline controls directly under visualization */}
+        <div className="mt-2 flex justify-center">
+          <Button onClick={() => setShowMemoryView(!showMemoryView)} variant="outline" size="sm" aria-label="Toggle memory view below visualization">
+            <HardDrive className="h-4 w-4 mr-1" /> {showMemoryView ? 'Hide Memory' : 'Show Memory Below'}
+          </Button>
+        </div>
+        
         {/* Current Operation Status */}
         {currentStep && (
           <div className="mt-4 p-3 bg-muted/20 rounded-lg border">
@@ -449,7 +456,7 @@ export function EnhancedArrayVisualizer({ initialArray = [64, 25, 12, 22, 11] }:
           </div>
         )}
       </div>
-
+      
       {/* Status */}
       <div className="flex flex-wrap gap-3 items-center">
         <Badge variant="outline">Length: {array.length}</Badge>
@@ -460,8 +467,8 @@ export function EnhancedArrayVisualizer({ initialArray = [64, 25, 12, 22, 11] }:
           </Badge>
         )}
       </div>
-
-
+      
+      
       {/* Memory Layout View */}
       {showMemoryView && (
         <div className="mt-6 p-4 bg-muted/20 rounded-lg border">
@@ -495,9 +502,9 @@ export function EnhancedArrayVisualizer({ initialArray = [64, 25, 12, 22, 11] }:
           </div>
         </div>
       )}
-
+      
       {/* Complexity Analysis removed - now shown in sidebar only */}
-
+      
       {/* Learning Points */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-4">

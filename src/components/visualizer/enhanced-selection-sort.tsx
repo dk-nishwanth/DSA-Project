@@ -5,6 +5,8 @@ import { Input } from '@/components/ui/input';
 import { RotateCcw, Shuffle, HardDrive } from 'lucide-react';
 import { StepByStepBase, VisualizationStep } from './step-by-step-base';
 import { VisualizerControls } from './visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 export function EnhancedSelectionSort() {
   const [array, setArray] = useState<number[]>([64, 25, 12, 22, 11, 90]);
@@ -12,6 +14,8 @@ export function EnhancedSelectionSort() {
   const [steps, setSteps] = useState<VisualizationStep[]>([]);
   const [showMemoryView, setShowMemoryView] = useState(false);
   const [memoryAddresses, setMemoryAddresses] = useState<number[]>([]);
+  const { voiceEnabled, setVoiceEnabled, speed, setSpeed, isSpeaking, pauseSpeech, resumeSpeech, stopSpeech, speakOperation, speakStep, speakResult } = useVisualizerVoice({ minInterval: 2000 });
+  const [stepDesc, setStepDesc] = useState('');
 
   const generateMemoryAddresses = () => {
     const baseAddress = 0x1000;
@@ -223,11 +227,26 @@ export function EnhancedSelectionSort() {
   };
 
   const handleSort = () => {
+    speakOperation('Selection Sort', 'Starting selection sort: repeatedly find the minimum and place it at the beginning.');
+    const sortSteps = generateSelectionSortSteps(array);
+    setSteps(sortSteps);
+    setStepDesc(sortSteps[0]?.description || '');
+  };
+
+  return (
+    <div className="space-y-3">
+      {stepDesc && (<div className="p-2 bg-muted/20 rounded text-sm">{stepDesc}</div>)}
+    </div>
+  );
+
+  const handleSort = () => {
+    speakOperation('Selection Sort', 'Starting selection sort: find the minimum and place it at the front each pass.');
     const sortSteps = generateSelectionSortSteps(array);
     setSteps(sortSteps);
   };
 
   const handleReset = () => {
+    speakResult('Resetting selection sort visualization.');
     setArray([64, 25, 12, 22, 11, 90]);
     setInputValue('64,25,12,22,11,90');
     setSteps([]);
@@ -417,6 +436,28 @@ export function EnhancedSelectionSort() {
           </Button>
         </div>
       </div>
+
+      {/* Controls below visualization: voice + memory */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemoryView}
+          onToggleMemory={setShowMemoryView}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
+      </div>
+
+      {showMemoryView && (
+        <div className="mt-4">
+          <MemoryLayout title="Array Memory Layout" data={array as number[]} baseAddress={0x1020} wordSize={4} />
+        </div>
+      )}
 
       {/* Step-by-Step Visualization */}
       {steps.length > 0 ? (

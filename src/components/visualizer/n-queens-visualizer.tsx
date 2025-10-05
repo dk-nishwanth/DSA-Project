@@ -140,6 +140,25 @@ export function NQueensVisualizer() {
           <div className="mt-3 p-2 bg-muted/20 rounded text-sm text-center">{currentStepDescription}</div>
         )}
       </div>
+
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {showMemory && (
+        <MemoryLayout
+          data={board.map((c,i)=>`row ${i}: col ${c}`)}
+          title="Board mapping (row -> col)"
+          baseAddress={9800}
+          wordSize={1}
+        />
+      )}
+
       {solutions.length>0 && (
         <div className="p-3 bg-muted/20 rounded border text-sm">Solutions found: <span className="font-mono">{solutions.length}</span></div>
       )}

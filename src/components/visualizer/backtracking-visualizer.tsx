@@ -317,6 +317,34 @@ export function BacktrackingVisualizer() {
         </Button>
       </div>
 
+      {/* Controls below visualization: voice + memory */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
+      </div>
+
+      {showMemory && (
+        <MemoryLayout
+          title="Backtracking Memory Layout (Queen column per row)"
+          data={Array.from({ length: boardSize }, (_, r) => {
+            const q = queens.find(q => q.row === r);
+            return q ? q.col : -1;
+          })}
+          baseAddress={0x7000}
+          wordSize={4}
+        />
+      )}
+
       {/* Solutions Display */}
       {solutions.length > 0 && (
         <div className="p-4 bg-success/10 border-2 border-success rounded-xl text-center">

@@ -3,6 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PseudocodeBox } from '@/components/pseudocode-box';
 import { ComplexityBox } from '@/components/complexity-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 export function SlidingWindowMaximumVisualizer() {
   const [arr, setArr] = useState<number[]>([1,3,-1,-3,5,3,6,7]);
@@ -14,6 +17,8 @@ export function SlidingWindowMaximumVisualizer() {
   const [isRunning, setIsRunning] = useState(false);
   const [step, setStep] = useState(0);
   const [stepDesc, setStepDesc] = useState('');
+  const [showMemory, setShowMemory] = useState(false);
+  const { voiceEnabled, setVoiceEnabled, speed, setSpeed, isSpeaking, pauseSpeech, resumeSpeech, stopSpeech, speakOperation, speakStep, speakResult } = useVisualizerVoice({ minInterval: 2000 });
 
   const sleep = (ms:number)=>new Promise(r=>setTimeout(r,ms));
 
@@ -23,6 +28,7 @@ export function SlidingWindowMaximumVisualizer() {
   };
 
   const run = useCallback(async ()=>{
+    speakOperation('Sliding Window Maximum', 'Maintain a decreasing deque of indices; front is the maximum for the current window.');
     if (isRunning) return; setIsRunning(true);
     const k = Math.max(1, Math.min(arr.length, parseInt(kInput)||1));
     const dq: number[] = [];
@@ -108,6 +114,25 @@ export function SlidingWindowMaximumVisualizer() {
           </ul>
         </div>
       </div>
+      {/* Controls below visualization: voice + memory */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
+      </div>
+
+      {showMemory && (
+        <MemoryLayout title="Deque Indices (front→back)" data={deque as number[]} baseAddress={0x5900} wordSize={2} />
+      )}
     </div>
   );
 }

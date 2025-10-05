@@ -1023,6 +1023,38 @@ export function GraphVisualizer() {
         </div>
       </div>
 
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceExplain}
+          onToggleVoice={setVoice}
+        />
+      </div>
+
+      {showMemory && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <MemoryLayout
+            data={selectedAlgorithm==='bfs' ? queueState : selectedAlgorithm==='dfs' ? stackState : visitedNodes}
+            title={selectedAlgorithm==='bfs' ? 'Queue' : selectedAlgorithm==='dfs' ? 'Stack' : 'Visited'}
+            baseAddress={9200}
+            wordSize={4}
+          />
+          <MemoryLayout
+            data={nodes.map(n=>n.id)}
+            title="Nodes"
+            baseAddress={9400}
+            wordSize={4}
+          />
+          <MemoryLayout
+            data={Array.from(distances.values())}
+            title="Distances (if applicable)"
+            baseAddress={9600}
+            wordSize={4}
+          />
+        </div>
+      )}
+
       {/* Enhanced Visualization */}
       <div className="relative bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-xl border-2 border-border/50 min-h-[400px]">
         <svg width="700" height="400" className="w-full h-full">

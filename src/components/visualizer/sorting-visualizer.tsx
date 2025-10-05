@@ -5,6 +5,9 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Play, Pause, RotateCcw, Shuffle, SkipForward } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface SortingVisualizerProps {
   algorithm?: 'bubble' | 'insertion' | 'selection' | 'merge' | 'quick' | 'counting' | 'radix' | 'bucket';
@@ -20,6 +23,10 @@ export function SortingVisualizer({ algorithm = 'bubble' }: SortingVisualizerPro
   const [sortedIndices, setSortedIndices] = useState<Set<number>>(new Set());
   const [speed, setSpeed] = useState(1000);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithm);
+  const [showMemory, setShowMemory] = useState(false);
+  const [narration, setNarration] = useState('');
+  const [stepDesc, setStepDesc] = useState('');
+  const { voiceEnabled, setVoiceEnabled, speakOperation, speakStep, speakResult } = useVisualizerVoice({ minInterval: 1200 });
 
   const generateRandomArray = () => {
     const newArray = Array.from({ length: 8 }, () => Math.floor(Math.random() * 90) + 10);
@@ -42,14 +49,21 @@ export function SortingVisualizer({ algorithm = 'bubble' }: SortingVisualizerPro
   const bubbleSort = async () => {
     const arr = [...array];
     const n = arr.length;
+    speakOperation('Bubble Sort', `Start bubble sort on ${n} elements.`);
     
     for (let i = 0; i < n - 1; i++) {
       for (let j = 0; j < n - i - 1; j++) {
         setComparingIndices([j, j + 1]);
+        setNarration(`Compare A[${j}]=${arr[j]} and A[${j+1}]=${arr[j+1]}`);
+        setStepDesc(`Compare A[${j}]=${arr[j]} and A[${j+1}]=${arr[j+1]}`);
+        speakStep('', `Compare ${arr[j]} and ${arr[j+1]}`, j, n);
         await new Promise(resolve => setTimeout(resolve, speed));
         
         if (arr[j] > arr[j + 1]) {
           setSwappingIndices([j, j + 1]);
+          setNarration(`Swap ${arr[j]} and ${arr[j+1]}`);
+          setStepDesc(`Swap ${arr[j]} and ${arr[j+1]}`);
+          speakStep('', `Swap ${arr[j]} with ${arr[j+1]}`, j, n);
           await new Promise(resolve => setTimeout(resolve, speed / 2));
           
           [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
@@ -64,6 +78,7 @@ export function SortingVisualizer({ algorithm = 'bubble' }: SortingVisualizerPro
       setSortedIndices(prev => new Set([...prev, n - 1 - i]));
     }
     setSortedIndices(new Set(Array.from({ length: n }, (_, i) => i)));
+    speakResult('Array sorted.');
   };
 
   const startSorting = async () => {
@@ -241,6 +256,32 @@ export function SortingVisualizer({ algorithm = 'bubble' }: SortingVisualizerPro
           </div>
         </div>
       </div>
+
+      {/* Narration and controls */}
+      {narration && (
+        <div className="mt-3 text-sm bg-muted/20 rounded p-2">{narration}</div>
+      )}
+      {stepDesc && (
+        <div className="sr-only">{stepDesc}</div>
+      )}
+      <div className="mt-2 flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {/* Memory layout */}
+      {showMemory && (
+        <MemoryLayout
+          data={array}
+          title="Array Memory Layout"
+          baseAddress={2000}
+          wordSize={4}
+        />
+      )}
     </div>
   );
 }

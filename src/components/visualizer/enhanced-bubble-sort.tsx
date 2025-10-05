@@ -5,6 +5,8 @@ import { Input } from '@/components/ui/input';
 import { RotateCcw, Shuffle, HardDrive } from 'lucide-react';
 import { StepByStepBase, VisualizationStep } from './step-by-step-base';
 import { VisualizerControls } from './visualizer-controls';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
+import { MemoryLayout } from '@/components/memory-layout';
 
 export function EnhancedBubbleSort() {
   const [array, setArray] = useState<number[]>([64, 34, 25, 12, 22, 11, 90]);
@@ -12,6 +14,10 @@ export function EnhancedBubbleSort() {
   const [steps, setSteps] = useState<VisualizationStep[]>([]);
   const [showMemoryView, setShowMemoryView] = useState(false);
   const [memoryAddresses, setMemoryAddresses] = useState<number[]>([]);
+  const [voiceEnabled, setVoiceEnabled] = useState(true);
+  const [voiceSpeed, setVoiceSpeed] = useState(1.0);
+  const { isSpeaking, pauseSpeech, resumeSpeech, stopSpeech, speakOperation, speakStep, speakResult } = useVisualizerVoice({ minInterval: 2000 });
+  const [stepDesc, setStepDesc] = useState('');
 
   const generateMemoryAddresses = () => {
     const baseAddress = 0x1000;
@@ -197,15 +203,25 @@ export function EnhancedBubbleSort() {
   };
 
   const handleSort = () => {
+    speakOperation('Bubble Sort', 'Starting bubble sort. We will repeatedly compare adjacent elements and swap if they are out of order.');
     const sortSteps = generateBubbleSortSteps(array);
     setSteps(sortSteps);
+    setStepDesc(sortSteps[0]?.description || '');
   };
 
   const handleReset = () => {
+    speakResult('Resetting bubble sort visualization.');
     setArray([64, 34, 25, 12, 22, 11, 90]);
     setInputValue('64,34,25,12,22,11,90');
     setSteps([]);
   };
+
+  return (
+    <div className="space-y-3">
+      {stepDesc && (<div className="p-2 bg-muted/20 rounded text-sm">{stepDesc}</div>)}
+      {/* existing UI remains rendered by StepByStepBase / controls */}
+    </div>
+  );
 
   const handleShuffle = () => {
     const newArray = Array.from({ length: 7 }, () => Math.floor(Math.random() * 90) + 10);
@@ -343,9 +359,9 @@ export function EnhancedBubbleSort() {
           </div>
         </div>
 
-        {/* Memory Layout View */}
-        {showMemoryView && (
-          <div className="mt-6 p-4 bg-muted/20 rounded-lg border">
+      {/* Memory Layout View */}
+      {showMemoryView && (
+        <div className="mt-6 p-4 bg-muted/20 rounded-lg border">
             <h4 className="font-semibold mb-3 flex items-center gap-2">
               <HardDrive className="h-4 w-4" />
               Memory Layout
@@ -376,10 +392,15 @@ export function EnhancedBubbleSort() {
               <div className="text-xs text-muted-foreground mt-2">
                 Each element occupies 4 bytes (32-bit integer). Base address: 0x{memoryAddresses[0]?.toString(16).toUpperCase()}
               </div>
+              {/* Standardized Memory Layout Component */}
+              <div className="mt-4">
+                <MemoryLayout title="Array Memory Layout" data={array as number[]} baseAddress={0x1000} wordSize={4} />
+              </div>
             </div>
           </div>
         )}
       </div>
+
     );
   };
 

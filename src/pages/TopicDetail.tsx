@@ -642,7 +642,7 @@ export default function TopicDetail() {
     }
   };
 
-  // Sample pseudocode for array operations
+  // Sample pseudocode for array operations (fallback only)
   const arrayPseudocode = [
     "function insertElement(array, element):",
     "  array.push(element)",
@@ -659,6 +659,29 @@ export default function TopicDetail() {
     "      return i",
     "  return -1"
   ];
+
+  // Derive per-topic pseudocode and key concepts when available
+  const snippet = getCodeSnippet(topic.id);
+  const pseudocodeText = topic.pseudocode || snippet?.pseudocode || '';
+  const pseudocodeLines = pseudocodeText
+    ? pseudocodeText.split('\n').filter(line => line.trim() !== '')
+    : arrayPseudocode;
+
+  const keyConceptsList: string[] = (() => {
+    if (topic.keyConcepts) {
+      // Split by lines and strip numbering/bullets/markdown
+      return topic.keyConcepts
+        .split('\n')
+        .map(l => l.replace(/\*\*(.*?)\*\*/g, '$1'))
+        .map(l => l.replace(/^\s*[0-9]+\.|^\s*[-•]\s*/,'').trim())
+        .filter(Boolean)
+        .filter(l => !/^Essential Concepts:?$/i.test(l));
+    }
+    if (snippet?.keyConcepts && Array.isArray(snippet.keyConcepts)) {
+      return snippet.keyConcepts;
+    }
+    return [];
+  })();
 
   const getExplanationSteps = (topicId: string) => {
     const explanations: Record<string, any[]> = {
@@ -1779,10 +1802,17 @@ arr.findIndex(v => v === 7); // search`,
           <CodeSnippetBox
             title={`${topic.title} Implementation`}
             language={getCodeSnippet(topic.id)?.language || 'javascript'}
-            code={getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'javascript')}
+            code={
+              // Prefer rich per-topic implementation if provided in topic data
+              (topic.implementationCode && topic.implementationCode.trim().length > 0)
+                ? topic.implementationCode
+                : (getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'javascript'))
+            }
             description={getCodeSnippet(topic.id)?.description || `Implementation of ${topic.title} with multiple language support`}
             implementations={{
-              javascript: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'javascript'),
+              javascript: (topic.implementationCode && topic.implementationCode.trim().length > 0)
+                ? topic.implementationCode
+                : (getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'javascript')),
               python: getDefaultCodeSnippet(topic.id, topic.title, 'python'),
               java: getDefaultCodeSnippet(topic.id, topic.title, 'java'),
               c: getDefaultCodeSnippet(topic.id, topic.title, 'c')
@@ -1793,7 +1823,7 @@ arr.findIndex(v => v === 7); // search`,
           {/* Pseudocode */}
           <PseudocodeBox
             title={`${topic.title} Pseudocode`}
-            code={arrayPseudocode}
+            code={pseudocodeLines}
           />
 
           {/* Key Concepts */}
@@ -1808,6 +1838,18 @@ arr.findIndex(v => v === 7); // search`,
                 <h5 className="font-medium text-foreground mb-1">Definition</h5>
                 <p className="text-muted-foreground">{topic.description}</p>
               </div>
+
+              {/* Core Principles sourced from topic or snippet */}
+              {keyConceptsList.length > 0 && (
+                <div className="p-3 bg-muted/50 rounded-lg">
+                  <h5 className="font-medium text-foreground mb-1">Core Principles</h5>
+                  <ul className="text-muted-foreground space-y-1">
+                    {keyConceptsList.map((k, i) => (
+                      <li key={i}>• {k}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {topic.category === 'Arrays' && (
                 <>

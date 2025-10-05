@@ -43,6 +43,7 @@ export function BinaryTreeVisualizer() {
   const [lcaMode, setLcaMode] = useState<'bst' | 'general'>('bst');
   const [treeHeight, setTreeHeight] = useState<number | null>(null);
   const [showMemory, setShowMemory] = useState(false);
+  const [currentStepText, setCurrentStepText] = useState('');
   const {
     voiceEnabled,
     setVoiceEnabled,
@@ -68,6 +69,7 @@ export function BinaryTreeVisualizer() {
     setTreeHeight(h);
     const opText = `Computing tree height: ${h}`;
     setOperation(opText);
+    setCurrentStepText(opText);
     speakOperation("Height Calculation", `Computing the height of the binary tree. The height is the longest path from root to leaf, which is ${h} levels.`);
   };
 
@@ -76,6 +78,7 @@ export function BinaryTreeVisualizer() {
     setIsAnimating(true);
     const opText = 'Level Order Traversal (BFS)';
     setOperation(opText);
+    setCurrentStepText(opText);
     speakOperation("Level Order Traversal", "Starting level order traversal using breadth-first search. We'll visit nodes level by level from left to right.");
     setHighlightedNodes([]);
     setTraversalOrder([]);
@@ -89,6 +92,7 @@ export function BinaryTreeVisualizer() {
       order.push(node.value);
       setTraversalOrder([...order]);
       stepCount++;
+      setCurrentStepText(`Visit ${node.value} (step ${stepCount})`);
       speakStep("", `Visiting node ${node.value} at step ${stepCount}`, stepCount, 7);
       await new Promise(r => setTimeout(r, 600));
       if (node.left) queue.push(node.left);
@@ -170,6 +174,7 @@ export function BinaryTreeVisualizer() {
     if (isNaN(a) || isNaN(b)) return;
     setIsAnimating(true);
     setOperation(`Finding LCA(${a}, ${b})`);
+    setCurrentStepText(`Find LCA(${a}, ${b})`);
     speakOperation("Lowest Common Ancestor", `Finding the lowest common ancestor of ${a} and ${b}. ${lcaMode === 'bst' ? 'Using BST property for efficient O(log n) search.' : 'Using general tree algorithm with parent tracking.'}`);
     setHighlightedNodes([]);
     const lca = lcaMode === 'bst'
@@ -178,11 +183,13 @@ export function BinaryTreeVisualizer() {
     if (lca) {
       setOperation(`LCA is ${lca.value}`);
       speakResult(`Found the lowest common ancestor! The LCA of ${a} and ${b} is ${lca.value}.`);
+      setCurrentStepText(`LCA is ${lca.value}`);
       // pulse highlight
       setHighlightedNodes(prev => Array.from(new Set([...prev, lca.id])));
     } else {
       setOperation('LCA not found');
       speakResult(`Could not find LCA. One or both values ${a} and ${b} may not exist in the tree.`);
+      setCurrentStepText('LCA not found');
     }
     setTimeout(() => {
       setIsAnimating(false);
@@ -372,6 +379,11 @@ export function BinaryTreeVisualizer() {
           {root && renderNode(root)}
         </svg>
       </div>
+
+      {/* Step Panel */}
+      {currentStepText && (
+        <div className="p-2 bg-muted/20 rounded text-sm text-center">{currentStepText}</div>
+      )}
 
       {/* Controls */}
       <div className="space-y-4">

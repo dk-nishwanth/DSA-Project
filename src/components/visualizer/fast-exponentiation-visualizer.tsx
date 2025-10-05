@@ -45,6 +45,7 @@ export function FastExponentiationVisualizer() {
     const m = hasMod ? Math.max(2, parseInt(mod)||2) : undefined;
     
     speakOperation("Fast Exponentiation", `Computing ${a0} to the power ${b}${hasMod ? ` modulo ${m}` : ''} using binary exponentiation. This reduces O(n) to O(log n) complexity.`);
+    setCurrentStep(`Initialize: a=${a0}${hasMod?` (mod ${m})`:''}, b=${b}, ans=1`);
     
     let a = hasMod ? ((a0 % (m!)) + (m!)) % (m!) : a0;
     let ans = 1;
@@ -63,6 +64,7 @@ export function FastExponentiationVisualizer() {
       a = hasMod ? (a * a) % (m!) : (a * a);
       S.push(`square a → a = ${a}, b >>= 1 → ${b}`);
       setSteps([...S]);
+      setCurrentStep(S[S.length-1] || '');
       await sleep(160);
     }
     setResult(String(ans));
@@ -83,6 +85,30 @@ export function FastExponentiationVisualizer() {
       {result!=='' && (
         <div className="p-3 bg-muted/20 rounded border text-sm">Result: <span className="font-mono font-bold">{result}</span></div>
       )}
+
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {showMemory && (
+        <MemoryLayout
+          data={steps}
+          title="Computation Steps (Binary Exponentiation)"
+          baseAddress={8000}
+          wordSize={1}
+        />
+      )}
+
+      {/* Step Panel */}
+      {currentStep && (
+        <div className="mt-3 p-2 bg-muted/20 rounded text-sm">{currentStep}</div>
+      )}
+
       <div className="bg-muted/20 rounded-lg p-3 text-sm text-muted-foreground">
         <div>• Binary exponentiation multiplies only on set bits and squares base each step.</div>
         <div>• Time: O(log b), Space: O(1)</div>

@@ -1,6 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 export function TrappingRainWaterVisualizer() {
   const [heights, setHeights] = useState<number[]>([0,1,0,2,1,0,1,3,2,1,2,1]);
@@ -11,6 +14,9 @@ export function TrappingRainWaterVisualizer() {
   const [rMax, setRMax] = useState(0);
   const [water, setWater] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const [showMemory, setShowMemory] = useState(false);
+  const [stepDesc, setStepDesc] = useState('');
+  const { voiceEnabled, setVoiceEnabled, speakOperation, speakStep, speakResult } = useVisualizerVoice({ minInterval: 1000 });
 
   const sleep = (ms:number)=>new Promise(r=>setTimeout(r,ms));
 
@@ -21,22 +27,26 @@ export function TrappingRainWaterVisualizer() {
 
   const run = useCallback(async ()=>{
     if (isRunning) return; setIsRunning(true);
+    speakOperation('Trapping Rain Water', 'Use two pointers and running maxima to accumulate water.');
     let i=0, j=heights.length-1; let lm=0, rm=0; let w=0;
     while(i<j){
       setL(i); setR(j); setLMax(lm); setRMax(rm);
       if (heights[i] <= heights[j]){
-        lm = Math.max(lm, heights[i]); w += lm - heights[i];
+        lm = Math.max(lm, heights[i]); const add = lm - heights[i]; w += add; setStepDesc(`L=${i}, R=${j} | lMax=${lm}, rMax=${rm} -> add ${Math.max(0, add)} water`);
+        speakStep('', `Left moves: add ${Math.max(0, add)} water`);
         setWater(w);
         i++;
       } else {
-        rm = Math.max(rm, heights[j]); w += rm - heights[j];
+        rm = Math.max(rm, heights[j]); const add = rm - heights[j]; w += add; setStepDesc(`L=${i}, R=${j} | lMax=${lm}, rMax=${rm} -> add ${Math.max(0, add)} water`);
+        speakStep('', `Right moves: add ${Math.max(0, add)} water`);
         setWater(w);
         j--;
       }
       await sleep(180);
     }
+    speakResult(`Total water trapped = ${w}`);
     setIsRunning(false);
-  }, [heights, isRunning]);
+  }, [heights, isRunning, speakOperation, speakStep, speakResult]);
 
   return (
     <div className="w-full space-y-4">
@@ -63,7 +73,29 @@ export function TrappingRainWaterVisualizer() {
           })}
         </div>
         <div className="text-sm mt-2">Water trapped: <span className="font-mono">{water}</span></div>
+        {stepDesc && (
+          <div className="mt-2 text-xs bg-muted/20 rounded p-2">{stepDesc}</div>
+        )}
       </div>
+
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {showMemory && (
+        <MemoryLayout
+          data={heights}
+          title="Heights Memory Layout"
+          baseAddress={1500}
+          wordSize={4}
+        />
+      )}
+
       <div className="bg-muted/20 rounded-lg p-3 text-sm text-muted-foreground">
         <div>• Maintain running maxima from both ends; move the side with smaller height.</div>
         <div>• Time: O(n), Space: O(1)</div>

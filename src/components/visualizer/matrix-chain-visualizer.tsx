@@ -1,6 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 // Dimensions p[0..n] meaning Ai is p[i-1] x p[i]
 export function MatrixChainVisualizer() {
@@ -12,17 +15,23 @@ export function MatrixChainVisualizer() {
   const [iCur, setICur] = useState(0);
   const [jCur, setJCur] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const [showMemory, setShowMemory] = useState(false);
+  const [stepDesc, setStepDesc] = useState('');
+  const { voiceEnabled, setVoiceEnabled, speakOperation, speakStep, speakResult } = useVisualizerVoice({ minInterval: 1000 });
 
   const sleep = (ms:number)=>new Promise(r=>setTimeout(r,ms));
 
   const run = useCallback(async () => {
     if (isRunning) return;
     setIsRunning(true);
+    speakOperation('Matrix Chain Multiplication', 'Dynamic programming over chain length.');
     const n = p.length - 1;
     const M = Array.from({length:n},()=>Array(n).fill(0));
     const S = Array.from({length:n},()=>Array(n).fill(0));
     for (let L=2; L<=n; L++) { // chain length
       setLCur(L);
+      setStepDesc(`Chain length L=${L}`);
+      speakStep('', `L=${L}`);
       for (let i=0; i<=n-L; i++) {
         const j = i + L - 1;
         setICur(i); setJCur(j);
@@ -31,12 +40,15 @@ export function MatrixChainVisualizer() {
           const q = M[i][k] + M[k+1][j] + p[i]*p[k+1]*p[j+1];
           if (q < M[i][j]) { M[i][j]=q; S[i][j]=k; }
           setM(M.map(r=>r.slice())); setS(S.map(r=>r.slice()));
+          setStepDesc(`i=${i}, j=${j}, try k=${k} -> cost=${q}`);
+          speakStep('', `i=${i}, j=${j}, k=${k}`);
           await sleep(80);
         }
       }
     }
     setIsRunning(false);
-  }, [p, isRunning]);
+    if (n>0) speakResult(`Optimal cost m[0][${n-1}] = ${M[0][n-1]}`);
+  }, [p, isRunning, speakOperation, speakStep, speakResult]);
 
   const rebuild = useCallback(()=>{
     const dims = dimsInput.split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n) && n>0);
@@ -58,6 +70,19 @@ export function MatrixChainVisualizer() {
         <Button onClick={rebuild} disabled={isRunning}>Set</Button>
         <Button onClick={run} disabled={isRunning}>Run</Button>
       </div>
+
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {stepDesc && (
+        <div className="text-xs bg-muted/20 rounded p-2">{stepDesc}</div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="p-4 bg-gradient-visualization rounded-xl border-2 overflow-x-auto">
@@ -92,6 +117,15 @@ export function MatrixChainVisualizer() {
 
       {m.length>0 && (
         <div className="bg-muted/20 rounded-lg p-3 text-sm">Parenthesization: <span className="font-mono">{parenText}</span></div>
+      )}
+
+      {showMemory && (
+        <MemoryLayout
+          data={p}
+          title="Dimensions p[0..n]"
+          baseAddress={4200}
+          wordSize={4}
+        />
       )}
 
       <div className="bg-muted/20 rounded-lg p-3 text-sm text-muted-foreground">

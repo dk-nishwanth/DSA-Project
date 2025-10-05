@@ -7,6 +7,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Plus, Minus, Search, RotateCcw, Zap, HardDrive, Info, Play } from 'lucide-react';
 import { toast } from 'sonner';
 import { ComplexityBox } from '@/components/complexity-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface ArrayVisualizerProps {
   initialArray?: number[];
@@ -25,6 +28,7 @@ export function EnhancedArrayVisualizer({ initialArray = [64, 25, 12, 22, 11] }:
   const [currentStep, setCurrentStep] = useState('');
   const [memoryAddresses, setMemoryAddresses] = useState<number[]>([]);
   const [showMemoryView, setShowMemoryView] = useState(false);
+  const { voiceEnabled, setVoiceEnabled, speed, setSpeed, isSpeaking, pauseSpeech, resumeSpeech, stopSpeech, speakOperation, speakStep, speakResult } = useVisualizerVoice({ minInterval: 2000 });
   const [operationCount, setOperationCount] = useState(0);
   const [timeComplexity, setTimeComplexity] = useState('O(1)');
 
@@ -338,6 +342,28 @@ export function EnhancedArrayVisualizer({ initialArray = [64, 25, 12, 22, 11] }:
           </div>
         </div>
       </div>
+
+      {/* Controls below visualization: voice + memory */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemoryView}
+          onToggleMemory={setShowMemoryView}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
+      </div>
+
+      {showMemoryView && (
+        <div className="mt-4">
+          <MemoryLayout title="Array Memory Layout" data={array as number[]} baseAddress={0x1000} wordSize={4} />
+        </div>
+      )}
 
       {/* Array Visualization */}
       <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900 rounded-xl border-2 border-border/50 p-6">

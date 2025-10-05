@@ -7,6 +7,9 @@ import { Play, Trash2, Search, RotateCcw } from 'lucide-react';
 import { PseudocodeBox } from '@/components/pseudocode-box';
 import { ComplexityBox } from '@/components/complexity-box';
 import { toast } from 'sonner';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface HashNode {
   key: string;
@@ -39,6 +42,8 @@ export function SeparateChainingVisualizer() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [currentStep, setCurrentStep] = useState(-1);
   const [stepDescription, setStepDescription] = useState('');
+  const [showMemory, setShowMemory] = useState(false);
+  const { voiceEnabled, setVoiceEnabled, speed, setSpeed, isSpeaking, pauseSpeech, resumeSpeech, stopSpeech, speakOperation, speakStep, speakResult } = useVisualizerVoice({ minInterval: 2000 });
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -267,6 +272,7 @@ export function SeparateChainingVisualizer() {
   }, [tableSize]);
 
   const handleInsert = async () => {
+    speakOperation('Hash Insert (Chaining)', 'Compute slot by hash and insert at head of chain to resolve collisions.');
     if (!inputKey.trim() || !inputValue.trim()) {
       toast.error('Please enter both key and value');
       return;
@@ -277,6 +283,7 @@ export function SeparateChainingVisualizer() {
   };
 
   const handleSearch = async () => {
+    speakOperation('Hash Search (Chaining)', 'Compute slot by hash and traverse the linked list at that bucket.');
     if (!searchKey.trim()) {
       toast.error('Please enter a key to search');
       return;
@@ -285,6 +292,7 @@ export function SeparateChainingVisualizer() {
   };
 
   const handleDelete = async () => {
+    speakOperation('Hash Delete (Chaining)', 'Compute slot by hash and unlink node from the chain.');
     if (!searchKey.trim()) {
       toast.error('Please enter a key to delete');
       return;
@@ -397,6 +405,31 @@ export function SeparateChainingVisualizer() {
           </Button>
         </div>
       </div>
+
+      {/* Controls below visualization: voice + memory */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
+      </div>
+
+      {showMemory && (
+        <MemoryLayout
+          title="Chain Lengths per Bucket"
+          data={table.map(b=>b.chainLength) as number[]}
+          baseAddress={0x5A00}
+          wordSize={2}
+        />
+      )}
 
       {/* Status */}
       {stepDescription && (

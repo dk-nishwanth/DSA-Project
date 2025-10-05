@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
 import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
+import { MemoryLayout } from '@/components/memory-layout';
 
 type CollisionMethod = 'chaining' | 'linear-probing' | 'quadratic-probing';
 

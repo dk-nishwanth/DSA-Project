@@ -285,6 +285,24 @@ export function DPVisualizer() {
         </Button>
       </div>
 
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {showMemory && dpTable.length>0 && (
+        <MemoryLayout
+          data={dpTable.flat().map(c=>c.value)}
+          title="DP Table Values (flattened)"
+          baseAddress={9000}
+          wordSize={4}
+        />
+      )}
+
       {/* Result Display */}
       {result && (
         <div className="p-4 bg-success/10 border-2 border-success rounded-xl text-center">

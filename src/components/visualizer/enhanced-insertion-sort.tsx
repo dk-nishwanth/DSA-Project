@@ -4,11 +4,17 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { RotateCcw, Shuffle } from 'lucide-react';
 import { StepByStepBase, VisualizationStep } from './step-by-step-base';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 export function EnhancedInsertionSort() {
   const [array, setArray] = useState<number[]>([64, 34, 25, 12, 22, 11, 90]);
   const [inputValue, setInputValue] = useState('64,34,25,12,22,11,90');
   const [steps, setSteps] = useState<VisualizationStep[]>([]);
+  const [showMemory, setShowMemory] = useState(false);
+  const { voiceEnabled, setVoiceEnabled, speed, setSpeed, isSpeaking, pauseSpeech, resumeSpeech, stopSpeech, speakOperation, speakStep, speakResult } = useVisualizerVoice({ minInterval: 2000 });
+  const [stepDesc, setStepDesc] = useState('');
 
   const generateInsertionSortSteps = (arr: number[]): VisualizationStep[] => {
     const steps: VisualizationStep[] = [];
@@ -170,11 +176,14 @@ export function EnhancedInsertionSort() {
   };
 
   const handleSort = () => {
+    speakOperation('Insertion Sort', 'Starting insertion sort: pick a key and insert into sorted portion by shifting larger elements.');
     const sortSteps = generateInsertionSortSteps(array);
     setSteps(sortSteps);
+    setStepDesc(sortSteps[0]?.description || '');
   };
 
   const handleReset = () => {
+    speakResult('Resetting insertion sort visualization.');
     setArray([64, 34, 25, 12, 22, 11, 90]);
     setInputValue('64,34,25,12,22,11,90');
     setSteps([]);
@@ -186,6 +195,12 @@ export function EnhancedInsertionSort() {
     setInputValue(newArray.join(','));
     setSteps([]);
   };
+
+  return (
+    <div className="space-y-3">
+      {stepDesc && (<div className="p-2 bg-muted/20 rounded text-sm">{stepDesc}</div>)}
+    </div>
+  );
 
   const handleInputChange = () => {
     try {
@@ -483,6 +498,29 @@ export function EnhancedInsertionSort() {
           </p>
         </div>
       </div>
+      </div>
+
+      {/* Controls below visualization: voice + memory */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
+      </div>
+
+      {showMemory && (
+        <div className="mt-4">
+          <MemoryLayout title="Array Memory Layout" data={array as number[]} baseAddress={0x1010} wordSize={4} />
+        </div>
+      )}
     </div>
   );
 }

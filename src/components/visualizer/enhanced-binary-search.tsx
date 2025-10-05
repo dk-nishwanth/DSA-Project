@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Search, RotateCcw, Shuffle, Target } from 'lucide-react';
 import { StepByStepBase, VisualizationStep } from './step-by-step-base';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
 import { useVoiceExplain } from '@/hooks/useVoiceExplain';
 
 export function EnhancedBinarySearch() {
@@ -397,6 +398,18 @@ export function EnhancedBinarySearch() {
             }`}>
               {direction === 'left' ? '← Searching Left Half' : 'Searching Right Half →'}
             </div>
+          </div>
+        )}
+
+        {/* Optional Memory Layout */}
+        {showMemory && (
+          <div className="mt-6">
+            <MemoryLayout
+              title="Array Memory Layout"
+              data={displayArray as number[]}
+              baseAddress={0x4100}
+              wordSize={4}
+            />
           </div>
         )}
       </div>

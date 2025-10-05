@@ -297,7 +297,7 @@ export function DFSBFSVisualizer() {
   const isRunning = !!generator;
 
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-4">
       {/* Controls */}
       <div className="flex flex-wrap items-center gap-4 p-4 bg-card border rounded-xl shadow-sm">
         <div className="flex items-center gap-2">
@@ -333,6 +333,38 @@ export function DFSBFSVisualizer() {
           </Button>
         </div>
       </div>
+
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {showMemory && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <MemoryLayout
+            data={algorithm==='bfs' ? queue : stack}
+            title={algorithm==='bfs' ? 'Queue State' : 'Stack State'}
+            baseAddress={8400}
+            wordSize={4}
+          />
+          <MemoryLayout
+            data={visitOrder}
+            title="Visit Order"
+            baseAddress={8600}
+            wordSize={4}
+          />
+          <MemoryLayout
+            data={nodes.map(n=>n.id)}
+            title="Nodes"
+            baseAddress={8800}
+            wordSize={4}
+          />
+        </div>
+      )}
 
       {/* Graph */}
       <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-6 border-2 border-primary/10 shadow-sm">

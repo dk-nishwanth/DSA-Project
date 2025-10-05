@@ -3,6 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PseudocodeBox } from '@/components/pseudocode-box';
 import { ComplexityBox } from '@/components/complexity-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 export function SieveVisualizer() {
   const [nInput, setNInput] = useState('50');
@@ -12,6 +15,21 @@ export function SieveVisualizer() {
   const [currentStep, setCurrentStep] = useState(0);
   const [currentStepDescription, setCurrentStepDescription] = useState('');
   const [highlightIdx, setHighlightIdx] = useState<number | null>(null);
+  const [showMemory, setShowMemory] = useState(false);
+
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakOperation,
+    speakStep,
+    speakResult,
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const sleep = (ms:number)=>new Promise(r=>setTimeout(r,ms));
 
@@ -25,6 +43,7 @@ export function SieveVisualizer() {
   ];
 
   const run = useCallback(async ()=>{
+    speakOperation('Sieve of Eratosthenes', 'Initializing sieve and crossing out composite numbers.');
     if (isRunning) return; setIsRunning(true);
     const n = Math.max(2, Math.min(1000, parseInt(nInput)||50));
     const isPrime = Array(n+1).fill(true);
@@ -40,6 +59,7 @@ export function SieveVisualizer() {
         setCurP(p);
         setCurrentStep(4);
         setCurrentStepDescription(`p = ${p} is prime. Cross out multiples starting at p*p = ${p*p}`);
+        speakStep('', `Marking multiples of ${p} starting at ${p*p}.`, p, n);
         await sleep(200);
         setCurrentStep(5);
         for (let m=p*p; m<=n; m+=p){
@@ -57,8 +77,9 @@ export function SieveVisualizer() {
     setCurP(null);
     setCurrentStep(0);
     setCurrentStepDescription('Sieve complete. Remaining true entries are primes.');
+    speakResult('Sieve complete. Prime list computed.');
     setIsRunning(false);
-  }, [nInput, isRunning]);
+  }, [nInput, isRunning, speakOperation, speakStep, speakResult]);
 
   return (
     <div className="w-full space-y-4">
@@ -93,6 +114,31 @@ export function SieveVisualizer() {
         )}
       </div>
       <PseudocodeBox title="Sieve of Eratosthenes - Pseudocode" code={pseudocode} highlightedLine={currentStep} />
+
+      {/* Controls below visualization: voice + memory */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
+      </div>
+
+      {showMemory && (
+        <MemoryLayout
+          title="Sieve Memory Layout (1=prime,0=composite)"
+          data={marked.map(v => v ? 1 : 0)}
+          baseAddress={0x5300}
+          wordSize={1}
+        />
+      )}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ComplexityBox
           title="Time Complexity"

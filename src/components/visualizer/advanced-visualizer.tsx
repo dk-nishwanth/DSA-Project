@@ -6,6 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { PseudocodeBox } from '@/components/pseudocode-box';
 import { ComplexityBox } from '@/components/complexity-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 type DataStructure = 'segment-tree' | 'fenwick-tree';
 
@@ -31,6 +34,8 @@ interface FenwickTreeNode {
 
 export function AdvancedVisualizer() {
   const [dataStructure, setDataStructure] = useState<DataStructure>('segment-tree');
+  const [showMemory, setShowMemory] = useState(false);
+  const { voiceEnabled, setVoiceEnabled, speed, setSpeed, isSpeaking, pauseSpeech, resumeSpeech, stopSpeech, speakOperation, speakStep, speakResult } = useVisualizerVoice({ minInterval: 2000 });
   const [isAnimating, setIsAnimating] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [currentStepDescription, setCurrentStepDescription] = useState('');
@@ -548,6 +553,31 @@ export function AdvancedVisualizer() {
           </ul>
         </div>
       </div>
+
+      {/* Controls below visualization: voice + memory */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
+      </div>
+
+      {showMemory && (
+        <MemoryLayout
+          title={dataStructure==='segment-tree' ? 'Segment Array Memory' : 'Fenwick Array Memory'}
+          data={(dataStructure==='segment-tree' ? segmentArray : fenwickArray) as number[]}
+          baseAddress={0x5800}
+          wordSize={4}
+        />
+      )}
     </div>
   );
 }

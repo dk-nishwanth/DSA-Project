@@ -3,6 +3,9 @@ import { Play, Pause, RotateCcw, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface HeapNode {
   value: number;
@@ -20,6 +23,20 @@ export function HeapVisualizer() {
   const [highlightedIndices, setHighlightedIndices] = useState<number[]>([]);
   const [currentStep, setCurrentStep] = useState(0);
   const [operation, setOperation] = useState<'insert' | 'extract' | null>(null);
+  const [showMemory, setShowMemory] = useState(false);
+
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakOperation,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const getHeapNodes = useCallback((): HeapNode[] => {
     const nodes: HeapNode[] = [];
@@ -58,6 +75,9 @@ export function HeapVisualizer() {
       
       if (heap[currentIndex] <= heap[parentIndex]) break;
       
+      // Narrate comparison and swap
+      speakOperation('Heapify Up', `Compare child ${heap[currentIndex]} with parent ${heap[parentIndex]}. Swap if child > parent in max-heap.`);
+
       // Swap
       const newHeap = [...heap];
       [newHeap[currentIndex], newHeap[parentIndex]] = [newHeap[parentIndex], newHeap[currentIndex]];
@@ -68,7 +88,7 @@ export function HeapVisualizer() {
     }
     
     setHighlightedIndices([]);
-  }, [heap]);
+  }, [heap, speakOperation]);
 
   const heapifyDown = useCallback(async (startIndex: number, heapSize: number) => {
     let currentIndex = startIndex;
@@ -91,6 +111,8 @@ export function HeapVisualizer() {
       
       if (largest === currentIndex) break;
       
+      speakOperation('Heapify Down', `Swap parent ${heap[currentIndex]} with larger child ${heap[largest]} to restore heap property.`);
+
       // Swap
       const newHeap = [...heap];
       [newHeap[currentIndex], newHeap[largest]] = [newHeap[largest], newHeap[currentIndex]];
@@ -101,7 +123,7 @@ export function HeapVisualizer() {
     }
     
     setHighlightedIndices([]);
-  }, [heap]);
+  }, [heap, speakOperation]);
 
   const insertElement = useCallback(async () => {
     if (!inputValue.trim() || isNaN(Number(inputValue))) {
@@ -112,6 +134,8 @@ export function HeapVisualizer() {
     const value = Number(inputValue);
     setIsAnimating(true);
     setOperation('insert');
+
+    speakOperation('Insert', `Insert ${value} at the end, then bubble up while parent is smaller (max-heap).`);
     
     const newHeap = [...heap, value];
     setHeap(newHeap);
@@ -119,11 +143,13 @@ export function HeapVisualizer() {
     toast.success(`Inserted ${value} into heap`);
     
     await heapifyUp(newHeap.length - 1);
+
+    speakResult(`Insertion of ${value} completed. Heap property restored.`);
     
     setIsAnimating(false);
     setOperation(null);
     setInputValue('');
-  }, [inputValue, heap, heapifyUp]);
+  }, [inputValue, heap, heapifyUp, speakOperation, speakResult]);
 
   const extractMax = useCallback(async () => {
     if (heap.length === 0) {
@@ -133,6 +159,8 @@ export function HeapVisualizer() {
 
     setIsAnimating(true);
     setOperation('extract');
+
+    speakOperation('Extract Max', `Remove the root (${heap[0]}). Move last element to root and heapify down.`);
     
     const maxValue = heap[0];
     const newHeap = [...heap];
@@ -147,10 +175,12 @@ export function HeapVisualizer() {
     if (newHeap.length > 0) {
       await heapifyDown(0, newHeap.length);
     }
+
+    speakResult(`Extraction complete. New root is ${newHeap[0] ?? 'empty heap'}.`);
     
     setIsAnimating(false);
     setOperation(null);
-  }, [heap, heapifyDown]);
+  }, [heap, heapifyDown, speakOperation, speakResult]);
 
   const resetHeap = useCallback(() => {
     setHeap([50, 30, 40, 20, 10, 35, 25]);
@@ -209,6 +239,36 @@ export function HeapVisualizer() {
           Reset
         </Button>
       </div>
+
+      {/* Controls below visualization: voice + memory */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
+      </div>
+
+      {/* Step Panel */}
+      {currentStepText && (
+        <div className="p-2 bg-muted/20 rounded text-sm text-center">{currentStepText}</div>
+      )}
+
+      {showMemory && (
+        <MemoryLayout
+          title="Heap Array Memory Layout"
+          data={heap as number[]}
+          baseAddress={0x6000}
+          wordSize={4}
+        />
+      )}
 
       {/* Visualization */}
       <div className="relative bg-gradient-visualization rounded-xl border-2 border-border/50 overflow-hidden">

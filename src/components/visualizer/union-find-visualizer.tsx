@@ -3,6 +3,9 @@ import { Play, RotateCcw, Link, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 interface UFNode {
   id: number;
@@ -31,10 +34,15 @@ export function UnionFindVisualizer() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [highlightedNodes, setHighlightedNodes] = useState<number[]>([]);
   const [operation, setOperation] = useState<'union' | 'find' | null>(null);
+  const [showMemory, setShowMemory] = useState(false);
+  const [currentStepText, setCurrentStepText] = useState('');
+  const { voiceEnabled, setVoiceEnabled, speakOperation, speakStep, speakResult } = useVisualizerVoice({ minInterval: 1200 });
 
   const find = useCallback(async (nodeId: number, animate = false): Promise<number> => {
     if (animate) {
       setHighlightedNodes([nodeId]);
+      speakOperation('Find', `Find root of node ${nodeId}`);
+      setCurrentStepText(`Find(${nodeId}) - highlight path to root`);
       await new Promise(resolve => setTimeout(resolve, 500));
     }
     
@@ -48,6 +56,8 @@ export function UnionFindVisualizer() {
       
       if (animate) {
         setHighlightedNodes(path);
+        speakStep('', `Move to parent ${current}`);
+        setCurrentStepText(`Move up to parent ${current}`);
         await new Promise(resolve => setTimeout(resolve, 600));
       }
     }
@@ -63,15 +73,19 @@ export function UnionFindVisualizer() {
       setNodes(newNodes);
       
       toast.info(`Path compression applied for node ${nodeId}`);
+      speakStep('', `Compress path: set parents along path to ${current}`);
+      setCurrentStepText(`Path compression: set parents along path to ${current}`);
       await new Promise(resolve => setTimeout(resolve, 800));
     }
     
     return current;
-  }, [nodes]);
+  }, [nodes, speakOperation, speakStep]);
 
   const union = useCallback(async (a: number, b: number) => {
     setIsAnimating(true);
     setOperation('union');
+    speakOperation('Union', `Union nodes ${a} and ${b} by rank`);
+    setCurrentStepText(`Union(${a}, ${b}) - find roots and attach smaller rank under larger`);
     
     // Find roots of both sets
     const rootA = await find(a, true);
@@ -82,6 +96,8 @@ export function UnionFindVisualizer() {
     
     if (rootA === rootB) {
       toast.info(`Nodes ${a} and ${b} are already in the same set`);
+      speakResult(`Nodes ${a} and ${b} already united`);
+      setCurrentStepText(`Nodes ${a} and ${b} are already connected`);
       setHighlightedNodes([]);
       setIsAnimating(false);
       setOperation(null);
@@ -94,13 +110,19 @@ export function UnionFindVisualizer() {
     if (newNodes[rootA].rank < newNodes[rootB].rank) {
       newNodes[rootA].parent = rootB;
       newNodes[rootA].isRoot = false;
+      speakStep('', `Attach root ${rootA} under ${rootB}`);
+      setCurrentStepText(`Attach ${rootA} under ${rootB}`);
     } else if (newNodes[rootA].rank > newNodes[rootB].rank) {
       newNodes[rootB].parent = rootA;
       newNodes[rootB].isRoot = false;
+      speakStep('', `Attach root ${rootB} under ${rootA}`);
+      setCurrentStepText(`Attach ${rootB} under ${rootA}`);
     } else {
       newNodes[rootB].parent = rootA;
       newNodes[rootB].isRoot = false;
       newNodes[rootA].rank++;
+      speakStep('', `Equal rank: attach ${rootB} under ${rootA} and increment rank of ${rootA}`);
+      setCurrentStepText(`Equal rank: attach ${rootB} under ${rootA} and increment rank(${rootA})`);
     }
     
     setNodes(newNodes);
@@ -113,7 +135,7 @@ export function UnionFindVisualizer() {
       setIsAnimating(false);
       setOperation(null);
     }, 1000);
-  }, [nodes, find]);
+  }, [nodes, find, speakOperation, speakStep, speakResult]);
 
   const findOperation = useCallback(async (nodeId: number) => {
     setIsAnimating(true);
@@ -256,8 +278,8 @@ export function UnionFindVisualizer() {
           </Button>
         </div>
         
-        <Button
-          onClick={handleFind}
+          <Button
+            onClick={handleFind}
           disabled={isAnimating}
           size="sm"
           variant="secondary"
@@ -278,6 +300,37 @@ export function UnionFindVisualizer() {
           Reset
         </Button>
       </div>
+
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {/* Step Panel */}
+      {currentStepText && (
+        <div className="p-2 bg-muted/20 rounded text-sm text-center">{currentStepText}</div>
+      )}
+
+      {showMemory && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <MemoryLayout
+            data={nodes.map(n=>n.parent)}
+            title="Parent Array"
+            baseAddress={5000}
+            wordSize={4}
+          />
+          <MemoryLayout
+            data={nodes.map(n=>n.rank)}
+            title="Rank Array"
+            baseAddress={5200}
+            wordSize={4}
+          />
+        </div>
+      )}
 
       {/* Current Sets Display */}
       <div className="bg-muted/20 rounded-lg p-3">

@@ -4,6 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Play, Pause, RotateCcw, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 type PointerType = 'i' | 'left' | 'right';
 
@@ -37,6 +40,7 @@ export function ThreeSumVisualizer({
   const [triplets, setTriplets] = useState<number[][]>([]);
   const [isComplete, setIsComplete] = useState(false);
   const [showMemory, setShowMemory] = useState(false);
+  const { voiceEnabled, setVoiceEnabled, speakStep, speakOperation, speakResult } = useVisualizerVoice({ minInterval: 1200 });
   
   // Initialize array with default values
   useEffect(() => {
@@ -64,7 +68,8 @@ export function ThreeSumVisualizer({
   const updateStep = useCallback((step: string) => {
     setCurrentStep(step);
     onStepChange?.(step);
-  }, [onStepChange]);
+    speakStep('', step);
+  }, [onStepChange, speakStep]);
 
   const highlightElements = useCallback((indices: number[], type: PointerType | 'sum' | 'reset' = 'reset') => {
     setArray(prev => {
@@ -129,6 +134,7 @@ export function ThreeSumVisualizer({
     const nums = [...initialArray].sort((a, b) => a - b);
     const n = nums.length;
     const result: number[][] = [];
+    speakOperation('Three Sum', 'Find all unique triplets that sum to target.');
     
     updateStep('Starting Three Sum visualization...');
     await new Promise(resolve => setTimeout(resolve, 1000 / speed));
@@ -216,9 +222,10 @@ export function ThreeSumVisualizer({
     }
     
     updateStep('Three Sum visualization complete!');
+    speakResult('Three Sum complete.');
     setIsComplete(true);
     setIsPlaying(false);
-  }, [initialArray, targetSum, isPlaying, speed, updateStep, highlightElements, markAsProcessed, markAsDuplicate, addTriplet]);
+  }, [initialArray, targetSum, isPlaying, speed, updateStep, highlightElements, markAsProcessed, markAsDuplicate, addTriplet, speakResult]);
 
   const togglePlayPause = () => {
     if (isComplete) {
@@ -296,6 +303,26 @@ export function ThreeSumVisualizer({
           <span>{currentStep || 'Ready to start visualization...'}</span>
         </div>
       </div>
+
+      {/* Visualizer Controls */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {/* Memory Layout */}
+      {showMemory && (
+        <MemoryLayout
+          data={array.map(el=>el.value)}
+          title="Array (sorted) Memory Layout"
+          baseAddress={2500}
+          wordSize={4}
+        />
+      )}
       
       {/* Array Visualization */}
       <div className="flex flex-col gap-4">

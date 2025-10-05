@@ -6,6 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { PseudocodeBox } from '@/components/pseudocode-box';
 import { ComplexityBox } from '@/components/complexity-box';
+import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
+import { MemoryLayout } from '@/components/memory-layout';
+import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
 
 type GreedyAlgorithm = 'activity-selection' | 'fractional-knapsack' | 'huffman-coding';
 
@@ -69,6 +72,20 @@ export function GreedyVisualizer() {
   const [huffmanCodes, setHuffmanCodes] = useState<{[key: string]: string}>({});
 
   const [currentStepDescription, setCurrentStepDescription] = useState('');
+  const [showMemory, setShowMemory] = useState(false);
+  const {
+    voiceEnabled,
+    setVoiceEnabled,
+    speed,
+    setSpeed,
+    isSpeaking,
+    pauseSpeech,
+    resumeSpeech,
+    stopSpeech,
+    speakOperation,
+    speakStep,
+    speakResult
+  } = useVisualizerVoice({ minInterval: 2000 });
 
   const pseudocode: Record<GreedyAlgorithm, string[]> = {
     'activity-selection': [
@@ -120,6 +137,7 @@ export function GreedyVisualizer() {
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
   const executeAlgorithm = useCallback(async () => {
+    speakOperation('Greedy Algorithm', `Running ${algorithm.replace('-', ' ')}.`);
     setIsAnimating(true);
     setCurrentStep(0);
     
@@ -184,6 +202,7 @@ export function GreedyVisualizer() {
     }
 
     toast.success(`Selected ${selected.length} activities: ${selected.map(a => a.name).join(', ')}`);
+    speakResult(`Activity selection complete. Selected ${selected.length} activities.`);
   };
 
   const executeFractionalKnapsack = async () => {
@@ -237,6 +256,7 @@ export function GreedyVisualizer() {
     }
 
     toast.success(`Total value: ${totalValue.toFixed(2)}`);
+    speakResult(`Fractional knapsack total value ${totalValue.toFixed(2)}.`);
   };
 
   const executeHuffmanCoding = async () => {
@@ -332,6 +352,36 @@ export function GreedyVisualizer() {
           </div>
         ))}
       </div>
+
+      {/* Controls below visualization: voice + memory */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
+      </div>
+
+      {showMemory && (
+        <MemoryLayout
+          title="Greedy State Memory"
+          data={(function(){
+            if (algorithm==='activity-selection') return activities.map(a=>a.finish);
+            if (algorithm==='fractional-knapsack') return knapsackItems.map(i=>Math.round(i.ratio*100));
+            if (algorithm==='huffman-coding') return Object.values(huffmanCodes).map(c=>c.length);
+            return [] as number[];
+          })()}
+          baseAddress={0x5400}
+          wordSize={4}
+        />
+      )}
       
       <div className="mt-4 h-16 bg-muted/20 rounded-lg relative">
         <div className="absolute inset-0 flex items-center">

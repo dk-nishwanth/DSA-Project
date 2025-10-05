@@ -25,6 +25,7 @@ export function StackVisualizer() {
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const [operation, setOperation] = useState<string>('');
   const [showMemory, setShowMemory] = useState(false);
+  const [currentStepText, setCurrentStepText] = useState('');
   const {
     voiceEnabled,
     setVoiceEnabled,
@@ -44,6 +45,7 @@ export function StackVisualizer() {
     setIsAnimating(true);
     const opText = `Pushing ${value} onto the stack`;
     setOperation(opText);
+    setCurrentStepText(opText);
     speakOperation('Push Operation', opText);
 
     const newItem: StackItem = {
@@ -69,6 +71,7 @@ export function StackVisualizer() {
     const topItem = stack[stack.length - 1];
     const opText = `Popping ${topItem.value} from the stack`;
     setOperation(opText);
+    setCurrentStepText(opText);
     speakOperation('Pop Operation', opText);
     setHighlightedIndex(stack.length - 1);
 
@@ -86,6 +89,7 @@ export function StackVisualizer() {
     setIsAnimating(true);
     const opText = `Top element: ${stack[stack.length - 1].value}`;
     setOperation(opText);
+    setCurrentStepText(opText);
     speakOperation('Peek Operation', opText);
     setHighlightedIndex(stack.length - 1);
 
@@ -170,6 +174,11 @@ export function StackVisualizer() {
           )}
         </div>
       </div>
+
+      {/* Step Panel */}
+      {currentStepText && (
+        <div className="p-2 bg-muted/20 rounded text-sm text-center">{currentStepText}</div>
+      )}
 
       {/* Controls */}
       <div className="flex justify-center">

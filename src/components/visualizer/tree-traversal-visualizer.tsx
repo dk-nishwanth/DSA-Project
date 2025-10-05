@@ -497,6 +497,32 @@ export function TreeTraversalVisualizer() {
         )}
       </div>
 
+      {/* Visualizer Controls below visualization */}
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+          voiceSpeed={speed}
+          onVoiceSpeedChange={setSpeed}
+          isSpeaking={isSpeaking}
+          onPauseSpeech={pauseSpeech}
+          onResumeSpeech={resumeSpeech}
+          onStopSpeech={stopSpeech}
+        />
+      </div>
+
+      {/* Memory Layout below visualization */}
+      {showMemory && (
+        <MemoryLayout
+          title="Traversal Result Memory Layout"
+          data={(steps[currentStep]?.result || []) as number[]}
+          baseAddress={0x5200}
+          wordSize={4}
+        />
+      )}
+
       {/* Step Information */}
       {currentStepData && (
         <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border">

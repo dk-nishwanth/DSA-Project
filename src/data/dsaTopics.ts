@@ -4789,8 +4789,8 @@ console.log('Stock span [100,80,60,70,60,75,85]:', calculateSpan([100, 80, 60, 7
        return stack.pop();
    }
    \`\`\``,
-    voiceExplanation: `Think of a stack like a stack of plates in a cafeteria - you can only add or remove plates from the top. This is exactly how a stack data structure works! When you push an element, it goes on top of the stack, just like placing a new plate on the pile. When you pop an element, you take the top plate off, which is always the most recently added one. This "last in, first out" behavior makes stacks perfect for situations where you need to reverse the order of things or keep track of what happened most recently. Imagine the "undo" function in your text editor - every action you take gets pushed onto a stack, and when you hit undo, it pops off the most recent action. Or think about function calls in programming - when one function calls another, the first function gets "paused" and pushed onto a call stack, and when the second function finishes, the first one gets popped back off and continues where it left off.`,
-    keyConcepts: `**Essential Concepts:**
+    voiceExplanation_alt: `Think of a stack like a stack of plates in a cafeteria - you can only add or remove plates from the top. This is exactly how a stack data structure works! When you push an element, it goes on top of the stack, just like placing a new plate on the pile. When you pop an element, you take the top plate off, which is always the most recently added one. This "last in, first out" behavior makes stacks perfect for situations where you need to reverse the order of things or keep track of what happened most recently. Imagine the "undo" function in your text editor - every action you take gets pushed onto a stack, and when you hit undo, it pops off the most recent action. Or think about function calls in programming - when one function calls another, the first function gets "paused" and pushed onto a call stack, and when the second function finishes, the first one gets popped back off and continues where it left off.`,
+    keyConcepts_alt: `**Essential Concepts:**
 1. **LIFO Principle**: Last In, First Out ordering constraint
 2. **Top Pointer**: Reference to the most recently added element
 3. **Stack Overflow**: Error when pushing to a full stack
@@ -4798,7 +4798,7 @@ console.log('Stock span [100,80,60,70,60,75,85]:', calculateSpan([100, 80, 60, 7
 5. **Recursive Nature**: Natural fit for recursive algorithms
 6. **Memory Management**: Stack frames in program execution
 7. **Expression Evaluation**: Converting and evaluating mathematical expressions`,
-    pseudocode: `**Stack Operations Pseudocode:**
+    pseudocode_alt: `**Stack Operations Pseudocode:**
 
 ALGORITHM Push(stack, element)
 INPUT: stack - the stack data structure, element - value to add
@@ -4868,7 +4868,7 @@ BEGIN
     
     RETURN IsEmpty(stack)
 END`,
-    implementationCode: `// Comprehensive Stack Implementation
+    implementationCode_alt: `// Comprehensive Stack Implementation
 
 class Stack {
     constructor(capacity = 100) {
@@ -5150,6 +5150,7 @@ What it does: stores elements in FIFO order where the first added element is the
 How it works: maintains front and rear pointers, enqueue adds at rear, dequeue removes from front in O(1) time.
 
 When to use: task scheduling, breadth-first search, handling requests, buffering data streams.`,
+    voiceExplanation: `Picture a queue like a line at a coffee shop. New customers join at the back, and the barista serves from the front. No cutting in line! The person who arrived first is served first. That’s exactly how a queue works in code: enqueue puts an item at the rear, dequeue removes from the front. If the line is empty, you can’t serve anyone (that’s an underflow). If your waiting area is full, you can’t let more people in (that’s overflow). In practice, queues make sure things get handled in the order they arrived — perfect for task scheduling, web requests, and breadth-first searches.`,
     realWorldApplications: `**Industry Applications:**
 - **Operating Systems**: Process scheduling, CPU task management, print job queues
 - **Web Servers**: Request handling, load balancing, connection management
@@ -5629,7 +5630,7 @@ scheduler.addTask('Critical bug fix', 5);
 scheduler.addTask('Update documentation', 1);
 console.log('\\nProcessing tasks by priority:');
 scheduler.processAllTasks();`,
-    syntax: `**Queue Operation Patterns:**
+    syntax_alt: `**Queue Operation Patterns:**
 
 1. **Basic Queue Operations:**
    \`\`\`javascript
@@ -5671,8 +5672,8 @@ scheduler.processAllTasks();`,
        frontElement() { return this.isEmpty() ? null : this.items[this.front]; }
    }
    \`\`\``,
-    voiceExplanation: `Think of a queue like a line of people waiting at a coffee shop - the first person in line is the first person to get served. This is exactly how a queue data structure works! When you enqueue (add) an element, it goes to the back of the line, just like a new customer joining the queue. When you dequeue (remove) an element, you take the person from the front of the line, who has been waiting the longest. This "first in, first out" behavior makes queues perfect for situations where fairness and order matter. Imagine a printer queue in an office - documents are printed in the order they were submitted, ensuring everyone gets their turn. Or think about breadth-first search in a graph - you explore all neighbors at the current level before moving to the next level, just like serving all customers at the front before helping those who arrived later. Queues are also great for handling tasks in web servers, where requests should be processed in the order they arrive.`,
-    implementationCode: `// Comprehensive Queue Implementation
+    voiceExplanation_alt: `Think of a queue like a line of people waiting at a coffee shop - the first person in line is the first person to get served. This is exactly how a queue data structure works! When you enqueue (add) an element, it goes to the back of the line, just like a new customer joining the queue. When you dequeue (remove) an element, you take the person from the front of the line, who has been waiting the longest. This "first in, first out" behavior makes queues perfect for situations where fairness and order matter. Imagine a printer queue in an office - documents are printed in the order they were submitted, ensuring everyone gets their turn. Or think about breadth-first search in a graph - you explore all neighbors at the current level before moving to the next level, just like serving all customers at the front before helping those who arrived later. Queues are also great for handling tasks in web servers, where requests should be processed in the order they arrive.`,
+    implementationCode_alt: `// Comprehensive Queue Implementation
 
 class Queue {
     constructor(capacity = 100) {
@@ -6993,7 +6994,7 @@ console.log(heap.extractMin()); // 1`,
    }
    \`\`\``,
     voiceExplanation: `Think of a heap like a family tree where parents are always more important than their children, but siblings don't care about each other's rank. In a min-heap, every parent is smaller than their children - imagine a corporate hierarchy where the CEO (root) has the smallest employee ID, and every manager has a smaller ID than their direct reports. When you want to find the most important person (minimum value), you just look at the top! When someone new joins the company, they start at the bottom and bubble up until they find their proper place in the hierarchy. When the CEO leaves, the newest employee temporarily takes their place, but then they sink down to where they belong while someone more qualified rises to fill the leadership role. This constant reorganization ensures that the most important person is always at the top, and you can find them instantly!`,
-    extendedDefinition: `A Heap is a specialized tree-based data structure that satisfies the heap property. It's a complete binary tree where every parent node has a specific relationship with its children, making it perfect for priority-based operations.
+    extendedDefinition_alt: `A Heap is a specialized tree-based data structure that satisfies the heap property. It's a complete binary tree where every parent node has a specific relationship with its children, making it perfect for priority-based operations.
 
 What it does: maintains heap property where parent nodes are always smaller (min-heap) or larger (max-heap) than their children.
 
@@ -7871,7 +7872,7 @@ function postorderIterative(root) {
        return stack2.reverse().map(node => node.val);
    }
    \`\`\``,
-    voiceExplanation: `Think of postorder traversal like being a responsible parent cleaning up after a big family gathering! Imagine you're in charge of cleaning up a house where every room has smaller rooms inside it. As a responsible parent, you can't clean a room until all the smaller rooms inside it are completely clean first. So you start with the tiniest rooms (the leaves), clean them thoroughly, then move to slightly bigger rooms, and finally clean the main room. This is exactly how postorder traversal works! You visit the left child's house, clean it completely, then visit the right child's house and clean it completely, and only then do you clean the parent's room. This approach is perfect when you need to make sure all the "children" are taken care of before you handle the "parent" - like calculating the total size of a folder by first calculating the sizes of all files and subfolders inside it, or safely deleting a directory by first deleting all its contents!`
+    voiceExplanation_alt: `Think of postorder traversal like being a responsible parent cleaning up after a big family gathering! Imagine you're in charge of cleaning up a house where every room has smaller rooms inside it. As a responsible parent, you can't clean a room until all the smaller rooms inside it are completely clean first. So you start with the tiniest rooms (the leaves), clean them thoroughly, then move to slightly bigger rooms, and finally clean the main room. This is exactly how postorder traversal works! You visit the left child's house, clean it completely, then visit the right child's house and clean it completely, and only then do you clean the parent's room. This approach is perfect when you need to make sure all the "children" are taken care of before you handle the "parent" - like calculating the total size of a folder by first calculating the sizes of all files and subfolders inside it, or safely deleting a directory by first deleting all its contents!`
   },
 
   // Graphs
@@ -9232,8 +9233,8 @@ console.log("Sorted:", bubbleSort([...numbers]));
        return arr;
    }
    \`\`\``,
-    voiceExplanation: `Bubble sort is like organizing books on a shelf by comparing only adjacent books. You start at the left and compare each pair of neighboring books. If the left book is bigger than the right one, you swap them. After one complete pass through all books, the largest book "bubbles up" to the rightmost position. You repeat this process, and each time, the next largest book finds its correct spot. It's called bubble sort because large elements bubble to the top, just like air bubbles rising in water. The algorithm is simple but slow for large collections.`,
-    realWorldApplications: `**Industry Applications:**
+    voiceExplanation_alt: `Bubble sort is like organizing books on a shelf by comparing only adjacent books. You start at the left and compare each pair of neighboring books. If the left book is bigger than the right one, you swap them. After one complete pass through all books, the largest book "bubbles up" to the rightmost position. You repeat this process, and each time, the next largest book finds its correct spot. It's called bubble sort because large elements bubble to the top, just like air bubbles rising in water. The algorithm is simple but slow for large collections.`,
+    realWorldApplications_alt: `**Industry Applications:**
 - **Educational Systems**: Teaching fundamental sorting concepts in computer science courses
 - **Small Dataset Processing**: Sorting small lists where simplicity matters more than efficiency
 - **Embedded Systems**: Simple sorting for microcontrollers with severe memory constraints
@@ -10277,8 +10278,8 @@ console.log("Sorted:", heapSort([...numbers]));
        return arr;
    }
    \`\`\``,
-    voiceExplanation: `Heap sort is like organizing a tournament where the winner always moves to the top. First, you arrange all elements into a "heap" - a special tree where parents are always larger than their children. The largest element naturally becomes the root. You then repeatedly take the winner (root), place it in the sorted section, and reorganize the remaining elements to find the next largest. Heap sort is reliable because it always takes the same amount of time, and it sorts in place without needing extra memory.`,
-    realWorldApplications: `**Industry Applications:**
+    voiceExplanation_alt: `Heap sort is like organizing a tournament where the winner always moves to the top. First, you arrange all elements into a "heap" - a special tree where parents are always larger than their children. The largest element naturally becomes the root. You then repeatedly take the winner (root), place it in the sorted section, and reorganize the remaining elements to find the next largest. Heap sort is reliable because it always takes the same amount of time, and it sorts in place without needing extra memory.`,
+    realWorldApplications_alt: `**Industry Applications:**
 - **Operating Systems**: Process scheduling with priority queues, memory management
 - **Database Systems**: Priority-based query processing, index maintenance
 - **Network Systems**: Bandwidth allocation, packet scheduling, QoS management
@@ -24544,7 +24545,7 @@ console.log(isPowerOfTwo(8));  // true
 console.log(setBit(5, 1));     // 7 (101 -> 111)
 console.log(clearBit(7, 1));   // 5 (111 -> 101)
 console.log(countSetBits(7));  // 3`,
-    syntax: `**Bit Manipulation Patterns:**
+    syntax_alt: `**Bit Manipulation Patterns:**
 
 1. **Basic Operations:**
    \`\`\`javascript
@@ -24587,7 +24588,7 @@ console.log(countSetBits(7));  // 3`,
    // Check if bit i is set
    (num & (1 << i)) !== 0
    \`\`\``,
-    syntax: `// Basic Bitwise Operators
+    syntax_alt2: `// Basic Bitwise Operators
 a & b    // AND
 a | b    // OR  
 a ^ b    // XOR
@@ -26498,7 +26499,7 @@ console.log(MathematicalAlgorithms.fibonacciMatrix(10)); // 55`,
         explanation: "RSA encryption relies heavily on mathematical algorithms like fast exponentiation, prime number generation, and modular arithmetic for secure communication."
       }
     ],
-    syntax: `// Mathematical Algorithm Patterns
+    syntax_alt: `// Mathematical Algorithm Patterns
 
 // Fast Exponentiation
 function fastPower(base, exp, mod) {
@@ -26568,7 +26569,15 @@ function primeFactors(n) {
     }
     if (n > 2) factors.push(n);
     return factors;
-}`
+}`,
+    keyConcepts: `**Essential Concepts:**\n1. Euclidean algorithm for GCD (iterative modulo)\n2. LCM via lcm(a,b) = |ab| / gcd(a,b)\n3. Primes and trial division up to √n\n4. Sieve of Eratosthenes for generating primes\n5. Prime factorization and multiplicity`,
+    pseudocode: `ALGORITHM EuclidGCD(a, b)\nBEGIN\n  while b != 0 do\n    (a, b) <- (b, a mod b)\n  return a\nEND`,
+    implementationCode: `// TS helpers for GCD/LCM/prime
+export function gcdNT(a: number, b: number): number { a = Math.abs(a); b = Math.abs(b); while (b !== 0) { [a, b] = [b, a % b]; } return a; }
+export function lcmNT(a: number, b: number): number { if (a === 0 || b === 0) return 0; return Math.abs(a / gcdNT(a, b) * b); }
+export function isPrimeNT(n: number): boolean { if (n < 2) return false; if (n % 2 === 0) return n === 2; for (let i = 3; i * i <= n; i += 2) if (n % i === 0) return false; return true; }
+export function sieveNT(n: number): number[] { const isPrime = new Array(n+1).fill(true); isPrime[0]=isPrime[1]=false; for (let p=2; p*p<=n; p++){ if (isPrime[p]) for (let m=p*p; m<=n; m+=p) isPrime[m]=false; } return isPrime.map((v,i)=>v?i:-1).filter(x=>x!==-1); }`,
+    voiceExplanation: `Think of GCD like repeatedly exchanging change: you replace the larger number with the remainder until nothing is left—what remains is the greatest common divisor. For primes, the sieve is like crossing off multiples on a number line until only the prime “loners” remain.`
   },
   {
     id: 'prime-algorithms',
@@ -26599,7 +26608,7 @@ function sieveOfEratosthenes(n) {
     return isPrime.map((prime, index) => prime ? index : null).filter(num => num !== null);
 }
 
-// Optimized Primality Test
+// Optimized Primality Test (6k±1)
 function isPrimeOptimized(n) {
     if (n < 2) return false;
     if (n === 2 || n === 3) return true;
@@ -26611,7 +26620,7 @@ function isPrimeOptimized(n) {
     return true;
 }
 
-// Prime Factorization
+// Prime Factorization (map of prime -> exponent)
 function primeFactorization(n) {
     const factors = new Map();
     while (n % 2 === 0) { factors.set(2, (factors.get(2) || 0) + 1); n /= 2; }
@@ -26620,7 +26629,29 @@ function primeFactorization(n) {
     }
     if (n > 2) factors.set(n, 1);
     return factors;
-}`
+}`,
+    keyConcepts: `**Essential Concepts:**\n1. Sieve of Eratosthenes for prime generation up to n\n2. Trial division up to √n; 6k±1 optimization\n3. Prime factorization as multiset of primes\n4. Applications in cryptography and hashing\n5. Complexity: O(n log log n) for sieve`,
+    pseudocode: `ALGORITHM Sieve(n)\nBEGIN\n  isPrime[0] <- false; isPrime[1] <- false\n  for p from 2 to floor(sqrt(n)) do\n    if isPrime[p] then\n      for m from p*p to n step p do isPrime[m] <- false\n  return { i | isPrime[i] = true }\nEND`,
+    implementationCode: `// TS-ready helpers
+export function sievePrimes(n: number): number[] {
+  const isPrime = new Array(n + 1).fill(true);
+  isPrime[0] = isPrime[1] = false;
+  for (let p = 2; p * p <= n; p++) if (isPrime[p]) for (let m = p * p; m <= n; m += p) isPrime[m] = false;
+  return isPrime.map((v, i) => (v ? i : -1)).filter((x) => x !== -1);
+}
+export function isPrime6k(n: number): boolean {
+  if (n < 2) return false; if (n <= 3) return true; if (n % 2 === 0 || n % 3 === 0) return false;
+  for (let i = 5; i * i <= n; i += 6) { if (n % i === 0 || n % (i + 2) === 0) return false; }
+  return true;
+}
+export function factorize(n: number): Map<number, number> {
+  const f = new Map<number, number>();
+  while (n % 2 === 0) { f.set(2, (f.get(2) || 0) + 1); n /= 2; }
+  for (let i = 3; i * i <= n; i += 2) { while (n % i === 0) { f.set(i, (f.get(i) || 0) + 1); n /= i; } }
+  if (n > 2) f.set(n, (f.get(n) || 0) + 1);
+  return f;
+}`,
+    voiceExplanation: `Imagine lining up numbers from 2 to n and crossing out multiples like stamping “taken” slots on a parking lot. The unmarked spots are primes. For testing one number, you only need to check divisors up to its square root, mostly around numbers of the form 6k±1.`
   },
   {
     id: 'fast-exponentiation',
@@ -26640,11 +26671,11 @@ When to use: large power computations, modular exponentiation in cryptography, m
     example: `// Iterative Binary Exponentiation
 function fastPower(base, exp, mod = null) {
     let result = 1;
-    base = base % (mod || Number.MAX_SAFE_INTEGER);
+    base = mod ? (base % mod) : base;
     
     while (exp > 0) {
-        if (exp % 2 === 1) result = mod ? (result * base) % mod : result * base;
-        exp = Math.floor(exp / 2);
+        if (exp & 1) result = mod ? (result * base) % mod : result * base;
+        exp >>= 1;
         base = mod ? (base * base) % mod : base * base;
     }
     return result;
@@ -26655,10 +26686,30 @@ function fastPowerRecursive(base, exp, mod = null) {
     if (exp === 0) return 1;
     const half = fastPowerRecursive(base, Math.floor(exp / 2), mod);
     const halfSquared = mod ? (half * half) % mod : half * half;
-    return exp % 2 === 0 ? halfSquared : mod ? (base * halfSquared) % mod : base * halfSquared;
+    return (exp % 2 === 0) ? halfSquared : (mod ? (base * halfSquared) % mod : base * halfSquared);
 }
 
 // Example: fastPower(2, 10) = 1024`
+    ,
+    keyConcepts: `**Essential Concepts:**\n1. Binary representation of exponent drives squaring and multiply steps\n2. Exponentiation by squaring yields O(log n) multiplies\n3. Modular multiplication keeps values bounded (avoid overflow)\n4. Handles large powers and moduli (e.g., cryptography)`,
+    pseudocode: `ALGORITHM BinaryExponentiation(a, n, m OPTIONAL)\nINPUT: base a, exponent n, optional modulus m\nOUTPUT: a^n (mod m if provided)\nBEGIN\n  result <- 1\n  if m is provided then a <- a mod m\n  while n > 0 do\n    if (n mod 2 = 1) then\n      result <- (m ? (result * a) mod m : result * a)\n    end if\n    a <- (m ? (a * a) mod m : a * a)\n    n <- floor(n / 2)\n  end while\n  return result\nEND`,
+    implementationCode: `// Production-ready implementation (TypeScript friendly)
+export function binPow(base: number, exp: number, mod?: number): number {
+  let a = mod !== undefined ? ((base % mod) + mod) % mod : base;
+  let e = exp >>> 0; // ensure non-negative integer
+  let res = 1;
+  while (e > 0) {
+    if (e & 1) res = mod !== undefined ? (res * a) % mod : res * a;
+    a = mod !== undefined ? (a * a) % mod : a * a;
+    e >>>= 1;
+  }
+  return res;
+}
+
+// Example usage
+// console.log(binPow(2, 10)); // 1024
+// console.log(binPow(2, 10, 1000000007)); // 1024`,
+    voiceExplanation: `Imagine climbing a staircase where each step doubles your height, and sometimes you add your current height to the answer when the step number is odd. That’s binary exponentiation: we square (double height) every step, and only multiply into the result when the current bit of the exponent is 1. This clever bit-by-bit process finishes in logarithmic time.`
   },
   {
     id: 'modular-arithmetic',
@@ -26699,6 +26750,35 @@ function modInverse(a, mod = MOD) {
 function modDivide(a, b, mod = MOD) {
     return modMultiply(a, modInverse(b, mod), mod);
 }`
+    ,
+    keyConcepts: `**Essential Concepts:**\n1. Congruences and equivalence classes mod m\n2. Modular addition/multiplication/division rules\n3. Modular inverse (exists if gcd(a, m) = 1)\n4. Fast modular exponentiation (binary exponentiation)\n5. Fermat’s little theorem and CRT for optimizations`,
+    pseudocode: `ALGORITHM ModInverse(a, m) USING ExtendedGCD\nINPUT: integer a, modulus m\nOUTPUT: a^{-1} mod m if it exists\nBEGIN\n  (g, x, y) <- extended_gcd(a, m)\n  if g != 1 then return "no inverse"\n  else return (x mod m + m) mod m\nEND`,
+    implementationCode: `// Modular arithmetic helpers
+export const MOD = 1000000007;
+export function modAdd(a: number, b: number, mod: number = MOD): number { return ((a % mod) + (b % mod)) % mod; }
+export function modSub(a: number, b: number, mod: number = MOD): number { return ((a % mod) - (b % mod) + mod) % mod; }
+export function modMul(a: number, b: number, mod: number = MOD): number { return ((a % mod) * (b % mod)) % mod; }
+export function modPow(a: number, e: number, mod: number = MOD): number {
+  let base = ((a % mod) + mod) % mod, exp = e >>> 0, res = 1;
+  while (exp > 0) {
+    if (exp & 1) res = (res * base) % mod;
+    base = (base * base) % mod;
+    exp >>>= 1;
+  }
+  return res;
+}
+export function modInv(a: number, mod: number = MOD): number {
+  function egcd(x: number, y: number): {g: number, x: number, y: number} {
+    if (y === 0) return { g: x, x: 1, y: 0 };
+    const r = egcd(y, x % y);
+    return { g: r.g, x: r.y, y: r.x - Math.floor(x / y) * r.y };
+  }
+  const r = egcd(((a % mod) + mod) % mod, mod);
+  if (r.g !== 1) throw new Error('Inverse does not exist');
+  return (r.x % mod + mod) % mod;
+}
+export function modDiv(a: number, b: number, mod: number = MOD): number { return modMul(a, modInv(b, mod), mod); }`,
+    voiceExplanation: `Think of a clock with m hours: after hitting m, you wrap back to 0. Modular arithmetic is clock math for integers. Adding, multiplying, and even dividing (when an inverse exists) all happen on this wrap-around clock, which keeps numbers small and safe for big computations.`
   },
   {
     id: 'combinatorics',
@@ -26748,6 +26828,29 @@ function catalanNumber(n) {
 }
 
 // Example: combination(10, 3) = 120, catalanNumber(4) = 14`
+    ,
+    keyConcepts: `**Essential Concepts:**\n1. Factorials, permutations (nPr), combinations (nCr)\n2. Pascal’s triangle and dynamic programming for nCr\n3. Catalan numbers and combinatorial structures\n4. Inclusion–exclusion for overlapping sets\n5. Stars and bars for partitions`,
+    pseudocode: `ALGORITHM nCr(n, r) via DP\nBEGIN\n  if r > n return 0\n  create dp[0..n][0..r]\n  for i in 0..n:\n    for j in 0..min(i,r):\n      if j == 0 or j == i: dp[i][j] <- 1\n      else dp[i][j] <- dp[i-1][j-1] + dp[i-1][j]\n  return dp[n][r]\nEND`,
+    implementationCode: `// Practical utilities for combinatorics
+export function nCr(n: number, r: number): number {
+  if (r < 0 || r > n) return 0;
+  r = Math.min(r, n - r);
+  let res = 1;
+  for (let i = 1; i <= r; i++) {
+    res = (res * (n - r + i)) / i;
+  }
+  return Math.round(res);
+}
+
+export function catalan(n: number): number {
+  const dp = new Array(n + 1).fill(0);
+  dp[0] = dp[1] = 1;
+  for (let i = 2; i <= n; i++) {
+    for (let j = 0; j < i; j++) dp[i] += dp[j] * dp[i - 1 - j];
+  }
+  return dp[n];
+}`,
+    voiceExplanation: `Combinatorics is like counting how many outfits you can make from shirts and pants. Permutations care about order (shirt then pants), combinations don’t. With tools like Pascal’s triangle and Catalan numbers, we can count surprisingly complex structures without listing them all.`
   },
   {
     id: 'fibonacci-algorithms',
@@ -26761,14 +26864,13 @@ function catalanNumber(n) {
 
 What it does: efficiently computes Fibonacci numbers and solves linear recurrence relations using optimized mathematical techniques.
 
-How it works: uses dynamic programming for O(n), matrix exponentiation for O(log n), or mathematical identities for direct calculation.
+How it works: uses dynamic programming for O(n), fast doubling or matrix exponentiation for O(log n), or mathematical identities for direct calculation.
 
 When to use: Fibonacci calculations, counting problems like stairs/tiling, recurrence relation optimization, competitive programming, mathematical modeling.`,
     example: `// Dynamic Programming Approach O(n)
 function fibonacciDP(n) {
     if (n <= 1) return n;
     let prev2 = 0, prev1 = 1;
-    
     for (let i = 2; i <= n; i++) {
         const current = prev1 + prev2;
         prev2 = prev1;
@@ -26780,30 +26882,65 @@ function fibonacciDP(n) {
 // Matrix Exponentiation O(log n)
 function fibonacciMatrix(n) {
     if (n <= 1) return n;
-    
     function matrixMultiply(A, B) {
         return [
             [A[0][0] * B[0][0] + A[0][1] * B[1][0], A[0][0] * B[0][1] + A[0][1] * B[1][1]],
             [A[1][0] * B[0][0] + A[1][1] * B[1][0], A[1][0] * B[0][1] + A[1][1] * B[1][1]]
         ];
     }
-    
-    function matrixPower(matrix, power) {
-        if (power === 1) return matrix;
-        if (power % 2 === 0) {
-            const half = matrixPower(matrix, power / 2);
+    function matrixPower(M, p) {
+        if (p === 1) return M;
+        if (p % 2 === 0) {
+            const half = matrixPower(M, Math.floor(p / 2));
             return matrixMultiply(half, half);
         }
-        return matrixMultiply(matrix, matrixPower(matrix, power - 1));
+        return matrixMultiply(M, matrixPower(M, p - 1));
     }
-    
-    const baseMatrix = [[1, 1], [1, 0]];
-    return matrixPower(baseMatrix, n)[0][1];
+    const Q = [[1,1],[1,0]];
+    const R = matrixPower(Q, n);
+    return R[0][1];
 }
 
-// Example: fibonacciDP(10) = 55, fibonacciMatrix(50) computed in O(log 50)`
+// Fast Doubling O(log n)
+function fibFastDoubling(n) {
+    function f(k) {
+        if (k === 0) return [0, 1];
+        const [a, b] = f(Math.floor(k / 2)); // a=F(k), b=F(k+1)
+        const c = a * (2 * b - a);
+        const d = a * a + b * b;
+        if (k % 2 === 0) return [c, d];
+        return [d, c + d];
+    }
+    return f(n)[0];
+}
+`,
+    keyConcepts: `**Essential Concepts:**\n1. Recurrence F(n) = F(n-1) + F(n-2) with F(0)=0, F(1)=1\n2. DP (tabulation) yields O(n) time, O(1) space with rolling variables\n3. Matrix exponentiation and fast doubling compute in O(log n)\n4. Overflow handling with big integers or modulo arithmetic\n5. Linear recurrences extend Fibonacci techniques`,
+    pseudocode: `ALGORITHM FastDoublingFib(n)\nBEGIN\n  function FD(k):\n    if k = 0 return (0, 1)\n    (a, b) <- FD(floor(k/2))  // a=F(k), b=F(k+1)\n    c <- a * (2*b - a)\n    d <- a*a + b*b\n    if k even return (c, d) else return (d, c + d)\n  return FD(n).first\nEND`,
+    implementationCode: `// Production-ready Fibonacci implementations
+export function fibDP(n: number): number {
+  if (n <= 1) return n;
+  let a = 0, b = 1;
+  for (let i = 2; i <= n; i++) {
+    const c = a + b;
+    a = b; b = c;
   }
-];
+  return b;
+}
+
+export function fibFastDoubling(n: number): number {
+  function fd(k: number): [number, number] {
+    if (k === 0) return [0, 1];
+    const [a, b] = fd(Math.floor(k / 2));
+    const c = a * (2 * b - a);
+    const d = a * a + b * b;
+    return (k % 2 === 0) ? [c, d] : [d, c + d];
+  }
+  return fd(n)[0];
+}
+`,
+    voiceExplanation: `Think of Fibonacci like climbing stairs: each step count is the sum of the previous two ways. The fast-doubling method jumps many steps at once using math identities, so instead of walking one step at a time, we leap in powers of two—finishing in logarithmic time.`
+  }
+]
 
 
 

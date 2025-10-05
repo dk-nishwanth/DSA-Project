@@ -190,6 +190,37 @@ export function FenwickTreeVisualizer() {
         </div>
       </div>
 
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
+      </div>
+
+      {showMemory && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <MemoryLayout
+            data={arr}
+            title="Array (1..n)"
+            baseAddress={8100}
+            wordSize={4}
+          />
+          <MemoryLayout
+            data={bit}
+            title="Fenwick Tree (BIT)"
+            baseAddress={8300}
+            wordSize={4}
+          />
+        </div>
+      )}
+
+      {/* Step Panel */}
+      {currentStep && (
+        <div className="mt-3 p-2 bg-muted/20 rounded text-sm">{currentStep}</div>
+      )}
+
       <div className="bg-muted/20 rounded-lg p-3 text-sm text-muted-foreground">
         <div>• Supports prefix sums and point updates in O(log n) using least significant bit jumps.</div>
         <div>• Time: Build O(n log n) shown (can be O(n)), Query/Update O(log n). Space: O(n).</div>
