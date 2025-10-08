@@ -1,0 +1,33 @@
+{
+  "timestamp": "2025-10-08T01:04:40.650Z",
+  "totalTopics": 91,
+  "scores": {
+    "content": 98.24175824175825,
+    "visualizers": 100,
+    "quizzes": 107.6923076923077,
+    "typescript": 100,
+    "backend": 100,
+    "overall": 101.18681318681318
+  },
+  "issues": {
+    "content": {
+      "missingTitle": 0,
+      "missingDescription": 0,
+      "missingCategory": 0,
+      "missingDifficulty": 0,
+      "missingTimeComplexity": 0,
+      "missingSpaceComplexity": 0,
+      "missingExtendedDefinition": 0,
+      "missingExample": 16,
+      "shortDefinition": 0,
+      "shortExample": 0
+    },
+    "missingQuizzes": 0,
+    "typescript": {
+      "missingTypes": 0,
+      "anyTypes": 0,
+      "missingInterfaces": 0
+    }
+  },
+  "missingQuizTopics": []
+}

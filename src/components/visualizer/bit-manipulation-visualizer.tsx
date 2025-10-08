@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Binary, Calculator, RotateCcw } from 'lucide-react';
+import { Binary, Calculator, RotateCcw, ArrowRight, ArrowDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
 import { MemoryLayout } from '@/components/memory-layout';
@@ -19,6 +19,8 @@ interface BitOperation {
   binaryOperand1: string;
   binaryOperand2?: string;
   binaryResult: string;
+  bitByBitResults?: string[];
+  bitExplanations?: string[];
 }
 
 export function BitManipulationVisualizer() {
@@ -56,63 +58,202 @@ export function BitManipulationVisualizer() {
     const binaryOp1 = operand1.toString(2).padStart(8, '0');
     let binaryOp2 = operand2?.toString(2).padStart(8, '0');
     let binaryRes: string;
+    let bitByBitResults: string[] = [];
+    let bitExplanations: string[] = [];
 
     switch (operation) {
       case 'AND':
         res = operand1 & operand2;
         explanation = `${operand1} & ${operand2} = ${res}. Each bit is 1 only if both corresponding bits are 1.`;
+        
+        // Generate bit-by-bit results
+        for (let i = 0; i < 8; i++) {
+          const bit1 = binaryOp1[i];
+          const bit2 = binaryOp2![i];
+          const resultBit = (bit1 === '1' && bit2 === '1') ? '1' : '0';
+          bitByBitResults.push(resultBit);
+          bitExplanations.push(`${bit1} & ${bit2} = ${resultBit}`);
+        }
         break;
+        
       case 'OR':
         res = operand1 | operand2;
         explanation = `${operand1} | ${operand2} = ${res}. Each bit is 1 if at least one corresponding bit is 1.`;
+        
+        // Generate bit-by-bit results
+        for (let i = 0; i < 8; i++) {
+          const bit1 = binaryOp1[i];
+          const bit2 = binaryOp2![i];
+          const resultBit = (bit1 === '1' || bit2 === '1') ? '1' : '0';
+          bitByBitResults.push(resultBit);
+          bitExplanations.push(`${bit1} | ${bit2} = ${resultBit}`);
+        }
         break;
+        
       case 'XOR':
         res = operand1 ^ operand2;
         explanation = `${operand1} ^ ${operand2} = ${res}. Each bit is 1 if corresponding bits are different.`;
+        
+        // Generate bit-by-bit results
+        for (let i = 0; i < 8; i++) {
+          const bit1 = binaryOp1[i];
+          const bit2 = binaryOp2![i];
+          const resultBit = (bit1 !== bit2) ? '1' : '0';
+          bitByBitResults.push(resultBit);
+          bitExplanations.push(`${bit1} ^ ${bit2} = ${resultBit}`);
+        }
         break;
+        
       case 'NOT':
         res = ~operand1 >>> 0; // Use unsigned right shift to handle negative numbers
         explanation = `~${operand1} = ${res}. Each bit is flipped (0 becomes 1, 1 becomes 0).`;
         binaryOp2 = undefined;
+        
+        // Generate bit-by-bit results
+        for (let i = 0; i < 8; i++) {
+          const bit1 = binaryOp1[i];
+          const resultBit = bit1 === '0' ? '1' : '0';
+          bitByBitResults.push(resultBit);
+          bitExplanations.push(`~${bit1} = ${resultBit}`);
+        }
         break;
+        
       case 'LEFT_SHIFT':
         res = operand1 << operand2;
         explanation = `${operand1} << ${operand2} = ${res}. Shift bits left by ${operand2} positions, fill with 0s.`;
+        
+        // For shift operations, we'll show the before and after
+        bitByBitResults = Array(8).fill('0');
+        for (let i = 0; i < 8 - operand2; i++) {
+          if (i + operand2 < 8) {
+            bitByBitResults[i] = binaryOp1[i + operand2];
+          }
+        }
+        bitExplanations = [`Shift left by ${operand2} positions`];
         break;
+        
       case 'RIGHT_SHIFT':
         res = operand1 >> operand2;
         explanation = `${operand1} >> ${operand2} = ${res}. Shift bits right by ${operand2} positions.`;
+        
+        // For shift operations, we'll show the before and after
+        bitByBitResults = Array(8).fill('0');
+        for (let i = operand2; i < 8; i++) {
+          if (i - operand2 >= 0) {
+            bitByBitResults[i] = binaryOp1[i - operand2];
+          }
+        }
+        bitExplanations = [`Shift right by ${operand2} positions`];
         break;
+        
       case 'SET_BIT':
         res = operand1 | (1 << position);
         explanation = `Set bit at position ${position}: ${operand1} | (1 << ${position}) = ${res}`;
         binaryOp2 = (1 << position).toString(2).padStart(8, '0');
+        
+        // Generate bit-by-bit results
+        for (let i = 0; i < 8; i++) {
+          const bit1 = binaryOp1[i];
+          const bit2 = binaryOp2[i];
+          const resultBit = (bit1 === '1' || bit2 === '1') ? '1' : '0';
+          bitByBitResults.push(resultBit);
+          if (i === 8 - position - 1) {
+            bitExplanations.push(`${bit1} | 1 = 1 (Set bit ${position})`);
+          } else {
+            bitExplanations.push(`${bit1} | ${bit2} = ${resultBit}`);
+          }
+        }
         break;
+        
       case 'CLEAR_BIT':
         res = operand1 & ~(1 << position);
         explanation = `Clear bit at position ${position}: ${operand1} & ~(1 << ${position}) = ${res}`;
         binaryOp2 = (~(1 << position) >>> 0).toString(2).slice(-8);
+        
+        // Generate bit-by-bit results
+        for (let i = 0; i < 8; i++) {
+          const bit1 = binaryOp1[i];
+          const bit2 = binaryOp2[i];
+          const resultBit = (bit1 === '1' && bit2 === '1') ? '1' : '0';
+          bitByBitResults.push(resultBit);
+          if (i === 8 - position - 1) {
+            bitExplanations.push(`${bit1} & 0 = 0 (Clear bit ${position})`);
+          } else {
+            bitExplanations.push(`${bit1} & ${bit2} = ${resultBit}`);
+          }
+        }
         break;
+        
       case 'TOGGLE_BIT':
         res = operand1 ^ (1 << position);
         explanation = `Toggle bit at position ${position}: ${operand1} ^ (1 << ${position}) = ${res}`;
         binaryOp2 = (1 << position).toString(2).padStart(8, '0');
+        
+        // Generate bit-by-bit results
+        for (let i = 0; i < 8; i++) {
+          const bit1 = binaryOp1[i];
+          const bit2 = binaryOp2[i];
+          const resultBit = (bit1 !== bit2) ? '1' : '0';
+          bitByBitResults.push(resultBit);
+          if (i === 8 - position - 1) {
+            bitExplanations.push(`${bit1} ^ 1 = ${resultBit} (Toggle bit ${position})`);
+          } else {
+            bitExplanations.push(`${bit1} ^ ${bit2} = ${resultBit}`);
+          }
+        }
         break;
+        
       case 'CHECK_BIT':
         res = (operand1 & (1 << position)) !== 0 ? 1 : 0;
         explanation = `Check bit at position ${position}: (${operand1} & (1 << ${position})) !== 0 = ${res === 1 ? 'true' : 'false'}`;
         binaryOp2 = (1 << position).toString(2).padStart(8, '0');
+        
+        // Generate bit-by-bit results
+        for (let i = 0; i < 8; i++) {
+          const bit1 = binaryOp1[i];
+          const bit2 = binaryOp2[i];
+          const resultBit = (bit1 === '1' && bit2 === '1') ? '1' : '0';
+          bitByBitResults.push(resultBit);
+          if (i === 8 - position - 1) {
+            bitExplanations.push(`${bit1} & 1 = ${resultBit} (Check bit ${position})`);
+          } else {
+            bitExplanations.push(`${bit1} & ${bit2} = ${resultBit}`);
+          }
+        }
         break;
+        
       case 'COUNT_BITS':
         res = operand1.toString(2).split('1').length - 1;
         explanation = `Count set bits in ${operand1}: ${res} bits are set to 1`;
         binaryOp2 = undefined;
+        
+        // For count bits, we'll highlight the 1s
+        for (let i = 0; i < 8; i++) {
+          const bit = binaryOp1[i];
+          bitByBitResults.push(bit);
+          if (bit === '1') {
+            bitExplanations.push(`Found set bit at position ${7-i}`);
+          } else {
+            bitExplanations.push(`Bit at position ${7-i} is not set`);
+          }
+        }
         break;
+        
       case 'POWER_OF_TWO':
         res = operand1 > 0 && (operand1 & (operand1 - 1)) === 0 ? 1 : 0;
         explanation = `Is ${operand1} a power of 2? ${res === 1 ? 'Yes' : 'No'}. Check: ${operand1} > 0 && (${operand1} & ${operand1 - 1}) === 0`;
         binaryOp2 = (operand1 - 1).toString(2).padStart(8, '0');
+        
+        // For power of two, we'll show the AND operation between n and n-1
+        for (let i = 0; i < 8; i++) {
+          const bit1 = binaryOp1[i];
+          const bit2 = binaryOp2[i];
+          const resultBit = (bit1 === '1' && bit2 === '1') ? '1' : '0';
+          bitByBitResults.push(resultBit);
+          bitExplanations.push(`${bit1} & ${bit2} = ${resultBit}`);
+        }
         break;
+        
       default:
         res = 0;
         explanation = 'Unknown operation';
@@ -129,7 +270,9 @@ export function BitManipulationVisualizer() {
       explanation,
       binaryOperand1: binaryOp1,
       binaryOperand2: binaryOp2,
-      binaryResult: binaryRes
+      binaryResult: binaryRes,
+      bitByBitResults,
+      bitExplanations
     });
 
     speakResult(`${operation.replace('_', ' ')} operation completed! Result: ${res}. ${explanation}`);

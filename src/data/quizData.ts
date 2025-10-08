@@ -2778,6 +2778,24 @@ export const quizData: Record<string, QuizQuestion[]> = {
     { id: 'wsearch-3', question: 'Visited tracking prevents:', options: ['Correctness', 'Cycles and reusing same cell', 'Faster runtime', 'Out of bounds'], correctAnswer: 1, explanation: 'Marking visited avoids revisiting a cell within current path.', hint: 'Per path visited.', difficulty: 'medium' },
     { id: 'wsearch-4', question: 'Space complexity driver:', options: ['Queue size', 'Recursion depth and visited set', 'Priority queue', 'Sorting'], correctAnswer: 1, explanation: 'DFS recursion depth and the visited tracking dominate space.', hint: 'Depth and marks.', difficulty: 'hard' },
     { id: 'wsearch-5', question: 'Optimization often used:', options: ['Heap sort', 'Trie of dictionary words', 'Counting sort', 'AVL rotations'], correctAnswer: 1, explanation: 'Building a trie enables efficient pruning when matching many words.', hint: 'Prefix pruning.', difficulty: 'hard' }
+  ],
+
+  // Combinatorics
+  'combinatorics': [
+    { id: 'comb-1', question: 'What is the formula for permutations of n items taken r at a time?', options: ['n! / (n-r)!', 'n! / r!', 'n! / (r! × (n-r)!)', 'n^r'], correctAnswer: 0, explanation: 'Permutations consider order, so P(n,r) = n!/(n-r)! accounts for arranging r items from n.', hint: 'Order matters in permutations.', difficulty: 'easy' },
+    { id: 'comb-2', question: 'What is the formula for combinations of n items taken r at a time?', options: ['n! / (n-r)!', 'n! / r!', 'n! / (r! × (n-r)!)', 'n^r'], correctAnswer: 2, explanation: 'Combinations ignore order, so C(n,r) = n!/(r!×(n-r)!) divides out the r! orderings.', hint: 'Order does not matter.', difficulty: 'easy' },
+    { id: 'comb-3', question: 'How many ways can you arrange 5 distinct books on a shelf?', options: ['5', '25', '120', '3125'], correctAnswer: 2, explanation: '5! = 120 ways to arrange 5 distinct items.', hint: 'Factorial of n.', difficulty: 'medium' },
+    { id: 'comb-4', question: 'How many ways to choose 3 items from 10 (order does not matter)?', options: ['720', '120', '30', '1000'], correctAnswer: 1, explanation: 'C(10,3) = 10!/(3!×7!) = 120 combinations.', hint: 'Use combination formula.', difficulty: 'medium' },
+    { id: 'comb-5', question: 'The number of subsets of a set with n elements is:', options: ['n!', 'n²', '2^n', 'n×2'], correctAnswer: 2, explanation: 'Each element can be included or excluded, giving 2^n total subsets.', hint: 'Binary choice per element.', difficulty: 'hard' }
+  ],
+
+  // Mathematical Induction
+  'mathematical-induction': [
+    { id: 'induct-1', question: 'What are the two main steps in mathematical induction?', options: ['Base case and recursive case', 'Base case and inductive step', 'Hypothesis and conclusion', 'Proof and verification'], correctAnswer: 1, explanation: 'Mathematical induction requires proving the base case and then the inductive step (if P(k) then P(k+1)).', hint: 'Foundation and step forward.', difficulty: 'easy' },
+    { id: 'induct-2', question: 'In the inductive step, we assume:', options: ['P(n) is true for all n', 'P(k) is true for some k', 'P(k) is false', 'Nothing'], correctAnswer: 1, explanation: 'We assume P(k) holds (inductive hypothesis) and prove P(k+1) follows.', hint: 'Assume for k, prove for k+1.', difficulty: 'medium' },
+    { id: 'induct-3', question: 'What does the base case establish?', options: ['The formula works for all n', 'The formula works for n=1 (or smallest n)', 'The inductive step', 'The general case'], correctAnswer: 1, explanation: 'The base case proves the statement holds for the initial value (usually n=1 or n=0).', hint: 'Starting point.', difficulty: 'easy' },
+    { id: 'induct-4', question: 'To prove sum 1+2+...+n = n(n+1)/2 by induction, the inductive step shows:', options: ['1+2+...+k = k(k+1)/2', '1+2+...+k+(k+1) = (k+1)(k+2)/2', 'The formula is always true', 'k+1 = k'], correctAnswer: 1, explanation: 'Assuming the formula for k, we add (k+1) and show it equals (k+1)(k+2)/2.', hint: 'Add next term to both sides.', difficulty: 'hard' },
+    { id: 'induct-5', question: 'Strong induction differs from regular induction by:', options: ['No base case needed', 'Assuming P(1), P(2), ..., P(k) all true', 'Only works for even numbers', 'Requires two base cases'], correctAnswer: 1, explanation: 'Strong induction assumes all previous cases P(1) through P(k) to prove P(k+1).', hint: 'Assume all previous, not just k.', difficulty: 'hard' }
   ]
 };
 

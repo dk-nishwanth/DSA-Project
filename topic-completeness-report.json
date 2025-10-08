@@ -1,0 +1,1216 @@
+{
+  "totalTopics": 90,
+  "completeTopics": 0,
+  "incompleteTopics": 90,
+  "issues": [
+    {
+      "id": "array-basics",
+      "title": "Array Fundamentals",
+      "issues": [
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "array-rotation",
+      "title": "Array Rotation",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "array-subarray-problems",
+      "title": "Subarray Problems",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "string-palindrome",
+      "title": "Palindrome Check",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "string-search-kmp",
+      "title": "KMP Algorithm",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "rabin-karp",
+      "title": "Rabin-Karp Algorithm",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "z-algorithm",
+      "title": "Z Algorithm",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "manacher-algorithm",
+      "title": "Manacher\\",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "string-anagram",
+      "title": "Anagram Detection",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "linked-list-singly",
+      "title": "Singly Linked List",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "linked-list-doubly",
+      "title": "Doubly Linked List",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "linked-list-circular",
+      "title": "Circular Linked List",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "stack-operations",
+      "title": "Stack Operations",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "queue-operations",
+      "title": "Queue Operations",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "binary-tree",
+      "title": "Binary Tree Fundamentals",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "binary-search-tree",
+      "title": "Binary Search Tree",
+      "issues": [
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "heap-operations",
+      "title": "Heap Data Structure",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "tree-inorder-traversal",
+      "title": "Inorder Traversal",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "tree-preorder-traversal",
+      "title": "Preorder Traversal",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "tree-postorder-traversal",
+      "title": "Postorder Traversal",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "graph-dfs",
+      "title": "Depth First Search",
+      "issues": [
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "graph-bfs",
+      "title": "Breadth First Search",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "dijkstra-algorithm",
+      "title": "Dijkstra\\",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "floyd-warshall",
+      "title": "Floyd-Warshall Algorithm",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "kruskal-algorithm",
+      "title": "Kruskal\\",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "prim-algorithm",
+      "title": "Prim\\",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "topological-sort",
+      "title": "Topological Sort",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "bubble-sort",
+      "title": "Bubble Sort",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "merge-sort",
+      "title": "Merge Sort",
+      "issues": [
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "quick-sort",
+      "title": "Quick Sort",
+      "issues": [
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "heap-sort",
+      "title": "Heap Sort",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "insertion-sort",
+      "title": "Insertion Sort",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "selection-sort",
+      "title": "Selection Sort",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "counting-sort",
+      "title": "Counting Sort",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "radix-sort",
+      "title": "Radix Sort",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "bucket-sort",
+      "title": "Bucket Sort",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "linear-search",
+      "title": "Linear Search",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "binary-search",
+      "title": "Binary Search",
+      "issues": [
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "interpolation-search",
+      "title": "Interpolation Search",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "hash-table",
+      "title": "Hash Table",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "hash-chaining",
+      "title": "Separate Chaining",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "open-addressing",
+      "title": "Open Addressing",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "recursion-basics",
+      "title": "Recursion Fundamentals",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "tail-recursion",
+      "title": "Tail Recursion",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "fibonacci",
+      "title": "Fibonacci Sequence",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "dp-introduction",
+      "title": "DP Introduction",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "longest-common-subsequence",
+      "title": "Longest Common Subsequence",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "knapsack-problem",
+      "title": "0/1 Knapsack Problem",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "longest-increasing-subsequence",
+      "title": "Longest Increasing Subsequence",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "activity-selection",
+      "title": "Activity Selection",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "huffman-coding",
+      "title": "Huffman Coding",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "fractional-knapsack",
+      "title": "Fractional Knapsack",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "backtracking-intro",
+      "title": "Backtracking Fundamentals",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "n-queens",
+      "title": "N-Queens Problem",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "sudoku-solver",
+      "title": "Sudoku Solver",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "maze-solver",
+      "title": "Maze Path Finding",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "generate-parentheses",
+      "title": "Generate Valid Parentheses",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "word-search",
+      "title": "Word Search in Grid",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "combination-sum",
+      "title": "Combination Sum",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "trie",
+      "title": "Trie (Prefix Tree)",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "segment-tree",
+      "title": "Segment Tree",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "fenwick-tree",
+      "title": "Fenwick Tree (BIT)",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "union-find",
+      "title": "Union-Find (Disjoint Set)",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "avl-tree",
+      "title": "AVL Tree",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "red-black-tree",
+      "title": "Red-Black Tree",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "b-tree",
+      "title": "B-Tree",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "splay-tree",
+      "title": "Splay Tree",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "two-pointers-intro",
+      "title": "Two Pointers Technique",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "two-sum",
+      "title": "Two Sum Problem",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "three-sum",
+      "title": "Three Sum Problem",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "container-water",
+      "title": "Container With Most Water",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "remove-duplicates",
+      "title": "Remove Duplicates from Sorted Array",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "palindrome-check",
+      "title": "Palindrome Verification",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "merge-sorted-arrays",
+      "title": "Merge Two Sorted Arrays",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "sliding-window-basics",
+      "title": "Sliding Window Technique",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "sliding-window-maximum",
+      "title": "Sliding Window Maximum",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "longest-substring",
+      "title": "Longest Substring Problems",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "bit-basics",
+      "title": "Bit Manipulation Basics",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "count-set-bits",
+      "title": "Count Set Bits",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "power-of-two",
+      "title": "Power of Two Check",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "single-number",
+      "title": "Single Number",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "bit-subset",
+      "title": "Generate All Subsets",
+      "issues": [
+        "Missing extendedDefinition",
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found"
+      ]
+    },
+    {
+      "id": "mathematical-algorithms-intro",
+      "title": "Mathematical Algorithms Overview",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "number-theory-basics",
+      "title": "Number Theory Fundamentals",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "prime-algorithms",
+      "title": "Prime Number Algorithms",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "fast-exponentiation",
+      "title": "Fast Exponentiation (Binary Exponentiation)",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "modular-arithmetic",
+      "title": "Modular Arithmetic",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "combinatorics",
+      "title": "Combinatorics and Counting",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "fibonacci-algorithms",
+      "title": "Fibonacci and Linear Recurrences",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    },
+    {
+      "id": "recursion",
+      "title": "Recursion",
+      "issues": [
+        "Missing voiceExplanation",
+        "Missing realWorldApplications",
+        "Missing pseudocode",
+        "Missing keyConcepts",
+        "Missing implementationCode",
+        "Missing quizQuestions",
+        "No quiz questions found",
+        "extendedDefinition not in required format (missing What it does/How it works/When to use)"
+      ]
+    }
+  ]
+}

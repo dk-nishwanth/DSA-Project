@@ -1,0 +1,37 @@
+{
+  "priorityTopics": [
+    "linked-list-singly",
+    "linked-list-circular",
+    "binary-tree",
+    "heap-operations",
+    "graph-bfs",
+    "bellman-ford",
+    "floyd-warshall",
+    "kruskal-algorithm",
+    "prim-algorithm",
+    "topological-sort",
+    "hash-chaining",
+    "open-addressing",
+    "tail-recursion",
+    "fibonacci",
+    "huffman-coding",
+    "fractional-knapsack",
+    "n-queens",
+    "sudoku-solver",
+    "maze-solver",
+    "trie",
+    "palindrome-check"
+  ],
+  "auditSummary": {
+    "missingExtendedDefinition": 2,
+    "missingVoiceExplanation": 24,
+    "missingRealWorldApplications": 33,
+    "missingKeyConcepts": 28,
+    "missingPseudocode": 28,
+    "missingImplementationCode": 28,
+    "missingQuizQuestions": 0,
+    "insufficientQuizQuestions": 43,
+    "totalIssues": 186
+  },
+  "timestamp": "2025-10-08T03:47:14.317Z"
+}

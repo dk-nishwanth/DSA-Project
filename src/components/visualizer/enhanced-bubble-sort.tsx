@@ -216,13 +216,6 @@ export function EnhancedBubbleSort() {
     setSteps([]);
   };
 
-  return (
-    <div className="space-y-3">
-      {stepDesc && (<div className="p-2 bg-muted/20 rounded text-sm">{stepDesc}</div>)}
-      {/* existing UI remains rendered by StepByStepBase / controls */}
-    </div>
-  );
-
   const handleShuffle = () => {
     const newArray = Array.from({ length: 7 }, () => Math.floor(Math.random() * 90) + 10);
     setArray(newArray);
@@ -241,11 +234,11 @@ export function EnhancedBubbleSort() {
       console.error('Invalid input');
     }
   };
-
+  
   const renderSortVisualization = (currentStep: VisualizationStep) => {
     const { array: displayArray, comparing, sorted, swapping, justSorted } = currentStep.data;
     const maxValue = Math.max(...displayArray);
-
+    
     return (
       <div className="space-y-6">
         <div className="text-center mb-6">
@@ -255,152 +248,90 @@ export function EnhancedBubbleSort() {
           </p>
         </div>
 
-        {/* Array Elements */}
-        <div className="flex items-end justify-center gap-2 h-64">
+        {/* Array Elements with Bubble Animation */}
+        <div className="flex items-end justify-center gap-2 h-64 relative">
+          {/* Water Effect Background */}
+          <div className="absolute inset-0 bg-gradient-to-t from-blue-100 to-transparent dark:from-blue-950 dark:to-transparent opacity-40 rounded-lg"></div>
+          
           <AnimatePresence mode="popLayout">
             {displayArray.map((value: number, index: number) => {
               let barColor = 'bg-blue-500';
               let scale = 1;
               let y = 0;
+              let bubbleEffect = '';
+              let textColor = 'text-white';
 
               if (sorted?.includes(index)) {
                 barColor = 'bg-green-500';
+                bubbleEffect = 'ring-4 ring-green-200 dark:ring-green-900/30';
               } else if (justSorted?.includes(index)) {
                 barColor = 'bg-green-400';
                 scale = 1.1;
                 y = -5;
+                bubbleEffect = 'ring-4 ring-green-200 dark:ring-green-900/30 animate-pulse';
               } else if (swapping?.includes(index)) {
                 barColor = 'bg-red-500';
                 scale = 1.1;
                 y = -10;
+                bubbleEffect = 'ring-2 ring-red-200 dark:ring-red-900/50';
               } else if (comparing?.includes(index)) {
                 barColor = 'bg-yellow-500';
                 scale = 1.05;
                 y = -3;
+                textColor = 'text-black';
+                bubbleEffect = 'ring-2 ring-yellow-200 dark:ring-yellow-900/50';
               }
+
+              // Add bubble decorations for elements that are moving
+              const bubbles = (swapping?.includes(index) || justSorted?.includes(index)) ? (
+                <>
+                  <motion.div 
+                    className="absolute -top-3 -right-1 w-2 h-2 bg-white rounded-full opacity-70"
+                    animate={{ y: [-5, -15], opacity: [0.7, 0] }}
+                    transition={{ repeat: Infinity, duration: 1.5, repeatType: "loop" }}
+                  />
+                  <motion.div 
+                    className="absolute -top-2 -left-1 w-1.5 h-1.5 bg-white rounded-full opacity-60"
+                    animate={{ y: [-3, -12], opacity: [0.6, 0] }}
+                    transition={{ repeat: Infinity, duration: 2, repeatType: "loop", delay: 0.5 }}
+                  />
+                </>
+              ) : null;
 
               return (
                 <motion.div
                   key={`${index}-${value}`}
-                  layout
-                  initial={{ opacity: 0, scale: 0.8 }}
+                  className={`${barColor} ${bubbleEffect} rounded-t-lg relative flex flex-col items-center shadow-lg`}
+                  style={{
+                    height: `${(value / maxValue) * 100}%`,
+                    width: '2.5rem',
+                  }}
+                  initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ 
                     opacity: 1, 
-                    scale,
+                    scale, 
                     y,
-                    rotateX: swapping?.includes(index) ? [0, 10, -10, 0] : 0
+                    transition: { duration: 0.3 } 
                   }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ 
-                    duration: 0.5,
-                    rotateX: { duration: 0.6, times: [0, 0.3, 0.7, 1] }
-                  }}
-                  className={`${barColor} rounded-t-lg flex flex-col items-center justify-end relative min-w-[50px] text-white font-bold shadow-lg`}
-                  style={{
-                    height: `${(value / maxValue) * 200 + 30}px`,
-                  }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  layout
                 >
-                  <span className="text-sm mb-2">{value}</span>
-                  <span className="absolute -bottom-6 text-xs text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 px-1 py-0.5 rounded">
+                  {bubbles}
+                  <span className={`absolute -top-7 text-sm font-mono font-bold ${comparing?.includes(index) ? 'text-primary' : ''}`}>
+                    {value}
+                  </span>
+                  <span className={`absolute top-1/2 transform -translate-y-1/2 ${textColor} font-semibold`}>
+                    {value}
+                  </span>
+                  <span className="absolute -bottom-7 text-xs text-muted-foreground">
                     [{index}]
                   </span>
-                  {showMemoryView && (
-                    <span className="absolute -bottom-12 text-xs font-mono text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-1 py-0.5 rounded">
-                      0x{memoryAddresses[index]?.toString(16).toUpperCase()}
-                    </span>
-                  )}
-
-                  {/* Status indicators */}
-                  {sorted?.includes(index) && (
-                    <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs bg-green-500 text-white px-2 py-1 rounded">
-                      ✓
-                    </div>
-                  )}
-                  {comparing?.includes(index) && (
-                    <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs bg-yellow-500 text-white px-2 py-1 rounded">
-                      ?
-                    </div>
-                  )}
-                  {swapping?.includes(index) && (
-                    <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs bg-red-500 text-white px-2 py-1 rounded">
-                      ↕
-                    </div>
-                  )}
                 </motion.div>
               );
             })}
           </AnimatePresence>
         </div>
-
-        {/* Pass Information */}
-        {currentStep.data.pass && (
-          <div className="text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900 rounded-full">
-              <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
-                Pass {currentStep.data.pass} {currentStep.data.completed ? '- Complete!' : '- In Progress'}
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* Statistics */}
-        <div className="grid grid-cols-3 gap-4 text-center">
-          <div className="bg-blue-50 dark:bg-blue-950 rounded-lg p-3">
-            <div className="text-lg font-bold text-blue-600">{displayArray.length}</div>
-            <div className="text-xs text-blue-600">Total Elements</div>
-          </div>
-          <div className="bg-green-50 dark:bg-green-950 rounded-lg p-3">
-            <div className="text-lg font-bold text-green-600">{sorted?.length || 0}</div>
-            <div className="text-xs text-green-600">Sorted Elements</div>
-          </div>
-          <div className="bg-purple-50 dark:bg-purple-950 rounded-lg p-3">
-            <div className="text-lg font-bold text-purple-600">{currentStep.data.pass || 0}</div>
-            <div className="text-xs text-purple-600">Current Pass</div>
-          </div>
-        </div>
-
-      {/* Memory Layout View */}
-      {showMemoryView && (
-        <div className="mt-6 p-4 bg-muted/20 rounded-lg border">
-            <h4 className="font-semibold mb-3 flex items-center gap-2">
-              <HardDrive className="h-4 w-4" />
-              Memory Layout
-            </h4>
-            <div className="space-y-2">
-              <div className="text-xs text-muted-foreground mb-2">
-                Array elements are stored in contiguous memory locations:
-              </div>
-              <div className="grid grid-cols-1 gap-1 font-mono text-xs">
-                {displayArray.map((value, index) => (
-                  <div 
-                    key={index}
-                    className={`flex justify-between items-center p-2 rounded ${
-                      sorted?.includes(index) ? 'bg-green-100 dark:bg-green-900' :
-                      comparing?.includes(index) ? 'bg-yellow-100 dark:bg-yellow-900' :
-                      swapping?.includes(index) ? 'bg-red-100 dark:bg-red-900' :
-                      'bg-gray-100 dark:bg-gray-800'
-                    }`}
-                  >
-                    <span>arr[{index}]</span>
-                    <span className="font-bold">{value}</span>
-                    <span className="text-muted-foreground">
-                      0x{memoryAddresses[index]?.toString(16).toUpperCase()}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <div className="text-xs text-muted-foreground mt-2">
-                Each element occupies 4 bytes (32-bit integer). Base address: 0x{memoryAddresses[0]?.toString(16).toUpperCase()}
-              </div>
-              {/* Standardized Memory Layout Component */}
-              <div className="mt-4">
-                <MemoryLayout title="Array Memory Layout" data={array as number[]} baseAddress={0x1000} wordSize={4} />
-              </div>
-            </div>
-          </div>
-        )}
       </div>
-
     );
   };
 

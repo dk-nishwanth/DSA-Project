@@ -1,0 +1,1333 @@
+{
+  "totalTopics": 87,
+  "totalVisualizers": 127,
+  "topicsWithVisualizers": 87,
+  "topicsWithoutVisualizers": 0,
+  "categories": [
+    {
+      "name": "Arrays",
+      "count": 3,
+      "topics": [
+        {
+          "id": "array-basics",
+          "title": "Array Fundamentals",
+          "category": "Arrays"
+        },
+        {
+          "id": "array-rotation",
+          "title": "Array Rotation",
+          "category": "Arrays"
+        },
+        {
+          "id": "array-subarray-problems",
+          "title": "Subarray Problems",
+          "category": "Arrays"
+        }
+      ]
+    },
+    {
+      "name": "Strings",
+      "count": 5,
+      "topics": [
+        {
+          "id": "string-palindrome",
+          "title": "Palindrome Check",
+          "category": "Strings"
+        },
+        {
+          "id": "string-search-kmp",
+          "title": "KMP Algorithm",
+          "category": "Strings"
+        },
+        {
+          "id": "rabin-karp",
+          "title": "Rabin-Karp Algorithm",
+          "category": "Strings"
+        },
+        {
+          "id": "z-algorithm",
+          "title": "Z Algorithm",
+          "category": "Strings"
+        },
+        {
+          "id": "string-anagram",
+          "title": "Anagram Detection",
+          "category": "Strings"
+        }
+      ]
+    },
+    {
+      "name": "Linked Lists",
+      "count": 3,
+      "topics": [
+        {
+          "id": "linked-list-singly",
+          "title": "Singly Linked List",
+          "category": "Linked Lists"
+        },
+        {
+          "id": "linked-list-doubly",
+          "title": "Doubly Linked List",
+          "category": "Linked Lists"
+        },
+        {
+          "id": "linked-list-circular",
+          "title": "Circular Linked List",
+          "category": "Linked Lists"
+        }
+      ]
+    },
+    {
+      "name": "Stacks & Queues",
+      "count": 2,
+      "topics": [
+        {
+          "id": "stack-operations",
+          "title": "Stack Operations",
+          "category": "Stacks & Queues"
+        },
+        {
+          "id": "queue-operations",
+          "title": "Queue Operations",
+          "category": "Stacks & Queues"
+        }
+      ]
+    },
+    {
+      "name": "Trees",
+      "count": 6,
+      "topics": [
+        {
+          "id": "binary-tree",
+          "title": "Binary Tree Fundamentals",
+          "category": "Trees"
+        },
+        {
+          "id": "binary-search-tree",
+          "title": "Binary Search Tree",
+          "category": "Trees"
+        },
+        {
+          "id": "heap-operations",
+          "title": "Heap Data Structure",
+          "category": "Trees"
+        },
+        {
+          "id": "tree-inorder-traversal",
+          "title": "Inorder Traversal",
+          "category": "Trees"
+        },
+        {
+          "id": "tree-preorder-traversal",
+          "title": "Preorder Traversal",
+          "category": "Trees"
+        },
+        {
+          "id": "tree-postorder-traversal",
+          "title": "Postorder Traversal",
+          "category": "Trees"
+        }
+      ]
+    },
+    {
+      "name": "Graphs",
+      "count": 5,
+      "topics": [
+        {
+          "id": "graph-dfs",
+          "title": "Depth First Search",
+          "category": "Graphs"
+        },
+        {
+          "id": "graph-bfs",
+          "title": "Breadth First Search",
+          "category": "Graphs"
+        },
+        {
+          "id": "bellman-ford",
+          "title": "Bellman-Ford Algorithm",
+          "category": "Graphs"
+        },
+        {
+          "id": "floyd-warshall",
+          "title": "Floyd-Warshall Algorithm",
+          "category": "Graphs"
+        },
+        {
+          "id": "topological-sort",
+          "title": "Topological Sort",
+          "category": "Graphs"
+        }
+      ]
+    },
+    {
+      "name": "Sorting",
+      "count": 9,
+      "topics": [
+        {
+          "id": "bubble-sort",
+          "title": "Bubble Sort",
+          "category": "Sorting"
+        },
+        {
+          "id": "merge-sort",
+          "title": "Merge Sort",
+          "category": "Sorting"
+        },
+        {
+          "id": "quick-sort",
+          "title": "Quick Sort",
+          "category": "Sorting"
+        },
+        {
+          "id": "heap-sort",
+          "title": "Heap Sort",
+          "category": "Sorting"
+        },
+        {
+          "id": "insertion-sort",
+          "title": "Insertion Sort",
+          "category": "Sorting"
+        },
+        {
+          "id": "selection-sort",
+          "title": "Selection Sort",
+          "category": "Sorting"
+        },
+        {
+          "id": "counting-sort",
+          "title": "Counting Sort",
+          "category": "Sorting"
+        },
+        {
+          "id": "radix-sort",
+          "title": "Radix Sort",
+          "category": "Sorting"
+        },
+        {
+          "id": "bucket-sort",
+          "title": "Bucket Sort",
+          "category": "Sorting"
+        }
+      ]
+    },
+    {
+      "name": "Searching",
+      "count": 3,
+      "topics": [
+        {
+          "id": "linear-search",
+          "title": "Linear Search",
+          "category": "Searching"
+        },
+        {
+          "id": "binary-search",
+          "title": "Binary Search",
+          "category": "Searching"
+        },
+        {
+          "id": "interpolation-search",
+          "title": "Interpolation Search",
+          "category": "Searching"
+        }
+      ]
+    },
+    {
+      "name": "Hashing",
+      "count": 3,
+      "topics": [
+        {
+          "id": "hash-table",
+          "title": "Hash Table",
+          "category": "Hashing"
+        },
+        {
+          "id": "hash-chaining",
+          "title": "Separate Chaining",
+          "category": "Hashing"
+        },
+        {
+          "id": "open-addressing",
+          "title": "Open Addressing",
+          "category": "Hashing"
+        }
+      ]
+    },
+    {
+      "name": "Recursion",
+      "count": 3,
+      "topics": [
+        {
+          "id": "recursion-basics",
+          "title": "Recursion Fundamentals",
+          "category": "Recursion"
+        },
+        {
+          "id": "tail-recursion",
+          "title": "Tail Recursion",
+          "category": "Recursion"
+        },
+        {
+          "id": "fibonacci",
+          "title": "Fibonacci Sequence",
+          "category": "Recursion"
+        }
+      ]
+    },
+    {
+      "name": "Dynamic Programming",
+      "count": 4,
+      "topics": [
+        {
+          "id": "dp-introduction",
+          "title": "DP Introduction",
+          "category": "Dynamic Programming"
+        },
+        {
+          "id": "longest-common-subsequence",
+          "title": "Longest Common Subsequence",
+          "category": "Dynamic Programming"
+        },
+        {
+          "id": "knapsack-problem",
+          "title": "0/1 Knapsack Problem",
+          "category": "Dynamic Programming"
+        },
+        {
+          "id": "longest-increasing-subsequence",
+          "title": "Longest Increasing Subsequence",
+          "category": "Dynamic Programming"
+        }
+      ]
+    },
+    {
+      "name": "Greedy Algorithms",
+      "count": 3,
+      "topics": [
+        {
+          "id": "activity-selection",
+          "title": "Activity Selection",
+          "category": "Greedy Algorithms"
+        },
+        {
+          "id": "huffman-coding",
+          "title": "Huffman Coding",
+          "category": "Greedy Algorithms"
+        },
+        {
+          "id": "fractional-knapsack",
+          "title": "Fractional Knapsack",
+          "category": "Greedy Algorithms"
+        }
+      ]
+    },
+    {
+      "name": "Backtracking",
+      "count": 7,
+      "topics": [
+        {
+          "id": "backtracking-intro",
+          "title": "Backtracking Fundamentals",
+          "category": "Backtracking"
+        },
+        {
+          "id": "n-queens",
+          "title": "N-Queens Problem",
+          "category": "Backtracking"
+        },
+        {
+          "id": "sudoku-solver",
+          "title": "Sudoku Solver",
+          "category": "Backtracking"
+        },
+        {
+          "id": "maze-solver",
+          "title": "Maze Path Finding",
+          "category": "Backtracking"
+        },
+        {
+          "id": "generate-parentheses",
+          "title": "Generate Valid Parentheses",
+          "category": "Backtracking"
+        },
+        {
+          "id": "word-search",
+          "title": "Word Search in Grid",
+          "category": "Backtracking"
+        },
+        {
+          "id": "combination-sum",
+          "title": "Combination Sum",
+          "category": "Backtracking"
+        }
+      ]
+    },
+    {
+      "name": "Advanced Data Structures",
+      "count": 8,
+      "topics": [
+        {
+          "id": "trie",
+          "title": "Trie (Prefix Tree)",
+          "category": "Advanced Data Structures"
+        },
+        {
+          "id": "segment-tree",
+          "title": "Segment Tree",
+          "category": "Advanced Data Structures"
+        },
+        {
+          "id": "fenwick-tree",
+          "title": "Fenwick Tree (BIT)",
+          "category": "Advanced Data Structures"
+        },
+        {
+          "id": "union-find",
+          "title": "Union-Find (Disjoint Set)",
+          "category": "Advanced Data Structures"
+        },
+        {
+          "id": "avl-tree",
+          "title": "AVL Tree",
+          "category": "Advanced Data Structures"
+        },
+        {
+          "id": "red-black-tree",
+          "title": "Red-Black Tree",
+          "category": "Advanced Data Structures"
+        },
+        {
+          "id": "b-tree",
+          "title": "B-Tree",
+          "category": "Advanced Data Structures"
+        },
+        {
+          "id": "splay-tree",
+          "title": "Splay Tree",
+          "category": "Advanced Data Structures"
+        }
+      ]
+    },
+    {
+      "name": "Two Pointers",
+      "count": 7,
+      "topics": [
+        {
+          "id": "two-pointers-intro",
+          "title": "Two Pointers Technique",
+          "category": "Two Pointers"
+        },
+        {
+          "id": "two-sum",
+          "title": "Two Sum Problem",
+          "category": "Two Pointers"
+        },
+        {
+          "id": "three-sum",
+          "title": "Three Sum Problem",
+          "category": "Two Pointers"
+        },
+        {
+          "id": "container-water",
+          "title": "Container With Most Water",
+          "category": "Two Pointers"
+        },
+        {
+          "id": "remove-duplicates",
+          "title": "Remove Duplicates from Sorted Array",
+          "category": "Two Pointers"
+        },
+        {
+          "id": "palindrome-check",
+          "title": "Palindrome Verification",
+          "category": "Two Pointers"
+        },
+        {
+          "id": "merge-sorted-arrays",
+          "title": "Merge Two Sorted Arrays",
+          "category": "Two Pointers"
+        }
+      ]
+    },
+    {
+      "name": "Sliding Window",
+      "count": 3,
+      "topics": [
+        {
+          "id": "sliding-window-basics",
+          "title": "Sliding Window Technique",
+          "category": "Sliding Window"
+        },
+        {
+          "id": "sliding-window-maximum",
+          "title": "Sliding Window Maximum",
+          "category": "Sliding Window"
+        },
+        {
+          "id": "longest-substring",
+          "title": "Longest Substring Problems",
+          "category": "Sliding Window"
+        }
+      ]
+    },
+    {
+      "name": "Bit Manipulation",
+      "count": 5,
+      "topics": [
+        {
+          "id": "bit-basics",
+          "title": "Bit Manipulation Basics",
+          "category": "Bit Manipulation"
+        },
+        {
+          "id": "count-set-bits",
+          "title": "Count Set Bits",
+          "category": "Bit Manipulation"
+        },
+        {
+          "id": "power-of-two",
+          "title": "Power of Two Check",
+          "category": "Bit Manipulation"
+        },
+        {
+          "id": "single-number",
+          "title": "Single Number",
+          "category": "Bit Manipulation"
+        },
+        {
+          "id": "bit-subset",
+          "title": "Generate All Subsets",
+          "category": "Bit Manipulation"
+        }
+      ]
+    },
+    {
+      "name": "Mathematical Algorithms",
+      "count": 8,
+      "topics": [
+        {
+          "id": "mathematical-algorithms-intro",
+          "title": "Mathematical Algorithms Overview",
+          "category": "Mathematical Algorithms"
+        },
+        {
+          "id": "number-theory-basics",
+          "title": "Number Theory Fundamentals",
+          "category": "Mathematical Algorithms"
+        },
+        {
+          "id": "prime-algorithms",
+          "title": "Prime Number Algorithms",
+          "category": "Mathematical Algorithms"
+        },
+        {
+          "id": "fast-exponentiation",
+          "title": "Fast Exponentiation (Binary Exponentiation)",
+          "category": "Mathematical Algorithms"
+        },
+        {
+          "id": "modular-arithmetic",
+          "title": "Modular Arithmetic",
+          "category": "Mathematical Algorithms"
+        },
+        {
+          "id": "combinatorics",
+          "title": "Combinatorics and Counting",
+          "category": "Mathematical Algorithms"
+        },
+        {
+          "id": "fibonacci-algorithms",
+          "title": "Fibonacci and Linear Recurrences",
+          "category": "Mathematical Algorithms"
+        },
+        {
+          "id": "mathematical-induction",
+          "title": "Mathematical Induction",
+          "category": "Mathematical Algorithms"
+        }
+      ]
+    }
+  ],
+  "missingVisualizers": [],
+  "existingVisualizers": [
+    {
+      "id": "array-basics",
+      "title": "Array Fundamentals",
+      "category": "Arrays",
+      "visualizer": "array-fundamentals-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "array-fundamentals-visualizer.tsx",
+        "array-rotation-visualizer.tsx",
+        "array-visualizer.tsx",
+        "bit-basics-visualizer.tsx",
+        "enhanced-array-visualizer-clean.tsx",
+        "enhanced-array-visualizer.tsx",
+        "hash-table-basics-visualizer.tsx",
+        "recursion-basics-visualizer.tsx",
+        "sliding-window-basics-visualizer.tsx",
+        "two-pointers-basics-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "array-rotation",
+      "title": "Array Rotation",
+      "category": "Arrays",
+      "visualizer": "array-rotation-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "array-subarray-problems",
+      "title": "Subarray Problems",
+      "category": "Arrays",
+      "visualizer": "array-fundamentals-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "array-fundamentals-visualizer.tsx",
+        "array-rotation-visualizer.tsx",
+        "array-visualizer.tsx",
+        "enhanced-array-visualizer-clean.tsx",
+        "enhanced-array-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "string-palindrome",
+      "title": "Palindrome Check",
+      "category": "Strings",
+      "visualizer": "string-palindrome-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "string-search-kmp",
+      "title": "KMP Algorithm",
+      "category": "Strings",
+      "visualizer": "binary-search-tree-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "binary-search-tree-visualizer.tsx",
+        "binary-search-visualizer.tsx",
+        "enhanced-binary-search.tsx",
+        "interpolation-search-visualizer.tsx",
+        "linear-search-visualizer.tsx",
+        "longest-substring-visualizer.tsx",
+        "search-visualizer.tsx",
+        "string-matching-visualizer.tsx",
+        "string-palindrome-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "rabin-karp",
+      "title": "Rabin-Karp Algorithm",
+      "category": "Strings",
+      "visualizer": "rabin-karp-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "z-algorithm",
+      "title": "Z Algorithm",
+      "category": "Strings",
+      "visualizer": "z-algorithm-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "string-anagram",
+      "title": "Anagram Detection",
+      "category": "Strings",
+      "visualizer": "anagram-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "anagram-visualizer.tsx",
+        "longest-substring-visualizer.tsx",
+        "string-matching-visualizer.tsx",
+        "string-palindrome-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "linked-list-singly",
+      "title": "Singly Linked List",
+      "category": "Linked Lists",
+      "visualizer": "circular-linked-list-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "circular-linked-list-visualizer.tsx",
+        "doubly-linked-list-visualizer.tsx",
+        "linked-list-visualizer.tsx",
+        "singly-linked-list-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "linked-list-doubly",
+      "title": "Doubly Linked List",
+      "category": "Linked Lists",
+      "visualizer": "circular-linked-list-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "circular-linked-list-visualizer.tsx",
+        "doubly-linked-list-visualizer.tsx",
+        "linked-list-visualizer.tsx",
+        "singly-linked-list-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "linked-list-circular",
+      "title": "Circular Linked List",
+      "category": "Linked Lists",
+      "visualizer": "circular-linked-list-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "circular-linked-list-visualizer.tsx",
+        "doubly-linked-list-visualizer.tsx",
+        "linked-list-visualizer.tsx",
+        "singly-linked-list-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "stack-operations",
+      "title": "Stack Operations",
+      "category": "Stacks & Queues",
+      "visualizer": "stack-operations-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "queue-operations",
+      "title": "Queue Operations",
+      "category": "Stacks & Queues",
+      "visualizer": "queue-operations-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "binary-tree",
+      "title": "Binary Tree Fundamentals",
+      "category": "Trees",
+      "visualizer": "binary-tree-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "binary-search-tree",
+      "title": "Binary Search Tree",
+      "category": "Trees",
+      "visualizer": "binary-search-tree-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "heap-operations",
+      "title": "Heap Data Structure",
+      "category": "Trees",
+      "visualizer": "heap-operations-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "tree-inorder-traversal",
+      "title": "Inorder Traversal",
+      "category": "Trees",
+      "visualizer": "avl-tree-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "avl-tree-visualizer.tsx",
+        "b-tree-visualizer.tsx",
+        "binary-search-tree-visualizer.tsx",
+        "binary-tree-fundamentals-visualizer.tsx",
+        "binary-tree-visualizer.tsx",
+        "enhanced-binary-tree.tsx",
+        "fenwick-tree-visualizer.tsx",
+        "red-black-tree-visualizer.tsx",
+        "segment-tree-visualizer.tsx",
+        "splay-tree-visualizer.tsx",
+        "tree-traversal-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "tree-preorder-traversal",
+      "title": "Preorder Traversal",
+      "category": "Trees",
+      "visualizer": "avl-tree-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "avl-tree-visualizer.tsx",
+        "b-tree-visualizer.tsx",
+        "binary-search-tree-visualizer.tsx",
+        "binary-tree-fundamentals-visualizer.tsx",
+        "binary-tree-visualizer.tsx",
+        "enhanced-binary-tree.tsx",
+        "fenwick-tree-visualizer.tsx",
+        "red-black-tree-visualizer.tsx",
+        "segment-tree-visualizer.tsx",
+        "splay-tree-visualizer.tsx",
+        "tree-traversal-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "tree-postorder-traversal",
+      "title": "Postorder Traversal",
+      "category": "Trees",
+      "visualizer": "avl-tree-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "avl-tree-visualizer.tsx",
+        "b-tree-visualizer.tsx",
+        "binary-search-tree-visualizer.tsx",
+        "binary-tree-fundamentals-visualizer.tsx",
+        "binary-tree-visualizer.tsx",
+        "enhanced-binary-tree.tsx",
+        "fenwick-tree-visualizer.tsx",
+        "red-black-tree-visualizer.tsx",
+        "segment-tree-visualizer.tsx",
+        "splay-tree-visualizer.tsx",
+        "tree-traversal-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "graph-dfs",
+      "title": "Depth First Search",
+      "category": "Graphs",
+      "visualizer": "dfs-bfs-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "dfs-bfs-visualizer.tsx",
+        "graph-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "graph-bfs",
+      "title": "Breadth First Search",
+      "category": "Graphs",
+      "visualizer": "dfs-bfs-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "dfs-bfs-visualizer.tsx",
+        "graph-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "bellman-ford",
+      "title": "Bellman-Ford Algorithm",
+      "category": "Graphs",
+      "visualizer": "bellman-ford-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "floyd-warshall",
+      "title": "Floyd-Warshall Algorithm",
+      "category": "Graphs",
+      "visualizer": "floyd-warshall-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "topological-sort",
+      "title": "Topological Sort",
+      "category": "Graphs",
+      "visualizer": "topological-sort-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "bubble-sort",
+      "title": "Bubble Sort",
+      "category": "Sorting",
+      "visualizer": "bubble-sort-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "merge-sort",
+      "title": "Merge Sort",
+      "category": "Sorting",
+      "visualizer": "merge-sort-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "quick-sort",
+      "title": "Quick Sort",
+      "category": "Sorting",
+      "visualizer": "quick-sort-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "heap-sort",
+      "title": "Heap Sort",
+      "category": "Sorting",
+      "visualizer": "heap-sort-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "insertion-sort",
+      "title": "Insertion Sort",
+      "category": "Sorting",
+      "visualizer": "insertion-sort-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "selection-sort",
+      "title": "Selection Sort",
+      "category": "Sorting",
+      "visualizer": "selection-sort-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "counting-sort",
+      "title": "Counting Sort",
+      "category": "Sorting",
+      "visualizer": "counting-sort-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "radix-sort",
+      "title": "Radix Sort",
+      "category": "Sorting",
+      "visualizer": "radix-sort-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "bucket-sort",
+      "title": "Bucket Sort",
+      "category": "Sorting",
+      "visualizer": "bucket-sort-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "linear-search",
+      "title": "Linear Search",
+      "category": "Searching",
+      "visualizer": "linear-search-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "binary-search",
+      "title": "Binary Search",
+      "category": "Searching",
+      "visualizer": "binary-search-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "interpolation-search",
+      "title": "Interpolation Search",
+      "category": "Searching",
+      "visualizer": "interpolation-search-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "hash-table",
+      "title": "Hash Table",
+      "category": "Hashing",
+      "visualizer": "hash-table-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "hash-chaining",
+      "title": "Separate Chaining",
+      "category": "Hashing",
+      "visualizer": "hash-table-basics-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "hash-table-basics-visualizer.tsx",
+        "hash-table-visualizer.tsx",
+        "hashing-visualizer.tsx",
+        "separate-chaining-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "open-addressing",
+      "title": "Open Addressing",
+      "category": "Hashing",
+      "visualizer": "open-addressing-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "recursion-basics",
+      "title": "Recursion Fundamentals",
+      "category": "Recursion",
+      "visualizer": "recursion-basics-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "tail-recursion",
+      "title": "Tail Recursion",
+      "category": "Recursion",
+      "visualizer": "tail-recursion-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "fibonacci",
+      "title": "Fibonacci Sequence",
+      "category": "Recursion",
+      "visualizer": "fibonacci-dp-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "fibonacci-dp-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "dp-introduction",
+      "title": "DP Introduction",
+      "category": "Dynamic Programming",
+      "visualizer": "dp-introduction-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "longest-common-subsequence",
+      "title": "Longest Common Subsequence",
+      "category": "Dynamic Programming",
+      "visualizer": "longest-increasing-subsequence-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "longest-increasing-subsequence-visualizer.tsx",
+        "longest-substring-visualizer.tsx",
+        "sliding-window-longest-unique.tsx"
+      ]
+    },
+    {
+      "id": "knapsack-problem",
+      "title": "0/1 Knapsack Problem",
+      "category": "Dynamic Programming",
+      "visualizer": "knapsack-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "knapsack-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "longest-increasing-subsequence",
+      "title": "Longest Increasing Subsequence",
+      "category": "Dynamic Programming",
+      "visualizer": "longest-increasing-subsequence-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "activity-selection",
+      "title": "Activity Selection",
+      "category": "Greedy Algorithms",
+      "visualizer": "enhanced-selection-sort.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "enhanced-selection-sort.tsx",
+        "selection-sort-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "huffman-coding",
+      "title": "Huffman Coding",
+      "category": "Greedy Algorithms",
+      "visualizer": "huffman-coding-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "fractional-knapsack",
+      "title": "Fractional Knapsack",
+      "category": "Greedy Algorithms",
+      "visualizer": "knapsack-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "knapsack-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "backtracking-intro",
+      "title": "Backtracking Fundamentals",
+      "category": "Backtracking",
+      "visualizer": "backtracking-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "backtracking-visualizer.tsx",
+        "dp-introduction-visualizer.tsx",
+        "enhanced-backtracking-visualizer.tsx",
+        "two-pointers-intro-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "n-queens",
+      "title": "N-Queens Problem",
+      "category": "Backtracking",
+      "visualizer": "n-queens-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "sudoku-solver",
+      "title": "Sudoku Solver",
+      "category": "Backtracking",
+      "visualizer": "maze-solver-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "maze-solver-visualizer.tsx",
+        "sudoku-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "maze-solver",
+      "title": "Maze Path Finding",
+      "category": "Backtracking",
+      "visualizer": "maze-solver-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "generate-parentheses",
+      "title": "Generate Valid Parentheses",
+      "category": "Backtracking",
+      "visualizer": "generate-parentheses-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "word-search",
+      "title": "Word Search in Grid",
+      "category": "Backtracking",
+      "visualizer": "binary-search-tree-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "binary-search-tree-visualizer.tsx",
+        "binary-search-visualizer.tsx",
+        "enhanced-binary-search.tsx",
+        "interpolation-search-visualizer.tsx",
+        "linear-search-visualizer.tsx",
+        "search-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "combination-sum",
+      "title": "Combination Sum",
+      "category": "Backtracking",
+      "visualizer": "three-sum-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "three-sum-visualizer.tsx",
+        "two-sum-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "trie",
+      "title": "Trie (Prefix Tree)",
+      "category": "Advanced Data Structures",
+      "visualizer": "trie-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "segment-tree",
+      "title": "Segment Tree",
+      "category": "Advanced Data Structures",
+      "visualizer": "segment-tree-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "fenwick-tree",
+      "title": "Fenwick Tree (BIT)",
+      "category": "Advanced Data Structures",
+      "visualizer": "fenwick-tree-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "union-find",
+      "title": "Union-Find (Disjoint Set)",
+      "category": "Advanced Data Structures",
+      "visualizer": "union-find-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "avl-tree",
+      "title": "AVL Tree",
+      "category": "Advanced Data Structures",
+      "visualizer": "avl-tree-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "red-black-tree",
+      "title": "Red-Black Tree",
+      "category": "Advanced Data Structures",
+      "visualizer": "red-black-tree-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "b-tree",
+      "title": "B-Tree",
+      "category": "Advanced Data Structures",
+      "visualizer": "b-tree-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "splay-tree",
+      "title": "Splay Tree",
+      "category": "Advanced Data Structures",
+      "visualizer": "splay-tree-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "two-pointers-intro",
+      "title": "Two Pointers Technique",
+      "category": "Two Pointers",
+      "visualizer": "two-pointers-intro-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "two-sum",
+      "title": "Two Sum Problem",
+      "category": "Two Pointers",
+      "visualizer": "two-sum-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "three-sum",
+      "title": "Three Sum Problem",
+      "category": "Two Pointers",
+      "visualizer": "three-sum-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "container-water",
+      "title": "Container With Most Water",
+      "category": "Two Pointers",
+      "visualizer": "container-water-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "remove-duplicates",
+      "title": "Remove Duplicates from Sorted Array",
+      "category": "Two Pointers",
+      "visualizer": "remove-duplicates-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "palindrome-check",
+      "title": "Palindrome Verification",
+      "category": "Two Pointers",
+      "visualizer": "palindrome-check-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "merge-sorted-arrays",
+      "title": "Merge Two Sorted Arrays",
+      "category": "Two Pointers",
+      "visualizer": "merge-sort-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "merge-sort-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "sliding-window-basics",
+      "title": "Sliding Window Technique",
+      "category": "Sliding Window",
+      "visualizer": "sliding-window-basics-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "sliding-window-maximum",
+      "title": "Sliding Window Maximum",
+      "category": "Sliding Window",
+      "visualizer": "sliding-window-maximum-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "longest-substring",
+      "title": "Longest Substring Problems",
+      "category": "Sliding Window",
+      "visualizer": "longest-substring-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "bit-basics",
+      "title": "Bit Manipulation Basics",
+      "category": "Bit Manipulation",
+      "visualizer": "bit-basics-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "count-set-bits",
+      "title": "Count Set Bits",
+      "category": "Bit Manipulation",
+      "visualizer": "count-set-bits-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "power-of-two",
+      "title": "Power of Two Check",
+      "category": "Bit Manipulation",
+      "visualizer": "power-of-two-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "single-number",
+      "title": "Single Number",
+      "category": "Bit Manipulation",
+      "visualizer": "single-number-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "bit-subset",
+      "title": "Generate All Subsets",
+      "category": "Bit Manipulation",
+      "visualizer": "bit-subset-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "mathematical-algorithms-intro",
+      "title": "Mathematical Algorithms Overview",
+      "category": "Mathematical Algorithms",
+      "visualizer": "dp-introduction-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "dp-introduction-visualizer.tsx",
+        "mathematical-induction-visualizer.tsx",
+        "mathematical-visualizer.tsx",
+        "prime-algorithms-visualizer.tsx",
+        "two-pointers-intro-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "number-theory-basics",
+      "title": "Number Theory Fundamentals",
+      "category": "Mathematical Algorithms",
+      "visualizer": "bit-basics-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "bit-basics-visualizer.tsx",
+        "hash-table-basics-visualizer.tsx",
+        "number-theory-visualizer.tsx",
+        "recursion-basics-visualizer.tsx",
+        "single-number-visualizer.tsx",
+        "sliding-window-basics-visualizer.tsx",
+        "two-pointers-basics-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "prime-algorithms",
+      "title": "Prime Number Algorithms",
+      "category": "Mathematical Algorithms",
+      "visualizer": "prime-algorithms-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "fast-exponentiation",
+      "title": "Fast Exponentiation (Binary Exponentiation)",
+      "category": "Mathematical Algorithms",
+      "visualizer": "fast-exponentiation-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "modular-arithmetic",
+      "title": "Modular Arithmetic",
+      "category": "Mathematical Algorithms",
+      "visualizer": "modular-arithmetic-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "combinatorics",
+      "title": "Combinatorics and Counting",
+      "category": "Mathematical Algorithms",
+      "visualizer": "combinatorics-visualizer.tsx",
+      "matchType": "exact"
+    },
+    {
+      "id": "fibonacci-algorithms",
+      "title": "Fibonacci and Linear Recurrences",
+      "category": "Mathematical Algorithms",
+      "visualizer": "fibonacci-dp-visualizer.tsx",
+      "matchType": "partial",
+      "allMatches": [
+        "fibonacci-dp-visualizer.tsx",
+        "prime-algorithms-visualizer.tsx"
+      ]
+    },
+    {
+      "id": "mathematical-induction",
+      "title": "Mathematical Induction",
+      "category": "Mathematical Algorithms",
+      "visualizer": "mathematical-induction-visualizer.tsx",
+      "matchType": "exact"
+    }
+  ]
+}

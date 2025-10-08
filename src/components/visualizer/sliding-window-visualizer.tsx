@@ -305,75 +305,139 @@ export function SlidingWindowVisualizer() {
         )}
       </div>
 
-      {/* Visualization */}
+      {/* Enhanced Visualization */}
       <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900 p-8 rounded-xl border-2 border-border/50">
-        <div className="flex items-end justify-center gap-2 h-64 mb-8">
-          {currentStepData.array.map((value, index) => {
-            const isInWindow = index >= currentStepData.windowStart && index <= currentStepData.windowEnd;
-            const isMaxInWindow = index === currentStepData.maxIndex;
-            
-            let barColor = 'bg-card border-border';
-            if (isMaxInWindow && isInWindow) {
-              barColor = 'bg-primary border-primary text-primary-foreground';
-            } else if (isInWindow) {
-              barColor = 'bg-primary/20 border-primary/50';
-            }
-
-            const height = value >= 0 
-              ? ((value / maxValue) * 180 + 20)
-              : (20 - (Math.abs(value) / Math.abs(minValue)) * 180);
-
-            return (
-              <motion.div
-                key={index}
-                className="flex flex-col items-center justify-end relative min-w-[50px]"
-                initial={{ scale: 1 }}
-                animate={{ 
-                  scale: isInWindow ? 1.05 : 1,
-                  y: isMaxInWindow ? -5 : 0
-                }}
-                transition={{ duration: 0.3 }}
-              >
-                <div
-                  className={`${barColor} rounded-t-lg transition-all duration-500 flex items-end justify-center relative border-2`}
-                  style={{ height: `${Math.abs(height)}px` }}
-                >
-                  <span className="font-bold text-sm mb-2">
-                    {value}
-                  </span>
-                </div>
-                <span className="absolute -bottom-6 text-xs text-gray-600 dark:text-gray-400">
-                  {index}
-                </span>
-                
-                {isInWindow && (
-                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
-                    <div className={`${isMaxInWindow ? 'bg-primary text-primary-foreground' : 'bg-primary/20 text-primary'} px-2 py-1 rounded text-xs`}>
-                      {isMaxInWindow ? 'MAX' : 'WIN'}
-                    </div>
-                  </div>
-                )}
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {/* Window Indicator */}
-        {currentStepData.windowStart >= 0 && (
-          <div className="relative">
-            <div 
-              className="absolute top-0 bg-blue-200 dark:bg-blue-800 opacity-50 rounded"
+        {/* Window Animation Frame */}
+        <div className="relative mb-12">
+          {currentStepData.windowStart >= 0 && (
+            <motion.div 
+              className="absolute top-0 left-0 h-full border-4 border-blue-500/70 dark:border-blue-400/70 rounded-lg z-10 shadow-lg"
               style={{
                 left: `${(currentStepData.windowStart / currentStepData.array.length) * 100}%`,
                 width: `${(currentStepData.windowSize / currentStepData.array.length) * 100}%`,
-                height: '4px'
               }}
-            />
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ 
+                opacity: 1, 
+                y: 0,
+                left: `${(currentStepData.windowStart / currentStepData.array.length) * 100}%`,
+                width: `${(currentStepData.windowSize / currentStepData.array.length) * 100}%`,
+              }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                Sliding Window
+              </div>
+            </motion.div>
+          )}
+          
+          <div className="flex items-end justify-center gap-2 h-64 mb-8 relative">
+            {currentStepData.array.map((value, index) => {
+              const isInWindow = index >= currentStepData.windowStart && index <= currentStepData.windowEnd;
+              const isMaxInWindow = index === currentStepData.maxIndex;
+              const isJustEntered = index === currentStepData.windowEnd && currentStep > 0;
+              const isJustLeft = index === currentStepData.windowStart - 1 && currentStep > 0;
+              
+              let barColor = 'bg-card border-border';
+              if (isMaxInWindow && isInWindow) {
+                barColor = 'bg-primary border-primary text-primary-foreground';
+              } else if (isInWindow) {
+                barColor = 'bg-primary/20 border-primary/50';
+              }
+
+              const height = value >= 0 
+                ? ((value / maxValue) * 180 + 20)
+                : (20 - (Math.abs(value) / Math.abs(minValue)) * 180);
+
+              return (
+                <motion.div
+                  key={index}
+                  className="flex flex-col items-center justify-end relative min-w-[50px]"
+                  initial={{ scale: 1 }}
+                  animate={{ 
+                    scale: isInWindow ? 1.05 : 1,
+                    y: isMaxInWindow ? -5 : 0,
+                    opacity: isJustLeft ? [1, 0.7, 1] : isJustEntered ? [0.7, 1] : 1
+                  }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <motion.div
+                    className={`${barColor} rounded-t-lg transition-all duration-500 flex items-end justify-center relative border-2`}
+                    style={{ height: `${Math.abs(height)}px` }}
+                    animate={isInWindow ? {
+                      boxShadow: isMaxInWindow ? 
+                        '0 0 15px 5px rgba(99, 102, 241, 0.5)' : 
+                        '0 0 10px 2px rgba(99, 102, 241, 0.3)'
+                    } : {}}
+                  >
+                    <span className="font-bold text-sm mb-2">
+                      {value}
+                    </span>
+                    
+                    {/* Ripple effect for elements entering/leaving window */}
+                    {(isJustEntered || isJustLeft) && (
+                      <motion.div
+                        className="absolute inset-0 rounded-t-lg border-2 border-blue-500"
+                        initial={{ opacity: 0.8, scale: 1 }}
+                        animate={{ opacity: 0, scale: 1.2 }}
+                        transition={{ duration: 0.8, repeat: 0 }}
+                      />
+                    )}
+                  </motion.div>
+                  
+                  <span className="absolute -bottom-6 text-xs text-gray-600 dark:text-gray-400">
+                    {index}
+                  </span>
+                  
+                  {isInWindow && (
+                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
+                      <div className={`
+                        ${isMaxInWindow ? 'bg-primary text-primary-foreground' : 'bg-primary/20 text-primary'} 
+                        px-2 py-1 rounded-md text-xs font-bold shadow-md
+                      `}>
+                        {isMaxInWindow ? 'MAX' : 'WIN'}
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })}
           </div>
-        )}
+        </div>
+
+        {/* Window Movement Tracker */}
+        <div className="relative h-4 mb-8 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+          <div className="absolute top-0 left-0 h-full w-full flex items-center">
+            {currentStepData.array.map((_, index) => (
+              <div key={index} className="flex-1 flex justify-center">
+                <div className={`h-2 w-2 rounded-full ${
+                  index < currentStepData.windowStart || index > currentStepData.windowEnd 
+                    ? 'bg-gray-300 dark:bg-gray-600' 
+                    : index === currentStepData.maxIndex 
+                      ? 'bg-primary' 
+                      : 'bg-blue-300 dark:bg-blue-600'
+                }`} />
+              </div>
+            ))}
+          </div>
+          
+          {currentStepData.windowStart >= 0 && (
+            <motion.div 
+              className="absolute top-0 h-full bg-blue-200 dark:bg-blue-800 opacity-50"
+              style={{
+                left: `${(currentStepData.windowStart / currentStepData.array.length) * 100}%`,
+                width: `${(currentStepData.windowSize / currentStepData.array.length) * 100}%`,
+              }}
+              animate={{
+                left: `${(currentStepData.windowStart / currentStepData.array.length) * 100}%`,
+              }}
+              transition={{ duration: 0.5 }}
+            />
+          )}
+        </div>
 
         {/* Message */}
-        <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg border mt-4">
+        <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg border mt-4 shadow-md">
           <p className="text-sm font-medium">{currentStepData.message}</p>
         </div>
       </div>

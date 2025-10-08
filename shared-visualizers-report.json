@@ -1,0 +1,16 @@
+[
+  {
+    "visualizer": "DPFundamentalsViz",
+    "topics": [
+      "dp-introduction",
+      "dp-fundamentals"
+    ]
+  },
+  {
+    "visualizer": "Knapsack01Viz",
+    "topics": [
+      "knapsack-problem",
+      "0-1-knapsack"
+    ]
+  }
+]

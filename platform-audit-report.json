@@ -1,0 +1,54 @@
+{
+  "timestamp": "2025-10-08T00:59:33.412Z",
+  "totalTopics": 91,
+  "issues": {
+    "missingTitle": [],
+    "missingDescription": [],
+    "missingCategory": [],
+    "missingDifficulty": [],
+    "missingComplexity": [],
+    "missingDefinition": [
+      "linked-list-circular",
+      "binary-tree"
+    ],
+    "missingExample": [
+      "array-basics",
+      "linked-list-doubly",
+      "stack-operations",
+      "binary-search-tree",
+      "graph-dfs",
+      "dijkstra-algorithm",
+      "merge-sort",
+      "insertion-sort",
+      "selection-sort",
+      "counting-sort",
+      "radix-sort",
+      "bucket-sort",
+      "linear-search",
+      "open-addressing",
+      "recursion-basics",
+      "fibonacci",
+      "dp-introduction",
+      "knapsack-problem",
+      "longest-increasing-subsequence",
+      "backtracking-intro",
+      "segment-tree",
+      "merge-sorted-arrays"
+    ],
+    "shortDefinition": [],
+    "shortExample": [],
+    "invalidComplexity": [
+      "recursion-basics",
+      "dp-introduction",
+      "dp-introduction",
+      "mathematical-algorithms-intro",
+      "mathematical-algorithms-intro"
+    ]
+  },
+  "readinessScore": {
+    "content": 68.13186813186813,
+    "visualizers": 100,
+    "quizzes": 0
+  },
+  "overallScore": 56.04395604395605
+}

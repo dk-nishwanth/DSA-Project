@@ -213,86 +213,6 @@ export function TwoPointersVisualizer() {
         <Button onClick={handleReset} variant="secondary">Reset</Button>
       </div>
 
-      <div className="p-4 bg-gradient-visualization rounded-xl border-2">
-        <div className="flex items-end gap-2 justify-center">
-          {currentStepData.array.map((val, idx) => (
-            <div key={idx} className={`w-9 h-9 flex items-center justify-center border rounded ${idx===currentStepData.left||idx===currentStepData.right? 'bg-primary/20 border-primary' : 'bg-card'}`}>
-              <span className="font-mono text-sm">{val}</span>
-            </div>
-          ))}
-        </div>
-        <div className="mt-2 text-sm">
-          Step: {currentStep} | Message: <span className="font-mono">{(steps[currentStep]?.message) || 'Ready'}</span>
-        </div>
-      </div>
-
-      <div className="flex justify-center">
-        <VisualizerControls
-          showMemory={showMemory}
-          onToggleMemory={setShowMemory}
-          voiceEnabled={voiceEnabled}
-          onToggleVoice={setVoiceEnabled}
-        />
-      </div>
-
-      {showMemory && (
-        <MemoryLayout
-          data={array}
-          title="Array Memory"
-          baseAddress={10200}
-          wordSize={4}
-        />
-      )}
-    </div>
-  );
-}
-
-  return (
-    <div className="space-y-6">
-      {/* Controls */}
-      <div className="flex flex-wrap gap-4 items-center">
-        <div className="flex gap-2">
-          <Button
-            onClick={isPlaying ? handlePause : handlePlay}
-            disabled={steps.length > 0 && currentStep >= steps.length - 1}
-            className="flex items-center gap-2"
-          >
-            {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-            {isPlaying ? 'Pause' : 'Play'}
-          </Button>
-          
-          <Button onClick={handleReset} variant="outline">
-            <RotateCcw className="h-4 w-4 mr-2" />
-            Reset
-          </Button>
-        </div>
-
-        <div className="flex gap-2 items-center">
-          <Input
-            value={inputArray}
-            onChange={(e) => setInputArray(e.target.value)}
-            placeholder="Enter sorted numbers"
-            className="w-48"
-          />
-          <Input
-            value={inputTarget}
-            onChange={(e) => setInputTarget(e.target.value)}
-            placeholder="Target sum"
-            className="w-24"
-          />
-          <Button onClick={handleInputChange} variant="outline">
-            Set Values
-          </Button>
-        </div>
-      </div>
-
-      {/* Progress */}
-      {steps.length > 0 && (
-        <div className="text-sm text-muted-foreground">
-          Step {currentStep + 1} of {steps.length}
-        </div>
-      )}
-
       {/* Target Display */}
       <div className="flex items-center justify-center gap-2 p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
         <Target className="h-5 w-5 text-blue-600" />
@@ -303,65 +223,94 @@ export function TwoPointersVisualizer() {
         </span>
       </div>
 
-      {/* Visualization */}
+      {/* Enhanced Visualization */}
       <div className="bg-gradient-to-br from-purple-50 to-pink-100 dark:from-purple-950 dark:to-pink-900 p-8 rounded-xl border-2 border-dashed border-purple-200 dark:border-purple-800">
         <div className="flex items-center justify-center gap-2 mb-8">
           {currentStepData.array.map((value, index) => {
             const isLeft = index === currentStepData.left;
             const isRight = index === currentStepData.right;
             const isBetween = index > currentStepData.left && index < currentStepData.right;
+            const isPair = currentStepData.found && (isLeft || isRight);
             
-            let bgColor = 'bg-gray-300 dark:bg-gray-600';
-            let textColor = 'text-gray-700 dark:text-gray-300';
-            
-            if (isLeft) {
-              bgColor = 'bg-blue-500';
-              textColor = 'text-white';
-            } else if (isRight) {
-              bgColor = 'bg-red-500';
-              textColor = 'text-white';
-            } else if (isBetween) {
-              bgColor = 'bg-yellow-200 dark:bg-yellow-800';
-              textColor = 'text-yellow-800 dark:text-yellow-200';
-            }
-
-            if (currentStepData.found && (isLeft || isRight)) {
-              bgColor = 'bg-green-500';
-              textColor = 'text-white';
-            }
-
             return (
-              <motion.div
+              <motion.div 
                 key={index}
-                className={`${bgColor} ${textColor} rounded-lg p-4 min-w-[60px] text-center font-bold relative`}
-                initial={{ scale: 1 }}
-                animate={{ 
-                  scale: (isLeft || isRight) ? 1.1 : 1,
-                  y: (isLeft || isRight) ? -5 : 0
-                }}
-                transition={{ duration: 0.3 }}
+                className="relative"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
               >
-                <div className="text-lg">{value}</div>
-                <div className="text-xs mt-1 opacity-75">[{index}]</div>
+                {/* Array element */}
+                <motion.div
+                  className={`
+                    w-12 h-12 flex items-center justify-center rounded-lg border-2 font-mono text-lg
+                    ${isPair ? 'bg-green-200 border-green-500 dark:bg-green-800 dark:border-green-500' : 
+                      isLeft ? 'bg-blue-200 border-blue-500 dark:bg-blue-800 dark:border-blue-500' : 
+                      isRight ? 'bg-red-200 border-red-500 dark:bg-red-800 dark:border-red-500' : 
+                      isBetween ? 'bg-yellow-50 border-yellow-200 dark:bg-yellow-950 dark:border-yellow-800' : 
+                      'bg-white border-gray-300 dark:bg-gray-800 dark:border-gray-600'}
+                    transition-all duration-300 ease-in-out
+                    ${isPair ? 'shadow-lg shadow-green-200 dark:shadow-green-900/30' : ''}
+                  `}
+                  animate={isPair ? { scale: [1, 1.1, 1] } : {}}
+                  transition={{ duration: 0.5, repeat: isPair ? Infinity : 0, repeatType: "reverse" }}
+                >
+                  {value}
+                </motion.div>
                 
+                {/* Index number */}
+                <div className="text-xs text-center text-muted-foreground mt-1">{index}</div>
+                
+                {/* Pointer indicators */}
                 {isLeft && (
                   <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-blue-500 text-white px-2 py-1 rounded text-xs">
-                      Left
+                    <div className="flex flex-col items-center">
+                      <motion.div 
+                        className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-blue-500"
+                        animate={{ y: [0, -4, 0] }}
+                        transition={{ duration: 1, repeat: Infinity }}
+                      />
+                      <div className="bg-blue-500 text-white text-xs px-2 py-0.5 rounded-sm">
+                        Left
+                      </div>
                     </div>
                   </div>
                 )}
                 
                 {isRight && (
                   <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-red-500 text-white px-2 py-1 rounded text-xs">
-                      Right
+                    <div className="flex flex-col items-center">
+                      <motion.div 
+                        className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-red-500"
+                        animate={{ y: [0, -4, 0] }}
+                        transition={{ duration: 1, repeat: Infinity }}
+                      />
+                      <div className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-sm">
+                        Right
+                      </div>
                     </div>
                   </div>
                 )}
               </motion.div>
             );
           })}
+        </div>
+
+        {/* Search space indicator */}
+        <div className="relative h-2 mx-auto mb-6 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden" style={{ width: `${currentStepData.array.length * 48}px` }}>
+          <motion.div 
+            className="absolute h-full bg-yellow-300 dark:bg-yellow-600"
+            style={{ 
+              left: `${currentStepData.left * 48}px`, 
+              width: `${(currentStepData.right - currentStepData.left + 1) * 48}px` 
+            }}
+            initial={{ width: '100%' }}
+            animate={{ 
+              left: `${currentStepData.left * 48}px`, 
+              width: `${(currentStepData.right - currentStepData.left + 1) * 48}px` 
+            }}
+            transition={{ duration: 0.5 }}
+          />
         </div>
 
         {/* Message */}
@@ -390,18 +339,23 @@ export function TwoPointersVisualizer() {
         </div>
       </div>
 
-      {/* Algorithm Info */}
-      <div className="bg-card border rounded-lg p-4">
-        <h4 className="font-semibold mb-2">Two Pointers Technique:</h4>
-        <ol className="list-decimal list-inside space-y-1 text-sm text-muted-foreground">
-          <li>Start with pointers at both ends of the sorted array</li>
-          <li>Calculate sum of elements at both pointers</li>
-          <li>If sum equals target, we found the pair</li>
-          <li>If sum is less than target, move left pointer right</li>
-          <li>If sum is greater than target, move right pointer left</li>
-          <li>Continue until pointers meet or pair is found</li>
-        </ol>
+      <div className="flex justify-center">
+        <VisualizerControls
+          showMemory={showMemory}
+          onToggleMemory={setShowMemory}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={setVoiceEnabled}
+        />
       </div>
+
+      {showMemory && (
+        <MemoryLayout
+          data={array}
+          title="Array Memory"
+          baseAddress={10200}
+          wordSize={4}
+        />
+      )}
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { Play, Pause, RotateCcw, Info } from 'lucide-react';
+import { Play, Pause, RotateCcw, Info, HardDrive } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
 import { MemoryLayout } from '@/components/memory-layout';

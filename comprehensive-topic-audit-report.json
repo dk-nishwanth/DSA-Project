@@ -1,0 +1,2142 @@
+{
+  "totalTopics": 91,
+  "completionPercentage": "67.9",
+  "passedChecks": 556,
+  "totalChecks": 819,
+  "issues": {
+    "missingVisualizer": [
+      {
+        "id": "array-rotation",
+        "title": "Array Rotation"
+      },
+      {
+        "id": "array-subarray-problems",
+        "title": "Subarray Problems"
+      },
+      {
+        "id": "string-search-kmp",
+        "title": "KMP Algorithm"
+      },
+      {
+        "id": "rabin-karp",
+        "title": "Rabin-Karp Algorithm"
+      },
+      {
+        "id": "z-algorithm",
+        "title": "Z Algorithm"
+      },
+      {
+        "id": "manacher-algorithm",
+        "title": "Manacher\\"
+      },
+      {
+        "id": "string-anagram",
+        "title": "Anagram Detection"
+      },
+      {
+        "id": "linked-list-singly",
+        "title": "Singly Linked List"
+      },
+      {
+        "id": "linked-list-doubly",
+        "title": "Doubly Linked List"
+      },
+      {
+        "id": "linked-list-circular",
+        "title": "Circular Linked List"
+      },
+      {
+        "id": "stack-operations",
+        "title": "Stack Operations"
+      },
+      {
+        "id": "queue-operations",
+        "title": "Queue Operations"
+      },
+      {
+        "id": "binary-tree",
+        "title": "Binary Tree Fundamentals"
+      },
+      {
+        "id": "heap-operations",
+        "title": "Heap Data Structure"
+      },
+      {
+        "id": "tree-inorder-traversal",
+        "title": "Inorder Traversal"
+      },
+      {
+        "id": "tree-preorder-traversal",
+        "title": "Preorder Traversal"
+      },
+      {
+        "id": "tree-postorder-traversal",
+        "title": "Postorder Traversal"
+      },
+      {
+        "id": "graph-dfs",
+        "title": "Depth First Search"
+      },
+      {
+        "id": "graph-bfs",
+        "title": "Breadth First Search"
+      },
+      {
+        "id": "dijkstra-algorithm",
+        "title": "Dijkstra\\"
+      },
+      {
+        "id": "bellman-ford",
+        "title": "Bellman-Ford Algorithm"
+      },
+      {
+        "id": "floyd-warshall",
+        "title": "Floyd-Warshall Algorithm"
+      },
+      {
+        "id": "kruskal-algorithm",
+        "title": "Kruskal\\"
+      },
+      {
+        "id": "prim-algorithm",
+        "title": "Prim\\"
+      },
+      {
+        "id": "topological-sort",
+        "title": "Topological Sort"
+      },
+      {
+        "id": "bubble-sort",
+        "title": "Bubble Sort"
+      },
+      {
+        "id": "merge-sort",
+        "title": "Merge Sort"
+      },
+      {
+        "id": "quick-sort",
+        "title": "Quick Sort"
+      },
+      {
+        "id": "heap-sort",
+        "title": "Heap Sort"
+      },
+      {
+        "id": "insertion-sort",
+        "title": "Insertion Sort"
+      },
+      {
+        "id": "selection-sort",
+        "title": "Selection Sort"
+      },
+      {
+        "id": "counting-sort",
+        "title": "Counting Sort"
+      },
+      {
+        "id": "radix-sort",
+        "title": "Radix Sort"
+      },
+      {
+        "id": "bucket-sort",
+        "title": "Bucket Sort"
+      },
+      {
+        "id": "linear-search",
+        "title": "Linear Search"
+      },
+      {
+        "id": "binary-search",
+        "title": "Binary Search"
+      },
+      {
+        "id": "interpolation-search",
+        "title": "Interpolation Search"
+      },
+      {
+        "id": "hash-table",
+        "title": "Hash Table"
+      },
+      {
+        "id": "hash-chaining",
+        "title": "Separate Chaining"
+      },
+      {
+        "id": "open-addressing",
+        "title": "Open Addressing"
+      },
+      {
+        "id": "recursion-basics",
+        "title": "Recursion Fundamentals"
+      },
+      {
+        "id": "tail-recursion",
+        "title": "Tail Recursion"
+      },
+      {
+        "id": "fibonacci",
+        "title": "Fibonacci Sequence"
+      },
+      {
+        "id": "dp-introduction",
+        "title": "DP Introduction"
+      },
+      {
+        "id": "longest-common-subsequence",
+        "title": "Longest Common Subsequence"
+      },
+      {
+        "id": "knapsack-problem",
+        "title": "0/1 Knapsack Problem"
+      },
+      {
+        "id": "longest-increasing-subsequence",
+        "title": "Longest Increasing Subsequence"
+      },
+      {
+        "id": "activity-selection",
+        "title": "Activity Selection"
+      },
+      {
+        "id": "huffman-coding",
+        "title": "Huffman Coding"
+      },
+      {
+        "id": "fractional-knapsack",
+        "title": "Fractional Knapsack"
+      },
+      {
+        "id": "backtracking-intro",
+        "title": "Backtracking Fundamentals"
+      },
+      {
+        "id": "n-queens",
+        "title": "N-Queens Problem"
+      },
+      {
+        "id": "sudoku-solver",
+        "title": "Sudoku Solver"
+      },
+      {
+        "id": "maze-solver",
+        "title": "Maze Path Finding"
+      },
+      {
+        "id": "generate-parentheses",
+        "title": "Generate Valid Parentheses"
+      },
+      {
+        "id": "word-search",
+        "title": "Word Search in Grid"
+      },
+      {
+        "id": "combination-sum",
+        "title": "Combination Sum"
+      },
+      {
+        "id": "trie",
+        "title": "Trie (Prefix Tree)"
+      },
+      {
+        "id": "segment-tree",
+        "title": "Segment Tree"
+      },
+      {
+        "id": "fenwick-tree",
+        "title": "Fenwick Tree (BIT)"
+      },
+      {
+        "id": "union-find",
+        "title": "Union-Find (Disjoint Set)"
+      },
+      {
+        "id": "avl-tree",
+        "title": "AVL Tree"
+      },
+      {
+        "id": "red-black-tree",
+        "title": "Red-Black Tree"
+      },
+      {
+        "id": "b-tree",
+        "title": "B-Tree"
+      },
+      {
+        "id": "splay-tree",
+        "title": "Splay Tree"
+      },
+      {
+        "id": "two-pointers-intro",
+        "title": "Two Pointers Technique"
+      },
+      {
+        "id": "two-sum",
+        "title": "Two Sum Problem"
+      },
+      {
+        "id": "three-sum",
+        "title": "Three Sum Problem"
+      },
+      {
+        "id": "container-water",
+        "title": "Container With Most Water"
+      },
+      {
+        "id": "remove-duplicates",
+        "title": "Remove Duplicates from Sorted Array"
+      },
+      {
+        "id": "palindrome-check",
+        "title": "Palindrome Verification"
+      },
+      {
+        "id": "merge-sorted-arrays",
+        "title": "Merge Two Sorted Arrays"
+      },
+      {
+        "id": "sliding-window-basics",
+        "title": "Sliding Window Technique"
+      },
+      {
+        "id": "sliding-window-maximum",
+        "title": "Sliding Window Maximum"
+      },
+      {
+        "id": "longest-substring",
+        "title": "Longest Substring Problems"
+      },
+      {
+        "id": "bit-basics",
+        "title": "Bit Manipulation Basics"
+      },
+      {
+        "id": "count-set-bits",
+        "title": "Count Set Bits"
+      },
+      {
+        "id": "power-of-two",
+        "title": "Power of Two Check"
+      },
+      {
+        "id": "single-number",
+        "title": "Single Number"
+      },
+      {
+        "id": "bit-subset",
+        "title": "Generate All Subsets"
+      },
+      {
+        "id": "fast-exponentiation",
+        "title": "Fast Exponentiation (Binary Exponentiation)"
+      },
+      {
+        "id": "combinatorics",
+        "title": "Combinatorics and Counting"
+      },
+      {
+        "id": "fibonacci-algorithms",
+        "title": "Fibonacci and Linear Recurrences"
+      }
+    ],
+    "missingVoiceExplanation": [
+      {
+        "id": "tree-inorder-traversal",
+        "title": "Inorder Traversal"
+      },
+      {
+        "id": "graph-bfs",
+        "title": "Breadth First Search"
+      },
+      {
+        "id": "bellman-ford",
+        "title": "Bellman-Ford Algorithm"
+      },
+      {
+        "id": "floyd-warshall",
+        "title": "Floyd-Warshall Algorithm"
+      },
+      {
+        "id": "kruskal-algorithm",
+        "title": "Kruskal\\"
+      },
+      {
+        "id": "prim-algorithm",
+        "title": "Prim\\"
+      },
+      {
+        "id": "topological-sort",
+        "title": "Topological Sort"
+      },
+      {
+        "id": "hash-chaining",
+        "title": "Separate Chaining"
+      },
+      {
+        "id": "open-addressing",
+        "title": "Open Addressing"
+      },
+      {
+        "id": "tail-recursion",
+        "title": "Tail Recursion"
+      },
+      {
+        "id": "fibonacci",
+        "title": "Fibonacci Sequence"
+      },
+      {
+        "id": "huffman-coding",
+        "title": "Huffman Coding"
+      },
+      {
+        "id": "fractional-knapsack",
+        "title": "Fractional Knapsack"
+      },
+      {
+        "id": "n-queens",
+        "title": "N-Queens Problem"
+      },
+      {
+        "id": "sudoku-solver",
+        "title": "Sudoku Solver"
+      },
+      {
+        "id": "maze-solver",
+        "title": "Maze Path Finding"
+      },
+      {
+        "id": "generate-parentheses",
+        "title": "Generate Valid Parentheses"
+      },
+      {
+        "id": "word-search",
+        "title": "Word Search in Grid"
+      },
+      {
+        "id": "combination-sum",
+        "title": "Combination Sum"
+      },
+      {
+        "id": "trie",
+        "title": "Trie (Prefix Tree)"
+      },
+      {
+        "id": "palindrome-check",
+        "title": "Palindrome Verification"
+      }
+    ],
+    "missingQuizQuestions": [
+      {
+        "id": "tree-inorder-traversal",
+        "title": "Inorder Traversal"
+      },
+      {
+        "id": "tree-postorder-traversal",
+        "title": "Postorder Traversal"
+      },
+      {
+        "id": "graph-dfs",
+        "title": "Depth First Search"
+      },
+      {
+        "id": "graph-bfs",
+        "title": "Breadth First Search"
+      },
+      {
+        "id": "bellman-ford",
+        "title": "Bellman-Ford Algorithm"
+      },
+      {
+        "id": "floyd-warshall",
+        "title": "Floyd-Warshall Algorithm"
+      },
+      {
+        "id": "kruskal-algorithm",
+        "title": "Kruskal\\"
+      },
+      {
+        "id": "prim-algorithm",
+        "title": "Prim\\"
+      },
+      {
+        "id": "topological-sort",
+        "title": "Topological Sort"
+      },
+      {
+        "id": "linear-search",
+        "title": "Linear Search"
+      },
+      {
+        "id": "hash-chaining",
+        "title": "Separate Chaining"
+      },
+      {
+        "id": "open-addressing",
+        "title": "Open Addressing"
+      },
+      {
+        "id": "tail-recursion",
+        "title": "Tail Recursion"
+      },
+      {
+        "id": "fibonacci",
+        "title": "Fibonacci Sequence"
+      },
+      {
+        "id": "activity-selection",
+        "title": "Activity Selection"
+      },
+      {
+        "id": "huffman-coding",
+        "title": "Huffman Coding"
+      },
+      {
+        "id": "fractional-knapsack",
+        "title": "Fractional Knapsack"
+      },
+      {
+        "id": "n-queens",
+        "title": "N-Queens Problem"
+      },
+      {
+        "id": "sudoku-solver",
+        "title": "Sudoku Solver"
+      },
+      {
+        "id": "maze-solver",
+        "title": "Maze Path Finding"
+      },
+      {
+        "id": "generate-parentheses",
+        "title": "Generate Valid Parentheses"
+      },
+      {
+        "id": "word-search",
+        "title": "Word Search in Grid"
+      },
+      {
+        "id": "combination-sum",
+        "title": "Combination Sum"
+      },
+      {
+        "id": "trie",
+        "title": "Trie (Prefix Tree)"
+      },
+      {
+        "id": "palindrome-check",
+        "title": "Palindrome Verification"
+      },
+      {
+        "id": "number-theory-basics",
+        "title": "Number Theory Fundamentals"
+      },
+      {
+        "id": "prime-algorithms",
+        "title": "Prime Number Algorithms"
+      },
+      {
+        "id": "fast-exponentiation",
+        "title": "Fast Exponentiation (Binary Exponentiation)"
+      },
+      {
+        "id": "modular-arithmetic",
+        "title": "Modular Arithmetic"
+      },
+      {
+        "id": "combinatorics",
+        "title": "Combinatorics and Counting"
+      },
+      {
+        "id": "fibonacci-algorithms",
+        "title": "Fibonacci and Linear Recurrences"
+      }
+    ],
+    "insufficientQuizQuestions": [
+      {
+        "id": "red-black-tree",
+        "title": "Red-Black Tree",
+        "count": 3
+      },
+      {
+        "id": "b-tree",
+        "title": "B-Tree",
+        "count": 3
+      },
+      {
+        "id": "splay-tree",
+        "title": "Splay Tree",
+        "count": 3
+      }
+    ],
+    "missingPseudocode": [
+      {
+        "id": "tree-inorder-traversal",
+        "title": "Inorder Traversal"
+      },
+      {
+        "id": "tree-postorder-traversal",
+        "title": "Postorder Traversal"
+      },
+      {
+        "id": "graph-bfs",
+        "title": "Breadth First Search"
+      },
+      {
+        "id": "bellman-ford",
+        "title": "Bellman-Ford Algorithm"
+      },
+      {
+        "id": "floyd-warshall",
+        "title": "Floyd-Warshall Algorithm"
+      },
+      {
+        "id": "kruskal-algorithm",
+        "title": "Kruskal\\"
+      },
+      {
+        "id": "prim-algorithm",
+        "title": "Prim\\"
+      },
+      {
+        "id": "topological-sort",
+        "title": "Topological Sort"
+      },
+      {
+        "id": "hash-chaining",
+        "title": "Separate Chaining"
+      },
+      {
+        "id": "open-addressing",
+        "title": "Open Addressing"
+      },
+      {
+        "id": "tail-recursion",
+        "title": "Tail Recursion"
+      },
+      {
+        "id": "fibonacci",
+        "title": "Fibonacci Sequence"
+      },
+      {
+        "id": "huffman-coding",
+        "title": "Huffman Coding"
+      },
+      {
+        "id": "fractional-knapsack",
+        "title": "Fractional Knapsack"
+      },
+      {
+        "id": "n-queens",
+        "title": "N-Queens Problem"
+      },
+      {
+        "id": "sudoku-solver",
+        "title": "Sudoku Solver"
+      },
+      {
+        "id": "maze-solver",
+        "title": "Maze Path Finding"
+      },
+      {
+        "id": "generate-parentheses",
+        "title": "Generate Valid Parentheses"
+      },
+      {
+        "id": "word-search",
+        "title": "Word Search in Grid"
+      },
+      {
+        "id": "combination-sum",
+        "title": "Combination Sum"
+      },
+      {
+        "id": "trie",
+        "title": "Trie (Prefix Tree)"
+      },
+      {
+        "id": "palindrome-check",
+        "title": "Palindrome Verification"
+      }
+    ],
+    "missingKeyConcepts": [
+      {
+        "id": "tree-inorder-traversal",
+        "title": "Inorder Traversal"
+      },
+      {
+        "id": "tree-postorder-traversal",
+        "title": "Postorder Traversal"
+      },
+      {
+        "id": "graph-bfs",
+        "title": "Breadth First Search"
+      },
+      {
+        "id": "bellman-ford",
+        "title": "Bellman-Ford Algorithm"
+      },
+      {
+        "id": "floyd-warshall",
+        "title": "Floyd-Warshall Algorithm"
+      },
+      {
+        "id": "kruskal-algorithm",
+        "title": "Kruskal\\"
+      },
+      {
+        "id": "prim-algorithm",
+        "title": "Prim\\"
+      },
+      {
+        "id": "topological-sort",
+        "title": "Topological Sort"
+      },
+      {
+        "id": "hash-chaining",
+        "title": "Separate Chaining"
+      },
+      {
+        "id": "open-addressing",
+        "title": "Open Addressing"
+      },
+      {
+        "id": "tail-recursion",
+        "title": "Tail Recursion"
+      },
+      {
+        "id": "fibonacci",
+        "title": "Fibonacci Sequence"
+      },
+      {
+        "id": "huffman-coding",
+        "title": "Huffman Coding"
+      },
+      {
+        "id": "fractional-knapsack",
+        "title": "Fractional Knapsack"
+      },
+      {
+        "id": "n-queens",
+        "title": "N-Queens Problem"
+      },
+      {
+        "id": "sudoku-solver",
+        "title": "Sudoku Solver"
+      },
+      {
+        "id": "maze-solver",
+        "title": "Maze Path Finding"
+      },
+      {
+        "id": "generate-parentheses",
+        "title": "Generate Valid Parentheses"
+      },
+      {
+        "id": "word-search",
+        "title": "Word Search in Grid"
+      },
+      {
+        "id": "combination-sum",
+        "title": "Combination Sum"
+      },
+      {
+        "id": "trie",
+        "title": "Trie (Prefix Tree)"
+      },
+      {
+        "id": "palindrome-check",
+        "title": "Palindrome Verification"
+      }
+    ],
+    "missingImplementation": [
+      {
+        "id": "tree-inorder-traversal",
+        "title": "Inorder Traversal"
+      },
+      {
+        "id": "tree-postorder-traversal",
+        "title": "Postorder Traversal"
+      },
+      {
+        "id": "graph-bfs",
+        "title": "Breadth First Search"
+      },
+      {
+        "id": "bellman-ford",
+        "title": "Bellman-Ford Algorithm"
+      },
+      {
+        "id": "floyd-warshall",
+        "title": "Floyd-Warshall Algorithm"
+      },
+      {
+        "id": "kruskal-algorithm",
+        "title": "Kruskal\\"
+      },
+      {
+        "id": "prim-algorithm",
+        "title": "Prim\\"
+      },
+      {
+        "id": "topological-sort",
+        "title": "Topological Sort"
+      },
+      {
+        "id": "hash-chaining",
+        "title": "Separate Chaining"
+      },
+      {
+        "id": "open-addressing",
+        "title": "Open Addressing"
+      },
+      {
+        "id": "tail-recursion",
+        "title": "Tail Recursion"
+      },
+      {
+        "id": "fibonacci",
+        "title": "Fibonacci Sequence"
+      },
+      {
+        "id": "huffman-coding",
+        "title": "Huffman Coding"
+      },
+      {
+        "id": "fractional-knapsack",
+        "title": "Fractional Knapsack"
+      },
+      {
+        "id": "n-queens",
+        "title": "N-Queens Problem"
+      },
+      {
+        "id": "sudoku-solver",
+        "title": "Sudoku Solver"
+      },
+      {
+        "id": "maze-solver",
+        "title": "Maze Path Finding"
+      },
+      {
+        "id": "generate-parentheses",
+        "title": "Generate Valid Parentheses"
+      },
+      {
+        "id": "word-search",
+        "title": "Word Search in Grid"
+      },
+      {
+        "id": "combination-sum",
+        "title": "Combination Sum"
+      },
+      {
+        "id": "trie",
+        "title": "Trie (Prefix Tree)"
+      },
+      {
+        "id": "palindrome-check",
+        "title": "Palindrome Verification"
+      }
+    ],
+    "incorrectDefinitionFormat": [
+      {
+        "id": "heap-operations",
+        "title": "Heap Data Structure"
+      }
+    ],
+    "missingRealWorldApps": [
+      {
+        "id": "tree-inorder-traversal",
+        "title": "Inorder Traversal"
+      },
+      {
+        "id": "graph-bfs",
+        "title": "Breadth First Search"
+      },
+      {
+        "id": "bellman-ford",
+        "title": "Bellman-Ford Algorithm"
+      },
+      {
+        "id": "floyd-warshall",
+        "title": "Floyd-Warshall Algorithm"
+      },
+      {
+        "id": "kruskal-algorithm",
+        "title": "Kruskal\\"
+      },
+      {
+        "id": "prim-algorithm",
+        "title": "Prim\\"
+      },
+      {
+        "id": "topological-sort",
+        "title": "Topological Sort"
+      },
+      {
+        "id": "hash-chaining",
+        "title": "Separate Chaining"
+      },
+      {
+        "id": "open-addressing",
+        "title": "Open Addressing"
+      },
+      {
+        "id": "tail-recursion",
+        "title": "Tail Recursion"
+      },
+      {
+        "id": "fibonacci",
+        "title": "Fibonacci Sequence"
+      },
+      {
+        "id": "huffman-coding",
+        "title": "Huffman Coding"
+      },
+      {
+        "id": "fractional-knapsack",
+        "title": "Fractional Knapsack"
+      },
+      {
+        "id": "n-queens",
+        "title": "N-Queens Problem"
+      },
+      {
+        "id": "sudoku-solver",
+        "title": "Sudoku Solver"
+      },
+      {
+        "id": "maze-solver",
+        "title": "Maze Path Finding"
+      },
+      {
+        "id": "generate-parentheses",
+        "title": "Generate Valid Parentheses"
+      },
+      {
+        "id": "word-search",
+        "title": "Word Search in Grid"
+      },
+      {
+        "id": "combination-sum",
+        "title": "Combination Sum"
+      },
+      {
+        "id": "trie",
+        "title": "Trie (Prefix Tree)"
+      },
+      {
+        "id": "palindrome-check",
+        "title": "Palindrome Verification"
+      },
+      {
+        "id": "number-theory-basics",
+        "title": "Number Theory Fundamentals"
+      },
+      {
+        "id": "prime-algorithms",
+        "title": "Prime Number Algorithms"
+      },
+      {
+        "id": "fast-exponentiation",
+        "title": "Fast Exponentiation (Binary Exponentiation)"
+      },
+      {
+        "id": "modular-arithmetic",
+        "title": "Modular Arithmetic"
+      },
+      {
+        "id": "combinatorics",
+        "title": "Combinatorics and Counting"
+      },
+      {
+        "id": "fibonacci-algorithms",
+        "title": "Fibonacci and Linear Recurrences"
+      }
+    ]
+  },
+  "topics": [
+    {
+      "id": "array-basics",
+      "title": "Array Fundamentals",
+      "hasVisualizer": true,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "array-rotation",
+      "title": "Array Rotation",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "array-subarray-problems",
+      "title": "Subarray Problems",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 6,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "string-palindrome",
+      "title": "Palindrome Check",
+      "hasVisualizer": true,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "string-search-kmp",
+      "title": "KMP Algorithm",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "rabin-karp",
+      "title": "Rabin-Karp Algorithm",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "z-algorithm",
+      "title": "Z Algorithm",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "manacher-algorithm",
+      "title": "Manacher\\",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "string-anagram",
+      "title": "Anagram Detection",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "linked-list-singly",
+      "title": "Singly Linked List",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "linked-list-doubly",
+      "title": "Doubly Linked List",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "linked-list-circular",
+      "title": "Circular Linked List",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "stack-operations",
+      "title": "Stack Operations",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "queue-operations",
+      "title": "Queue Operations",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "binary-tree",
+      "title": "Binary Tree Fundamentals",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "binary-search-tree",
+      "title": "Binary Search Tree",
+      "hasVisualizer": true,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "heap-operations",
+      "title": "Heap Data Structure",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": false,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "tree-inorder-traversal",
+      "title": "Inorder Traversal",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "tree-preorder-traversal",
+      "title": "Preorder Traversal",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "tree-postorder-traversal",
+      "title": "Postorder Traversal",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "graph-dfs",
+      "title": "Depth First Search",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "graph-bfs",
+      "title": "Breadth First Search",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "dijkstra-algorithm",
+      "title": "Dijkstra\\",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "bellman-ford",
+      "title": "Bellman-Ford Algorithm",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "floyd-warshall",
+      "title": "Floyd-Warshall Algorithm",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "kruskal-algorithm",
+      "title": "Kruskal\\",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "prim-algorithm",
+      "title": "Prim\\",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "topological-sort",
+      "title": "Topological Sort",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "bubble-sort",
+      "title": "Bubble Sort",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "merge-sort",
+      "title": "Merge Sort",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "quick-sort",
+      "title": "Quick Sort",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "heap-sort",
+      "title": "Heap Sort",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "insertion-sort",
+      "title": "Insertion Sort",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "selection-sort",
+      "title": "Selection Sort",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "counting-sort",
+      "title": "Counting Sort",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "radix-sort",
+      "title": "Radix Sort",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "bucket-sort",
+      "title": "Bucket Sort",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "linear-search",
+      "title": "Linear Search",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "binary-search",
+      "title": "Binary Search",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "interpolation-search",
+      "title": "Interpolation Search",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "hash-table",
+      "title": "Hash Table",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "hash-chaining",
+      "title": "Separate Chaining",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "open-addressing",
+      "title": "Open Addressing",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "recursion-basics",
+      "title": "Recursion Fundamentals",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "tail-recursion",
+      "title": "Tail Recursion",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "fibonacci",
+      "title": "Fibonacci Sequence",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "dp-introduction",
+      "title": "DP Introduction",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "longest-common-subsequence",
+      "title": "Longest Common Subsequence",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "knapsack-problem",
+      "title": "0/1 Knapsack Problem",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "longest-increasing-subsequence",
+      "title": "Longest Increasing Subsequence",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "activity-selection",
+      "title": "Activity Selection",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "huffman-coding",
+      "title": "Huffman Coding",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "fractional-knapsack",
+      "title": "Fractional Knapsack",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "backtracking-intro",
+      "title": "Backtracking Fundamentals",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "n-queens",
+      "title": "N-Queens Problem",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "sudoku-solver",
+      "title": "Sudoku Solver",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "maze-solver",
+      "title": "Maze Path Finding",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "generate-parentheses",
+      "title": "Generate Valid Parentheses",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "word-search",
+      "title": "Word Search in Grid",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "combination-sum",
+      "title": "Combination Sum",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "trie",
+      "title": "Trie (Prefix Tree)",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "segment-tree",
+      "title": "Segment Tree",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "fenwick-tree",
+      "title": "Fenwick Tree (BIT)",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "union-find",
+      "title": "Union-Find (Disjoint Set)",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "avl-tree",
+      "title": "AVL Tree",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "red-black-tree",
+      "title": "Red-Black Tree",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 3,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "b-tree",
+      "title": "B-Tree",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 3,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "splay-tree",
+      "title": "Splay Tree",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 3,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "two-pointers-intro",
+      "title": "Two Pointers Technique",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "two-sum",
+      "title": "Two Sum Problem",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "three-sum",
+      "title": "Three Sum Problem",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "container-water",
+      "title": "Container With Most Water",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "remove-duplicates",
+      "title": "Remove Duplicates from Sorted Array",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "palindrome-check",
+      "title": "Palindrome Verification",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": false,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": false,
+      "hasKeyConcepts": false,
+      "hasImplementation": false,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "merge-sorted-arrays",
+      "title": "Merge Two Sorted Arrays",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "sliding-window-basics",
+      "title": "Sliding Window Technique",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "sliding-window-maximum",
+      "title": "Sliding Window Maximum",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "longest-substring",
+      "title": "Longest Substring Problems",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "bit-basics",
+      "title": "Bit Manipulation Basics",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "count-set-bits",
+      "title": "Count Set Bits",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "power-of-two",
+      "title": "Power of Two Check",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "single-number",
+      "title": "Single Number",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "bit-subset",
+      "title": "Generate All Subsets",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "mathematical-algorithms-intro",
+      "title": "Mathematical Algorithms Overview",
+      "hasVisualizer": true,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    },
+    {
+      "id": "number-theory-basics",
+      "title": "Number Theory Fundamentals",
+      "hasVisualizer": true,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "prime-algorithms",
+      "title": "Prime Number Algorithms",
+      "hasVisualizer": true,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "fast-exponentiation",
+      "title": "Fast Exponentiation (Binary Exponentiation)",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "modular-arithmetic",
+      "title": "Modular Arithmetic",
+      "hasVisualizer": true,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "combinatorics",
+      "title": "Combinatorics and Counting",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "fibonacci-algorithms",
+      "title": "Fibonacci and Linear Recurrences",
+      "hasVisualizer": false,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": false
+    },
+    {
+      "id": "mathematical-induction",
+      "title": "Mathematical Induction",
+      "hasVisualizer": true,
+      "hasVoiceExplanation": true,
+      "hasQuizQuestions": true,
+      "quizCount": 5,
+      "hasPseudocode": true,
+      "hasKeyConcepts": true,
+      "hasImplementation": true,
+      "hasCorrectFormat": true,
+      "hasRealWorldApps": true
+    }
+  ]
+}

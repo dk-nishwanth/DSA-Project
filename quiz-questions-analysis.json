@@ -1,0 +1,624 @@
+{
+  "totalTopics": 88,
+  "topicsWithSufficientQuizzes": 0,
+  "topicsNeedingQuizzes": 88,
+  "topicsNeedingQuizzesDetails": [
+    {
+      "id": "array-basics",
+      "title": "Array Fundamentals",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "array-rotation",
+      "title": "Array Rotation",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "array-subarray-problems",
+      "title": "Subarray Problems",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "string-palindrome",
+      "title": "Palindrome Check",
+      "hasQuizQuestions": true,
+      "quizCount": 1,
+      "needsQuizzes": true
+    },
+    {
+      "id": "string-search-kmp",
+      "title": "KMP Algorithm",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "rabin-karp",
+      "title": "Rabin-Karp Algorithm",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "z-algorithm",
+      "title": "Z Algorithm",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "manacher-algorithm",
+      "title": "Manacher\\",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "string-anagram",
+      "title": "Anagram Detection",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "linked-list-singly",
+      "title": "Singly Linked List",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "linked-list-doubly",
+      "title": "Doubly Linked List",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "linked-list-circular",
+      "title": "Circular Linked List",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "stack-operations",
+      "title": "Stack Operations",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "queue-operations",
+      "title": "Queue Operations",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "binary-tree",
+      "title": "Binary Tree Fundamentals",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "binary-search-tree",
+      "title": "Binary Search Tree",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "heap-operations",
+      "title": "Heap Data Structure",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "tree-inorder-traversal",
+      "title": "Inorder Traversal",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "tree-preorder-traversal",
+      "title": "Preorder Traversal",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "tree-postorder-traversal",
+      "title": "Postorder Traversal",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "graph-dfs",
+      "title": "Depth First Search",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "graph-bfs",
+      "title": "Breadth First Search",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "dijkstra-algorithm",
+      "title": "Dijkstra\\",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "bellman-ford",
+      "title": "Bellman-Ford Algorithm",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "floyd-warshall",
+      "title": "Floyd-Warshall Algorithm",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "kruskal-algorithm",
+      "title": "Kruskal\\",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "prim-algorithm",
+      "title": "Prim\\",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "topological-sort",
+      "title": "Topological Sort",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "bubble-sort",
+      "title": "Bubble Sort",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "merge-sort",
+      "title": "Merge Sort",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "quick-sort",
+      "title": "Quick Sort",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "heap-sort",
+      "title": "Heap Sort",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "insertion-sort",
+      "title": "Insertion Sort",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "selection-sort",
+      "title": "Selection Sort",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "counting-sort",
+      "title": "Counting Sort",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "radix-sort",
+      "title": "Radix Sort",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "bucket-sort",
+      "title": "Bucket Sort",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "linear-search",
+      "title": "Linear Search",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "binary-search",
+      "title": "Binary Search",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "interpolation-search",
+      "title": "Interpolation Search",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "hash-table",
+      "title": "Hash Table",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "hash-chaining",
+      "title": "Separate Chaining",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "open-addressing",
+      "title": "Open Addressing",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "tail-recursion",
+      "title": "Tail Recursion",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "fibonacci",
+      "title": "Fibonacci Sequence",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "longest-common-subsequence",
+      "title": "Longest Common Subsequence",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "knapsack-problem",
+      "title": "0/1 Knapsack Problem",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "longest-increasing-subsequence",
+      "title": "Longest Increasing Subsequence",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "activity-selection",
+      "title": "Activity Selection",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "huffman-coding",
+      "title": "Huffman Coding",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "fractional-knapsack",
+      "title": "Fractional Knapsack",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "backtracking-intro",
+      "title": "Backtracking Fundamentals",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "n-queens",
+      "title": "N-Queens Problem",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "sudoku-solver",
+      "title": "Sudoku Solver",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "maze-solver",
+      "title": "Maze Path Finding",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "generate-parentheses",
+      "title": "Generate Valid Parentheses",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "word-search",
+      "title": "Word Search in Grid",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "combination-sum",
+      "title": "Combination Sum",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "trie",
+      "title": "Trie (Prefix Tree)",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "segment-tree",
+      "title": "Segment Tree",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "fenwick-tree",
+      "title": "Fenwick Tree (BIT)",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "union-find",
+      "title": "Union-Find (Disjoint Set)",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "avl-tree",
+      "title": "AVL Tree",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "red-black-tree",
+      "title": "Red-Black Tree",
+      "hasQuizQuestions": true,
+      "quizCount": 1,
+      "needsQuizzes": true
+    },
+    {
+      "id": "b-tree",
+      "title": "B-Tree",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "splay-tree",
+      "title": "Splay Tree",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "two-pointers-intro",
+      "title": "Two Pointers Technique",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "two-sum",
+      "title": "Two Sum Problem",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "three-sum",
+      "title": "Three Sum Problem",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "container-water",
+      "title": "Container With Most Water",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "remove-duplicates",
+      "title": "Remove Duplicates from Sorted Array",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "palindrome-check",
+      "title": "Palindrome Verification",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "merge-sorted-arrays",
+      "title": "Merge Two Sorted Arrays",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "sliding-window-basics",
+      "title": "Sliding Window Technique",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "sliding-window-maximum",
+      "title": "Sliding Window Maximum",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "longest-substring",
+      "title": "Longest Substring Problems",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "bit-basics",
+      "title": "Bit Manipulation Basics",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "count-set-bits",
+      "title": "Count Set Bits",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "power-of-two",
+      "title": "Power of Two Check",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "single-number",
+      "title": "Single Number",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "bit-subset",
+      "title": "Generate All Subsets",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "mathematical-algorithms-intro",
+      "title": "Mathematical Algorithms Overview",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "number-theory-basics",
+      "title": "Number Theory Fundamentals",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "prime-algorithms",
+      "title": "Prime Number Algorithms",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "fast-exponentiation",
+      "title": "Fast Exponentiation (Binary Exponentiation)",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "modular-arithmetic",
+      "title": "Modular Arithmetic",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "combinatorics",
+      "title": "Combinatorics and Counting",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    },
+    {
+      "id": "fibonacci-algorithms",
+      "title": "Fibonacci and Linear Recurrences",
+      "hasQuizQuestions": false,
+      "quizCount": 0,
+      "needsQuizzes": true
+    }
+  ],
+  "topicsWithQuizzesDetails": []
+}

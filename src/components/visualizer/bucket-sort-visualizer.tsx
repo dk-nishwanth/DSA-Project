@@ -1,204 +1,113 @@
-import React, { useState, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { VisualizerControls } from '@/components/visualizer/visualizer-controls';
-import { MemoryLayout } from '@/components/memory-layout';
-import { useVisualizerVoice } from '@/hooks/useVisualizerVoice';
+import React, { useState } from 'react';
+import { Play, RotateCcw } from 'lucide-react';
 
-export function BucketSortVisualizer() {
-  const [arr, setArr] = useState<number[]>([0.78, 0.17, 0.39, 0.26, 0.72, 0.94, 0.21, 0.12, 0.23, 0.68]);
-  const [input, setInput] = useState('0.78,0.17,0.39,0.26,0.72,0.94,0.21,0.12,0.23,0.68');
-  const [isSorting, setIsSorting] = useState(false);
-  const [buckets, setBuckets] = useState<number[][]>(Array.from({length:10},()=>[]));
-  const [showMemory, setShowMemory] = useState(false);
-  const [currentStep, setCurrentStep] = useState('');
-  
-  const {
-    voiceEnabled,
-    setVoiceEnabled,
-    speed,
-    setSpeed,
-    isSpeaking,
-    pauseSpeech,
-    resumeSpeech,
-    stopSpeech,
-    speakStep,
-    speakOperation,
-    speakResult
-  } = useVisualizerVoice({ minInterval: 2000 });
+export const BucketSortVisualizer: React.FC = () => {
+  const [array, setArray] = useState([0.78, 0.17, 0.39, 0.26, 0.72, 0.94, 0.21, 0.12, 0.23, 0.68]);
+  const [buckets, setBuckets] = useState<number[][]>([]);
+  const [sorted, setSorted] = useState<number[]>([]);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
-
-  const updateFromInput = useCallback(() => {
-    const nums = input.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n) && n >= 0 && n <= 1);
-    if (nums.length) setArr(nums);
-  }, [input]);
-
-  const insertionSort = (bucket: number[]) => {
-    for (let i = 1; i < bucket.length; i++) {
-      const key = bucket[i];
-      let j = i - 1;
-      while (j >= 0 && bucket[j] > key) {
-        bucket[j + 1] = bucket[j];
-        j--;
-      }
-      bucket[j + 1] = key;
-    }
+  const reset = () => {
+    setBuckets([]);
+    setSorted([]);
+    setIsPlaying(false);
   };
 
-  const run = useCallback(async () => {
-    if (isSorting) return;
-    setIsSorting(true);
-    
-    speakOperation("Bucket Sort", "Starting bucket sort. We'll distribute elements into buckets based on their value ranges, then sort each bucket individually.");
-    setCurrentStep("Distributing elements into buckets...");
+  const sort = async () => {
+    setIsPlaying(true);
+    const n = array.length;
+    const bkts: number[][] = Array.from({ length: n }, () => []);
 
-    const n = arr.length;
-    const bucketArray: number[][] = Array.from({length: n}, () => []);
-
-    // Distribute elements into buckets
+    // Distribute into buckets
     for (let i = 0; i < n; i++) {
-      const bucketIndex = Math.floor(n * arr[i]);
-      bucketArray[bucketIndex].push(arr[i]);
-      setBuckets([...bucketArray]);
-      setCurrentStep(`Placing ${arr[i].toFixed(2)} into bucket ${bucketIndex}`);
-      speakStep("", `Placing element ${arr[i].toFixed(2)} into bucket ${bucketIndex} based on its value range`, i + 1, n);
-      await sleep(300);
+      const bucketIndex = Math.floor(array[i] * n);
+      bkts[bucketIndex].push(array[i]);
+      setBuckets([...bkts]);
+      await new Promise(resolve => setTimeout(resolve, 400));
     }
 
-    setCurrentStep("Sorting individual buckets using insertion sort...");
-    // Sort individual buckets
+    // Sort each bucket
     for (let i = 0; i < n; i++) {
-      if (bucketArray[i].length > 0) {
-        setCurrentStep(`Sorting bucket ${i} with ${bucketArray[i].length} elements`);
-        speakStep("", `Sorting bucket ${i} containing ${bucketArray[i].length} elements using insertion sort`, i + 1, n);
-        insertionSort(bucketArray[i]);
-        setBuckets([...bucketArray]);
-        await sleep(200);
+      if (bkts[i].length > 0) {
+        bkts[i].sort((a, b) => a - b);
+        setBuckets([...bkts]);
+        await new Promise(resolve => setTimeout(resolve, 400));
       }
     }
 
-    setCurrentStep("Concatenating all sorted buckets...");
-    // Concatenate all buckets
+    // Concatenate
     const result: number[] = [];
     for (let i = 0; i < n; i++) {
-      result.push(...bucketArray[i]);
+      result.push(...bkts[i]);
+      setSorted([...result]);
+      await new Promise(resolve => setTimeout(resolve, 300));
     }
-    
-    setArr(result);
-    setBuckets(Array.from({length: n}, () => []));
-    setCurrentStep("Bucket sort completed!");
-    speakResult("Bucket sort completed! All elements are now sorted by combining the sorted buckets in order.");
-    
-    setTimeout(() => {
-      setIsSorting(false);
-      setCurrentStep('');
-    }, 2000);
-  }, [isSorting, arr, speakOperation, speakStep, speakResult]);
+
+    setIsPlaying(false);
+  };
 
   return (
-    <div className="w-full space-y-4">
-      {/* Header */}
-      <div className="text-center">
-        <h2 className="text-2xl font-bold mb-2">Bucket Sort Visualizer</h2>
-        <p className="text-muted-foreground">
-          Watch how bucket sort distributes elements into buckets and sorts them individually
-        </p>
+    <div className="p-6 bg-white rounded-lg shadow-md">
+      <h3 className="text-xl font-bold mb-4">Bucket Sort</h3>
+      
+      <div className="flex gap-2 mb-4">
+        <button onClick={sort} disabled={isPlaying} className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-300">
+          <Play size={16} /> Sort
+        </button>
+        <button onClick={reset} className="flex items-center gap-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
+          <RotateCcw size={16} /> Reset
+        </button>
       </div>
 
-      {/* Controls */}
-      <div className="flex flex-wrap gap-3 p-4 bg-muted/30 rounded-xl border">
-        <Input 
-          className="w-72" 
-          value={input} 
-          onChange={e => setInput(e.target.value)}
-          placeholder="Enter decimal numbers (0-1) separated by commas"
-        />
-        <Button onClick={updateFromInput} disabled={isSorting}>Update</Button>
-        <Button onClick={run} disabled={isSorting}>Run Bucket Sort</Button>
-      </div>
-
-      {/* Array Visualization */}
-      <div className="p-6 bg-gradient-visualization rounded-xl border-2 border-primary/20">
-        <h3 className="text-lg font-semibold mb-4 text-center">Array Visualization</h3>
-        <div className="flex gap-2 items-end justify-center">
-          {arr.map((v, i) => (
-            <div key={i} className="w-16 text-center text-xs font-mono border rounded bg-card p-2">
-              {v.toFixed(2)}
+      <div className="mb-4">
+        <p className="text-sm font-semibold mb-2">Original Array:</p>
+        <div className="flex gap-2">
+          {array.map((val, idx) => (
+            <div key={idx} className="px-3 py-2 bg-gray-100 border rounded font-mono text-sm">
+              {val.toFixed(2)}
             </div>
           ))}
         </div>
       </div>
 
-      {/* Buckets Visualization */}
-      <div className="p-6 bg-gradient-visualization rounded-xl border-2 border-primary/20">
-        <h3 className="text-lg font-semibold mb-4 text-center">Buckets</h3>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-          {buckets.map((bucket, bucketIndex) => (
-            <div key={bucketIndex} className="p-2 border rounded bg-card">
-              <div className="text-xs text-muted-foreground mb-1">Bucket {bucketIndex}</div>
-              <div className="flex flex-col gap-1">
-                {bucket.map((value, idx) => (
-                  <div key={idx} className="px-2 py-1 border rounded text-xs font-mono bg-blue-100">
-                    {value.toFixed(2)}
-                  </div>
-                ))}
-                {bucket.length === 0 && (
-                  <div className="px-2 py-1 text-xs text-muted-foreground">Empty</div>
-                )}
+      {buckets.length > 0 && (
+        <div className="mb-4">
+          <p className="text-sm font-semibold mb-2">Buckets:</p>
+          <div className="space-y-2">
+            {buckets.map((bucket, idx) => (
+              <div key={idx} className="flex gap-2 items-center">
+                <span className="text-xs w-12">B{idx}:</span>
+                <div className="flex gap-1">
+                  {bucket.map((val, i) => (
+                    <div key={i} className="px-2 py-1 bg-blue-100 border border-blue-300 rounded font-mono text-xs">
+                      {val.toFixed(2)}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-        
-        {/* Current Step Display */}
-        {currentStep && (
-          <div className="mt-4 p-3 bg-muted/20 rounded-lg border">
-            <div className="flex items-center gap-2 text-sm">
-              <span className="font-medium">{currentStep}</span>
-            </div>
+            ))}
           </div>
-        )}
-      </div>
-
-      {/* Algorithm Info */}
-      <div className="bg-card border rounded-lg p-4">
-        <h4 className="font-semibold mb-2">How Bucket Sort Works:</h4>
-        <ol className="list-decimal list-inside space-y-1 text-sm text-muted-foreground">
-          <li>Create n empty buckets (where n is the number of elements)</li>
-          <li>Distribute elements into buckets based on their value range</li>
-          <li>Sort individual buckets using insertion sort</li>
-          <li>Concatenate all sorted buckets to get the final result</li>
-          <li>Works best with uniformly distributed data</li>
-          <li>Time Complexity: O(n + k) average, O(n²) worst case</li>
-          <li>Space Complexity: O(n + k) where k is the number of buckets</li>
-        </ol>
-      </div>
-
-      {/* Memory Layout */}
-      {showMemory && (
-        <MemoryLayout
-          title="Array Memory Layout"
-          data={arr}
-          baseAddress={0x7000}
-        />
+        </div>
       )}
 
-      {/* Controls */}
-      <div className="flex justify-center">
-        <VisualizerControls
-          showMemory={showMemory}
-          onToggleMemory={setShowMemory}
-          voiceEnabled={voiceEnabled}
-          onToggleVoice={setVoiceEnabled}
-          voiceSpeed={speed}
-          onVoiceSpeedChange={setSpeed}
-          isSpeaking={isSpeaking}
-          onPauseSpeech={pauseSpeech}
-          onResumeSpeech={resumeSpeech}
-          onStopSpeech={stopSpeech}
-        />
+      {sorted.length > 0 && (
+        <div className="mb-4">
+          <p className="text-sm font-semibold mb-2">Sorted Array:</p>
+          <div className="flex gap-2">
+            {sorted.map((val, idx) => (
+              <div key={idx} className="px-3 py-2 bg-green-100 border border-green-300 rounded font-mono text-sm">
+                {val.toFixed(2)}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="p-3 bg-gray-50 rounded text-sm">
+        <p><strong>Strategy:</strong> Distribute into buckets, sort each, concatenate</p>
+        <p><strong>Time:</strong> O(n + k) average | <strong>Space:</strong> O(n + k)</p>
+        <p><strong>Best for:</strong> Uniformly distributed data</p>
       </div>
     </div>
   );
-}
+};

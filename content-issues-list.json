@@ -1,0 +1,35 @@
+{
+  "missingDefinition": [
+    "linked-list-circular",
+    "binary-tree"
+  ],
+  "missingExample": [
+    "array-basics",
+    "linked-list-doubly",
+    "stack-operations",
+    "binary-search-tree",
+    "graph-dfs",
+    "dijkstra-algorithm",
+    "merge-sort",
+    "insertion-sort",
+    "selection-sort",
+    "counting-sort",
+    "radix-sort",
+    "bucket-sort",
+    "linear-search",
+    "open-addressing",
+    "recursion-basics",
+    "fibonacci",
+    "dp-introduction",
+    "knapsack-problem",
+    "longest-increasing-subsequence",
+    "backtracking-intro",
+    "segment-tree",
+    "merge-sorted-arrays"
+  ],
+  "invalidComplexity": [
+    "recursion-basics",
+    "dp-introduction",
+    "mathematical-algorithms-intro"
+  ]
+}

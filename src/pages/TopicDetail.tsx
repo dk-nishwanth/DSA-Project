@@ -70,11 +70,77 @@ import { ContainerWithMostWaterVisualizer } from '@/components/visualizer/two-po
 import { TrappingRainWaterVisualizer } from '@/components/visualizer/two-pointers-trapping-rain';
 import { LongestUniqueSubstringVisualizer } from '@/components/visualizer/sliding-window-longest-unique';
 import { MinimumWindowSubstringVisualizer } from '@/components/visualizer/sliding-window-min-window';
-import { SlidingWindowMaximumVisualizer } from '@/components/visualizer/sliding-window-maximum';
 import { SieveVisualizer } from '@/components/visualizer/sieve-visualizer';
 import { FastExponentiationVisualizer } from '@/components/visualizer/fast-exponentiation-visualizer';
 import { NQueensVisualizer } from '@/components/visualizer/n-queens-visualizer';
 import { SudokuVisualizer } from '@/components/visualizer/sudoku-visualizer';
+import { BellmanFordVisualizer } from '@/components/visualizer/bellman-ford-visualizer';
+import { MazeSolverVisualizer } from '@/components/visualizer/maze-solver-visualizer';
+import { GenerateParenthesesVisualizer } from '@/components/visualizer/generate-parentheses-visualizer';
+import { GraphDFSVisualizer } from '@/components/visualizer/graph-dfs-visualizer';
+import { GraphBFSVisualizer } from '@/components/visualizer/graph-bfs-visualizer';
+import { DijkstraVisualizer } from '@/components/visualizer/dijkstra-visualizer';
+import { LinearSearchVisualizer } from '@/components/visualizer/linear-search-visualizer';
+import { BinarySearchAlgoVisualizer } from '@/components/visualizer/binary-search-algo-visualizer';
+import { KMPVisualizer } from '@/components/visualizer/kmp-visualizer';
+import { RabinKarpVisualizer } from '@/components/visualizer/rabin-karp-visualizer';
+import { BucketSortVisualizer } from '@/components/visualizer/bucket-sort-visualizer';
+import { BinaryTreeFundamentalsViz } from '@/components/visualizer/binary-tree-fundamentals-viz';
+import { BSTOperationsVisualizer } from '@/components/visualizer/bst-operations-visualizer';
+import { InorderTraversalVisualizer } from '@/components/visualizer/inorder-traversal-visualizer';
+import { PreorderTraversalVisualizer } from '@/components/visualizer/preorder-traversal-visualizer';
+import { PostorderTraversalVisualizer } from '@/components/visualizer/postorder-traversal-visualizer';
+import { InterpolationSearchViz } from '@/components/visualizer/interpolation-search-viz';
+import { ExponentialSearchViz } from '@/components/visualizer/exponential-search-viz';
+import { HashFunctionsViz } from '@/components/visualizer/hash-functions-viz';
+import { SeparateChainingViz } from '@/components/visualizer/separate-chaining-viz';
+import { DPFundamentalsViz } from '@/components/visualizer/dp-fundamentals-viz';
+import { Knapsack01Viz } from '@/components/visualizer/knapsack-01-viz';
+import { LISUniqueViz } from '@/components/visualizer/lis-unique-viz';
+import { LCSUniqueViz } from '@/components/visualizer/lcs-unique-viz';
+import { ActivitySelectionViz } from '@/components/visualizer/activity-selection-viz';
+import { FractionalKnapsackViz } from '@/components/visualizer/fractional-knapsack-viz';
+import { JobSchedulingViz } from '@/components/visualizer/job-scheduling-viz';
+import { BacktrackingFundamentalsUniqueViz } from '@/components/visualizer/backtracking-fundamentals-unique-viz';
+import { SubsetGenerationUniqueViz } from '@/components/visualizer/subset-generation-unique-viz';
+import { PermutationGenerationUniqueViz } from '@/components/visualizer/permutation-generation-unique-viz';
+import { GCDEuclideanVisualizer } from '@/components/visualizer/gcd-euclidean-visualizer';
+import { PrimeFactorizationVisualizer } from '@/components/visualizer/prime-factorization-visualizer';
+import { CatalanNumbersVisualizer } from '@/components/visualizer/catalan-numbers-visualizer';
+import { NumberTheoryVisualizer } from '@/components/visualizer/number-theory-visualizer';
+import { PrimeAlgorithmsVisualizer } from '@/components/visualizer/prime-algorithms-visualizer';
+import { ModularArithmeticVisualizer } from '@/components/visualizer/modular-arithmetic-visualizer';
+import { CombinatoricsVisualizer } from '@/components/visualizer/combinatorics-visualizer';
+import { BitBasicsVisualizer } from '@/components/visualizer/bit-basics-visualizer';
+import { CountSetBitsVisualizer } from '@/components/visualizer/count-set-bits-visualizer';
+import { PowerOfTwoVisualizer } from '@/components/visualizer/power-of-two-visualizer';
+import { SingleNumberVisualizer } from '@/components/visualizer/single-number-visualizer';
+import { BitSubsetVisualizer } from '@/components/visualizer/bit-subset-visualizer';
+import { SlidingWindowBasicsVisualizer } from '@/components/visualizer/sliding-window-basics-visualizer';
+import { SlidingWindowMaximumVisualizer } from '@/components/visualizer/sliding-window-maximum-visualizer';
+import { LongestSubstringVisualizer } from '@/components/visualizer/longest-substring-visualizer';
+import { TwoPointersIntroVisualizer } from '@/components/visualizer/two-pointers-intro-visualizer';
+import { TwoPointersBasicsVisualizer } from '@/components/visualizer/two-pointers-basics-visualizer';
+import { TwoSumVisualizer } from '@/components/visualizer/two-sum-visualizer';
+import { RemoveDuplicatesVisualizer } from '@/components/visualizer/remove-duplicates-visualizer';
+import { PalindromeCheckVisualizer } from '@/components/visualizer/palindrome-check-visualizer';
+import { ContainerWaterVisualizer } from '@/components/visualizer/container-water-visualizer';
+import { BTreeVisualizer } from '@/components/visualizer/b-tree-visualizer';
+import { SplayTreeVisualizer } from '@/components/visualizer/splay-tree-visualizer';
+import { WordSearchVisualizer } from '@/components/visualizer/word-search-visualizer';
+import { CombinationSumVisualizer } from '@/components/visualizer/combination-sum-visualizer';
+import { RecursionBasicsVisualizer } from '@/components/visualizer/recursion-basics-visualizer';
+import { TailRecursionVisualizer } from '@/components/visualizer/tail-recursion-visualizer';
+import { HeapOperationsVisualizer } from '@/components/visualizer/heap-operations-visualizer';
+import { RecursionFundamentalsUniqueViz } from '@/components/visualizer/recursion-fundamentals-unique-viz';
+import { TailRecursionUniqueViz } from '@/components/visualizer/tail-recursion-unique-viz';
+import { FibonacciRecursionUniqueViz } from '@/components/visualizer/fibonacci-recursion-unique-viz';
+// import { SubarrayProblemsUniqueViz } from '@/components/visualizer/subarray-problems-unique-viz';
+import { InorderTraversalUniqueViz } from '@/components/visualizer/inorder-traversal-unique-viz';
+import { PreorderTraversalUniqueViz } from '@/components/visualizer/preorder-traversal-unique-viz';
+import { PostorderTraversalUniqueViz } from '@/components/visualizer/postorder-traversal-unique-viz';
+import { BSTUniqueViz } from '@/components/visualizer/bst-unique-viz';
+import { HeapUniqueViz } from '@/components/visualizer/heap-unique-viz';
 
 import { ComplexityBox } from '@/components/complexity-box';
 import { PseudocodeBox } from '@/components/pseudocode-box';
@@ -505,8 +571,9 @@ export default function TopicDetail() {
       case 'string-palindrome':
         return <PalindromeVisualizer />;
       case 'string-search-kmp':
+        return <KMPVisualizer />;
       case 'rabin-karp':
-        return <StringMatchingVisualizer />;
+        return <RabinKarpVisualizer />;
       case 'z-algorithm':
         return <ZAlgorithmVisualizer />;
       case 'manacher-algorithm':
@@ -530,27 +597,39 @@ export default function TopicDetail() {
 
       // Trees
       case 'binary-tree-fundamentals':
+        return <BinaryTreeFundamentalsViz />;
       case 'binary-search-tree':
-        return <BinaryTreeVisualizer />;
+        return <BSTUniqueViz />;
       case 'avl-tree':
         return <AVLTreeVisualizer />;
       case 'red-black-tree':
         return <RedBlackTreeVisualizer />;
       case 'tree-traversals':
-      case 'tree-inorder-traversal':
-      case 'tree-preorder-traversal':
-      case 'tree-postorder-traversal':
         return <TreeTraversalVisualizer />;
+      case 'tree-inorder-traversal':
+        return <InorderTraversalUniqueViz />;
+      case 'tree-preorder-traversal':
+        return <PreorderTraversalUniqueViz />;
+      case 'tree-postorder-traversal':
+        return <PostorderTraversalUniqueViz />;
+      case 'binary-tree':
+        return <BinaryTreeVisualizer />;
+      case 'heap-operations':
+        return <HeapUniqueViz />;
 
       // Graphs
       case 'graph-dfs':
+        return <GraphDFSVisualizer />;
       case 'graph-bfs':
+        return <GraphBFSVisualizer />;
       case 'dijkstra-algorithm':
-      case 'bellman-ford-algorithm':
-        return <GraphVisualizer />;
+        return <DijkstraVisualizer />;
+      case 'bellman-ford':
+        return <BellmanFordVisualizer />;
       case 'topological-sort':
         return <TopologicalSortVisualizer />;
       case 'floyd-warshall-algorithm':
+      case 'floyd-warshall':
         return <FloydWarshallVisualizer />;
       case 'kruskal-algorithm':
         return <KruskalVisualizer />;
@@ -567,8 +646,9 @@ export default function TopicDetail() {
       case 'heap-sort':
         return <HeapSortVisualizer />;
       case 'radix-sort':
-      case 'bucket-sort':
         return <RadixSortVisualizer />;
+      case 'bucket-sort':
+        return <BucketSortVisualizer />;
       case 'insertion-sort':
         return <InsertionSortVisualizer />;
       case 'selection-sort':
@@ -579,10 +659,13 @@ export default function TopicDetail() {
 
       // Searching
       case 'linear-search':
+        return <LinearSearchVisualizer />;
       case 'binary-search':
+        return <BinarySearchAlgoVisualizer />;
       case 'interpolation-search':
+        return <InterpolationSearchViz />;
       case 'exponential-search':
-        return <SearchVisualizer />;
+        return <ExponentialSearchViz />;
 
       // Two Pointers (per-problem)
       case 'three-sum':
@@ -594,29 +677,133 @@ export default function TopicDetail() {
 
       // Hashing
       case 'hash-table-basics':
-      case 'hash-functions':
-      case 'hash-chaining':
         return <HashTableVisualizer />;
+      case 'hash-functions':
+        return <HashFunctionsViz />;
+      case 'hash-chaining':
+        return <SeparateChainingViz />;
       case 'open-addressing':
         return <OpenAddressingVisualizer />;
+
+      // Recursion
+      case 'recursion-basics':
+        return <RecursionFundamentalsUniqueViz />;
+      case 'tail-recursion':
+        return <TailRecursionUniqueViz />;
+      case 'fibonacci':
+        return <FibonacciRecursionUniqueViz />;
 
       // DP, Greedy, Backtracking, etc.
       case 'n-queens':
         return <NQueensVisualizer />;
       case 'sudoku-solver':
         return <SudokuVisualizer />;
+      case 'maze-solver':
+        return <MazeSolverVisualizer />;
+      case 'generate-parentheses':
+        return <GenerateParenthesesVisualizer />;
+      case 'dp-introduction':
       case 'dp-fundamentals':
+        return <DPFundamentalsViz />;
+      case 'knapsack-problem':
       case '0-1-knapsack':
+        return <Knapsack01Viz />;
       case 'longest-increasing-subsequence':
-        return <DPVisualizer />;
+        return <LISUniqueViz />;
+      case 'longest-common-subsequence':
+        return <LCSUniqueViz />;
       case 'activity-selection':
+        return <ActivitySelectionViz />;
       case 'fractional-knapsack':
+        return <FractionalKnapsackViz />;
       case 'job-scheduling':
-        return <GreedyVisualizer />;
+        return <JobSchedulingViz />;
       case 'backtracking-intro':
+        return <BacktrackingFundamentalsUniqueViz />;
       case 'subset-generation':
+        return <SubsetGenerationUniqueViz />;
       case 'permutation-generation':
-        return <BacktrackingVisualizer />;
+        return <PermutationGenerationUniqueViz />;
+
+      // Mathematical Algorithms
+      case 'mathematical-algorithms-intro':
+        return <MathematicalVisualizer />;
+      case 'number-theory-basics':
+        return <NumberTheoryVisualizer />;
+      case 'prime-algorithms':
+        return <PrimeAlgorithmsVisualizer />;
+      case 'fast-exponentiation':
+        return <FastExponentiationVisualizer />;
+      case 'modular-arithmetic':
+        return <ModularArithmeticVisualizer />;
+      case 'combinatorics':
+        return <CombinatoricsVisualizer />;
+      case 'fibonacci-algorithms':
+        return <FibonacciDPVisualizer />;
+
+      // Bit Manipulation
+      case 'bit-basics':
+        return <BitBasicsVisualizer />;
+      case 'count-set-bits':
+        return <CountSetBitsVisualizer />;
+      case 'power-of-two':
+        return <PowerOfTwoVisualizer />;
+      case 'single-number':
+        return <SingleNumberVisualizer />;
+      case 'bit-subset':
+        return <BitSubsetVisualizer />;
+
+      // Sliding Window
+      case 'sliding-window-basics':
+        return <SlidingWindowBasicsVisualizer />;
+      case 'sliding-window-maximum':
+        return <SlidingWindowMaximumVisualizer />;
+      case 'longest-substring':
+        return <LongestSubstringVisualizer />;
+
+      // Two Pointers
+      case 'two-pointers-intro':
+        return <TwoPointersIntroVisualizer />;
+      case 'two-sum':
+        return <TwoSumVisualizer />;
+      case 'three-sum':
+        return <ThreeSumVisualizer />;
+      case 'container-water':
+        return <ContainerWaterVisualizer />;
+      case 'remove-duplicates':
+        return <RemoveDuplicatesVisualizer />;
+      case 'palindrome-check':
+        return <PalindromeCheckVisualizer />;
+      case 'merge-sorted-arrays':
+        return <TwoPointersVisualizer />;
+
+      // Advanced Data Structures
+      case 'trie':
+        return <TrieVisualizer />;
+      case 'segment-tree':
+        return <SegmentTreeVisualizer />;
+      case 'fenwick-tree':
+        return <FenwickTreeVisualizer />;
+      case 'union-find':
+        return <UnionFindVisualizer />;
+      case 'avl-tree':
+        return <AVLTreeVisualizer />;
+      case 'red-black-tree':
+        return <RedBlackTreeVisualizer />;
+      case 'b-tree':
+        return <BTreeVisualizer />;
+      case 'splay-tree':
+        return <SplayTreeVisualizer />;
+
+      // Backtracking (Additional)
+      case 'word-search':
+        return <WordSearchVisualizer />;
+      case 'combination-sum':
+        return <CombinationSumVisualizer />;
+
+      // Greedy Algorithms
+      case 'huffman-coding':
+        return <HuffmanVisualizer />;
 
       // Defaults
       default:
@@ -673,7 +860,7 @@ export default function TopicDetail() {
       return topic.keyConcepts
         .split('\n')
         .map(l => l.replace(/\*\*(.*?)\*\*/g, '$1'))
-        .map(l => l.replace(/^\s*[0-9]+\.|^\s*[-•]\s*/,'').trim())
+        .map(l => l.replace(/^\s*[0-9]+\.|^\s*[-•]\s*/, '').trim())
         .filter(Boolean)
         .filter(l => !/^Essential Concepts:?$/i.test(l));
     }
@@ -919,7 +1106,7 @@ arr.findIndex(v => v === 7); // search`,
   };
 
   const getTeachingCardItems = (topicId: string, category: string) => {
-    const cardsByTopic: Record<string, Array<{icon: string, title: string, text: string}>> = {
+    const cardsByTopic: Record<string, Array<{ icon: string, title: string, text: string }>> = {
       'array-basics': [
         { icon: 'fast', title: 'Fast Access', text: 'Arrays provide O(1) access to any element using its index.' },
         { icon: 'insert', title: 'Easy Insertion', text: 'Adding to the end is O(1); inserting in the middle shifts elements.' },
@@ -958,7 +1145,7 @@ arr.findIndex(v => v === 7); // search`,
     };
 
     // Fallback for categories not specifically defined
-    const categoryDefaults: Record<string, Array<{icon: string, title: string, text: string}>> = {
+    const categoryDefaults: Record<string, Array<{ icon: string, title: string, text: string }>> = {
       'Sorting': [
         { icon: 'fast', title: 'Ordering Data', text: 'Arrange elements in ascending or descending order.' },
         { icon: 'insert', title: 'Time Complexity', text: 'Different algorithms have different performance characteristics.' },
@@ -1539,433 +1726,433 @@ arr.findIndex(v => v === 7); // search`,
   return (
     <TopicAccessGuard topicId={topicId!}>
       <div className="p-6 space-y-6 animate-fade-in">
-      {/* Header */}
-      <div className="flex items-center gap-4 mb-6">
-        <NavLink to="/dashboard">
-          <Button variant="ghost" size="sm">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Dashboard
-          </Button>
-        </NavLink>
+        {/* Header */}
+        <div className="flex items-center gap-4 mb-6">
+          <NavLink to="/dashboard">
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Dashboard
+            </Button>
+          </NavLink>
 
-        <div className="flex-1">
-          <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-3xl font-bold text-foreground">{topic.title}</h1>
-            <Badge
-              variant="secondary"
-              className={cn(
-                topic.difficulty === 'beginner' && "bg-success/20 text-success border-success/30",
-                topic.difficulty === 'intermediate' && "bg-warning/20 text-warning border-warning/30",
-                topic.difficulty === 'advanced' && "bg-destructive/20 text-destructive border-destructive/30"
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-2">
+              <h1 className="text-3xl font-bold text-foreground">{topic.title}</h1>
+              <Badge
+                variant="secondary"
+                className={cn(
+                  topic.difficulty === 'beginner' && "bg-success/20 text-success border-success/30",
+                  topic.difficulty === 'intermediate' && "bg-warning/20 text-warning border-warning/30",
+                  topic.difficulty === 'advanced' && "bg-destructive/20 text-destructive border-destructive/30"
+                )}
+              >
+                {topic.difficulty}
+              </Badge>
+              <Badge variant="outline">{topic.category}</Badge>
+              <HintTooltip hint={getTopicHint(topic.id)} />
+            </div>
+            <p className="text-muted-foreground">{topic.description}</p>
+          </div>
+        </div>
+
+        {/* Learning Progress with Session Tracking */}
+        <LearningProgress currentTopicId={topic.id} />
+
+        {/* Learning Session Indicator (Advanced Feature) */}
+        {currentSession && (
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4 mb-4">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium text-blue-800">Learning Session Active</span>
+              {xpGained > 0 && (
+                <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
+                  +{xpGained} XP
+                </span>
               )}
+            </div>
+            <button
+              onClick={() => endSession()}
+              className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
             >
-              {topic.difficulty}
-            </Badge>
-            <Badge variant="outline">{topic.category}</Badge>
-            <HintTooltip hint={getTopicHint(topic.id)} />
+              Complete Session
+            </button>
           </div>
-          <p className="text-muted-foreground">{topic.description}</p>
-        </div>
-      </div>
+        )}
 
-      {/* Learning Progress with Session Tracking */}
-      <LearningProgress currentTopicId={topic.id} />
-      
-      {/* Learning Session Indicator (Advanced Feature) */}
-      {currentSession && (
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4 mb-4">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-sm font-medium text-blue-800">Learning Session Active</span>
-            {xpGained > 0 && (
-              <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
-                +{xpGained} XP
-              </span>
-            )}
-          </div>
-          <button 
-            onClick={() => endSession()}
-            className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
-          >
-            Complete Session
-          </button>
-        </div>
-      )}
-      
-      {/* Achievement Notifications */}
-      {achievementsUnlocked.length > 0 && (
-        <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-4 mb-4">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-lg">🏆</span>
-            <span className="font-medium text-yellow-800">New Achievement{achievementsUnlocked.length > 1 ? 's' : ''} Unlocked!</span>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {achievementsUnlocked.map((achievement, index) => (
-              <span key={index} className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
-                {achievement.icon} {achievement.name}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        {/* Left Column - Visualization */}
-        <div className="xl:col-span-2 space-y-6">
-          {/* Topic Definition + Voice Narration */}
-          <div className="space-y-3">
-            {(() => { const c = getTopicContent(topic.id); return null; })()}
-            <DefinitionBox 
-              title={topic.title} 
-              definition={topic.extendedDefinition || (getTopicContent(topic.id).definition) || topic.description}
-              extra={getTopicContent(topic.id).extras || []}
-              example={(getTopicContent(topic.id).example) || (topic.example || getExample(topic.id))}
-              syntax={(getTopicContent(topic.id).syntax) || (topic.syntax || getSyntax(topic.id))}
-              narrationText={topic.voiceExplanation || (getTopicContent(topic.id).narration) || `${topic.title}. ${topic.description}. ${getVisualizationNarration(topic.id)}`}
-            />
-          </div>
-
-          <div 
-            className="bg-card border rounded-xl p-6 shadow-subtle"
-            onClick={() => trackInteraction({ topicId: topic.id, action: 'visualization_view', data: { type: 'interactive_visualizer' } })}
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <Lightbulb className="h-5 w-5 text-primary" />
-              <h2 className="text-xl font-semibold">Interactive Visualization</h2>
+        {/* Achievement Notifications */}
+        {achievementsUnlocked.length > 0 && (
+          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-4 mb-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-lg">🏆</span>
+              <span className="font-medium text-yellow-800">New Achievement{achievementsUnlocked.length > 1 ? 's' : ''} Unlocked!</span>
             </div>
-            <VisualizationAutoNarrator introText={`Let's explore ${topic.title}. ${topic.description}`} />
-            {/* Removed Code & Run Visualization button */}
-            {renderVisualizer(topic.id)}
-
-          </div>
-
-          {/* Explanation Steps */}
-          <div className="space-y-3">
-            <ExplanationBox
-              steps={getExplanationSteps(topic.id)}
-              title={`How ${topic.title} Works`}
-              currentStep={currentExplanationStep}
-              onStepChange={(step) => setCurrentExplanationStep(step)}
-            />
-          </div>
-
-          {/* Teaching Cards - beginner-friendly summary (hidden for array-basics) */}
-          {topic.id !== 'array-basics' && (
-            <TeachingCards
-              items={getTeachingCardItems(topic.id, topic.category) as any}
-              mistakes={getCommonMistakes(topic.id, topic.category)}
-            />
-          )}
-
-          {/* Real-world Applications */}
-          <div className="bg-card border rounded-xl p-6 shadow-subtle">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-2xl">🌍</span>
-              <h2 className="text-xl font-semibold">Real-World Applications</h2>
-            </div>
-            <div className="space-y-3 text-sm">
-              {getRealWorldApplications(topic.id).map((app, index) => (
-                <div key={index} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-                  <span className="text-lg flex-shrink-0">{app.icon}</span>
-                  <div>
-                    <h4 className="font-medium text-foreground">{app.title}</h4>
-                    <p className="text-muted-foreground">{app.description}</p>
-                  </div>
-                </div>
+            <div className="flex flex-wrap gap-2">
+              {achievementsUnlocked.map((achievement, index) => (
+                <span key={index} className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
+                  {achievement.icon} {achievement.name}
+                </span>
               ))}
             </div>
           </div>
+        )}
 
-          {/* Interactive Quiz with Advanced Tracking */}
-          <div onClick={() => trackInteraction({ topicId: topic.id, action: 'quiz_attempt', data: { type: 'interactive_quiz' } })}>
-            <InteractiveQuiz topicId={topic.id} />
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          {/* Left Column - Visualization */}
+          <div className="xl:col-span-2 space-y-6">
+            {/* Topic Definition + Voice Narration */}
+            <div className="space-y-3">
+              {(() => { const c = getTopicContent(topic.id); return null; })()}
+              <DefinitionBox
+                title={topic.title}
+                definition={topic.extendedDefinition || (getTopicContent(topic.id).definition) || topic.description}
+                extra={getTopicContent(topic.id).extras || []}
+                example={(getTopicContent(topic.id).example) || (topic.example || getExample(topic.id))}
+                syntax={(getTopicContent(topic.id).syntax) || (topic.syntax || getSyntax(topic.id))}
+                narrationText={topic.voiceExplanation || (getTopicContent(topic.id).narration) || `${topic.title}. ${topic.description}. ${getVisualizationNarration(topic.id)}`}
+              />
+            </div>
+
+            <div
+              className="bg-card border rounded-xl p-6 shadow-subtle"
+              onClick={() => trackInteraction({ topicId: topic.id, action: 'visualization_view', data: { type: 'interactive_visualizer' } })}
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <Lightbulb className="h-5 w-5 text-primary" />
+                <h2 className="text-xl font-semibold">Interactive Visualization</h2>
+              </div>
+              <VisualizationAutoNarrator introText={`Let's explore ${topic.title}. ${topic.description}`} />
+              {/* Removed Code & Run Visualization button */}
+              {renderVisualizer(topic.id)}
+
+            </div>
+
+            {/* Explanation Steps */}
+            <div className="space-y-3">
+              <ExplanationBox
+                steps={getExplanationSteps(topic.id)}
+                title={`How ${topic.title} Works`}
+                currentStep={currentExplanationStep}
+                onStepChange={(step) => setCurrentExplanationStep(step)}
+              />
+            </div>
+
+            {/* Teaching Cards - beginner-friendly summary (hidden for array-basics) */}
+            {topic.id !== 'array-basics' && (
+              <TeachingCards
+                items={getTeachingCardItems(topic.id, topic.category) as any}
+                mistakes={getCommonMistakes(topic.id, topic.category)}
+              />
+            )}
+
+            {/* Real-world Applications */}
+            <div className="bg-card border rounded-xl p-6 shadow-subtle">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-2xl">🌍</span>
+                <h2 className="text-xl font-semibold">Real-World Applications</h2>
+              </div>
+              <div className="space-y-3 text-sm">
+                {getRealWorldApplications(topic.id).map((app, index) => (
+                  <div key={index} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
+                    <span className="text-lg flex-shrink-0">{app.icon}</span>
+                    <div>
+                      <h4 className="font-medium text-foreground">{app.title}</h4>
+                      <p className="text-muted-foreground">{app.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Interactive Quiz with Advanced Tracking */}
+            <div onClick={() => trackInteraction({ topicId: topic.id, action: 'quiz_attempt', data: { type: 'interactive_quiz' } })}>
+              <InteractiveQuiz topicId={topic.id} />
+            </div>
+
+            {/* Advanced Personal Codespace with Tracking */}
+            <div onClick={() => trackInteraction({ topicId: topic.id, action: 'code_submit', data: { type: 'playground' } })}>
+              <AdvancedCodePlayground
+                topicId={topic.id}
+                topicTitle={topic.title}
+                initialCode={{
+                  javascript: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'javascript'),
+                  python: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'python'),
+                  java: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'java'),
+                  cpp: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'c')
+                }}
+              />
+            </div>
+
+            {/* Web Development Playground for web-related topics */}
+            {(topic.category === 'Web Development' || topic.title.toLowerCase().includes('html') || topic.title.toLowerCase().includes('css')) && (
+              <WebPlayground
+                topicId={topic.id}
+                topicTitle={topic.title}
+              />
+            )}
           </div>
 
-          {/* Advanced Personal Codespace with Tracking */}
-          <div onClick={() => trackInteraction({ topicId: topic.id, action: 'code_submit', data: { type: 'playground' } })}>
-            <AdvancedCodePlayground 
-              topicId={topic.id} 
-              topicTitle={topic.title}
-              initialCode={{
-                javascript: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'javascript'),
-                python: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'python'),
-                java: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'java'),
-                cpp: getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'c')
-              }}
+          {/* Right Column - Details */}
+          <div className="space-y-6">
+            {/* Complexity Analysis */}
+            <ComplexityBox
+              timeComplexity={topic.timeComplexity || 'O(1)'}
+              spaceComplexity={topic.spaceComplexity || 'O(1)'}
+              description="Performance characteristics for the main operations"
             />
-          </div>
 
-          {/* Web Development Playground for web-related topics */}
-          {(topic.category === 'Web Development' || topic.title.toLowerCase().includes('html') || topic.title.toLowerCase().includes('css')) && (
-            <WebPlayground 
-              topicId={topic.id} 
-              topicTitle={topic.title}
-            />
-          )}
-        </div>
+            {/* AI Recommendations (Advanced Feature) */}
+            {isPremium && (
+              <div className="bg-gradient-to-br from-blue-50 to-purple-50 border border-blue-200 rounded-xl p-4 shadow-subtle">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">🧠</span>
+                  <h4 className="font-semibold text-blue-800">AI Recommendations</h4>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div className="p-2 bg-white/60 rounded-lg">
+                    <p className="text-blue-700 font-medium">Needs Improvement</p>
+                    <p className="text-blue-600 text-xs">Confidence: 90%</p>
+                  </div>
+                  <div className="p-2 bg-white/60 rounded-lg">
+                    <p className="text-blue-700 font-medium">Practice more examples</p>
+                    <p className="text-blue-600 text-xs">Confidence: 85%</p>
+                  </div>
+                  <div className="p-2 bg-white/60 rounded-lg">
+                    <p className="text-blue-700 font-medium">Review related topics</p>
+                    <p className="text-blue-600 text-xs">Confidence: 75%</p>
+                  </div>
+                </div>
+              </div>
+            )}
 
-        {/* Right Column - Details */}
-        <div className="space-y-6">
-          {/* Complexity Analysis */}
-          <ComplexityBox
-            timeComplexity={topic.timeComplexity || 'O(1)'}
-            spaceComplexity={topic.spaceComplexity || 'O(1)'}
-            description="Performance characteristics for the main operations"
-          />
+            {/* Session Stats (Advanced Feature) */}
+            {currentSession && (
+              <div className="bg-gradient-to-br from-green-50 to-blue-50 border border-green-200 rounded-xl p-4 shadow-subtle">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">⚡</span>
+                  <h4 className="font-semibold text-green-800">Session Stats</h4>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-green-700">XP Gained</span>
+                    <span className="font-medium text-green-800">+{xpGained}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-green-700">Activities</span>
+                    <span className="font-medium text-green-800">{currentSession.activitiesCompleted.length}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-green-700">Progress</span>
+                    <span className="font-medium text-green-800">60%</span>
+                  </div>
+                </div>
+              </div>
+            )}
 
-          {/* AI Recommendations (Advanced Feature) */}
-          {isPremium && (
-            <div className="bg-gradient-to-br from-blue-50 to-purple-50 border border-blue-200 rounded-xl p-4 shadow-subtle">
+            {/* Quick Actions (Advanced Feature) */}
+            <div className="bg-card border rounded-xl p-4 shadow-subtle">
               <div className="flex items-center gap-2 mb-3">
-                <span className="text-lg">🧠</span>
-                <h4 className="font-semibold text-blue-800">AI Recommendations</h4>
+                <span className="text-lg">🚀</span>
+                <h4 className="font-semibold text-card-foreground">Quick Actions</h4>
               </div>
-              <div className="space-y-2 text-sm">
-                <div className="p-2 bg-white/60 rounded-lg">
-                  <p className="text-blue-700 font-medium">Needs Improvement</p>
-                  <p className="text-blue-600 text-xs">Confidence: 90%</p>
-                </div>
-                <div className="p-2 bg-white/60 rounded-lg">
-                  <p className="text-blue-700 font-medium">Practice more examples</p>
-                  <p className="text-blue-600 text-xs">Confidence: 85%</p>
-                </div>
-                <div className="p-2 bg-white/60 rounded-lg">
-                  <p className="text-blue-700 font-medium">Review related topics</p>
-                  <p className="text-blue-600 text-xs">Confidence: 75%</p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Session Stats (Advanced Feature) */}
-          {currentSession && (
-            <div className="bg-gradient-to-br from-green-50 to-blue-50 border border-green-200 rounded-xl p-4 shadow-subtle">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-lg">⚡</span>
-                <h4 className="font-semibold text-green-800">Session Stats</h4>
-              </div>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-green-700">XP Gained</span>
-                  <span className="font-medium text-green-800">+{xpGained}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-green-700">Activities</span>
-                  <span className="font-medium text-green-800">{currentSession.activitiesCompleted.length}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-green-700">Progress</span>
-                  <span className="font-medium text-green-800">60%</span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Quick Actions (Advanced Feature) */}
-          <div className="bg-card border rounded-xl p-4 shadow-subtle">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-lg">🚀</span>
-              <h4 className="font-semibold text-card-foreground">Quick Actions</h4>
-            </div>
-            <div className="space-y-2">
-              <button 
-                onClick={() => trackInteraction({ topicId: topic.id, action: 'visualization_view', data: { type: 'practice' } })}
-                className="w-full text-left p-2 text-sm bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
-              >
-                <span className="text-blue-700">🎯 Practice Problems</span>
-              </button>
-              {isPremium && (
-                <button 
-                  onClick={() => trackInteraction({ topicId: topic.id, action: 'visualization_view', data: { type: 'ai_help' } })}
-                  className="w-full text-left p-2 text-sm bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors"
+              <div className="space-y-2">
+                <button
+                  onClick={() => trackInteraction({ topicId: topic.id, action: 'visualization_view', data: { type: 'practice' } })}
+                  className="w-full text-left p-2 text-sm bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
                 >
-                  <span className="text-purple-700">🧠 AI Explanation</span>
+                  <span className="text-blue-700">🎯 Practice Problems</span>
                 </button>
-              )}
-              <button 
-                onClick={() => trackInteraction({ topicId: topic.id, action: 'code_submit', data: { type: 'challenge' } })}
-                className="w-full text-left p-2 text-sm bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
-              >
-                <span className="text-green-700">💻 Code Challenge</span>
-              </button>
-              <button 
-                onClick={() => trackInteraction({ topicId: topic.id, action: 'visualization_view', data: { type: 'related' } })}
-                className="w-full text-left p-2 text-sm bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
-              >
-                <span className="text-orange-700">🔗 Related Topics</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Code Implementation */}
-          <CodeSnippetBox
-            title={`${topic.title} Implementation`}
-            language={getCodeSnippet(topic.id)?.language || 'javascript'}
-            code={
-              // Prefer rich per-topic implementation if provided in topic data
-              (topic.implementationCode && topic.implementationCode.trim().length > 0)
-                ? topic.implementationCode
-                : (getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'javascript'))
-            }
-            description={getCodeSnippet(topic.id)?.description || `Implementation of ${topic.title} with multiple language support`}
-            implementations={{
-              javascript: (topic.implementationCode && topic.implementationCode.trim().length > 0)
-                ? topic.implementationCode
-                : (getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'javascript')),
-              python: getDefaultCodeSnippet(topic.id, topic.title, 'python'),
-              java: getDefaultCodeSnippet(topic.id, topic.title, 'java'),
-              c: getDefaultCodeSnippet(topic.id, topic.title, 'c')
-            }}
-            topicId={topic.id}
-          />
-
-          {/* Pseudocode */}
-          <PseudocodeBox
-            title={`${topic.title} Pseudocode`}
-            code={pseudocodeLines}
-          />
-
-          {/* Key Concepts */}
-          <div className="bg-card border rounded-xl p-4 shadow-subtle">
-            <div className="flex items-center gap-2 mb-3">
-              <BookOpen className="h-4 w-4 text-primary" />
-              <h4 className="font-semibold text-card-foreground">Key Concepts</h4>
+                {isPremium && (
+                  <button
+                    onClick={() => trackInteraction({ topicId: topic.id, action: 'visualization_view', data: { type: 'ai_help' } })}
+                    className="w-full text-left p-2 text-sm bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors"
+                  >
+                    <span className="text-purple-700">🧠 AI Explanation</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => trackInteraction({ topicId: topic.id, action: 'code_submit', data: { type: 'challenge' } })}
+                  className="w-full text-left p-2 text-sm bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
+                >
+                  <span className="text-green-700">💻 Code Challenge</span>
+                </button>
+                <button
+                  onClick={() => trackInteraction({ topicId: topic.id, action: 'visualization_view', data: { type: 'related' } })}
+                  className="w-full text-left p-2 text-sm bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
+                >
+                  <span className="text-orange-700">🔗 Related Topics</span>
+                </button>
+              </div>
             </div>
 
-            <div className="space-y-3 text-sm">
-              <div className="p-3 bg-muted/50 rounded-lg">
-                <h5 className="font-medium text-foreground mb-1">Definition</h5>
-                <p className="text-muted-foreground">{topic.description}</p>
+            {/* Code Implementation */}
+            <CodeSnippetBox
+              title={`${topic.title} Implementation`}
+              language={getCodeSnippet(topic.id)?.language || 'javascript'}
+              code={
+                // Prefer rich per-topic implementation if provided in topic data
+                (topic.implementationCode && topic.implementationCode.trim().length > 0)
+                  ? topic.implementationCode
+                  : (getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'javascript'))
+              }
+              description={getCodeSnippet(topic.id)?.description || `Implementation of ${topic.title} with multiple language support`}
+              implementations={{
+                javascript: (topic.implementationCode && topic.implementationCode.trim().length > 0)
+                  ? topic.implementationCode
+                  : (getCodeSnippet(topic.id)?.code || getDefaultCodeSnippet(topic.id, topic.title, 'javascript')),
+                python: getDefaultCodeSnippet(topic.id, topic.title, 'python'),
+                java: getDefaultCodeSnippet(topic.id, topic.title, 'java'),
+                c: getDefaultCodeSnippet(topic.id, topic.title, 'c')
+              }}
+              topicId={topic.id}
+            />
+
+            {/* Pseudocode */}
+            <PseudocodeBox
+              title={`${topic.title} Pseudocode`}
+              code={pseudocodeLines}
+            />
+
+            {/* Key Concepts */}
+            <div className="bg-card border rounded-xl p-4 shadow-subtle">
+              <div className="flex items-center gap-2 mb-3">
+                <BookOpen className="h-4 w-4 text-primary" />
+                <h4 className="font-semibold text-card-foreground">Key Concepts</h4>
               </div>
 
-              {/* Core Principles sourced from topic or snippet */}
-              {keyConceptsList.length > 0 && (
+              <div className="space-y-3 text-sm">
                 <div className="p-3 bg-muted/50 rounded-lg">
-                  <h5 className="font-medium text-foreground mb-1">Core Principles</h5>
-                  <ul className="text-muted-foreground space-y-1">
-                    {keyConceptsList.map((k, i) => (
-                      <li key={i}>• {k}</li>
-                    ))}
-                  </ul>
+                  <h5 className="font-medium text-foreground mb-1">Definition</h5>
+                  <p className="text-muted-foreground">{topic.description}</p>
                 </div>
-              )}
 
-              {topic.category === 'Arrays' && (
-                <>
+                {/* Core Principles sourced from topic or snippet */}
+                {keyConceptsList.length > 0 && (
                   <div className="p-3 bg-muted/50 rounded-lg">
-                    <h5 className="font-medium text-foreground mb-1">Use Cases</h5>
+                    <h5 className="font-medium text-foreground mb-1">Core Principles</h5>
                     <ul className="text-muted-foreground space-y-1">
-                      <li>• Fast element access by index</li>
-                      <li>• Memory-efficient storage</li>
-                      <li>• Foundation for other data structures</li>
+                      {keyConceptsList.map((k, i) => (
+                        <li key={i}>• {k}</li>
+                      ))}
                     </ul>
                   </div>
+                )}
 
-                  <div className="p-3 bg-muted/50 rounded-lg">
-                    <h5 className="font-medium text-foreground mb-1">Trade-offs</h5>
-                    <ul className="text-muted-foreground space-y-1">
-                      <li>• Fixed size in many implementations</li>
-                      <li>• Expensive insertions/deletions in middle</li>
-                      <li>• Memory must be contiguous</li>
-                    </ul>
-                  </div>
-                </>
-              )}
+                {topic.category === 'Arrays' && (
+                  <>
+                    <div className="p-3 bg-muted/50 rounded-lg">
+                      <h5 className="font-medium text-foreground mb-1">Use Cases</h5>
+                      <ul className="text-muted-foreground space-y-1">
+                        <li>• Fast element access by index</li>
+                        <li>• Memory-efficient storage</li>
+                        <li>• Foundation for other data structures</li>
+                      </ul>
+                    </div>
 
-              {topic.category === 'Linked Lists' && (
-                <>
-                  <div className="p-3 bg-muted/50 rounded-lg">
-                    <h5 className="font-medium text-foreground mb-1">Advantages</h5>
-                    <ul className="text-muted-foreground space-y-1">
-                      <li>• Dynamic size allocation</li>
-                      <li>• Efficient insertion/deletion</li>
-                      <li>• Memory efficiency for sparse data</li>
-                    </ul>
-                  </div>
+                    <div className="p-3 bg-muted/50 rounded-lg">
+                      <h5 className="font-medium text-foreground mb-1">Trade-offs</h5>
+                      <ul className="text-muted-foreground space-y-1">
+                        <li>• Fixed size in many implementations</li>
+                        <li>• Expensive insertions/deletions in middle</li>
+                        <li>• Memory must be contiguous</li>
+                      </ul>
+                    </div>
+                  </>
+                )}
 
-                  <div className="p-3 bg-muted/50 rounded-lg">
-                    <h5 className="font-medium text-foreground mb-1">Disadvantages</h5>
-                    <ul className="text-muted-foreground space-y-1">
-                      <li>• No random access (sequential only)</li>
-                      <li>• Extra memory for pointers</li>
-                      <li>• Poor cache locality</li>
-                    </ul>
-                  </div>
-                </>
-              )}
+                {topic.category === 'Linked Lists' && (
+                  <>
+                    <div className="p-3 bg-muted/50 rounded-lg">
+                      <h5 className="font-medium text-foreground mb-1">Advantages</h5>
+                      <ul className="text-muted-foreground space-y-1">
+                        <li>• Dynamic size allocation</li>
+                        <li>• Efficient insertion/deletion</li>
+                        <li>• Memory efficiency for sparse data</li>
+                      </ul>
+                    </div>
 
-              {topic.category === 'Stacks & Queues' && (
-                <>
-                  <div className="p-3 bg-muted/50 rounded-lg">
-                    <h5 className="font-medium text-foreground mb-1">Real-world Applications</h5>
-                    <ul className="text-muted-foreground space-y-1">
-                      <li>• Function call management</li>
-                      <li>• Undo operations in editors</li>
-                      <li>• Expression evaluation</li>
-                      <li>• Task scheduling systems</li>
-                    </ul>
-                  </div>
+                    <div className="p-3 bg-muted/50 rounded-lg">
+                      <h5 className="font-medium text-foreground mb-1">Disadvantages</h5>
+                      <ul className="text-muted-foreground space-y-1">
+                        <li>• No random access (sequential only)</li>
+                        <li>• Extra memory for pointers</li>
+                        <li>• Poor cache locality</li>
+                      </ul>
+                    </div>
+                  </>
+                )}
 
-                  <div className="p-3 bg-muted/50 rounded-lg">
-                    <h5 className="font-medium text-foreground mb-1">Key Properties</h5>
-                    <ul className="text-muted-foreground space-y-1">
-                      <li>• All operations are O(1)</li>
-                      <li>• Restricted access patterns</li>
-                      <li>• Can be implemented with arrays or linked lists</li>
-                    </ul>
-                  </div>
-                </>
-              )}
+                {topic.category === 'Stacks & Queues' && (
+                  <>
+                    <div className="p-3 bg-muted/50 rounded-lg">
+                      <h5 className="font-medium text-foreground mb-1">Real-world Applications</h5>
+                      <ul className="text-muted-foreground space-y-1">
+                        <li>• Function call management</li>
+                        <li>• Undo operations in editors</li>
+                        <li>• Expression evaluation</li>
+                        <li>• Task scheduling systems</li>
+                      </ul>
+                    </div>
 
-              {topic.category === 'Trees' && (
-                <>
-                  <div className="p-3 bg-muted/50 rounded-lg">
-                    <h5 className="font-medium text-foreground mb-1">Tree Properties</h5>
-                    <ul className="text-muted-foreground space-y-1">
-                      <li>• Hierarchical data structure</li>
-                      <li>• Efficient search, insertion, deletion</li>
-                      <li>• Various traversal methods</li>
-                    </ul>
-                  </div>
+                    <div className="p-3 bg-muted/50 rounded-lg">
+                      <h5 className="font-medium text-foreground mb-1">Key Properties</h5>
+                      <ul className="text-muted-foreground space-y-1">
+                        <li>• All operations are O(1)</li>
+                        <li>• Restricted access patterns</li>
+                        <li>• Can be implemented with arrays or linked lists</li>
+                      </ul>
+                    </div>
+                  </>
+                )}
 
-                  <div className="p-3 bg-muted/50 rounded-lg">
-                    <h5 className="font-medium text-foreground mb-1">Applications</h5>
-                    <ul className="text-muted-foreground space-y-1">
-                      <li>• Database indexing</li>
-                      <li>• File system structure</li>
-                      <li>• Expression parsing</li>
-                      <li>• Decision making algorithms</li>
-                    </ul>
-                  </div>
-                </>
-              )}
+                {topic.category === 'Trees' && (
+                  <>
+                    <div className="p-3 bg-muted/50 rounded-lg">
+                      <h5 className="font-medium text-foreground mb-1">Tree Properties</h5>
+                      <ul className="text-muted-foreground space-y-1">
+                        <li>• Hierarchical data structure</li>
+                        <li>• Efficient search, insertion, deletion</li>
+                        <li>• Various traversal methods</li>
+                      </ul>
+                    </div>
 
-              {topic.category === 'Sorting' && (
-                <>
-                  <div className="p-3 bg-muted/50 rounded-lg">
-                    <h5 className="font-medium text-foreground mb-1">Sorting Categories</h5>
-                    <ul className="text-muted-foreground space-y-1">
-                      <li>• Comparison-based vs Non-comparison</li>
-                      <li>• In-place vs Out-of-place</li>
-                      <li>• Stable vs Unstable</li>
-                    </ul>
-                  </div>
+                    <div className="p-3 bg-muted/50 rounded-lg">
+                      <h5 className="font-medium text-foreground mb-1">Applications</h5>
+                      <ul className="text-muted-foreground space-y-1">
+                        <li>• Database indexing</li>
+                        <li>• File system structure</li>
+                        <li>• Expression parsing</li>
+                        <li>• Decision making algorithms</li>
+                      </ul>
+                    </div>
+                  </>
+                )}
 
-                  <div className="p-3 bg-muted/50 rounded-lg">
-                    <h5 className="font-medium text-foreground mb-1">When to Use</h5>
-                    <ul className="text-muted-foreground space-y-1">
-                      <li>• Bubble Sort: Educational purposes</li>
-                      <li>• Merge Sort: Guaranteed O(n log n)</li>
-                      <li>• Quick Sort: Average case efficiency</li>
-                    </ul>
-                  </div>
-                </>
-              )}
+                {topic.category === 'Sorting' && (
+                  <>
+                    <div className="p-3 bg-muted/50 rounded-lg">
+                      <h5 className="font-medium text-foreground mb-1">Sorting Categories</h5>
+                      <ul className="text-muted-foreground space-y-1">
+                        <li>• Comparison-based vs Non-comparison</li>
+                        <li>• In-place vs Out-of-place</li>
+                        <li>• Stable vs Unstable</li>
+                      </ul>
+                    </div>
+
+                    <div className="p-3 bg-muted/50 rounded-lg">
+                      <h5 className="font-medium text-foreground mb-1">When to Use</h5>
+                      <ul className="text-muted-foreground space-y-1">
+                        <li>• Bubble Sort: Educational purposes</li>
+                        <li>• Merge Sort: Guaranteed O(n log n)</li>
+                        <li>• Quick Sort: Average case efficiency</li>
+                      </ul>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
     </TopicAccessGuard>
   );

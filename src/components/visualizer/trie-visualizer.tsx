@@ -304,21 +304,21 @@ export function TrieVisualizer() {
       </div>
 
       {/* Controls */}
-      <div className="flex flex-wrap gap-3 p-4 bg-muted/30 rounded-xl border">
+      <div className="flex flex-wrap gap-3 p-4 bg-muted/30 rounded-xl border shadow-inner">
         <div className="flex gap-2">
           <Input
             type="text"
             placeholder="Enter word to insert"
             value={inputWord}
-            onChange={(e) => setInputWord(e.target.value)}
-            className="w-40"
+            onChange={(e) => setInputWord(e.target.value.toUpperCase())}
+            className="w-40 border-2 focus:border-primary/50"
             disabled={isAnimating}
           />
           <Button
             onClick={insertWord}
             disabled={isAnimating}
             size="sm"
-            className="flex items-center gap-1"
+            className="flex items-center gap-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 shadow-md"
           >
             <Plus className="h-3 w-3" />
             Insert
@@ -330,8 +330,8 @@ export function TrieVisualizer() {
             type="text"
             placeholder="Search/Remove word"
             value={searchWord}
-            onChange={(e) => setSearchWord(e.target.value)}
-            className="w-40"
+            onChange={(e) => setSearchWord(e.target.value.toUpperCase())}
+            className="w-40 border-2 focus:border-primary/50"
             disabled={isAnimating}
           />
           <Button
@@ -339,7 +339,7 @@ export function TrieVisualizer() {
             disabled={isAnimating}
             size="sm"
             variant="secondary"
-            className="flex items-center gap-1"
+            className="flex items-center gap-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 shadow-md"
           >
             <Search className="h-3 w-3" />
             Search
@@ -361,7 +361,7 @@ export function TrieVisualizer() {
           disabled={isAnimating}
           size="sm"
           variant="outline"
-          className="flex items-center gap-1"
+          className="flex items-center gap-1 border-2"
         >
           <RotateCcw className="h-3 w-3" />
           Reset

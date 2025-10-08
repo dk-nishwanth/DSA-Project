@@ -263,11 +263,55 @@ export function BacktrackingVisualizer() {
     }
 
     return (
-      <div 
-        className="inline-grid gap-0 border-2 border-border rounded"
-        style={{ gridTemplateColumns: `repeat(${boardSize}, 1fr)` }}
-      >
-        {squares}
+      <div className="relative">
+        {/* Decision tree visualization overlay */}
+        {queens.length > 0 && (
+          <div className="absolute -top-5 -left-5 w-[calc(100%+40px)] h-[calc(100%+40px)] pointer-events-none">
+            <svg width="100%" height="100%" className="absolute top-0 left-0">
+              {/* Draw decision tree branches */}
+              {queens.map((queen, idx) => {
+                if (idx === 0) return null;
+                const prevQueen = queens[idx - 1];
+                return (
+                  <g key={`branch-${idx}`}>
+                    <line 
+                      x1={prevQueen.col * 12 + 6} 
+                      y1={prevQueen.row * 12 + 6} 
+                      x2={queen.col * 12 + 6} 
+                      y2={queen.row * 12 + 6} 
+                      stroke="#6366f1" 
+                      strokeWidth="1"
+                      strokeDasharray="2"
+                      className="animate-pulse"
+                    />
+                  </g>
+                );
+              })}
+              
+              {/* Show backtracking paths */}
+              {currentTry && !queens.some(q => q.row === currentTry.row && q.col === currentTry.col) && (
+                <g>
+                  <line 
+                    x1={(queens.length > 0 ? queens[queens.length - 1].col : 0) * 12 + 6} 
+                    y1={(queens.length > 0 ? queens[queens.length - 1].row : 0) * 12 + 6} 
+                    x2={currentTry.col * 12 + 6} 
+                    y2={currentTry.row * 12 + 6} 
+                    stroke="#ef4444" 
+                    strokeWidth="1"
+                    strokeDasharray="2"
+                  />
+                </g>
+              )}
+            </svg>
+          </div>
+        )}
+        
+        <div 
+          className="inline-grid gap-0 border-2 border-border rounded"
+          style={{ gridTemplateColumns: `repeat(${boardSize}, 1fr)` }}
+        >
+          {squares}
+        </div>
       </div>
     );
   }, [boardSize, queens, attackedSquares, currentTry]);

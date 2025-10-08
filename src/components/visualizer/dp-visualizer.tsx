@@ -193,40 +193,90 @@ export function DPVisualizer() {
   }, []);
 
   const renderDPTable = useCallback(() => {
-    if (dpTable.length === 0) return null;
-
+    if (!dpTable.length) return null;
+    
     return (
       <div className="overflow-x-auto">
-        <table className="border-collapse">
+        <table className="border-collapse mx-auto">
+          <thead>
+            <tr>
+              <th className="p-1"></th>
+              {dpTable[0].map((_, j) => (
+                <th key={j} className="p-1">
+                  <div className="w-12 h-8 flex items-center justify-center text-xs font-medium bg-muted/30 rounded-t-md">
+                    {problem === 'lcs' ? (j === 0 ? 'ε' : string2[j-1]) : j}
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
           <tbody>
             {dpTable.map((row, i) => (
               <tr key={i}>
-                {row.map((cell, j) => (
-                  <td key={j} className="p-0">
-                    <div
-                      className={`
-                        w-16 h-16 border border-border flex flex-col items-center justify-center
-                        text-xs font-mono transition-all duration-300 relative
-                        ${cell.isActive ? 'bg-primary text-primary-foreground animate-pulse' : 'bg-card'}
-                        ${cell.isResult ? 'bg-success text-success-foreground ring-2 ring-success' : ''}
-                      `}
-                    >
-                      <div className="font-bold">{cell.value}</div>
-                      {currentCell?.row === i && currentCell?.col === j && cell.calculation && (
-                        <div className="absolute top-full left-0 z-10 bg-popover border rounded p-2 text-xs whitespace-nowrap shadow-lg">
-                          {cell.calculation}
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                ))}
+                <th className="p-1">
+                  <div className="w-8 h-12 flex items-center justify-center text-xs font-medium bg-muted/30 rounded-l-md">
+                    {problem === 'lcs' ? (i === 0 ? 'ε' : string1[i-1]) : i}
+                  </div>
+                </th>
+                {row.map((cell, j) => {
+                  // Determine if this cell is part of the optimal solution path
+                  const isOptimalPath = cell.isResult || 
+                    (result && i > 0 && j > 0 && 
+                     ((problem === 'lcs' && string1[i-1] === string2[j-1] && dpTable[i-1][j-1].value === cell.value - 1) ||
+                      (problem === 'knapsack' && cell.value !== dpTable[i-1][j].value)));
+                  
+                  return (
+                    <td key={j} className="p-1">
+                      <div 
+                        className={`
+                          relative w-12 h-12 flex items-center justify-center rounded-md border-2 
+                          transition-all duration-300 transform
+                          ${cell.isActive ? 'bg-primary/20 border-primary shadow-md scale-110 z-10' : 'bg-card border-border'}
+                          ${cell.isResult ? 'bg-success/20 border-success ring-2 ring-success' : ''}
+                          ${isOptimalPath && !cell.isActive && !cell.isResult ? 'bg-primary/10 border-primary/50' : ''}
+                        `}
+                        style={{
+                          boxShadow: cell.isActive ? '0 0 15px rgba(var(--primary), 0.5)' : 'none'
+                        }}
+                      >
+                        <div className="font-bold">{cell.value}</div>
+                        {currentCell?.row === i && currentCell?.col === j && cell.calculation && (
+                          <div className="absolute top-full left-0 z-20 bg-popover border rounded-md p-3 text-sm whitespace-nowrap shadow-lg">
+                            <div className="font-medium mb-1">Calculation:</div>
+                            <div className="font-mono bg-muted/20 p-1 rounded">{cell.calculation}</div>
+                          </div>
+                        )}
+                        
+                        {/* Arrow indicators for cell dependencies */}
+                        {cell.isActive && i > 0 && j > 0 && (
+                          <>
+                            {/* Diagonal arrow for LCS match or diagonal dependency */}
+                            {(problem === 'lcs' && string1[i-1] === string2[j-1]) && (
+                              <div className="absolute -top-8 -left-8 w-8 h-8 border-t-2 border-l-2 border-primary/50 rounded-tl-md pointer-events-none"></div>
+                            )}
+                            
+                            {/* Top arrow for dependency */}
+                            {(problem === 'lcs' || problem === 'knapsack') && (
+                              <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-0 h-6 border-l-2 border-primary/50 pointer-events-none"></div>
+                            )}
+                            
+                            {/* Left arrow for dependency */}
+                            {(problem === 'lcs' || problem === 'knapsack') && (
+                              <div className="absolute top-1/2 -left-6 transform -translate-y-1/2 w-6 h-0 border-t-2 border-primary/50 pointer-events-none"></div>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </td>
+                  );
+                })}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
     );
-  }, [dpTable, currentCell]);
+  }, [dpTable, currentCell, problem, string1, string2, result]);
 
   const renderInputs = () => {
     if (problem === 'lcs') {

@@ -256,59 +256,94 @@ export function RecursionVisualizer() {
     return callStack.map((frame, index) => {
       const isExpanded = expandedFrames.has(frame.id);
       const indentLevel = frame.level * 20;
-
+      
+      // Visual enhancements for recursion tree
+      const isLastFrame = index === callStack.length - 1;
+      const hasReturnValue = frame.returnValue !== undefined;
+      
       return (
         <div
           key={frame.id}
           className={`
             border rounded-lg p-3 transition-all duration-300 mb-2
-            ${frame.isActive ? 'bg-primary/10 border-primary' : 'bg-card border-border'}
-            ${frame.isReturning ? 'bg-success/10 border-success' : ''}
+            ${frame.isActive ? 'bg-primary/10 border-primary shadow-md' : 'bg-card border-border'}
+            ${frame.isReturning ? 'bg-success/10 border-success shadow-lg' : ''}
+            ${isLastFrame ? 'ring-2 ring-primary/30' : ''}
           `}
-          style={{ marginLeft: `${indentLevel}px` }}
+          style={{ 
+            marginLeft: `${indentLevel}px`,
+            transform: frame.isReturning ? 'translateY(-4px)' : 'none',
+          }}
         >
+          {/* Connection lines to show parent-child relationships */}
+          {frame.level > 0 && (
+            <div 
+              className="absolute -left-4 top-1/2 w-4 h-px bg-muted-foreground/50"
+              style={{ transform: 'translateY(-50%)' }}
+            />
+          )}
+          
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => toggleFrameExpansion(frame.id)}
-                className="h-6 w-6 p-0"
+                className={`h-6 w-6 p-0 ${isLastFrame ? 'bg-primary/20' : ''}`}
               >
                 {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
               </Button>
-              <span className="font-mono font-semibold">
+              <span className={`font-mono font-semibold ${frame.isActive ? 'text-primary' : ''}`}>
                 {frame.functionName}({JSON.stringify(frame.parameters).slice(1, -1)})
               </span>
-              {frame.returnValue !== undefined && (
-                <span className="text-success font-bold">
+              {hasReturnValue && (
+                <span className={`font-bold ${frame.isReturning ? 'text-success animate-pulse' : 'text-success'}`}>
                   → {frame.returnValue}
                 </span>
               )}
             </div>
-            <div className="text-xs text-muted-foreground">
-              Level {frame.level}
+            <div className="flex items-center gap-2">
+              <div className={`px-2 py-1 rounded-full text-xs ${frame.isActive ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground'}`}>
+                Level {frame.level}
+              </div>
+              {frame.isReturning && (
+                <div className="text-xs bg-success/20 text-success px-2 py-1 rounded-full">
+                  Returning
+                </div>
+              )}
             </div>
           </div>
 
           {isExpanded && (
-            <div className="mt-2 space-y-1 text-sm">
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <span className="text-muted-foreground">Parameters:</span>
-                  <div className="font-mono bg-muted/20 p-1 rounded text-xs">
-                    {JSON.stringify(frame.parameters, null, 1)}
+            <div className="mt-3 space-y-2 text-sm">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-muted/10 p-2 rounded-md border border-muted/30">
+                  <span className="text-muted-foreground font-medium block mb-1">Parameters:</span>
+                  <div className="font-mono bg-background p-2 rounded text-xs shadow-sm">
+                    {JSON.stringify(frame.parameters, null, 2)}
                   </div>
                 </div>
                 {frame.localVars && Object.keys(frame.localVars).length > 0 && (
-                  <div>
-                    <span className="text-muted-foreground">Local Variables:</span>
-                    <div className="font-mono bg-muted/20 p-1 rounded text-xs">
-                      {JSON.stringify(frame.localVars, null, 1)}
+                  <div className="bg-muted/10 p-2 rounded-md border border-muted/30">
+                    <span className="text-muted-foreground font-medium block mb-1">Local Variables:</span>
+                    <div className="font-mono bg-background p-2 rounded text-xs shadow-sm">
+                      {JSON.stringify(frame.localVars, null, 2)}
                     </div>
+                    {frame.localVars.calculation && (
+                      <div className="mt-2 p-1 bg-success/10 border border-success/20 rounded text-xs text-success font-medium">
+                        Calculation: {frame.localVars.calculation}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
+              
+              {/* Visual representation of the recursive call */}
+              {frame.level < callStack.length - 1 && !frame.isReturning && (
+                <div className="flex justify-center my-1">
+                  <div className="border-l-2 border-dashed border-primary/30 h-4"></div>
+                </div>
+              )}
             </div>
           )}
         </div>
