@@ -24435,6 +24435,26 @@ console.log(BitManipulation.setBit(5, 1)); // 7 (101 -> 111)
 console.log(BitManipulation.countSetBits(7)); // 3
 console.log(BitManipulation.generateSubsets([1, 2, 3])); // All subsets
 console.log(BitManipulation.findSingleNumber([2, 1, 2, 3, 1])); // 3`,
+        example: `5 & 3 = 1    // 101 & 011 = 001
+5 | 3 = 7    // 101 | 011 = 111
+5 ^ 3 = 6    // 101 ^ 011 = 110
+~5 = -6      // Flip all bits
+5 << 1 = 10  // Multiply by 2
+8 >> 1 = 4   // Divide by 2`,
+        syntax: `// Check if even
+n & 1 === 0
+
+// Check if power of 2
+n > 0 && (n & (n-1)) === 0
+
+// Set bit at position i
+num | (1 << i)
+
+// Clear bit at position i
+num & ~(1 << i)
+
+// Toggle bit at position i
+num ^ (1 << i)`,
         quizQuestions: [
             {
                 question: "What does the expression (n & 1) check?",
@@ -24467,93 +24487,8 @@ console.log(BitManipulation.findSingleNumber([2, 1, 2, 3, 1])); // 3`,
                 explanation: "Computer graphics extensively uses bit manipulation for color operations, alpha blending, and pixel-level manipulations."
             }
         ],
-        syntax: `// Basic Bitwise Operators
-a & b    // AND - both bits must be 1
-a | b    // OR - at least one bit must be 1
-a ^ b    // XOR - bits must be different
-~a       // NOT - flip all bits
-a << n   // Left shift - multiply by 2^n
-a >> n   // Right shift - divide by 2^n
-
-// Common Bit Manipulation Patterns
-n & 1 === 0        // Check if even
-n & (n-1) === 0    // Check if power of 2
-num | (1 << i)     // Set bit at position i
-num & ~(1 << i)    // Clear bit at position i
-num ^ (1 << i)     // Toggle bit at position i
-(num & (1 << i)) !== 0  // Check if bit i is set`,
-        example: `// Bit Manipulation Basics
-
-// Basic Bitwise Operations
-function bitwiseOperations() {
-    const a = 5;  // Binary: 101
-    const b = 3;  // Binary: 011
-    
-    console.log("AND:", a & b);    // 1 (001)
-    console.log("OR:", a | b);     // 7 (111)
-    console.log("XOR:", a ^ b);    // 6 (110)
-    console.log("NOT a:", ~a);     // -6 (two's complement)
-    console.log("Left shift:", a << 1);  // 10 (1010)
-    console.log("Right shift:", a >> 1); // 2 (10)
-}
-
-// Check if number is even or odd
-function isEven(n) {
-    return (n & 1) === 0;
-}
-
-// Check if number is power of 2
-function isPowerOfTwo(n) {
-    return n > 0 && (n & (n - 1)) === 0;
-}
-
-// Set bit at position i
-function setBit(num, i) {
-    return num | (1 << i);
-}
-
-// Clear bit at position i
-function clearBit(num, i) {
-    return num & ~(1 << i);
-}
-
-// Toggle bit at position i
-function toggleBit(num, i) {
-    return num ^ (1 << i);
-}
-
-// Check if bit at position i is set
-function isBitSet(num, i) {
-    return (num & (1 << i)) !== 0;
-}
-
-// Count number of set bits (1s)
-function countSetBits(n) {
-    let count = 0;
-    while (n) {
-        count += n & 1;
-        n >>= 1;
-    }
-    return count;
-}
-
-// Brian Kernighan's algorithm for counting set bits
-function countSetBitsFast(n) {
-    let count = 0;
-    while (n) {
-        n &= (n - 1); // Removes rightmost set bit
-        count++;
-    }
-    return count;
-}
-
-// Example usage
-bitwiseOperations();
-console.log(isEven(4));        // true
-console.log(isPowerOfTwo(8));  // true
-console.log(setBit(5, 1));     // 7 (101 -> 111)
-console.log(clearBit(7, 1));   // 5 (111 -> 101)
-console.log(countSetBits(7));  // 3`,
+        
+        
         syntax_alt: `**Bit Manipulation Patterns:**
 
 1. **Basic Operations:**
@@ -24854,6 +24789,27 @@ console.log(SetBitCounter.countSetBitsBrianKernighan(12));  // 2 (binary: 1100)
 console.log(counter.comparePerformance(255));  // Performance comparison
 console.log(counter.findNumbersWithKBits(15, 2));  // Numbers ≤ 15 with exactly 2 set bits
 console.log(counter.hammingDistance(5, 3));  // Hamming distance between 5 and 3`,
+        example: `countSetBits(7) = 3   // 111 has 3 ones
+countSetBits(8) = 1   // 1000 has 1 one
+countSetBits(15) = 4  // 1111 has 4 ones`,
+        syntax: `function countSetBits(n) {
+  let count = 0;
+  while (n > 0) {
+    count += n & 1;
+    n >>= 1;
+  }
+  return count;
+}
+
+// Brian Kernighan's Algorithm
+function countFast(n) {
+  let count = 0;
+  while (n > 0) {
+    n &= (n - 1);
+    count++;
+  }
+  return count;
+}`,
         quizQuestions: [
             {
                 question: "What is the time complexity of Brian Kernighan's algorithm for counting set bits?",
@@ -24886,31 +24842,7 @@ console.log(counter.hammingDistance(5, 3));  // Hamming distance between 5 and 3
                 explanation: "Counting set bits is fundamental for calculating Hamming distance, which is crucial in error detection and correction codes used in data transmission."
             }
         ],
-        syntax: `// Count Set Bits Patterns
-// Method 1: Naive approach
-function countSetBits(n) {
-    let count = 0;
-    while (n) {
-        count += n & 1;
-        n >>= 1;
-    }
-    return count;
-}
-
-// Method 2: Brian Kernighan's Algorithm
-function countSetBitsBK(n) {
-    let count = 0;
-    while (n) {
-        n &= (n - 1);  // Clear rightmost set bit
-        count++;
-    }
-    return count;
-}
-
-// Method 3: Built-in (for reference)
-function countSetBitsBuiltIn(n) {
-    return n.toString(2).split('1').length - 1;
-}`,
+        
         example: `// Count Set Bits Implementation
 // Method 1: Naive approach - check each bit
 function countSetBitsNaive(n) {
@@ -25289,6 +25221,17 @@ console.log(PowerOfTwoChecker.isPowerOfTwo(6));  // false
 console.log(PowerOfTwoChecker.nextPowerOfTwo(10)); // 16
 console.log(PowerOfTwoChecker.generatePowersOfTwo(100)); // All powers of 2 ≤ 100
 console.log(PowerOfTwoChecker.comparePerformance(1024)); // Performance comparison`,
+        example: `isPowerOfTwo(8) = true   // 8 = 2^3
+isPowerOfTwo(6) = false  // Not a power of 2
+isPowerOfTwo(16) = true  // 16 = 2^4
+isPowerOfTwo(0) = false  // 0 is not a power of 2`,
+        syntax: `function isPowerOfTwo(n) {
+  return n > 0 && (n & (n - 1)) === 0;
+}
+
+// Why it works:
+// Powers of 2: 8 = 1000, 8-1 = 0111
+// 8 & 7 = 1000 & 0111 = 0000`,
         quizQuestions: [
             {
                 question: "What is the key insight behind the n & (n-1) == 0 check for powers of 2?",
@@ -25321,27 +25264,7 @@ console.log(PowerOfTwoChecker.comparePerformance(1024)); // Performance comparis
                 explanation: "Hash tables perform optimally when their size is a power of 2, as it allows for efficient modulo operations using bitwise AND."
             }
         ],
-        syntax: `// Power of Two Check Pattern
-function isPowerOfTwo(n) {
-    return n > 0 && (n & (n - 1)) === 0;
-}
-
-// Find next power of 2
-function nextPowerOfTwo(n) {
-    if (n <= 1) return 1;
-    n--;
-    n |= n >> 1;
-    n |= n >> 2;
-    n |= n >> 4;
-    n |= n >> 8;
-    n |= n >> 16;
-    return n + 1;
-}
-
-// Check if exactly one bit is set
-function hasOneBitSet(n) {
-    return n > 0 && (n & (n - 1)) === 0;
-}`,
+        
         example: `// Power of Two Check Examples
 function isPowerOfTwo(n) {
     return n > 0 && (n & (n - 1)) === 0;
@@ -25656,6 +25579,19 @@ console.log('Test case:', testCase);
 console.log('Solution:', SingleNumberSolver.singleNumber(testCase.array));
 
 console.log(SingleNumberSolver.demonstrateXOR([4, 1, 2, 1, 2])); // Step-by-step XOR`,
+        example: `findSingle([2,1,2,3,1]) = 3
+findSingle([4,1,2,1,2]) = 4
+// XOR cancels out duplicates
+// 2^1^2^3^1 = 3`,
+        syntax: `function findSingleNumber(nums) {
+  let result = 0;
+  for (let num of nums) {
+    result ^= num;
+  }
+  return result;
+}
+
+// a ^ a = 0, a ^ 0 = a`,
         quizQuestions: [
             {
                 question: "What is the key property of XOR that makes the single number algorithm work?",
@@ -25688,32 +25624,7 @@ console.log(SingleNumberSolver.demonstrateXOR([4, 1, 2, 1, 2])); // Step-by-step
                 explanation: "The algorithm is used in error detection systems where data corruption can be identified by finding unpaired or unique elements in transmitted data."
             }
         ],
-        syntax: `// Single Number Pattern
-function singleNumber(nums) {
-    let result = 0;
-    for (let num of nums) {
-        result ^= num;
-    }
-    return result;
-}
-
-// Using reduce
-function singleNumberReduce(nums) {
-    return nums.reduce((acc, num) => acc ^ num, 0);
-}
-
-// Two single numbers
-function singleNumberII(nums) {
-    let xor = nums.reduce((acc, num) => acc ^ num, 0);
-    let rightmostBit = xor & (-xor);
-    
-    let first = 0, second = 0;
-    for (let num of nums) {
-        if (num & rightmostBit) first ^= num;
-        else second ^= num;
-    }
-    return [first, second];
-}`,
+        
         example: `// Single Number Examples
 function singleNumber(nums) {
     let result = 0;
@@ -26060,6 +25971,24 @@ console.log(SubsetGenerator.generateSubsetsWithSum([1, 2, 3, 4], 5));
 
 console.log(SubsetGenerator.demonstrateBitPatterns(['A', 'B', 'C']));
 // Educational bit pattern demonstration`,
+        example: `generateSubsets([1,2,3]) = 
+[[], [1], [2], [1,2], [3], [1,3], [2,3], [1,2,3]]
+// 2^3 = 8 subsets`,
+        syntax: `function generateSubsets(arr) {
+  const n = arr.length;
+  const subsets = [];
+  
+  for (let mask = 0; mask < (1 << n); mask++) {
+    const subset = [];
+    for (let i = 0; i < n; i++) {
+      if (mask & (1 << i)) {
+        subset.push(arr[i]);
+      }
+    }
+    subsets.push(subset);
+  }
+  return subsets;
+}`,
         quizQuestions: [
             {
                 question: "How many subsets does a set with n elements have?",
@@ -26092,135 +26021,10 @@ console.log(SubsetGenerator.demonstrateBitPatterns(['A', 'B', 'C']));
                 explanation: "Machine learning uses subset generation for feature selection, exploring all possible combinations of features to find optimal sets."
             }
         ],
-        syntax: `// Generate All Subsets Pattern
-function generateSubsets(nums) {
-    const n = nums.length;
-    const subsets = [];
-    
-    for (let i = 0; i < (1 << n); i++) {
-        const subset = [];
-        for (let j = 0; j < n; j++) {
-            if (i & (1 << j)) {
-                subset.push(nums[j]);
-            }
-        }
-        subsets.push(subset);
-    }
-    
-    return subsets;
-}
-
-// Check if j-th bit is set
-function isBitSet(i, j) {
-    return (i & (1 << j)) !== 0;
-}
-
-// Count total subsets
-function countSubsets(n) {
-    return 1 << n; // 2^n
-}`,
-        example: `// Generate All Subsets Examples
-function generateSubsets(nums) {
-    const n = nums.length;
-    const subsets = [];
-    
-    // Iterate through all binary numbers from 0 to 2^n - 1
-    for (let i = 0; i < (1 << n); i++) {
-        const subset = [];
         
-        // Check each bit position
-        for (let j = 0; j < n; j++) {
-            if (i & (1 << j)) {
-                subset.push(nums[j]);
-            }
-        }
         
-        subsets.push(subset);
-    }
-    
-    return subsets;
-}
-
-console.log(generateSubsets([1, 2]));     // [[], [1], [2], [1,2]]
-console.log(generateSubsets([1, 2, 3])); // [[], [1], [2], [1,2], [3], [1,3], [2,3], [1,2,3]]`
-    },
-
-    // Mathematical Algorithms
-    {
-        id: 'mathematical-algorithms-intro',
-        title: 'Mathematical Algorithms Overview',
-        description: 'Foundation of computational mathematics in algorithm design and optimization',
-        category: 'Mathematical Algorithms',
-        difficulty: 'intermediate',
-        timeComplexity: 'Varies',
-        spaceComplexity: 'Varies',
-        extendedDefinition: `Mathematical algorithms form the backbone of computational problem-solving, combining mathematical theory with efficient algorithmic techniques. These algorithms solve numerical problems, optimize computations, and provide foundations for cryptography, graphics, and scientific computing.
-
-What it does: applies mathematical principles to solve computational problems efficiently, covering number theory, combinatorics, and optimization.
-
-How it works: leverages mathematical properties like modular arithmetic, fast exponentiation, and algorithmic optimization to reduce complexity.
-
-When to use: cryptography applications, scientific computing, graphics programming, competitive programming, when mathematical insight can optimize solutions.`,
-        example: `// Fast Exponentiation
-function fastPower(base, exp, mod = null) {
-    let result = 1;
-    while (exp > 0) {
-        if (exp % 2 === 1) result = (result * base) % (mod || Number.MAX_SAFE_INTEGER);
-        exp = Math.floor(exp / 2);
-        base = (base * base) % (mod || Number.MAX_SAFE_INTEGER);
-    }
-    return result;
-}
-
-// GCD using Euclidean Algorithm
-function gcd(a, b) {
-    while (b !== 0) [a, b] = [b, a % b];
-    return a;
-}
-
-// Sieve of Eratosthenes
-function sieveOfEratosthenes(n) {
-    const isPrime = Array(n + 1).fill(true);
-    isPrime[0] = isPrime[1] = false;
-    for (let i = 2; i * i <= n; i++) {
-        if (isPrime[i]) {
-            for (let j = i * i; j <= n; j += i) isPrime[j] = false;
-        }
-    }
-    return isPrime.map((prime, index) => prime ? index : null).filter(num => num !== null);
-}`,
-        syntax: `**Mathematical Algorithm Patterns:**
-
-1. **Iterative Mathematical Operations:**
-   \`\`\`javascript
-   function mathematicalOperation(n) {
-       let result = initialValue;
-       while (condition) {
-           result = updateRule(result);
-           n = reduceN(n);
-       }
-       return result;
-   }
-   \`\`\`
-
-2. **Recursive Mathematical Relations:**
-   \`\`\`javascript
-   function recursiveMath(n) {
-       if (baseCase(n)) return baseValue;
-       return combineResults(
-           recursiveMath(reduce1(n)),
-           recursiveMath(reduce2(n))
-       );
-   }
-   \`\`\`
-
-3. **Modular Arithmetic:**
-   \`\`\`javascript
-   const MOD = 1000000007;
-   function modularOperation(a, b) {
-       return ((a % MOD) + (b % MOD)) % MOD;
-   }
-   \`\`\``,
+        
+        
         voiceExplanation: `Think of mathematical algorithms like having a powerful toolkit for solving numerical puzzles that appear everywhere in computer science. Imagine you're a digital architect who needs to build secure systems, create stunning graphics, or solve complex optimization problems. Mathematical algorithms are your specialized tools! Picture fast exponentiation like having a super-efficient calculator that can compute 2^1000 without breaking a sweat - instead of multiplying 2 by itself 1000 times, it uses clever shortcuts by repeatedly squaring and combining results. Number theory algorithms are like having a master locksmith's tools - they help you understand the fundamental properties of numbers, find greatest common divisors, and work with prime numbers that form the backbone of internet security. Modular arithmetic is like working with a clock - numbers wrap around at a certain point, which is incredibly useful for keeping calculations manageable and preventing overflow. These aren't just abstract math concepts - they're the secret ingredients that make your credit card transactions secure, your video games run smoothly, and your search algorithms lightning-fast!`,
         realWorldApplications: `**Industry Applications:**
 - **Cryptography**: RSA encryption, elliptic curve cryptography, digital signatures
@@ -26586,6 +26390,24 @@ export function gcdNT(a: number, b: number): number { a = Math.abs(a); b = Math.
 export function lcmNT(a: number, b: number): number { if (a === 0 || b === 0) return 0; return Math.abs(a / gcdNT(a, b) * b); }
 export function isPrimeNT(n: number): boolean { if (n < 2) return false; if (n % 2 === 0) return n === 2; for (let i = 3; i * i <= n; i += 2) if (n % i === 0) return false; return true; }
 export function sieveNT(n: number): number[] { const isPrime = new Array(n+1).fill(true); isPrime[0]=isPrime[1]=false; for (let p=2; p*p<=n; p++){ if (isPrime[p]) for (let m=p*p; m<=n; m+=p) isPrime[m]=false; } return isPrime.map((v,i)=>v?i:-1).filter(x=>x!==-1); }`,
+        syntax: `function gcd(a, b) {
+  while (b !== 0) {
+    [a, b] = [b, a % b];
+  }
+  return a;
+}
+
+function lcm(a, b) {
+  return Math.abs(a * b) / gcd(a, b);
+}
+
+function isPrime(n) {
+  if (n <= 1) return false;
+  for (let i = 2; i * i <= n; i++) {
+    if (n % i === 0) return false;
+  }
+  return true;
+}`,
         voiceExplanation: `Think of GCD like repeatedly exchanging change: you replace the larger number with the remainder until nothing is left—what remains is the greatest common divisor. For primes, the sieve is like crossing off multiples on a number line until only the prime “loners” remain.`
     },
     {
@@ -26660,6 +26482,22 @@ export function factorize(n: number): Map<number, number> {
   if (n > 2) f.set(n, (f.get(n) || 0) + 1);
   return f;
 }`,
+        syntax: `// Sieve of Eratosthenes
+function sieve(n) {
+  const isPrime = Array(n + 1).fill(true);
+  isPrime[0] = isPrime[1] = false;
+  
+  for (let i = 2; i * i <= n; i++) {
+    if (isPrime[i]) {
+      for (let j = i * i; j <= n; j += i) {
+        isPrime[j] = false;
+      }
+    }
+  }
+  
+  return Array.from({length: n+1}, (_, i) => i)
+    .filter(i => isPrime[i]);
+}`,
         voiceExplanation: `Imagine lining up numbers from 2 to n and crossing out multiples like stamping “taken” slots on a parking lot. The unmarked spots are primes. For testing one number, you only need to check divisors up to its square root, mostly around numbers of the form 6k±1.`
     },
     {
@@ -26718,6 +26556,20 @@ export function binPow(base: number, exp: number, mod?: number): number {
 // Example usage
 // console.log(binPow(2, 10)); // 1024
 // console.log(binPow(2, 10, 1000000007)); // 1024`,
+        syntax: `function fastPower(base, exp, mod) {
+  let result = 1;
+  base = base % mod;
+  
+  while (exp > 0) {
+    if (exp % 2 === 1) {
+      result = (result * base) % mod;
+    }
+    exp = Math.floor(exp / 2);
+    base = (base * base) % mod;
+  }
+  
+  return result;
+}`,
         voiceExplanation: `Imagine climbing a staircase where each step doubles your height, and sometimes you add your current height to the answer when the step number is odd. That’s binary exponentiation: we square (double height) every step, and only multiply into the result when the current bit of the exponent is 1. This clever bit-by-bit process finishes in logarithmic time.`
     },
     {
@@ -26787,6 +26639,18 @@ export function modInv(a: number, mod: number = MOD): number {
   return (r.x % mod + mod) % mod;
 }
 export function modDiv(a: number, b: number, mod: number = MOD): number { return modMul(a, modInv(b, mod), mod); }`,
+        syntax: `function modAdd(a, b, mod) {
+  return ((a % mod) + (b % mod)) % mod;
+}
+
+function modMul(a, b, mod) {
+  return ((a % mod) * (b % mod)) % mod;
+}
+
+function modInverse(a, mod) {
+  // Using Fermat's little theorem
+  return fastPower(a, mod - 2, mod);
+}`,
         voiceExplanation: `Think of a clock with m hours: after hitting m, you wrap back to 0. Modular arithmetic is clock math for integers. Adding, multiplying, and even dividing (when an inverse exists) all happen on this wrap-around clock, which keeps numbers small and safe for big computations.`
     },
     {
@@ -26858,6 +26722,23 @@ export function catalan(n: number): number {
     for (let j = 0; j < i; j++) dp[i] += dp[j] * dp[i - 1 - j];
   }
   return dp[n];
+}`,
+        syntax: `function factorial(n) {
+  let result = 1;
+  for (let i = 2; i <= n; i++) {
+    result *= i;
+  }
+  return result;
+}
+
+function nCr(n, r) {
+  if (r > n) return 0;
+  return factorial(n) / (factorial(r) * factorial(n - r));
+}
+
+function nPr(n, r) {
+  if (r > n) return 0;
+  return factorial(n) / factorial(n - r);
 }`,
         voiceExplanation: `Combinatorics is like counting how many outfits you can make from shirts and pants. Permutations care about order (shirt then pants), combinations don’t. With tools like Pascal’s triangle and Catalan numbers, we can count surprisingly complex structures without listing them all.`
     },
@@ -26947,6 +26828,24 @@ export function fibFastDoubling(n: number): number {
   return fd(n)[0];
 }
 `,
+        syntax: `// Matrix exponentiation for Fibonacci
+function fibMatrix(n) {
+  if (n === 0) return 0;
+  if (n === 1) return 1;
+  
+  const matrix = [[1, 1], [1, 0]];
+  const result = matrixPower(matrix, n - 1);
+  return result[0][0];
+}
+
+function matrixMul(a, b) {
+  return [
+    [a[0][0]*b[0][0] + a[0][1]*b[1][0], 
+     a[0][0]*b[0][1] + a[0][1]*b[1][1]],
+    [a[1][0]*b[0][0] + a[1][1]*b[1][0], 
+     a[1][0]*b[0][1] + a[1][1]*b[1][1]]
+  ];
+}`,
         voiceExplanation: `Think of Fibonacci like climbing stairs: each step count is the sum of the previous two ways. The fast-doubling method jumps many steps at once using math identities, so instead of walking one step at a time, we leap in powers of two—finishing in logarithmic time.`
     }
 ]

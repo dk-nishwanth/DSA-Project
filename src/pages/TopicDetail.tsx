@@ -1,6 +1,6 @@
 import { useParams, Navigate } from 'react-router-dom';
 import { useState } from 'react';
-import { ArrowLeft, BookOpen, Code2, Lightbulb } from 'lucide-react';
+import { ArrowLeft, BookOpen, Code2, Lightbulb, PanelRightClose, PanelRightOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrayVisualizer } from '@/components/visualizer/array-visualizer';
@@ -539,6 +539,7 @@ import { useAdvancedFeatures } from '@/hooks/useAdvancedFeatures';
 
 export default function TopicDetail() {
   const [currentExplanationStep, setCurrentExplanationStep] = useState(0);
+  const [sidebarVisible, setSidebarVisible] = useState(true);
   const { topicId } = useParams<{ topicId: string }>();
   const topic = dsaTopics.find(t => t.id === topicId);
 
@@ -1760,19 +1761,19 @@ arr.findIndex(v => v === 7); // search`,
 
         {/* Learning Session Indicator (Advanced Feature) */}
         {currentSession && (
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-4 mb-4">
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-4">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium text-blue-800">Learning Session Active</span>
+              <span className="text-sm font-medium text-blue-800 dark:text-blue-200">Learning Session Active</span>
               {xpGained > 0 && (
-                <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
+                <span className="text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-2 py-1 rounded-full">
                   +{xpGained} XP
                 </span>
               )}
             </div>
             <button
               onClick={() => endSession()}
-              className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
+              className="text-xs bg-blue-600 dark:bg-blue-700 text-white px-3 py-1 rounded hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
             >
               Complete Session
             </button>
@@ -1781,14 +1782,14 @@ arr.findIndex(v => v === 7); // search`,
 
         {/* Achievement Notifications */}
         {achievementsUnlocked.length > 0 && (
-          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-4 mb-4">
+          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-950 dark:to-orange-950 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-4">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-lg">🏆</span>
-              <span className="font-medium text-yellow-800">New Achievement{achievementsUnlocked.length > 1 ? 's' : ''} Unlocked!</span>
+              <span className="font-medium text-yellow-800 dark:text-yellow-200">New Achievement{achievementsUnlocked.length > 1 ? 's' : ''} Unlocked!</span>
             </div>
             <div className="flex flex-wrap gap-2">
               {achievementsUnlocked.map((achievement, index) => (
-                <span key={index} className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
+                <span key={index} className="text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-2 py-1 rounded-full">
                   {achievement.icon} {achievement.name}
                 </span>
               ))}
@@ -1796,10 +1797,38 @@ arr.findIndex(v => v === 7); // search`,
           </div>
         )}
 
+        {/* Sidebar Toggle Button */}
+        <div className="flex justify-end mb-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setSidebarVisible(!sidebarVisible)}
+            className="flex items-center gap-2"
+          >
+            {sidebarVisible ? (
+              <>
+                <PanelRightClose className="w-4 h-4" />
+                Hide Sidebar
+              </>
+            ) : (
+              <>
+                <PanelRightOpen className="w-4 h-4" />
+                Show Sidebar
+              </>
+            )}
+          </Button>
+        </div>
+
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className={cn(
+          "grid grid-cols-1 gap-6",
+          sidebarVisible ? "xl:grid-cols-3" : "xl:grid-cols-1"
+        )}>
           {/* Left Column - Visualization */}
-          <div className="xl:col-span-2 space-y-6">
+          <div className={cn(
+            "space-y-6",
+            sidebarVisible ? "xl:col-span-2" : "xl:col-span-1"
+          )}>
             {/* Topic Definition + Voice Narration */}
             <div className="space-y-3">
               {(() => { const c = getTopicContent(topic.id); return null; })()}
@@ -1903,47 +1932,52 @@ arr.findIndex(v => v === 7); // search`,
 
             {/* AI Recommendations (Advanced Feature) */}
             {isPremium && (
-              <div className="bg-gradient-to-br from-blue-50 to-purple-50 border border-blue-200 rounded-xl p-4 shadow-subtle">
+              <div className="bg-card border rounded-xl p-4 shadow-subtle">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-lg">🧠</span>
-                  <h4 className="font-semibold text-blue-800">AI Recommendations</h4>
+                  <h4 className="font-semibold text-card-foreground">AI Recommendations</h4>
                 </div>
                 <div className="space-y-2 text-sm">
-                  <div className="p-2 bg-white/60 rounded-lg">
-                    <p className="text-blue-700 font-medium">Needs Improvement</p>
-                    <p className="text-blue-600 text-xs">Confidence: 90%</p>
+                  <div className="p-3 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <p className="text-blue-700 dark:text-blue-300 font-medium">Needs Improvement</p>
+                    <p className="text-blue-600 dark:text-blue-400 text-xs mt-1">Confidence: 90%</p>
                   </div>
-                  <div className="p-2 bg-white/60 rounded-lg">
-                    <p className="text-blue-700 font-medium">Practice more examples</p>
-                    <p className="text-blue-600 text-xs">Confidence: 85%</p>
+                  <div className="p-3 bg-purple-50 dark:bg-purple-950 rounded-lg border border-purple-200 dark:border-purple-800">
+                    <p className="text-purple-700 dark:text-purple-300 font-medium">Practice more examples</p>
+                    <p className="text-purple-600 dark:text-purple-400 text-xs mt-1">Confidence: 85%</p>
                   </div>
-                  <div className="p-2 bg-white/60 rounded-lg">
-                    <p className="text-blue-700 font-medium">Review related topics</p>
-                    <p className="text-blue-600 text-xs">Confidence: 75%</p>
-                  </div>
+                  <div className="p-3 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800 shadow-sm hover:shadow-md transition-all duration-200">
+  <p className="text-blue-700 dark:text-blue-300 font-semibold">
+    Review related topics
+  </p>
+  <p className="text-blue-600 dark:text-blue-400 text-xs mt-1">
+    Confidence: 75%
+  </p>
+</div>
+
                 </div>
               </div>
             )}
 
             {/* Session Stats (Advanced Feature) */}
             {currentSession && (
-              <div className="bg-gradient-to-br from-green-50 to-blue-50 border border-green-200 rounded-xl p-4 shadow-subtle">
+              <div className="bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-950 dark:to-blue-950 border border-green-200 dark:border-green-800 rounded-xl p-4 shadow-subtle">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-lg">⚡</span>
-                  <h4 className="font-semibold text-green-800">Session Stats</h4>
+                  <h4 className="font-semibold text-green-800 dark:text-green-200">Session Stats</h4>
                 </div>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-green-700">XP Gained</span>
-                    <span className="font-medium text-green-800">+{xpGained}</span>
+                    <span className="text-green-700 dark:text-green-300">XP Gained</span>
+                    <span className="font-medium text-green-800 dark:text-green-200">+{xpGained}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-green-700">Activities</span>
-                    <span className="font-medium text-green-800">{currentSession.activitiesCompleted.length}</span>
+                    <span className="text-green-700 dark:text-green-300">Activities</span>
+                    <span className="font-medium text-green-800 dark:text-green-200">{currentSession.activitiesCompleted.length}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-green-700">Progress</span>
-                    <span className="font-medium text-green-800">60%</span>
+                    <span className="text-green-700 dark:text-green-300">Progress</span>
+                    <span className="font-medium text-green-800 dark:text-green-200">60%</span>
                   </div>
                 </div>
               </div>
@@ -1958,29 +1992,29 @@ arr.findIndex(v => v === 7); // search`,
               <div className="space-y-2">
                 <button
                   onClick={() => trackInteraction({ topicId: topic.id, action: 'visualization_view', data: { type: 'practice' } })}
-                  className="w-full text-left p-2 text-sm bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                  className="w-full text-left p-2 text-sm bg-blue-50 dark:bg-blue-950 hover:bg-blue-100 dark:hover:bg-blue-900 rounded-lg transition-colors"
                 >
-                  <span className="text-blue-700">🎯 Practice Problems</span>
+                  <span className="text-blue-700 dark:text-blue-300">🎯 Practice Problems</span>
                 </button>
                 {isPremium && (
                   <button
                     onClick={() => trackInteraction({ topicId: topic.id, action: 'visualization_view', data: { type: 'ai_help' } })}
-                    className="w-full text-left p-2 text-sm bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors"
+                    className="w-full text-left p-2 text-sm bg-purple-50 dark:bg-purple-950 hover:bg-purple-100 dark:hover:bg-purple-900 rounded-lg transition-colors"
                   >
-                    <span className="text-purple-700">🧠 AI Explanation</span>
+                    <span className="text-purple-700 dark:text-purple-300">🧠 AI Explanation</span>
                   </button>
                 )}
                 <button
                   onClick={() => trackInteraction({ topicId: topic.id, action: 'code_submit', data: { type: 'challenge' } })}
-                  className="w-full text-left p-2 text-sm bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
+                  className="w-full text-left p-2 text-sm bg-green-50 dark:bg-green-950 hover:bg-green-100 dark:hover:bg-green-900 rounded-lg transition-colors"
                 >
-                  <span className="text-green-700">💻 Code Challenge</span>
+                  <span className="text-green-700 dark:text-green-300">💻 Code Challenge</span>
                 </button>
                 <button
                   onClick={() => trackInteraction({ topicId: topic.id, action: 'visualization_view', data: { type: 'related' } })}
-                  className="w-full text-left p-2 text-sm bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
+                  className="w-full text-left p-2 text-sm bg-orange-50 dark:bg-orange-950 hover:bg-orange-100 dark:hover:bg-orange-900 rounded-lg transition-colors"
                 >
-                  <span className="text-orange-700">🔗 Related Topics</span>
+                  <span className="text-orange-700 dark:text-orange-300">🔗 Related Topics</span>
                 </button>
               </div>
             </div>
