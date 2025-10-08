@@ -2,9 +2,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
 import { Users, GraduationCap, Shield, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
 
 export default function Landing() {
   const navigate = useNavigate();
+  const [showTeam, setShowTeam] = useState(false);
 
   return (
     <div className="min-h-screen flex">
@@ -51,15 +53,33 @@ export default function Landing() {
            <p className="text-white/80 text-lg mt-4">
   <b>
     Created by{' '}
+    <button 
+      onClick={() => setShowTeam(!showTeam)}
+      className="text-blue-400 hover:underline cursor-pointer focus:outline-none"
+    >
+      AlgoWave Team
+    </button>
+  </b>
+</p>
+{showTeam && (
+  <p className="text-white/80 text-base mt-3">
     <a href="https://www.linkedin.com/in/nishwanth-dk/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
       Nishwanth DK
-    </a>{' '}
-    &{' '}
+    </a>
+    {', '}
     <a href="https://www.linkedin.com/in/amirtha-anand/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
       Amirtha A
     </a>
-  </b>
-</p>
+    {', '}
+    <a href="https://www.linkedin.com/in/aswin-k-6a40ab259" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
+      Ashwin K
+    </a>
+    {' & '}
+    <a href="https://www.linkedin.com/in/gokulsubramaniyan/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
+      Gokul S
+    </a>
+  </p>
+)}
           </div>
         </div>
       </div>

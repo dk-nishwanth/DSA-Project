@@ -1,69 +1,78 @@
 export interface QuizQuestion {
-  question: string;
-  options: string[];
-  correctAnswer: number;
-  explanation: string;
+    question: string;
+    options: string[];
+    correctAnswer: number;
+    explanation: string;
 }
 
 export interface DSATopic {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  timeComplexity?: string;
-  spaceComplexity?: string;
-  extendedDefinition?: string; // richer content used in DefinitionBox if available
-  example?: string;
-  syntax?: string;
-  voiceExplanation?: string; // Voice-friendly explanation for audio learning
-  realWorldApplications?: string; // Practical applications in industry
-  pseudocode?: string; // Step-by-step pseudocode
-  keyConcepts?: string; // Essential concepts and principles
-  implementationCode?: string; // Complete, accurate implementation
-  quizQuestions?: QuizQuestion[]; // Interactive quiz questions for assessment
+    id: string;
+    title: string;
+    description: string;
+    category: string;
+    difficulty: 'beginner' | 'intermediate' | 'advanced';
+    timeComplexity?: string;
+    spaceComplexity?: string;
+    extendedDefinition?: string; // richer content used in DefinitionBox if available
+    example?: string;
+    syntax?: string;
+    voiceExplanation?: string; // Voice-friendly explanation for audio learning
+    realWorldApplications?: string; // Practical applications in industry
+    pseudocode?: string; // Step-by-step pseudocode
+    keyConcepts?: string; // Essential concepts and principles
+    implementationCode?: string; // Complete, accurate implementation
+    quizQuestions?: QuizQuestion[]; // Interactive quiz questions for assessment
+    // Alternative/extended content properties (legacy)
+    voiceExplanation_alt?: string;
+    keyConcepts_alt?: string;
+    pseudocode_alt?: string;
+    implementationCode_alt?: string;
+    syntax_alt?: string;
+    syntax_alt2?: string;
+    extendedDefinition_alt?: string;
+    realWorldApplications_alt?: string;
 }
 
 export const dsaCategories = [
-  'Arrays',
-  'Strings',
-  'Linked Lists',
-  'Stacks & Queues',
-  'Trees',
-  'Graphs',
-  'Sorting',
-  'Searching',
-  'Hashing',
-  'Recursion',
-  'Dynamic Programming',
-  'Greedy Algorithms',
-  'Backtracking',
-  'Advanced Data Structures',
-  'Two Pointers',
-  'Sliding Window',
-  'Bit Manipulation',
-  'Mathematical Algorithms'
+    'Arrays',
+    'Strings',
+    'Linked Lists',
+    'Stacks & Queues',
+    'Trees',
+    'Graphs',
+    'Sorting',
+    'Searching',
+    'Hashing',
+    'Recursion',
+    'Dynamic Programming',
+    'Greedy Algorithms',
+    'Backtracking',
+    'Advanced Data Structures',
+    'Two Pointers',
+    'Sliding Window',
+    'Bit Manipulation',
+    'Mathematical Algorithms'
 ];
 
 export const dsaTopics: DSATopic[] = [
-  // Arrays
-  {
-    id: 'array-basics',
-    title: 'Array Fundamentals',
-    description: 'Master array operations: access, insert, delete, traverse, and search',
-    category: 'Arrays',
-    difficulty: 'beginner',
-    timeComplexity: 'O(1) - O(n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Arrays are fundamental data structures that store elements of the same type in contiguous memory locations. Each element can be accessed directly using its index, making arrays one of the most efficient data structures for random access operations.
+    // Arrays
+    {
+        id: 'array-basics',
+        title: 'Array Fundamentals',
+        description: 'Master array operations: access, insert, delete, traverse, and search',
+        category: 'Arrays',
+        difficulty: 'beginner',
+        timeComplexity: 'O(1) - O(n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Arrays are fundamental data structures that store elements of the same type in contiguous memory locations. Each element can be accessed directly using its index, making arrays one of the most efficient data structures for random access operations.
 
 What it does: keeps items in order and lets you jump directly to any position by index.
 
 How it works: indexes map to memory offsets; appending at the end is fast, inserting in the middle shifts later elements.
 
 When to use: fast reads by position, compact storage, building blocks for higher-level structures.`,
-    voiceExplanation: `Arrays are like a row of numbered boxes where you can store items. Imagine you have a street with houses numbered zero, one, two, and so on. Each house can hold one item, and you can instantly go to any house if you know its number. This is exactly how arrays work in programming. The house number is the index, and the item inside is your data. You can quickly access any element because the computer knows exactly where each element is stored in memory. Arrays are perfect when you need fast access to elements and know roughly how much data you'll be storing.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Arrays are like a row of numbered boxes where you can store items. Imagine you have a street with houses numbered zero, one, two, and so on. Each house can hold one item, and you can instantly go to any house if you know its number. This is exactly how arrays work in programming. The house number is the index, and the item inside is your data. You can quickly access any element because the computer knows exactly where each element is stored in memory. Arrays are perfect when you need fast access to elements and know roughly how much data you'll be storing.`,
+        realWorldApplications: `**Industry Applications:**
 - **Database Systems**: Row storage and indexing mechanisms
 - **Image Processing**: Pixel data representation (2D arrays)
 - **Gaming**: Game boards, tile maps, inventory systems
@@ -72,7 +81,7 @@ When to use: fast reads by position, compact storage, building blocks for higher
 - **Web Development**: Form data collection, API response handling
 - **Operating Systems**: Process tables, memory management
 - **Embedded Systems**: Sensor data buffers, real-time data processing`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Indexing**: Direct access using array[index] notation
 2. **Bounds Checking**: Ensuring index is within valid range [0, length-1]
 3. **Memory Efficiency**: Contiguous storage minimizes memory overhead
@@ -80,7 +89,7 @@ When to use: fast reads by position, compact storage, building blocks for higher
 5. **Trade-offs**: Fast access vs. fixed size limitations
 6. **Dynamic vs. Static**: Understanding when to use each type
 7. **Multi-dimensional Arrays**: Arrays of arrays for complex data structures`,
-    pseudocode: `**Array Operations Pseudocode:**
+        pseudocode: `**Array Operations Pseudocode:**
 
 ALGORITHM ArrayAccess(array, index)
 INPUT: array - the array to access, index - position to access
@@ -122,7 +131,7 @@ BEGIN
     
     array.length = array.length - 1
 END`,
-    implementationCode: `// Comprehensive Array Implementation in JavaScript
+        implementationCode: `// Comprehensive Array Implementation in JavaScript
 
 class DynamicArray {
     constructor(initialCapacity = 10) {
@@ -237,7 +246,7 @@ arr.insert(1, 15); // [10, 15, 20, 30]
 console.log(arr.get(1)); // 15
 arr.delete(2); // [10, 15, 30]
 console.log(arr.indexOf(30)); // 2`,
-    example: `// Basic Array Operations
+        example: `// Basic Array Operations
 const numbers = [1, 2, 3, 4, 5];
 
 // Access - O(1)
@@ -261,61 +270,61 @@ const index = numbers.indexOf(3); // 2
 
 // Traverse - O(n)
 numbers.forEach((num, i) => console.log(\`Index \${i}: \${num}\`));`,
-    syntax: `const A = [3,8,12];
+        syntax: `const A = [3,8,12];
 A[1]; // access
 A.push(5); // append
 A.pop(); // remove last
 A.indexOf(12); // linear search`,
-    quizQuestions: [
-      {
-        question: "What is the time complexity of accessing an element in an array by index?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
-        correctAnswer: 0,
-        explanation: "Array access by index is O(1) because elements are stored in contiguous memory locations, allowing direct calculation of memory address using the formula: base_address + (index * element_size)."
-      },
-      {
-        question: "What happens when you try to insert an element at the beginning of an array?",
-        options: ["All elements shift left", "All elements shift right", "Only the first element moves", "No elements need to move"],
-        correctAnswer: 1,
-        explanation: "When inserting at the beginning, all existing elements must shift one position to the right to make space for the new element, resulting in O(n) time complexity."
-      },
-      {
-        question: "Which array operation has the best average-case time complexity?",
-        options: ["Search", "Insert at beginning", "Access by index", "Delete from middle"],
-        correctAnswer: 2,
-        explanation: "Access by index is O(1) - constant time - because arrays provide direct memory access using index calculations, regardless of array size."
-      },
-      {
-        question: "What is the main advantage of arrays over linked lists?",
-        options: ["Dynamic size", "Easy insertion", "Random access", "Less memory usage per element"],
-        correctAnswer: 2,
-        explanation: "Arrays provide O(1) random access to elements by index, while linked lists require O(n) traversal to reach a specific position. Arrays also have better cache locality due to contiguous memory layout."
-      },
-      {
-        question: "In a zero-indexed array of size 10, what is the valid range of indices?",
-        options: ["1 to 10", "0 to 10", "0 to 9", "1 to 9"],
-        correctAnswer: 2,
-        explanation: "Zero-indexed arrays start counting from 0, so an array of size 10 has valid indices from 0 to 9 (inclusive). Accessing index 10 would cause an out-of-bounds error."
-      }
-    ]
-  },
-  {
-    id: 'array-rotation',
-    title: 'Array Rotation',
-    description: 'Learn left and right rotation techniques with optimal approaches',
-    category: 'Arrays',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Array rotation involves shifting elements of an array to the left or right by a specified number of positions. This fundamental operation is crucial in many algorithms and has applications in circular data structures, string manipulation, and algorithmic problem solving.
+        quizQuestions: [
+            {
+                question: "What is the time complexity of accessing an element in an array by index?",
+                options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+                correctAnswer: 0,
+                explanation: "Array access by index is O(1) because elements are stored in contiguous memory locations, allowing direct calculation of memory address using the formula: base_address + (index * element_size)."
+            },
+            {
+                question: "What happens when you try to insert an element at the beginning of an array?",
+                options: ["All elements shift left", "All elements shift right", "Only the first element moves", "No elements need to move"],
+                correctAnswer: 1,
+                explanation: "When inserting at the beginning, all existing elements must shift one position to the right to make space for the new element, resulting in O(n) time complexity."
+            },
+            {
+                question: "Which array operation has the best average-case time complexity?",
+                options: ["Search", "Insert at beginning", "Access by index", "Delete from middle"],
+                correctAnswer: 2,
+                explanation: "Access by index is O(1) - constant time - because arrays provide direct memory access using index calculations, regardless of array size."
+            },
+            {
+                question: "What is the main advantage of arrays over linked lists?",
+                options: ["Dynamic size", "Easy insertion", "Random access", "Less memory usage per element"],
+                correctAnswer: 2,
+                explanation: "Arrays provide O(1) random access to elements by index, while linked lists require O(n) traversal to reach a specific position. Arrays also have better cache locality due to contiguous memory layout."
+            },
+            {
+                question: "In a zero-indexed array of size 10, what is the valid range of indices?",
+                options: ["1 to 10", "0 to 10", "0 to 9", "1 to 9"],
+                correctAnswer: 2,
+                explanation: "Zero-indexed arrays start counting from 0, so an array of size 10 has valid indices from 0 to 9 (inclusive). Accessing index 10 would cause an out-of-bounds error."
+            }
+        ]
+    },
+    {
+        id: 'array-rotation',
+        title: 'Array Rotation',
+        description: 'Learn left and right rotation techniques with optimal approaches',
+        category: 'Arrays',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Array rotation involves shifting elements of an array to the left or right by a specified number of positions. This fundamental operation is crucial in many algorithms and has applications in circular data structures, string manipulation, and algorithmic problem solving.
 
 What it does: shifts elements left or right by positions, wrapping elements around to the other end.
 
 How it works: uses reversal algorithm - reverse entire array, then reverse first k elements, then reverse remaining elements.
 
 When to use: circular data structures, image transformations, string rotations, sliding window problems.`,
-    voiceExplanation: `Think of array rotation like a carousel or a conveyor belt. Imagine you have a row of people standing in a line, and you want to rotate them. In a left rotation, everyone takes a step to the left, and the person at the front wraps around to the back. In a right rotation, everyone steps to the right, and the person at the back moves to the front. The clever part is that you don't need to move everyone one by one - there's a brilliant trick called the reversal algorithm. It's like doing three magic flips: first flip the entire line, then flip the first part, then flip the second part, and voila! You've rotated the array efficiently. This technique is used everywhere - from image processing where you rotate pixel arrays, to operating systems managing circular buffers, to even simple tasks like rotating elements in a game board.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of array rotation like a carousel or a conveyor belt. Imagine you have a row of people standing in a line, and you want to rotate them. In a left rotation, everyone takes a step to the left, and the person at the front wraps around to the back. In a right rotation, everyone steps to the right, and the person at the back moves to the front. The clever part is that you don't need to move everyone one by one - there's a brilliant trick called the reversal algorithm. It's like doing three magic flips: first flip the entire line, then flip the first part, then flip the second part, and voila! You've rotated the array efficiently. This technique is used everywhere - from image processing where you rotate pixel arrays, to operating systems managing circular buffers, to even simple tasks like rotating elements in a game board.`,
+        realWorldApplications: `**Industry Applications:**
 - **Image Processing**: Rotating pixel matrices for image transformations
 - **Operating Systems**: Circular buffer management for I/O operations
 - **Game Development**: Rotating game boards, tile maps, and sprite arrays
@@ -324,7 +333,7 @@ When to use: circular data structures, image transformations, string rotations, 
 - **Audio Processing**: Circular delay buffers and audio effects
 - **Network Protocols**: Round-robin scheduling and load balancing
 - **Database Systems**: Circular log files and buffer pool management`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Modular Arithmetic**: Understanding k % n for handling large rotations
 2. **In-place Operations**: Minimizing space complexity through clever algorithms
 3. **Reversal Technique**: Three reversals achieve optimal O(n) time, O(1) space
@@ -332,7 +341,7 @@ When to use: circular data structures, image transformations, string rotations, 
 5. **GCD-based Cycles**: Using greatest common divisor for cyclic replacements
 6. **Time-Space Trade-offs**: Balancing algorithm efficiency and memory usage
 7. **Edge Cases**: Handling empty arrays, single elements, and zero rotations`,
-    pseudocode: `**Array Rotation Pseudocode:**
+        pseudocode: `**Array Rotation Pseudocode:**
 
 ALGORITHM RotateLeftSimple(array, k)
 INPUT: array - the array to rotate, k - number of positions
@@ -376,7 +385,7 @@ BEGIN
         end = end - 1
     END WHILE
 END`,
-    implementationCode: `// Comprehensive Array Rotation Implementation
+        implementationCode: `// Comprehensive Array Rotation Implementation
 
 class ArrayRotation {
     // Simple rotation using extra space - O(n) time, O(n) space
@@ -459,7 +468,7 @@ const numbers = [1, 2, 3, 4, 5, 6, 7];
 console.log(ArrayRotation.rotateLeftSimple([...numbers], 3)); // [4, 5, 6, 7, 1, 2, 3]
 console.log(ArrayRotation.rotateLeftInPlace([...numbers], 3)); // [4, 5, 6, 7, 1, 2, 3]
 console.log(ArrayRotation.rotateRightInPlace([...numbers], 2)); // [6, 7, 1, 2, 3, 4, 5]`,
-    example: `// Array Rotation
+        example: `// Array Rotation
 function rotateLeft(arr, k) {
     const n = arr.length;
     k = k % n;
@@ -476,56 +485,56 @@ function rotateRight(arr, k) {
 const nums = [1, 2, 3, 4, 5];
 console.log(rotateLeft(nums, 2)); // [3, 4, 5, 1, 2]
 console.log(rotateRight(nums, 2)); // [4, 5, 1, 2, 3]`,
-    quizQuestions: [
-      {
-        question: "What is the time complexity of the reversal algorithm for array rotation?",
-        options: ["O(1)", "O(k)", "O(n)", "O(n²)"],
-        correctAnswer: 2,
-        explanation: "The reversal algorithm performs three array reversals, each taking O(n) time, resulting in overall O(n) time complexity."
-      },
-      {
-        question: "Why do we use k % n when rotating an array by k positions?",
-        options: ["To handle negative rotations", "To handle rotations larger than array size", "To optimize performance", "To prevent array overflow"],
-        correctAnswer: 1,
-        explanation: "Using k % n handles cases where k is larger than the array size, since rotating by n positions returns the array to its original state."
-      },
-      {
-        question: "What is the space complexity of the reversal algorithm for in-place rotation?",
-        options: ["O(1)", "O(k)", "O(n)", "O(n log n)"],
-        correctAnswer: 0,
-        explanation: "The reversal algorithm rotates the array in-place using only a constant amount of extra space for swapping elements."
-      },
-      {
-        question: "How do you convert a right rotation by k positions to a left rotation?",
-        options: ["Left rotate by k", "Left rotate by n-k", "Left rotate by k-n", "Right rotate by n-k"],
-        correctAnswer: 1,
-        explanation: "Right rotation by k positions is equivalent to left rotation by (n-k) positions, where n is the array length."
-      },
-      {
-        question: "What is a real-world application of array rotation?",
-        options: ["Binary search", "Hash table implementation", "Image processing for rotations", "Sorting algorithms"],
-        correctAnswer: 2,
-        explanation: "Array rotation is commonly used in image processing to rotate pixel matrices, as well as in circular buffers and game development."
-      }
-    ]
-  },
-  {
-    id: 'array-subarray-problems',
-    title: 'Subarray Problems',
-    description: 'Maximum subarray, subarray sum, and sliding window basics',
-    category: 'Arrays',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Subarray problems involve finding contiguous subsequences within an array that satisfy specific conditions. These problems are fundamental in algorithmic problem solving and form the basis for many optimization techniques.
+        quizQuestions: [
+            {
+                question: "What is the time complexity of the reversal algorithm for array rotation?",
+                options: ["O(1)", "O(k)", "O(n)", "O(n²)"],
+                correctAnswer: 2,
+                explanation: "The reversal algorithm performs three array reversals, each taking O(n) time, resulting in overall O(n) time complexity."
+            },
+            {
+                question: "Why do we use k % n when rotating an array by k positions?",
+                options: ["To handle negative rotations", "To handle rotations larger than array size", "To optimize performance", "To prevent array overflow"],
+                correctAnswer: 1,
+                explanation: "Using k % n handles cases where k is larger than the array size, since rotating by n positions returns the array to its original state."
+            },
+            {
+                question: "What is the space complexity of the reversal algorithm for in-place rotation?",
+                options: ["O(1)", "O(k)", "O(n)", "O(n log n)"],
+                correctAnswer: 0,
+                explanation: "The reversal algorithm rotates the array in-place using only a constant amount of extra space for swapping elements."
+            },
+            {
+                question: "How do you convert a right rotation by k positions to a left rotation?",
+                options: ["Left rotate by k", "Left rotate by n-k", "Left rotate by k-n", "Right rotate by n-k"],
+                correctAnswer: 1,
+                explanation: "Right rotation by k positions is equivalent to left rotation by (n-k) positions, where n is the array length."
+            },
+            {
+                question: "What is a real-world application of array rotation?",
+                options: ["Binary search", "Hash table implementation", "Image processing for rotations", "Sorting algorithms"],
+                correctAnswer: 2,
+                explanation: "Array rotation is commonly used in image processing to rotate pixel matrices, as well as in circular buffers and game development."
+            }
+        ]
+    },
+    {
+        id: 'array-subarray-problems',
+        title: 'Subarray Problems',
+        description: 'Maximum subarray, subarray sum, and sliding window basics',
+        category: 'Arrays',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Subarray problems involve finding contiguous subsequences within an array that satisfy specific conditions. These problems are fundamental in algorithmic problem solving and form the basis for many optimization techniques.
 
 What it does: finds contiguous subsequences within arrays that meet specific criteria like maximum sum or target value.
 
 How it works: uses techniques like Kadane's algorithm for maximum subarray or sliding window for efficient traversal.
 
 When to use: maximum/minimum subarray problems, stock trading algorithms, signal processing, pattern finding.`,
-    voiceExplanation: `Think of subarray problems like finding the best continuous stretch in a journey. Imagine you're driving on a highway and tracking your fuel efficiency - sometimes you get great mileage, sometimes terrible. A subarray problem is like asking "what's the best continuous stretch of road where I got the highest average mileage?" Kadane's algorithm is brilliant because it makes a simple decision at each mile marker: should I continue with my current stretch, or is it better to start fresh from here? If my running total becomes negative, it's like saying "this stretch is dragging me down so much that I'm better off starting over." This same principle applies everywhere - from finding the most profitable trading period in stocks, to identifying the most productive hours in your day, to detecting the strongest signal in noisy data. The sliding window technique is like having a smart window that expands and contracts as you move through your data, always maintaining the optimal view.`,
-    keyConcepts: `**Essential Concepts:**
+        voiceExplanation: `Think of subarray problems like finding the best continuous stretch in a journey. Imagine you're driving on a highway and tracking your fuel efficiency - sometimes you get great mileage, sometimes terrible. A subarray problem is like asking "what's the best continuous stretch of road where I got the highest average mileage?" Kadane's algorithm is brilliant because it makes a simple decision at each mile marker: should I continue with my current stretch, or is it better to start fresh from here? If my running total becomes negative, it's like saying "this stretch is dragging me down so much that I'm better off starting over." This same principle applies everywhere - from finding the most profitable trading period in stocks, to identifying the most productive hours in your day, to detecting the strongest signal in noisy data. The sliding window technique is like having a smart window that expands and contracts as you move through your data, always maintaining the optimal view.`,
+        keyConcepts: `**Essential Concepts:**
 1. **Contiguous Elements**: Subarrays must maintain original order and adjacency
 2. **Kadane's Principle**: At each position, choose between extending or restarting
 3. **Negative Sum Reset**: When cumulative sum becomes negative, start fresh
@@ -533,7 +542,7 @@ When to use: maximum/minimum subarray problems, stock trading algorithms, signal
 5. **Two Pointers**: Often used for subarray problems with specific conditions
 6. **Prefix Sums**: Precomputed sums for efficient range queries
 7. **Dynamic Programming**: Optimal substructure in subarray problems`,
-    pseudocode: `**Subarray Problems Pseudocode:**
+        pseudocode: `**Subarray Problems Pseudocode:**
 
 ALGORITHM KadaneMaxSubarray(array)
 INPUT: array - array of integers
@@ -605,7 +614,7 @@ BEGIN
     
     RETURN result
 END`,
-    implementationCode: `// Comprehensive Subarray Problems Implementation
+        implementationCode: `// Comprehensive Subarray Problems Implementation
 
 class SubarrayProblems {
     // Kadane's Algorithm - Maximum Subarray Sum
@@ -751,7 +760,7 @@ console.log(SubarrayProblems.subarrayWithSum(positiveNums, 9));
 
 console.log(SubarrayProblems.slidingWindowMaximum([1, 3, -1, -3, 5, 3, 6, 7], 3));
 // [3, 3, 5, 5, 6, 7]`,
-    example: `// Maximum Subarray Sum (Kadane's Algorithm)
+        example: `// Maximum Subarray Sum (Kadane's Algorithm)
 function maxSubarraySum(arr) {
     let maxSoFar = arr[0];
     let maxEndingHere = arr[0];
@@ -767,7 +776,7 @@ function maxSubarraySum(arr) {
 // Example usage
 const nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4];
 console.log(maxSubarraySum(nums)); // 6 (subarray [4, -1, 2, 1])`,
-    realWorldApplications: `**Industry Applications:**
+        realWorldApplications: `**Industry Applications:**
 - **Finance**: Stock trading algorithms for maximum profit periods, portfolio optimization
 - **Signal Processing**: Finding strongest signal segments in noisy data, pattern detection
 - **Data Analytics**: Identifying peak performance periods, trend analysis in time series
@@ -778,62 +787,62 @@ console.log(maxSubarraySum(nums)); // 6 (subarray [4, -1, 2, 1])`,
 - **Manufacturing**: Quality control analysis, identifying optimal production periods
 - **Sports Analytics**: Performance streak analysis, identifying peak performance periods
 - **Energy Systems**: Peak demand analysis, optimal energy distribution windows`,
-    quizQuestions: [
-      {
-        question: "What is the core principle behind Kadane's algorithm?",
-        options: ["Always include the current element", "At each position, choose between extending current subarray or starting new", "Find all possible subarrays first", "Use divide and conquer approach"],
-        correctAnswer: 1,
-        explanation: "Kadane's algorithm works by deciding at each position whether to extend the existing subarray or start a new one, based on whether the current sum is positive or negative."
-      },
-      {
-        question: "What is the time complexity of Kadane's algorithm for maximum subarray sum?",
-        options: ["O(n²)", "O(n log n)", "O(n)", "O(1)"],
-        correctAnswer: 2,
-        explanation: "Kadane's algorithm runs in O(n) time as it makes a single pass through the array, making a constant-time decision at each element."
-      },
-      {
-        question: "When should you reset the current sum to start a new subarray in Kadane's algorithm?",
-        options: ["When current element is negative", "When current sum becomes negative", "When current sum is zero", "Never reset, always extend"],
-        correctAnswer: 1,
-        explanation: "You should start a new subarray when the current sum becomes negative, as including negative sums would only decrease the total."
-      },
-      {
-        question: "What technique is most efficient for finding subarrays with a given sum in positive arrays?",
-        options: ["Brute force nested loops", "Sliding window technique", "Binary search", "Dynamic programming"],
-        correctAnswer: 1,
-        explanation: "The sliding window technique is most efficient for subarray sum problems with positive numbers, achieving O(n) time complexity."
-      },
-      {
-        question: "What is a real-world application of maximum subarray problems?",
-        options: ["Sorting algorithms", "Hash table implementation", "Stock trading for maximum profit periods", "Binary tree traversal"],
-        correctAnswer: 2,
-        explanation: "Maximum subarray problems are commonly used in stock trading to find the period that would yield maximum profit from buying and selling."
-      },
-      {
-        question: "In the sliding window technique, when do you expand vs shrink the window?",
-        options: ["Always expand first, then shrink", "Expand when condition not met, shrink when condition met", "Shrink when condition not met, expand when condition met", "Randomly expand and shrink"],
-        correctAnswer: 1,
-        explanation: "In sliding window technique, you typically expand the window by moving the right pointer when the current condition is not satisfied, and shrink by moving the left pointer when you need to maintain or optimize the condition."
-      }
-    ]
-  },
-  {
-    id: 'string-palindrome',
-    title: 'Palindrome Check',
-    description: 'Check if a string is a palindrome using various methods',
-    category: 'Strings',
-    difficulty: 'beginner',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `A palindrome is a sequence of characters that reads the same forwards and backwards. Palindrome checking is a fundamental string processing problem with applications in text analysis, DNA sequence analysis, and data validation.
+        quizQuestions: [
+            {
+                question: "What is the core principle behind Kadane's algorithm?",
+                options: ["Always include the current element", "At each position, choose between extending current subarray or starting new", "Find all possible subarrays first", "Use divide and conquer approach"],
+                correctAnswer: 1,
+                explanation: "Kadane's algorithm works by deciding at each position whether to extend the existing subarray or start a new one, based on whether the current sum is positive or negative."
+            },
+            {
+                question: "What is the time complexity of Kadane's algorithm for maximum subarray sum?",
+                options: ["O(n²)", "O(n log n)", "O(n)", "O(1)"],
+                correctAnswer: 2,
+                explanation: "Kadane's algorithm runs in O(n) time as it makes a single pass through the array, making a constant-time decision at each element."
+            },
+            {
+                question: "When should you reset the current sum to start a new subarray in Kadane's algorithm?",
+                options: ["When current element is negative", "When current sum becomes negative", "When current sum is zero", "Never reset, always extend"],
+                correctAnswer: 1,
+                explanation: "You should start a new subarray when the current sum becomes negative, as including negative sums would only decrease the total."
+            },
+            {
+                question: "What technique is most efficient for finding subarrays with a given sum in positive arrays?",
+                options: ["Brute force nested loops", "Sliding window technique", "Binary search", "Dynamic programming"],
+                correctAnswer: 1,
+                explanation: "The sliding window technique is most efficient for subarray sum problems with positive numbers, achieving O(n) time complexity."
+            },
+            {
+                question: "What is a real-world application of maximum subarray problems?",
+                options: ["Sorting algorithms", "Hash table implementation", "Stock trading for maximum profit periods", "Binary tree traversal"],
+                correctAnswer: 2,
+                explanation: "Maximum subarray problems are commonly used in stock trading to find the period that would yield maximum profit from buying and selling."
+            },
+            {
+                question: "In the sliding window technique, when do you expand vs shrink the window?",
+                options: ["Always expand first, then shrink", "Expand when condition not met, shrink when condition met", "Shrink when condition not met, expand when condition met", "Randomly expand and shrink"],
+                correctAnswer: 1,
+                explanation: "In sliding window technique, you typically expand the window by moving the right pointer when the current condition is not satisfied, and shrink by moving the left pointer when you need to maintain or optimize the condition."
+            }
+        ]
+    },
+    {
+        id: 'string-palindrome',
+        title: 'Palindrome Check',
+        description: 'Check if a string is a palindrome using various methods',
+        category: 'Strings',
+        difficulty: 'beginner',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `A palindrome is a sequence of characters that reads the same forwards and backwards. Palindrome checking is a fundamental string processing problem with applications in text analysis, DNA sequence analysis, and data validation.
 
 What it does: checks if a string reads the same forwards and backwards using character comparison.
 
 How it works: uses two pointers starting from both ends, moving inward while comparing characters until they meet.
 
 When to use: text validation, DNA sequence analysis, word games, data integrity checks.`,
-    voiceExplanation: `Think of a palindrome like a word or phrase that reads the same forwards and backwards - like "racecar" or "madam". Imagine you have two people standing at opposite ends of the word, one at the beginning and one at the end. They both start walking toward each other, checking if the letters they encounter are the same. If at any point the letters don't match, it's not a palindrome. If they meet in the middle and all letters matched along the way, congratulations - you've found a palindrome! This two-pointer approach is like having two inspectors working from both ends, making the process twice as fast. For phrases like "A man, a plan, a canal: Panama", we first clean up the text by removing spaces and punctuation, then apply the same walking-from-both-ends technique.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of a palindrome like a word or phrase that reads the same forwards and backwards - like "racecar" or "madam". Imagine you have two people standing at opposite ends of the word, one at the beginning and one at the end. They both start walking toward each other, checking if the letters they encounter are the same. If at any point the letters don't match, it's not a palindrome. If they meet in the middle and all letters matched along the way, congratulations - you've found a palindrome! This two-pointer approach is like having two inspectors working from both ends, making the process twice as fast. For phrases like "A man, a plan, a canal: Panama", we first clean up the text by removing spaces and punctuation, then apply the same walking-from-both-ends technique.`,
+        realWorldApplications: `**Industry Applications:**
 - **Data Validation**: Credit card numbers, license plates, product codes
 - **Bioinformatics**: DNA palindromic sequences, restriction enzyme sites
 - **Text Processing**: Spell checkers, word games, linguistic analysis
@@ -842,7 +851,7 @@ When to use: text validation, DNA sequence analysis, word games, data integrity 
 - **Web Development**: Form validation, user input sanitization
 - **Competitive Programming**: Algorithm contests, coding interviews
 - **Natural Language Processing**: Text analysis, pattern recognition`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Two-Pointer Technique**: Efficient O(n) time, O(1) space approach
 2. **String Preprocessing**: Handling case, spaces, and special characters
 3. **Boundary Conditions**: Empty strings, single characters, even/odd lengths
@@ -850,7 +859,7 @@ When to use: text validation, DNA sequence analysis, word games, data integrity 
 5. **Space-Time Tradeoffs**: In-place vs. auxiliary space approaches
 6. **Recursive vs. Iterative**: Stack space considerations
 7. **Unicode Handling**: Multi-byte character support and normalization`,
-    pseudocode: `**Palindrome Check Pseudocode:**
+        pseudocode: `**Palindrome Check Pseudocode:**
 
 ALGORITHM IsPalindromeTwoPointers(string)
 INPUT: string - the string to check
@@ -903,7 +912,7 @@ BEGIN
     
     RETURN IsPalindromeRecursive(string, left + 1, right - 1)
 END`,
-    implementationCode: `// Comprehensive Palindrome Check Implementation
+        implementationCode: `// Comprehensive Palindrome Check Implementation
 
 class PalindromeChecker {
     // Basic two-pointer approach - O(n) time, O(1) space
@@ -1023,7 +1032,7 @@ console.log(PalindromeChecker.isPalindromeIgnoreCase("A man, a plan, a canal: Pa
 console.log(PalindromeChecker.longestPalindrome("babad")); // "bab" or "aba"
 console.log(PalindromeChecker.countPalindromes("abc")); // 3 ("a", "b", "c")
 console.log(PalindromeChecker.canFormPalindrome("aabbcc")); // true`,
-    example: `// Palindrome Check
+        example: `// Palindrome Check
 function isPalindrome(str) {
     const cleaned = str.toLowerCase().replace(/[^a-z0-9]/g, '');
     let left = 0, right = cleaned.length - 1;
@@ -1038,7 +1047,7 @@ function isPalindrome(str) {
 // Example usage
 console.log(isPalindrome("A man, a plan, a canal: Panama")); // true
 console.log(isPalindrome("race a car")); // false`,
-    syntax: `**Palindrome Check Patterns:**
+        syntax: `**Palindrome Check Patterns:**
 
 1. **Two Pointers Approach:**
    \`\`\`javascript
@@ -1067,56 +1076,56 @@ console.log(isPalindrome("race a car")); // false`,
        return isPalindrome(s, left + 1, right - 1);
    }
    \`\`\``,
-    quizQuestions: [
-      {
-        question: "What is the time complexity of the two-pointer approach for palindrome checking?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(nÃ‚Â²)"],
-        correctAnswer: 2,
-        explanation: "The two-pointer approach visits each character at most once, making it O(n) time complexity."
-      },
-      {
-        question: "Which approach for palindrome checking uses O(1) space complexity?",
-        options: ["Reverse and compare", "Two pointers", "Recursive", "Dynamic programming"],
-        correctAnswer: 1,
-        explanation: "The two-pointer approach only uses a constant amount of extra space for the left and right pointers."
-      },
-      {
-        question: "What should be the first step when checking if a phrase like 'A man, a plan, a canal: Panama' is a palindrome?",
-        options: ["Convert to lowercase", "Remove spaces and punctuation", "Reverse the string", "Count characters"],
-        correctAnswer: 1,
-        explanation: "Preprocessing by removing non-alphanumeric characters and converting to lowercase is essential for phrase palindromes."
-      },
-      {
-        question: "In the two-pointer palindrome algorithm, when do we stop the loop?",
-        options: ["When left > right", "When left >= right", "When left == right", "When we find a mismatch"],
-        correctAnswer: 1,
-        explanation: "We stop when left >= right because we've checked all necessary character pairs."
-      },
-      {
-        question: "What is the space complexity of the recursive palindrome checking approach?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(nÃ‚Â²)"],
-        correctAnswer: 2,
-        explanation: "The recursive approach uses O(n) space due to the call stack depth in the worst case."
-      }
-    ]
-  },
-  {
-    id: 'string-search-kmp',
-    title: 'KMP Algorithm',
-    description: 'Knuth-Morris-Pratt algorithm for efficient string pattern matching',
-    category: 'Strings',
-    difficulty: 'advanced',
-    timeComplexity: 'O(n + m)',
-    spaceComplexity: 'O(m)',
-    extendedDefinition: `The Knuth-Morris-Pratt (KMP) algorithm is an efficient string matching algorithm that avoids redundant character comparisons by utilizing information about the pattern itself. It achieves linear time complexity by preprocessing the pattern to create a failure function.
+        quizQuestions: [
+            {
+                question: "What is the time complexity of the two-pointer approach for palindrome checking?",
+                options: ["O(1)", "O(log n)", "O(n)", "O(nÃ‚Â²)"],
+                correctAnswer: 2,
+                explanation: "The two-pointer approach visits each character at most once, making it O(n) time complexity."
+            },
+            {
+                question: "Which approach for palindrome checking uses O(1) space complexity?",
+                options: ["Reverse and compare", "Two pointers", "Recursive", "Dynamic programming"],
+                correctAnswer: 1,
+                explanation: "The two-pointer approach only uses a constant amount of extra space for the left and right pointers."
+            },
+            {
+                question: "What should be the first step when checking if a phrase like 'A man, a plan, a canal: Panama' is a palindrome?",
+                options: ["Convert to lowercase", "Remove spaces and punctuation", "Reverse the string", "Count characters"],
+                correctAnswer: 1,
+                explanation: "Preprocessing by removing non-alphanumeric characters and converting to lowercase is essential for phrase palindromes."
+            },
+            {
+                question: "In the two-pointer palindrome algorithm, when do we stop the loop?",
+                options: ["When left > right", "When left >= right", "When left == right", "When we find a mismatch"],
+                correctAnswer: 1,
+                explanation: "We stop when left >= right because we've checked all necessary character pairs."
+            },
+            {
+                question: "What is the space complexity of the recursive palindrome checking approach?",
+                options: ["O(1)", "O(log n)", "O(n)", "O(nÃ‚Â²)"],
+                correctAnswer: 2,
+                explanation: "The recursive approach uses O(n) space due to the call stack depth in the worst case."
+            }
+        ]
+    },
+    {
+        id: 'string-search-kmp',
+        title: 'KMP Algorithm',
+        description: 'Knuth-Morris-Pratt algorithm for efficient string pattern matching',
+        category: 'Strings',
+        difficulty: 'advanced',
+        timeComplexity: 'O(n + m)',
+        spaceComplexity: 'O(m)',
+        extendedDefinition: `The Knuth-Morris-Pratt (KMP) algorithm is an efficient string matching algorithm that avoids redundant character comparisons by utilizing information about the pattern itself. It achieves linear time complexity by preprocessing the pattern to create a failure function.
 
 What it does: finds pattern occurrences in text efficiently by avoiding redundant character comparisons.
 
 How it works: preprocesses pattern to create failure function, then uses it to skip characters during matching.
 
 When to use: text editors, DNA analysis, large text searches, when pattern occurs frequently.`,
-    voiceExplanation: `Think of the KMP algorithm like a smart detective who learns from past mistakes. Imagine you're searching for the word "ABABACA" in a long text. When you find a mismatch, instead of starting over from the next character like a naive approach, KMP is clever - it remembers the pattern it just saw and uses that knowledge to skip ahead intelligently. The secret is the "failure function" or LPS array, which is like a cheat sheet that tells you: "Hey, if you fail at position 5, don't start from scratch - you can safely jump to position 2 because you already know positions 0-1 match what you just saw." It's like having a memory of partial matches that prevents you from doing redundant work. This makes KMP incredibly efficient for text editors when you're searching for patterns, or in DNA analysis where you're looking for specific genetic sequences.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of the KMP algorithm like a smart detective who learns from past mistakes. Imagine you're searching for the word "ABABACA" in a long text. When you find a mismatch, instead of starting over from the next character like a naive approach, KMP is clever - it remembers the pattern it just saw and uses that knowledge to skip ahead intelligently. The secret is the "failure function" or LPS array, which is like a cheat sheet that tells you: "Hey, if you fail at position 5, don't start from scratch - you can safely jump to position 2 because you already know positions 0-1 match what you just saw." It's like having a memory of partial matches that prevents you from doing redundant work. This makes KMP incredibly efficient for text editors when you're searching for patterns, or in DNA analysis where you're looking for specific genetic sequences.`,
+        realWorldApplications: `**Industry Applications:**
 - **Text Editors**: Find/replace functionality, syntax highlighting, code search
 - **Bioinformatics**: DNA sequence matching, protein pattern analysis, genome research
 - **Web Search Engines**: Content indexing, keyword matching, document retrieval
@@ -1127,7 +1136,7 @@ When to use: text editors, DNA analysis, large text searches, when pattern occur
 - **Plagiarism Detection**: Text similarity analysis, academic integrity checking
 - **Compiler Design**: Lexical analysis, token recognition, syntax parsing
 - **Database Systems**: Full-text search, query optimization, index matching`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Failure Function (LPS)**: Longest Proper Prefix which is also Suffix
 2. **Pattern Preprocessing**: Building the LPS array in O(m) time
 3. **No Backtracking**: Text pointer never moves backward
@@ -1135,7 +1144,7 @@ When to use: text editors, DNA analysis, large text searches, when pattern occur
 5. **Linear Time Complexity**: Guaranteed O(n + m) performance
 6. **Optimal Shifting**: Maximum safe shift distance after mismatch
 7. **Border Concept**: Understanding string borders and their properties`,
-    pseudocode: `**KMP Algorithm Pseudocode:**
+        pseudocode: `**KMP Algorithm Pseudocode:**
 
 ALGORITHM BuildLPS(pattern)
 INPUT: pattern - the pattern string
@@ -1196,7 +1205,7 @@ BEGIN
     
     RETURN positions
 END`,
-    implementationCode: `// Comprehensive KMP Algorithm Implementation
+        implementationCode: `// Comprehensive KMP Algorithm Implementation
 
 class KMPStringMatcher {
     static buildLPS(pattern) {
@@ -1262,7 +1271,7 @@ class KMPStringMatcher {
 const text = "ABABDABACDABABCABCABCABCABC";
 const pattern = "ABABCABCABCABC";
 console.log("Matches:", KMPStringMatcher.search(text, pattern));`,
-    example: `// KMP Algorithm Implementation
+        example: `// KMP Algorithm Implementation
 function kmpSearch(text, pattern) {
     const lps = buildLPS(pattern);
     const result = [];
@@ -1300,7 +1309,7 @@ function buildLPS(pattern) {
     }
     return lps;
 }`,
-    syntax: `**KMP Algorithm Patterns:**
+        syntax: `**KMP Algorithm Patterns:**
 
 1. **LPS Array Construction:**
    \`\`\`javascript
@@ -1336,56 +1345,56 @@ function buildLPS(pattern) {
        }
    }
    \`\`\``,
-    quizQuestions: [
-      {
-        question: "What is the main advantage of KMP algorithm over naive string matching?",
-        options: ["Uses less memory", "Avoids backtracking in text", "Works with any alphabet", "Simpler implementation"],
-        correctAnswer: 1,
-        explanation: "KMP's key advantage is that it never backtracks in the text, achieving linear time complexity by using the failure function."
-      },
-      {
-        question: "What does the LPS array in KMP algorithm represent?",
-        options: ["Last Position Seen", "Longest Proper Prefix which is also Suffix", "Linear Pattern Search", "Left Pointer Shift"],
-        correctAnswer: 1,
-        explanation: "LPS stands for Longest Proper Prefix which is also Suffix, used to determine how far to shift the pattern on mismatch."
-      },
-      {
-        question: "What is the time complexity of building the LPS array?",
-        options: ["O(1)", "O(log m)", "O(m)", "O(mÃ‚Â²)"],
-        correctAnswer: 2,
-        explanation: "Building the LPS array takes O(m) time where m is the length of the pattern."
-      },
-      {
-        question: "In KMP, when a mismatch occurs at pattern[j], what do we do next?",
-        options: ["Start over from text[i+1]", "Set j = lps[j-1]", "Increment both i and j", "Return no match"],
-        correctAnswer: 1,
-        explanation: "On mismatch, we set j = lps[j-1] to utilize the previously computed failure function information."
-      },
-      {
-        question: "What is the overall time complexity of KMP algorithm?",
-        options: ["O(n)", "O(m)", "O(n + m)", "O(nm)"],
-        correctAnswer: 2,
-        explanation: "KMP runs in O(n + m) time: O(m) for preprocessing the pattern and O(n) for searching the text."
-      }
-    ]
-  },
-  {
-    id: 'rabin-karp',
-    title: 'Rabin-Karp Algorithm',
-    description: 'String matching using rolling hash technique',
-    category: 'Strings',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n + m)',
-    spaceComplexity: 'O(1)',
-    voiceExplanation: `Imagine you're looking for a specific word in a massive book, but instead of reading every word, you have a magical fingerprint scanner. The Rabin-Karp algorithm works like this scanner - it creates a unique "fingerprint" or hash value for the pattern you're searching for. Then, it slides a window through the text, creating fingerprints for each substring of the same length. Here's the clever part: instead of recalculating the entire fingerprint each time, it uses a "rolling hash" - like updating a fingerprint by removing the leftmost character and adding a new rightmost character. When two fingerprints match, it's like finding a potential match, but you still need to double-check character by character because different words can sometimes have the same fingerprint. It's particularly powerful when searching for multiple patterns simultaneously, making it a favorite for plagiarism detection and DNA sequence analysis.`,
-    extendedDefinition: `The Rabin-Karp algorithm uses hashing to find pattern occurrences in text efficiently. It employs a rolling hash function that can be updated in constant time as the window slides through the text, making it particularly effective for multiple pattern searches.
+        quizQuestions: [
+            {
+                question: "What is the main advantage of KMP algorithm over naive string matching?",
+                options: ["Uses less memory", "Avoids backtracking in text", "Works with any alphabet", "Simpler implementation"],
+                correctAnswer: 1,
+                explanation: "KMP's key advantage is that it never backtracks in the text, achieving linear time complexity by using the failure function."
+            },
+            {
+                question: "What does the LPS array in KMP algorithm represent?",
+                options: ["Last Position Seen", "Longest Proper Prefix which is also Suffix", "Linear Pattern Search", "Left Pointer Shift"],
+                correctAnswer: 1,
+                explanation: "LPS stands for Longest Proper Prefix which is also Suffix, used to determine how far to shift the pattern on mismatch."
+            },
+            {
+                question: "What is the time complexity of building the LPS array?",
+                options: ["O(1)", "O(log m)", "O(m)", "O(mÃ‚Â²)"],
+                correctAnswer: 2,
+                explanation: "Building the LPS array takes O(m) time where m is the length of the pattern."
+            },
+            {
+                question: "In KMP, when a mismatch occurs at pattern[j], what do we do next?",
+                options: ["Start over from text[i+1]", "Set j = lps[j-1]", "Increment both i and j", "Return no match"],
+                correctAnswer: 1,
+                explanation: "On mismatch, we set j = lps[j-1] to utilize the previously computed failure function information."
+            },
+            {
+                question: "What is the overall time complexity of KMP algorithm?",
+                options: ["O(n)", "O(m)", "O(n + m)", "O(nm)"],
+                correctAnswer: 2,
+                explanation: "KMP runs in O(n + m) time: O(m) for preprocessing the pattern and O(n) for searching the text."
+            }
+        ]
+    },
+    {
+        id: 'rabin-karp',
+        title: 'Rabin-Karp Algorithm',
+        description: 'String matching using rolling hash technique',
+        category: 'Strings',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n + m)',
+        spaceComplexity: 'O(1)',
+        voiceExplanation: `Imagine you're looking for a specific word in a massive book, but instead of reading every word, you have a magical fingerprint scanner. The Rabin-Karp algorithm works like this scanner - it creates a unique "fingerprint" or hash value for the pattern you're searching for. Then, it slides a window through the text, creating fingerprints for each substring of the same length. Here's the clever part: instead of recalculating the entire fingerprint each time, it uses a "rolling hash" - like updating a fingerprint by removing the leftmost character and adding a new rightmost character. When two fingerprints match, it's like finding a potential match, but you still need to double-check character by character because different words can sometimes have the same fingerprint. It's particularly powerful when searching for multiple patterns simultaneously, making it a favorite for plagiarism detection and DNA sequence analysis.`,
+        extendedDefinition: `The Rabin-Karp algorithm uses hashing to find pattern occurrences in text efficiently. It employs a rolling hash function that can be updated in constant time as the window slides through the text, making it particularly effective for multiple pattern searches.
 
 What it does: finds pattern occurrences in text using rolling hash technique to avoid redundant character comparisons.
 
 How it works: computes hash values for pattern and text substrings, uses rolling hash to update window hash in O(1) time, verifies matches with character comparison.
 
 When to use: multiple pattern searches, plagiarism detection, DNA sequence analysis, large text processing where hash-based matching is beneficial.`,
-    realWorldApplications: `**Industry Applications:**
+        realWorldApplications: `**Industry Applications:**
 - **Plagiarism Detection**: Academic integrity systems, content similarity analysis
 - **Bioinformatics**: DNA sequence matching, genetic pattern analysis, protein research
 - **Image Processing**: Template matching, pattern recognition, computer vision
@@ -1396,7 +1405,7 @@ When to use: multiple pattern searches, plagiarism detection, DNA sequence analy
 - **Version Control**: File difference detection, change tracking, merge operations
 - **Network Monitoring**: Packet analysis, protocol detection, traffic pattern matching
 - **Digital Forensics**: Evidence search, data recovery, pattern-based investigations`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Rolling Hash Function**: Polynomial hash that can be updated in O(1) time
 2. **Hash Collision Handling**: Verification step when hash values match
 3. **Modular Arithmetic**: Using prime numbers to reduce hash collisions
@@ -1404,7 +1413,7 @@ When to use: multiple pattern searches, plagiarism detection, DNA sequence analy
 5. **Base and Prime Selection**: Choosing appropriate values for hash function
 6. **Spurious Hits**: False positives due to hash collisions
 7. **Multiple Pattern Search**: Extending to search for multiple patterns simultaneously`,
-    pseudocode: `**Rabin-Karp Algorithm Pseudocode:**
+        pseudocode: `**Rabin-Karp Algorithm Pseudocode:**
 
 ALGORITHM RabinKarpSearch(text, pattern)
 INPUT: text - the text to search in, pattern - the pattern to find
@@ -1461,7 +1470,7 @@ BEGIN
     
     RETURN positions
 END`,
-    implementationCode: `// Comprehensive Rabin-Karp Algorithm Implementation
+        implementationCode: `// Comprehensive Rabin-Karp Algorithm Implementation
 
 class RabinKarpMatcher {
     constructor(base = 256, prime = 101) {
@@ -1567,7 +1576,7 @@ console.log("Pattern exists:", matcher.contains(text, pattern));
 // Multiple pattern search
 const patterns = ["AABA", "CAAD", "BAAB"];
 console.log("Multiple patterns:", matcher.multiSearch(text, patterns));`,
-    example: `// Rabin-Karp Algorithm
+        example: `// Rabin-Karp Algorithm
 function rabinKarp(text, pattern) {
     const base = 256, prime = 101;
     const n = text.length, m = pattern.length;
@@ -1608,7 +1617,7 @@ function rabinKarp(text, pattern) {
     }
     return result;
 }`,
-    syntax: `**Rabin-Karp Patterns:**
+        syntax: `**Rabin-Karp Patterns:**
 
 1. **Rolling Hash Calculation:**
    \`\`\`javascript
@@ -1628,56 +1637,56 @@ function rabinKarp(text, pattern) {
        return newHash < 0 ? newHash + prime : newHash;
    }
    \`\`\``,
-    quizQuestions: [
-      {
-        question: "What is the key technique used in Rabin-Karp algorithm?",
-        options: ["Dynamic programming", "Rolling hash", "Binary search", "Two pointers"],
-        correctAnswer: 1,
-        explanation: "Rabin-Karp uses rolling hash to efficiently compute hash values for sliding windows in constant time."
-      },
-      {
-        question: "Why do we need character-by-character verification in Rabin-Karp?",
-        options: ["To improve performance", "To handle hash collisions", "To reduce memory usage", "To support Unicode"],
-        correctAnswer: 1,
-        explanation: "Hash collisions can occur where different strings have the same hash value, so we verify matches character by character."
-      },
-      {
-        question: "What is the average time complexity of Rabin-Karp algorithm?",
-        options: ["O(n)", "O(m)", "O(n + m)", "O(nm)"],
-        correctAnswer: 2,
-        explanation: "On average, Rabin-Karp runs in O(n + m) time due to few hash collisions, though worst case is O(nm)."
-      },
-      {
-        question: "What happens when we slide the window in rolling hash?",
-        options: ["Recalculate entire hash", "Remove leftmost, add rightmost character", "Compare with pattern", "Reset to zero"],
-        correctAnswer: 1,
-        explanation: "Rolling hash efficiently updates by removing the leftmost character's contribution and adding the new rightmost character."
-      },
-      {
-        question: "Which application benefits most from Rabin-Karp's ability to search multiple patterns?",
-        options: ["Text editors", "Plagiarism detection", "Spell checkers", "Data compression"],
-        correctAnswer: 1,
-        explanation: "Plagiarism detection often needs to search for multiple patterns simultaneously, making Rabin-Karp ideal."
-      }
-    ]
-  },
-  {
-    id: 'z-algorithm',
-    title: 'Z Algorithm',
-    description: 'Linear time string matching using Z array',
-    category: 'Strings',
-    difficulty: 'advanced',
-    timeComplexity: 'O(n + m)',
-    spaceComplexity: 'O(n + m)',
-    voiceExplanation: `The Z Algorithm is like having a smart memory system that remembers patterns it has seen before. Imagine you're reading a book and you want to find every place where a certain phrase repeats. The Z Algorithm creates a special "memory array" called the Z array, where each position tells you how many characters match between that position and the very beginning of the string. It's like having a ruler that measures how much of the beginning of the string matches at each position. The brilliant part is that it uses previously computed information to avoid redundant comparisons - if you already know that positions 5-10 match the beginning, you can use that knowledge to quickly compute matches for positions 6, 7, 8, and so on. This makes it incredibly efficient for finding patterns, with applications in text editors, DNA analysis, and data compression.`,
-    extendedDefinition: `The Z Algorithm is a linear-time string matching algorithm that constructs a Z array where Z[i] represents the length of the longest substring starting from position i that is also a prefix of the string. This powerful preprocessing enables efficient pattern matching and various string analysis tasks.
+        quizQuestions: [
+            {
+                question: "What is the key technique used in Rabin-Karp algorithm?",
+                options: ["Dynamic programming", "Rolling hash", "Binary search", "Two pointers"],
+                correctAnswer: 1,
+                explanation: "Rabin-Karp uses rolling hash to efficiently compute hash values for sliding windows in constant time."
+            },
+            {
+                question: "Why do we need character-by-character verification in Rabin-Karp?",
+                options: ["To improve performance", "To handle hash collisions", "To reduce memory usage", "To support Unicode"],
+                correctAnswer: 1,
+                explanation: "Hash collisions can occur where different strings have the same hash value, so we verify matches character by character."
+            },
+            {
+                question: "What is the average time complexity of Rabin-Karp algorithm?",
+                options: ["O(n)", "O(m)", "O(n + m)", "O(nm)"],
+                correctAnswer: 2,
+                explanation: "On average, Rabin-Karp runs in O(n + m) time due to few hash collisions, though worst case is O(nm)."
+            },
+            {
+                question: "What happens when we slide the window in rolling hash?",
+                options: ["Recalculate entire hash", "Remove leftmost, add rightmost character", "Compare with pattern", "Reset to zero"],
+                correctAnswer: 1,
+                explanation: "Rolling hash efficiently updates by removing the leftmost character's contribution and adding the new rightmost character."
+            },
+            {
+                question: "Which application benefits most from Rabin-Karp's ability to search multiple patterns?",
+                options: ["Text editors", "Plagiarism detection", "Spell checkers", "Data compression"],
+                correctAnswer: 1,
+                explanation: "Plagiarism detection often needs to search for multiple patterns simultaneously, making Rabin-Karp ideal."
+            }
+        ]
+    },
+    {
+        id: 'z-algorithm',
+        title: 'Z Algorithm',
+        description: 'Linear time string matching using Z array',
+        category: 'Strings',
+        difficulty: 'advanced',
+        timeComplexity: 'O(n + m)',
+        spaceComplexity: 'O(n + m)',
+        voiceExplanation: `The Z Algorithm is like having a smart memory system that remembers patterns it has seen before. Imagine you're reading a book and you want to find every place where a certain phrase repeats. The Z Algorithm creates a special "memory array" called the Z array, where each position tells you how many characters match between that position and the very beginning of the string. It's like having a ruler that measures how much of the beginning of the string matches at each position. The brilliant part is that it uses previously computed information to avoid redundant comparisons - if you already know that positions 5-10 match the beginning, you can use that knowledge to quickly compute matches for positions 6, 7, 8, and so on. This makes it incredibly efficient for finding patterns, with applications in text editors, DNA analysis, and data compression.`,
+        extendedDefinition: `The Z Algorithm is a linear-time string matching algorithm that constructs a Z array where Z[i] represents the length of the longest substring starting from position i that is also a prefix of the string. This powerful preprocessing enables efficient pattern matching and various string analysis tasks.
 
 What it does: constructs Z array where each position stores length of longest prefix match starting from that position.
 
 How it works: maintains Z-box representing rightmost matching segment, uses previously computed information to avoid redundant comparisons.
 
 When to use: pattern matching, string analysis, text processing where prefix-based matching is needed with linear time complexity.`,
-    realWorldApplications: `**Industry Applications:**
+        realWorldApplications: `**Industry Applications:**
 - **Text Editors**: Find/replace operations, syntax highlighting, code analysis
 - **Bioinformatics**: DNA sequence analysis, genetic pattern matching, genome research
 - **Data Compression**: Pattern recognition, redundancy detection, compression algorithms
@@ -1688,7 +1697,7 @@ When to use: pattern matching, string analysis, text processing where prefix-bas
 - **Version Control**: File difference detection, merge conflict resolution
 - **Natural Language Processing**: Text analysis, linguistic pattern recognition
 - **Database Systems**: String matching in queries, full-text search optimization`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Z Array**: Array where Z[i] stores length of longest prefix match starting at position i
 2. **Z-Box [L, R]**: Rightmost segment that matches a prefix, used for optimization
 3. **Linear Time Complexity**: Each character examined at most twice during entire process
@@ -1696,7 +1705,7 @@ When to use: pattern matching, string analysis, text processing where prefix-bas
 5. **Memory Optimization**: Reuses previously computed information to avoid redundant work
 6. **Pattern Concatenation**: Combines pattern and text with separator for matching
 7. **Incremental Processing**: Builds Z array incrementally using previous computations`,
-    pseudocode: `**Z Algorithm Pseudocode:**
+        pseudocode: `**Z Algorithm Pseudocode:**
 
 ALGORITHM BuildZArray(string)
 INPUT: string - the input string
@@ -1746,7 +1755,7 @@ BEGIN
     
     RETURN positions
 END`,
-    implementationCode: `// Comprehensive Z Algorithm Implementation
+        implementationCode: `// Comprehensive Z Algorithm Implementation
 
 class ZAlgorithm {
     // Build Z array for given string
@@ -1933,7 +1942,7 @@ console.log("Multiple patterns:", ZAlgorithm.multiPatternMatch(text, patterns));
 // Prefix-suffix analysis
 console.log("Prefix-suffix matches:", ZAlgorithm.findPrefixSuffixMatches("abcabcab"));
 console.log("Longest common prefix-suffix:", ZAlgorithm.longestCommonPrefixSuffix("abcabcab"));`,
-    example: `// Z Algorithm Implementation
+        example: `// Z Algorithm Implementation
 function zAlgorithm(s) {
     const n = s.length;
     const z = new Array(n).fill(0);
@@ -1972,7 +1981,7 @@ function findPattern(text, pattern) {
 
 console.log(zAlgorithm("ababa")); // [0, 0, 3, 0, 1]
 console.log(findPattern("ababcababa", "aba")); // [0, 5, 7]`,
-    syntax: `**Z Algorithm Patterns:**
+        syntax: `**Z Algorithm Patterns:**
 
 1. **Z Array Construction:**
    \`\`\`javascript
@@ -1997,55 +2006,55 @@ console.log(findPattern("ababcababa", "aba")); // [0, 5, 7]`,
                    i - pattern.length - 1 : -1).filter(x => x >= 0);
    }
    \`\`\``,
-    quizQuestions: [
-      {
-        question: "What does Z[i] represent in the Z algorithm?",
-        options: ["Position of character i", "Length of longest substring starting at i that matches prefix", "Number of comparisons at position i", "Hash value at position i"],
-        correctAnswer: 1,
-        explanation: "Z[i] represents the length of the longest substring starting from position i that is also a prefix of the string."
-      },
-      {
-        question: "Why do we use a separator like '$' in Z algorithm for pattern matching?",
-        options: ["To improve performance", "To prevent pattern from matching with itself in text", "To handle special characters", "To reduce memory usage"],
-        correctAnswer: 1,
-        explanation: "The separator ensures that the pattern doesn't match with itself when concatenated with the text, avoiding false positives."
-      },
-      {
-        question: "What is the purpose of the Z-box [L, R] in the algorithm?",
-        options: ["Store pattern positions", "Track rightmost matching segment", "Count character frequencies", "Maintain hash values"],
-        correctAnswer: 1,
-        explanation: "The Z-box [L, R] represents the rightmost segment that matches a prefix, allowing us to use previously computed information."
-      },
-      {
-        question: "What is the time complexity of the Z algorithm?",
-        options: ["O(n log n)", "O(nÃ‚Â²)", "O(n)", "O(n + m)"],
-        correctAnswer: 2,
-        explanation: "The Z algorithm runs in O(n) time because each character is examined at most twice during the entire process."
-      },
-      {
-        question: "When processing position i, if i > R, what do we do?",
-        options: ["Use Z[i-L]", "Set Z[i] = 0 and expand", "Skip to next position", "Reset L and R"],
-        correctAnswer: 1,
-        explanation: "If i > R, we're outside any known Z-box, so we start with Z[i] = 0 and expand from scratch."
-      }
-    ]
-  },
-  {
-    id: 'manacher-algorithm',
-    title: 'Manacher\'s Algorithm',
-    description: 'Linear time algorithm to find all palindromes in string',
-    category: 'Strings',
-    difficulty: 'advanced',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `Manacher's Algorithm is a sophisticated linear-time algorithm for finding all palindromic substrings in a string. It's particularly famous for solving the "longest palindromic substring" problem optimally, improving upon the naive O(nÃ‚Â³) and dynamic programming O(nÃ‚Â²) approaches.
+        quizQuestions: [
+            {
+                question: "What does Z[i] represent in the Z algorithm?",
+                options: ["Position of character i", "Length of longest substring starting at i that matches prefix", "Number of comparisons at position i", "Hash value at position i"],
+                correctAnswer: 1,
+                explanation: "Z[i] represents the length of the longest substring starting from position i that is also a prefix of the string."
+            },
+            {
+                question: "Why do we use a separator like '$' in Z algorithm for pattern matching?",
+                options: ["To improve performance", "To prevent pattern from matching with itself in text", "To handle special characters", "To reduce memory usage"],
+                correctAnswer: 1,
+                explanation: "The separator ensures that the pattern doesn't match with itself when concatenated with the text, avoiding false positives."
+            },
+            {
+                question: "What is the purpose of the Z-box [L, R] in the algorithm?",
+                options: ["Store pattern positions", "Track rightmost matching segment", "Count character frequencies", "Maintain hash values"],
+                correctAnswer: 1,
+                explanation: "The Z-box [L, R] represents the rightmost segment that matches a prefix, allowing us to use previously computed information."
+            },
+            {
+                question: "What is the time complexity of the Z algorithm?",
+                options: ["O(n log n)", "O(nÃ‚Â²)", "O(n)", "O(n + m)"],
+                correctAnswer: 2,
+                explanation: "The Z algorithm runs in O(n) time because each character is examined at most twice during the entire process."
+            },
+            {
+                question: "When processing position i, if i > R, what do we do?",
+                options: ["Use Z[i-L]", "Set Z[i] = 0 and expand", "Skip to next position", "Reset L and R"],
+                correctAnswer: 1,
+                explanation: "If i > R, we're outside any known Z-box, so we start with Z[i] = 0 and expand from scratch."
+            }
+        ]
+    },
+    {
+        id: 'manacher-algorithm',
+        title: 'Manacher\'s Algorithm',
+        description: 'Linear time algorithm to find all palindromes in string',
+        category: 'Strings',
+        difficulty: 'advanced',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `Manacher's Algorithm is a sophisticated linear-time algorithm for finding all palindromic substrings in a string. It's particularly famous for solving the "longest palindromic substring" problem optimally, improving upon the naive O(nÃ‚Â³) and dynamic programming O(nÃ‚Â²) approaches.
 
 What it does: finds all palindromic substrings in linear time using mirror symmetry properties of palindromes.
 
 How it works: transforms string with special characters, maintains palindrome radius array, uses previously computed information to avoid redundant checks.
 
 When to use: longest palindromic substring problems, DNA sequence analysis, text processing requiring all palindromes, competitive programming.`,
-    realWorldApplications: `**Industry Applications:**
+        realWorldApplications: `**Industry Applications:**
 - **Bioinformatics**: DNA palindrome detection, genetic sequence analysis, restriction enzyme sites
 - **Text Processing**: Document analysis, linguistic pattern recognition, content similarity
 - **Competitive Programming**: Contest problems, algorithm optimization challenges
@@ -2056,8 +2065,8 @@ When to use: longest palindromic substring problems, DNA sequence analysis, text
 - **Game Development**: Word games, puzzle generation, pattern-based challenges
 - **Database Systems**: String matching queries, text search optimization
 - **Digital Forensics**: Pattern analysis in digital evidence, text-based investigations`,
-    voiceExplanation: `Think of Manacher's algorithm like a master palindrome detective with a perfect memory. Imagine you're walking down a street looking for houses that are perfectly symmetrical. Instead of checking each house from scratch, this detective is incredibly smart - when he finds a symmetrical house, he remembers that everything inside that house is also symmetrical. So when he moves to the next position, if it's still within a house he's already checked, he can use his memory to instantly know how much symmetry to expect. The brilliant preprocessing trick is like adding streetlights between every house - this way, whether the original palindrome was even or odd length, everything becomes odd length with a clear center. It's like having X-ray vision that can see all palindromes at once, making it the fastest way to find every single palindromic pattern in a string, which is why it's used in DNA analysis and advanced text processing.`,
-    keyConcepts: `**Essential Concepts:**
+        voiceExplanation: `Think of Manacher's algorithm like a master palindrome detective with a perfect memory. Imagine you're walking down a street looking for houses that are perfectly symmetrical. Instead of checking each house from scratch, this detective is incredibly smart - when he finds a symmetrical house, he remembers that everything inside that house is also symmetrical. So when he moves to the next position, if it's still within a house he's already checked, he can use his memory to instantly know how much symmetry to expect. The brilliant preprocessing trick is like adding streetlights between every house - this way, whether the original palindrome was even or odd length, everything becomes odd length with a clear center. It's like having X-ray vision that can see all palindromes at once, making it the fastest way to find every single palindromic pattern in a string, which is why it's used in DNA analysis and advanced text processing.`,
+        keyConcepts: `**Essential Concepts:**
 1. **String Preprocessing**: Adding separators to handle even/odd length uniformly
 2. **Palindrome Radius Array**: P[i] stores radius of palindrome centered at i
 3. **Mirror Property**: Using symmetry within known palindromes
@@ -2065,7 +2074,7 @@ When to use: longest palindromic substring problems, DNA sequence analysis, text
 5. **Linear Time Guarantee**: Each character examined at most twice
 6. **Sentinel Characters**: Boundary markers to avoid index checks
 7. **Radius to Length Conversion**: Converting radius back to original string positions`,
-    pseudocode: `**Manacher's Algorithm Pseudocode:**
+        pseudocode: `**Manacher's Algorithm Pseudocode:**
 
 ALGORITHM PreprocessString(string)
 INPUT: string - the original string
@@ -2124,7 +2133,7 @@ BEGIN
     start = (centerIndex - maxLength) / 2
     RETURN string.substring(start, start + maxLength)
 END`,
-    implementationCode: `// Comprehensive Manacher's Algorithm Implementation
+        implementationCode: `// Comprehensive Manacher's Algorithm Implementation
 
 class ManacherAlgorithm {
     // Preprocess string to handle even/odd length palindromes uniformly
@@ -2323,7 +2332,7 @@ console.log("Is palindrome:", ManacherAlgorithm.isPalindrome("racecar"));
 // Detailed analysis
 const analysis = ManacherAlgorithm.analyze("ababa");
 console.log("Analysis:", analysis);`,
-    example: `// Manacher's Algorithm
+        example: `// Manacher's Algorithm
 function longestPalindrome(s) {
     // Preprocess string: "abc" -> "^#a#b#c#$"
     let processed = "^#";
@@ -2363,7 +2372,7 @@ function longestPalindrome(s) {
     const start = (centerIndex - maxLen) / 2;
     return s.substring(start, start + maxLen);
 }`,
-    syntax: `**Manacher's Algorithm Patterns:**
+        syntax: `**Manacher's Algorithm Patterns:**
 
 1. **String Preprocessing:**
    \`\`\`javascript
@@ -2393,56 +2402,56 @@ function longestPalindrome(s) {
        return p;
    }
    \`\`\``,
-    quizQuestions: [
-      {
-        question: "Why does Manacher's algorithm preprocess the string by adding '#' characters?",
-        options: ["To improve performance", "To handle even and odd length palindromes uniformly", "To avoid boundary checks", "To reduce memory usage"],
-        correctAnswer: 1,
-        explanation: "Adding '#' characters between every character makes all palindromes have odd length in the processed string, simplifying the algorithm."
-      },
-      {
-        question: "What does P[i] represent in Manacher's algorithm?",
-        options: ["Position of palindrome", "Radius of palindrome centered at i", "Length of palindrome", "Number of characters"],
-        correctAnswer: 1,
-        explanation: "P[i] represents the radius of the palindrome centered at position i in the preprocessed string."
-      },
-      {
-        question: "What is the key insight that makes Manacher's algorithm linear time?",
-        options: ["Using hash functions", "Mirror property of palindromes", "Dynamic programming", "Binary search"],
-        correctAnswer: 1,
-        explanation: "The mirror property allows us to use previously computed palindrome information to avoid redundant comparisons."
-      },
-      {
-        question: "What are the sentinel characters '^' and '$' used for?",
-        options: ["Pattern matching", "Avoiding boundary checks", "Hash calculation", "Memory optimization"],
-        correctAnswer: 1,
-        explanation: "Sentinel characters at the beginning and end prevent index out of bounds errors during expansion."
-      },
-      {
-        question: "What is the time complexity of Manacher's algorithm?",
-        options: ["O(n log n)", "O(nÃ‚Â²)", "O(n)", "O(nÃ‚Â³)"],
-        correctAnswer: 2,
-        explanation: "Manacher's algorithm runs in O(n) time because each character is examined at most twice during the entire process."
-      }
-    ]
-  },
-  {
-    id: 'string-anagram',
-    title: 'Anagram Detection',
-    description: 'Check if two strings are anagrams of each other',
-    category: 'Strings',
-    difficulty: 'beginner',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Anagram detection is the process of determining whether two strings are anagrams of each other. Two strings are anagrams if they contain exactly the same characters with the same frequencies, but possibly in different orders. This fundamental string processing problem has applications in word games, cryptography, and text analysis.
+        quizQuestions: [
+            {
+                question: "Why does Manacher's algorithm preprocess the string by adding '#' characters?",
+                options: ["To improve performance", "To handle even and odd length palindromes uniformly", "To avoid boundary checks", "To reduce memory usage"],
+                correctAnswer: 1,
+                explanation: "Adding '#' characters between every character makes all palindromes have odd length in the processed string, simplifying the algorithm."
+            },
+            {
+                question: "What does P[i] represent in Manacher's algorithm?",
+                options: ["Position of palindrome", "Radius of palindrome centered at i", "Length of palindrome", "Number of characters"],
+                correctAnswer: 1,
+                explanation: "P[i] represents the radius of the palindrome centered at position i in the preprocessed string."
+            },
+            {
+                question: "What is the key insight that makes Manacher's algorithm linear time?",
+                options: ["Using hash functions", "Mirror property of palindromes", "Dynamic programming", "Binary search"],
+                correctAnswer: 1,
+                explanation: "The mirror property allows us to use previously computed palindrome information to avoid redundant comparisons."
+            },
+            {
+                question: "What are the sentinel characters '^' and '$' used for?",
+                options: ["Pattern matching", "Avoiding boundary checks", "Hash calculation", "Memory optimization"],
+                correctAnswer: 1,
+                explanation: "Sentinel characters at the beginning and end prevent index out of bounds errors during expansion."
+            },
+            {
+                question: "What is the time complexity of Manacher's algorithm?",
+                options: ["O(n log n)", "O(nÃ‚Â²)", "O(n)", "O(nÃ‚Â³)"],
+                correctAnswer: 2,
+                explanation: "Manacher's algorithm runs in O(n) time because each character is examined at most twice during the entire process."
+            }
+        ]
+    },
+    {
+        id: 'string-anagram',
+        title: 'Anagram Detection',
+        description: 'Check if two strings are anagrams of each other',
+        category: 'Strings',
+        difficulty: 'beginner',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Anagram detection is the process of determining whether two strings are anagrams of each other. Two strings are anagrams if they contain exactly the same characters with the same frequencies, but possibly in different orders. This fundamental string processing problem has applications in word games, cryptography, and text analysis.
 
 What it does: checks if two strings contain exactly the same characters with the same frequencies in any order.
 
 How it works: counts character frequencies in both strings and compares them, or sorts both strings and checks equality.
 
 When to use: word games, cryptography, text analysis, duplicate detection, linguistic analysis.`,
-    voiceExplanation: `Think of anagrams like word puzzles where you rearrange the letters of one word to form another word - like "listen" and "silent", or "elbow" and "below". The key insight is that anagrams must have exactly the same letters in the same quantities, just in different orders. Imagine you have two bags of letter tiles - if they're anagrams, both bags should contain identical sets of letters. The most efficient way to check this is to count the frequency of each letter in both strings. You can do this by going through the first string and adding 1 to each letter's count, then going through the second string and subtracting 1 from each letter's count. If they're true anagrams, all counts should end up at zero. It's like a perfect balancing act - every letter added from the first word should be perfectly canceled out by the same letter from the second word.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of anagrams like word puzzles where you rearrange the letters of one word to form another word - like "listen" and "silent", or "elbow" and "below". The key insight is that anagrams must have exactly the same letters in the same quantities, just in different orders. Imagine you have two bags of letter tiles - if they're anagrams, both bags should contain identical sets of letters. The most efficient way to check this is to count the frequency of each letter in both strings. You can do this by going through the first string and adding 1 to each letter's count, then going through the second string and subtracting 1 from each letter's count. If they're true anagrams, all counts should end up at zero. It's like a perfect balancing act - every letter added from the first word should be perfectly canceled out by the same letter from the second word.`,
+        realWorldApplications: `**Industry Applications:**
 - **Word Games**: Scrabble, anagram solvers, crossword puzzles
 - **Cryptography**: Detecting simple substitution ciphers and transpositions
 - **Text Analysis**: Plagiarism detection, document similarity analysis
@@ -2451,7 +2460,7 @@ When to use: word games, cryptography, text analysis, duplicate detection, lingu
 - **Search Engines**: Query expansion and alternative search suggestions
 - **Social Media**: Detecting spam accounts with scrambled usernames
 - **Educational Software**: Language learning tools and spelling games`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Character Frequency**: Counting occurrences of each character
 2. **Hash Table Usage**: Efficient storage and lookup of character counts
 3. **Early Termination**: Optimizing by checking length first
@@ -2459,7 +2468,7 @@ When to use: word games, cryptography, text analysis, duplicate detection, lingu
 5. **Case Sensitivity**: Handling uppercase/lowercase considerations
 6. **Unicode Normalization**: Dealing with multi-byte characters
 7. **Alphabet Constraints**: Leveraging known character sets for optimization`,
-    pseudocode: `**Anagram Detection Pseudocode:**
+        pseudocode: `**Anagram Detection Pseudocode:**
 
 ALGORITHM IsAnagramFrequencyCount(string1, string2)
 INPUT: string1, string2 - the two strings to compare
@@ -2542,7 +2551,7 @@ BEGIN
     
     RETURN true
 END`,
-    implementationCode: `// Comprehensive Anagram Detection Implementation
+        implementationCode: `// Comprehensive Anagram Detection Implementation
 
 class AnagramDetector {
     // Basic frequency counting approach - O(n) time, O(k) space where k is alphabet size
@@ -2727,7 +2736,7 @@ console.log("Grouped anagrams:", AnagramDetector.groupAnagrams(words));
 // Performance comparison
 const perf = AnagramDetector.performanceTest("listen", "silent");
 console.log("Performance results:", perf);`,
-    example: `// Anagram Detection
+        example: `// Anagram Detection
 function isAnagram(s1, s2) {
     if (s1.length !== s2.length) return false;
     
@@ -2750,7 +2759,7 @@ function isAnagram(s1, s2) {
 // Example usage
 console.log(isAnagram("listen", "silent")); // true
 console.log(isAnagram("hello", "world")); // false`,
-    syntax: `**Anagram Detection Patterns:**
+        syntax: `**Anagram Detection Patterns:**
 
 1. **Character Frequency Count:**
    \`\`\`javascript
@@ -2765,58 +2774,58 @@ console.log(isAnagram("hello", "world")); // false`,
        return true;
    }
    \`\`\``,
-    quizQuestions: [
-      {
-        question: "What is the most efficient approach for anagram detection?",
-        options: ["Sorting both strings", "Character frequency counting", "Nested loops", "Regular expressions"],
-        correctAnswer: 1,
-        explanation: "Character frequency counting is O(n) time and O(k) space where k is alphabet size, more efficient than O(n log n) sorting."
-      },
-      {
-        question: "What should be the first check when determining if two strings are anagrams?",
-        options: ["Character frequencies", "String lengths", "Alphabetical order", "Case sensitivity"],
-        correctAnswer: 1,
-        explanation: "If two strings have different lengths, they cannot be anagrams, so this is an efficient early termination check."
-      },
-      {
-        question: "Which data structure is most suitable for counting character frequencies?",
-        options: ["Array", "Hash table", "Linked list", "Stack"],
-        correctAnswer: 1,
-        explanation: "Hash tables provide O(1) average time for insertion and lookup, making them ideal for character frequency counting."
-      },
-      {
-        question: "What is the space complexity of the character frequency approach for anagram detection?",
-        options: ["O(1)", "O(n)", "O(k) where k is alphabet size", "O(nÃ‚Â²)"],
-        correctAnswer: 2,
-        explanation: "Space complexity is O(k) where k is the size of the character set (e.g., 26 for lowercase English letters)."
-      },
-      {
-        question: "Which of these pairs are anagrams?",
-        options: ["'listen' and 'silent'", "'hello' and 'world'", "'abc' and 'def'", "'cat' and 'dog'"],
-        correctAnswer: 0,
-        explanation: "'listen' and 'silent' contain exactly the same characters with the same frequencies, just in different order."
-      }
-    ]
-  },
+        quizQuestions: [
+            {
+                question: "What is the most efficient approach for anagram detection?",
+                options: ["Sorting both strings", "Character frequency counting", "Nested loops", "Regular expressions"],
+                correctAnswer: 1,
+                explanation: "Character frequency counting is O(n) time and O(k) space where k is alphabet size, more efficient than O(n log n) sorting."
+            },
+            {
+                question: "What should be the first check when determining if two strings are anagrams?",
+                options: ["Character frequencies", "String lengths", "Alphabetical order", "Case sensitivity"],
+                correctAnswer: 1,
+                explanation: "If two strings have different lengths, they cannot be anagrams, so this is an efficient early termination check."
+            },
+            {
+                question: "Which data structure is most suitable for counting character frequencies?",
+                options: ["Array", "Hash table", "Linked list", "Stack"],
+                correctAnswer: 1,
+                explanation: "Hash tables provide O(1) average time for insertion and lookup, making them ideal for character frequency counting."
+            },
+            {
+                question: "What is the space complexity of the character frequency approach for anagram detection?",
+                options: ["O(1)", "O(n)", "O(k) where k is alphabet size", "O(nÃ‚Â²)"],
+                correctAnswer: 2,
+                explanation: "Space complexity is O(k) where k is the size of the character set (e.g., 26 for lowercase English letters)."
+            },
+            {
+                question: "Which of these pairs are anagrams?",
+                options: ["'listen' and 'silent'", "'hello' and 'world'", "'abc' and 'def'", "'cat' and 'dog'"],
+                correctAnswer: 0,
+                explanation: "'listen' and 'silent' contain exactly the same characters with the same frequencies, just in different order."
+            }
+        ]
+    },
 
-  // Linked Lists
-  {
-    id: 'linked-list-singly',
-    title: 'Singly Linked List',
-    description: 'Master basic linked list operations: insert, delete, traverse, reverse',
-    category: 'Linked Lists',
-    difficulty: 'beginner',
-    timeComplexity: 'O(1) - O(n)',
-    spaceComplexity: 'O(1)',
-    voiceExplanation: `Think of a singly linked list like a treasure hunt where each clue leads you to the next location. Unlike an array where you can jump to any position instantly, a linked list is like a chain of connected nodes where each node knows only about the next one in line. Imagine you have a train where each car is connected to the next car, but you can only move forward - you can't go backwards. Each node in the list contains two things: the actual data you want to store, and a pointer or reference that tells you where to find the next node. The beauty of linked lists is their flexibility - you can easily add or remove nodes anywhere in the chain by simply updating the connections, like unhooking and rehooking train cars. However, if you want to find a specific piece of data, you have to start from the beginning and follow the chain until you find it, which can be slower than arrays for searching.`,
-    extendedDefinition: `A Singly Linked List is a linear data structure where elements (nodes) are stored in sequence, with each node containing data and a reference (pointer) to the next node. Unlike arrays, linked lists don't require contiguous memory allocation, providing dynamic size capabilities.
+    // Linked Lists
+    {
+        id: 'linked-list-singly',
+        title: 'Singly Linked List',
+        description: 'Master basic linked list operations: insert, delete, traverse, reverse',
+        category: 'Linked Lists',
+        difficulty: 'beginner',
+        timeComplexity: 'O(1) - O(n)',
+        spaceComplexity: 'O(1)',
+        voiceExplanation: `Think of a singly linked list like a treasure hunt where each clue leads you to the next location. Unlike an array where you can jump to any position instantly, a linked list is like a chain of connected nodes where each node knows only about the next one in line. Imagine you have a train where each car is connected to the next car, but you can only move forward - you can't go backwards. Each node in the list contains two things: the actual data you want to store, and a pointer or reference that tells you where to find the next node. The beauty of linked lists is their flexibility - you can easily add or remove nodes anywhere in the chain by simply updating the connections, like unhooking and rehooking train cars. However, if you want to find a specific piece of data, you have to start from the beginning and follow the chain until you find it, which can be slower than arrays for searching.`,
+        extendedDefinition: `A Singly Linked List is a linear data structure where elements (nodes) are stored in sequence, with each node containing data and a reference (pointer) to the next node. Unlike arrays, linked lists don't require contiguous memory allocation, providing dynamic size capabilities.
 
 What it does: stores elements in nodes connected by pointers, allowing dynamic insertion and deletion.
 
 How it works: each node contains data and a pointer to the next node, creating a chain-like structure with sequential access.
 
 When to use: dynamic size requirements, frequent insertions/deletions, when memory allocation is unpredictable.`,
-    example: `// Singly Linked List Implementation
+        example: `// Singly Linked List Implementation
 class ListNode {
     constructor(val) {
         this.val = val;
@@ -2895,7 +2904,7 @@ class SinglyLinkedList {
         return result;
     }
 }`,
-    syntax: `**Singly Linked List Patterns:**
+        syntax: `**Singly Linked List Patterns:**
 
 1. **Node Structure:**
    \`\`\`javascript
@@ -2927,7 +2936,7 @@ class SinglyLinkedList {
    }
    return prev; // new head
    \`\`\``,
-    realWorldApplications: `**Industry Applications:**
+        realWorldApplications: `**Industry Applications:**
 - **Operating Systems**: Process scheduling, memory management, undo operations
 - **Web Browsers**: Browser history, back button functionality
 - **Music/Video Players**: Playlist management, next/previous track navigation
@@ -2936,7 +2945,7 @@ class SinglyLinkedList {
 - **Compilers**: Symbol tables, syntax tree construction
 - **Game Development**: Inventory systems, AI pathfinding
 - **Social Media**: Timeline feeds, friend connections`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Node Structure**: Data field and next pointer combination
 2. **Head Pointer**: Reference to the first node in the list
 3. **Dynamic Memory**: Nodes allocated and deallocated as needed
@@ -2944,7 +2953,7 @@ class SinglyLinkedList {
 5. **Pointer Manipulation**: Core skill for insertion and deletion
 6. **Memory Management**: Proper allocation and deallocation
 7. **Traversal Patterns**: Standard iteration techniques`,
-    pseudocode: `**Singly Linked List Operations Pseudocode:**
+        pseudocode: `**Singly Linked List Operations Pseudocode:**
 
 ALGORITHM InsertAtHead(list, data)
 INPUT: list - the linked list, data - value to insert
@@ -3022,7 +3031,7 @@ BEGIN
         current = current.next
     END WHILE
 END`,
-    implementationCode: `// Comprehensive Singly Linked List Implementation
+        implementationCode: `// Comprehensive Singly Linked List Implementation
 
 class ListNode {
     constructor(data) {
@@ -3288,56 +3297,56 @@ console.log('Reversed:', list.toArray()); // [3, 2]
 console.log('Middle element:', list.getMiddle()); // 2
 console.log('Size:', list.getSize()); // 2
 console.log('Is empty:', list.isEmpty()); // false`,
-    quizQuestions: [
-      {
-        question: "What is the time complexity of inserting an element at the head of a singly linked list?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(nÃ‚Â²)"],
-        correctAnswer: 0,
-        explanation: "Inserting at the head requires only updating the head pointer and the new node's next pointer, which is constant time O(1)."
-      },
-      {
-        question: "Why is random access not possible in a singly linked list?",
-        options: ["Nodes are not indexed", "Memory is not contiguous", "Must traverse from head", "All of the above"],
-        correctAnswer: 3,
-        explanation: "Singly linked lists don't support random access because nodes aren't indexed, memory isn't contiguous, and you must traverse from the head to reach any element."
-      },
-      {
-        question: "What is the main advantage of linked lists over arrays?",
-        options: ["Faster access", "Better cache performance", "Dynamic size", "Less memory usage"],
-        correctAnswer: 2,
-        explanation: "The main advantage of linked lists is their dynamic size - they can grow or shrink during runtime without declaring a fixed size."
-      },
-      {
-        question: "In the two-pointer technique for finding the middle of a linked list, how do the pointers move?",
-        options: ["Both move one step", "Both move two steps", "Slow: 1 step, Fast: 2 steps", "Slow: 2 steps, Fast: 1 step"],
-        correctAnswer: 2,
-        explanation: "The slow pointer moves one step while the fast pointer moves two steps. When fast reaches the end, slow will be at the middle."
-      },
-      {
-        question: "What happens to the original head when reversing a singly linked list?",
-        options: ["It becomes the tail", "It gets deleted", "It stays the head", "It points to null"],
-        correctAnswer: 0,
-        explanation: "When reversing a singly linked list, the original head becomes the tail of the reversed list."
-      }
-    ]
-  },
-  {
-    id: 'linked-list-doubly',
-    title: 'Doubly Linked List',
-    description: 'Bidirectional linked list with efficient forward and backward operations',
-    category: 'Linked Lists',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(1) - O(n)',
-    spaceComplexity: 'O(1)',
-    voiceExplanation: `A doubly linked list is like upgrading from a one-way street to a two-way street. While a singly linked list only lets you move forward from one node to the next, a doubly linked list gives each node two connections - one pointing to the next node and another pointing to the previous node. Think of it like a train where each car is connected to both the car in front and the car behind it. This bidirectional connectivity makes many operations more efficient. For example, if you want to delete a node, you don't need to traverse from the beginning to find the previous node - you already have a direct reference to it. You can also traverse the list in both directions, which is useful for applications like browser history where you need to go both forward and backward through pages. The trade-off is that each node requires extra memory to store the additional pointer, but this cost is often worth it for the added flexibility and efficiency.`,
-    extendedDefinition: `A Doubly Linked List is a linear data structure where each node contains data and two pointers: one pointing to the next node and another pointing to the previous node. This bidirectional linking provides enhanced flexibility for traversal and manipulation operations.
+        quizQuestions: [
+            {
+                question: "What is the time complexity of inserting an element at the head of a singly linked list?",
+                options: ["O(1)", "O(log n)", "O(n)", "O(nÃ‚Â²)"],
+                correctAnswer: 0,
+                explanation: "Inserting at the head requires only updating the head pointer and the new node's next pointer, which is constant time O(1)."
+            },
+            {
+                question: "Why is random access not possible in a singly linked list?",
+                options: ["Nodes are not indexed", "Memory is not contiguous", "Must traverse from head", "All of the above"],
+                correctAnswer: 3,
+                explanation: "Singly linked lists don't support random access because nodes aren't indexed, memory isn't contiguous, and you must traverse from the head to reach any element."
+            },
+            {
+                question: "What is the main advantage of linked lists over arrays?",
+                options: ["Faster access", "Better cache performance", "Dynamic size", "Less memory usage"],
+                correctAnswer: 2,
+                explanation: "The main advantage of linked lists is their dynamic size - they can grow or shrink during runtime without declaring a fixed size."
+            },
+            {
+                question: "In the two-pointer technique for finding the middle of a linked list, how do the pointers move?",
+                options: ["Both move one step", "Both move two steps", "Slow: 1 step, Fast: 2 steps", "Slow: 2 steps, Fast: 1 step"],
+                correctAnswer: 2,
+                explanation: "The slow pointer moves one step while the fast pointer moves two steps. When fast reaches the end, slow will be at the middle."
+            },
+            {
+                question: "What happens to the original head when reversing a singly linked list?",
+                options: ["It becomes the tail", "It gets deleted", "It stays the head", "It points to null"],
+                correctAnswer: 0,
+                explanation: "When reversing a singly linked list, the original head becomes the tail of the reversed list."
+            }
+        ]
+    },
+    {
+        id: 'linked-list-doubly',
+        title: 'Doubly Linked List',
+        description: 'Bidirectional linked list with efficient forward and backward operations',
+        category: 'Linked Lists',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(1) - O(n)',
+        spaceComplexity: 'O(1)',
+        voiceExplanation: `A doubly linked list is like upgrading from a one-way street to a two-way street. While a singly linked list only lets you move forward from one node to the next, a doubly linked list gives each node two connections - one pointing to the next node and another pointing to the previous node. Think of it like a train where each car is connected to both the car in front and the car behind it. This bidirectional connectivity makes many operations more efficient. For example, if you want to delete a node, you don't need to traverse from the beginning to find the previous node - you already have a direct reference to it. You can also traverse the list in both directions, which is useful for applications like browser history where you need to go both forward and backward through pages. The trade-off is that each node requires extra memory to store the additional pointer, but this cost is often worth it for the added flexibility and efficiency.`,
+        extendedDefinition: `A Doubly Linked List is a linear data structure where each node contains data and two pointers: one pointing to the next node and another pointing to the previous node. This bidirectional linking provides enhanced flexibility for traversal and manipulation operations.
 
 What it does: stores elements in nodes with bidirectional pointers, allowing efficient forward and backward traversal.
 
 How it works: each node contains data, next pointer, and previous pointer, creating bidirectional connections between adjacent nodes.
 
 When to use: browser history, undo/redo operations, LRU cache implementation, when frequent bidirectional traversal is needed.`,
-    realWorldApplications: `**Industry Applications:**
+        realWorldApplications: `**Industry Applications:**
 - **Web Browsers**: Forward and backward navigation history
 - **Text Editors**: Cursor movement, undo/redo operations with bidirectional access
 - **Music Players**: Previous/next track with seamless navigation
@@ -3346,7 +3355,7 @@ When to use: browser history, undo/redo operations, LRU cache implementation, wh
 - **Game Development**: Player movement history, game state management
 - **File Systems**: Directory navigation, file history tracking
 - **Social Media**: Timeline navigation, content browsing`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Bidirectional Pointers**: Next and previous pointer management
 2. **Head and Tail Maintenance**: Efficient access to both ends
 3. **Symmetric Operations**: Operations possible from both directions
@@ -3354,7 +3363,7 @@ When to use: browser history, undo/redo operations, LRU cache implementation, wh
 5. **Pointer Integrity**: Maintaining consistency between next and prev pointers
 6. **Boundary Conditions**: Handling empty list, single node cases
 7. **Circular Variants**: Understanding doubly circular linked lists`,
-    pseudocode: `**Doubly Linked List Operations Pseudocode:**
+        pseudocode: `**Doubly Linked List Operations Pseudocode:**
 
 ALGORITHM InsertAtHead(list, data)
 INPUT: list - the doubly linked list, data - value to insert
@@ -3428,7 +3437,7 @@ BEGIN
         current = current.prev
     END WHILE
 END`,
-    implementationCode: `// Comprehensive Doubly Linked List Implementation
+        implementationCode: `// Comprehensive Doubly Linked List Implementation
 
 class DoublyNode {
     constructor(data) {
@@ -3733,7 +3742,7 @@ console.log('After deletion:', dList.toArray()); // [1, 3]
 // Reverse
 dList.reverse();
 console.log('Reversed:', dList.toArray()); // [3, 1]`,
-    example: `// Doubly Linked List Node
+        example: `// Doubly Linked List Node
 class DoublyNode {
     constructor(data) {
         this.data = data;
@@ -3771,7 +3780,7 @@ class DoublyLinkedList {
         return result;
     }
 }`,
-    syntax: `**Doubly Linked List Patterns:**
+        syntax: `**Doubly Linked List Patterns:**
 
 1. **Node Structure:**
    \`\`\`javascript
@@ -3797,49 +3806,49 @@ class DoublyLinkedList {
        }
    }
    \`\`\``,
-    quizQuestions: [
-      {
-        question: "What is the main advantage of a doubly linked list over a singly linked list?",
-        options: ["Uses less memory", "Bidirectional traversal", "Faster insertion", "Better cache performance"],
-        correctAnswer: 1,
-        explanation: "The main advantage is bidirectional traversal - you can move both forward and backward through the list efficiently."
-      },
-      {
-        question: "What is the time complexity of deleting a node when you have a direct reference to it in a doubly linked list?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(nÃ‚Â²)"],
-        correctAnswer: 0,
-        explanation: "With a direct reference to the node, deletion is O(1) because you can directly update the prev and next pointers without traversal."
-      },
-      {
-        question: "How many pointers does each node in a doubly linked list contain?",
-        options: ["1", "2", "3", "4"],
-        correctAnswer: 1,
-        explanation: "Each node contains 2 pointers: one pointing to the next node and one pointing to the previous node."
-      },
-      {
-        question: "What optimization can be used when accessing elements in a doubly linked list?",
-        options: ["Binary search", "Choose traversal direction based on position", "Hash table lookup", "Skip list"],
-        correctAnswer: 1,
-        explanation: "You can optimize by choosing to traverse from head or tail based on whether the target position is closer to the beginning or end."
-      },
-      {
-        question: "What is the space complexity trade-off of doubly linked lists compared to singly linked lists?",
-        options: ["Same space complexity", "Half the space", "Double the space", "Extra pointer per node"],
-        correctAnswer: 3,
-        explanation: "Doubly linked lists require an extra pointer per node (the previous pointer), increasing memory overhead."
-      }
-    ]
-  },
-  {
-    id: 'linked-list-circular',
-    title: 'Circular Linked List',
-    description: 'Circular linked list where last node points to first node',
-    category: 'Linked Lists',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(1) - O(n)',
-    spaceComplexity: 'O(1)',
-    voiceExplanation: `A circular linked list is like a regular linked list that has been bent into a circle - the last node points back to the first node instead of pointing to null. Imagine a group of people holding hands in a circle, where each person can only see and hold hands with the person next to them. You can start from any person and keep walking around the circle, and you'll eventually come back to where you started. This circular structure is perfect for applications that need to cycle through items repeatedly, like a playlist that repeats, a round-robin scheduler, or a game where players take turns. The tricky part is avoiding infinite loops when traversing - you need to remember where you started so you know when you've completed a full circle. Circular linked lists are especially useful when you need to represent cyclical processes or when you want to eliminate the concept of a "beginning" and "end" in your data structure.`,
-    example: `// Circular Linked List
+        quizQuestions: [
+            {
+                question: "What is the main advantage of a doubly linked list over a singly linked list?",
+                options: ["Uses less memory", "Bidirectional traversal", "Faster insertion", "Better cache performance"],
+                correctAnswer: 1,
+                explanation: "The main advantage is bidirectional traversal - you can move both forward and backward through the list efficiently."
+            },
+            {
+                question: "What is the time complexity of deleting a node when you have a direct reference to it in a doubly linked list?",
+                options: ["O(1)", "O(log n)", "O(n)", "O(nÃ‚Â²)"],
+                correctAnswer: 0,
+                explanation: "With a direct reference to the node, deletion is O(1) because you can directly update the prev and next pointers without traversal."
+            },
+            {
+                question: "How many pointers does each node in a doubly linked list contain?",
+                options: ["1", "2", "3", "4"],
+                correctAnswer: 1,
+                explanation: "Each node contains 2 pointers: one pointing to the next node and one pointing to the previous node."
+            },
+            {
+                question: "What optimization can be used when accessing elements in a doubly linked list?",
+                options: ["Binary search", "Choose traversal direction based on position", "Hash table lookup", "Skip list"],
+                correctAnswer: 1,
+                explanation: "You can optimize by choosing to traverse from head or tail based on whether the target position is closer to the beginning or end."
+            },
+            {
+                question: "What is the space complexity trade-off of doubly linked lists compared to singly linked lists?",
+                options: ["Same space complexity", "Half the space", "Double the space", "Extra pointer per node"],
+                correctAnswer: 3,
+                explanation: "Doubly linked lists require an extra pointer per node (the previous pointer), increasing memory overhead."
+            }
+        ]
+    },
+    {
+        id: 'linked-list-circular',
+        title: 'Circular Linked List',
+        description: 'Circular linked list where last node points to first node',
+        category: 'Linked Lists',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(1) - O(n)',
+        spaceComplexity: 'O(1)',
+        voiceExplanation: `A circular linked list is like a regular linked list that has been bent into a circle - the last node points back to the first node instead of pointing to null. Imagine a group of people holding hands in a circle, where each person can only see and hold hands with the person next to them. You can start from any person and keep walking around the circle, and you'll eventually come back to where you started. This circular structure is perfect for applications that need to cycle through items repeatedly, like a playlist that repeats, a round-robin scheduler, or a game where players take turns. The tricky part is avoiding infinite loops when traversing - you need to remember where you started so you know when you've completed a full circle. Circular linked lists are especially useful when you need to represent cyclical processes or when you want to eliminate the concept of a "beginning" and "end" in your data structure.`,
+        example: `// Circular Linked List
 class CircularLinkedList {
     constructor() {
         this.head = null;
@@ -3876,7 +3885,7 @@ class CircularLinkedList {
         return result;
     }
 }`,
-    syntax: `**Circular Linked List Patterns:**
+        syntax: `**Circular Linked List Patterns:**
 
 1. **Insert at End:**
    \`\`\`javascript
@@ -3907,14 +3916,14 @@ class CircularLinkedList {
        } while (current !== this.head);
    }
    \`\`\``,
-    extendedDefinition: `A Circular Linked List is a variation of a linked list where the last node points back to the first node instead of pointing to null, forming a circular structure. This creates a continuous loop where you can traverse indefinitely without reaching an end.
+        extendedDefinition: `A Circular Linked List is a variation of a linked list where the last node points back to the first node instead of pointing to null, forming a circular structure. This creates a continuous loop where you can traverse indefinitely without reaching an end.
 
 What it does: creates continuous loop structure where last node connects back to first node, enabling infinite traversal.
 
 How it works: last node points to first node instead of null, forming circular structure that eliminates fixed start/end points.
 
 When to use: round-robin scheduling, circular buffers, cyclic processes, when you need continuous traversal without null checks.`,
-    realWorldApplications: `**Industry Applications:**
+        realWorldApplications: `**Industry Applications:**
 - **Operating Systems**: Round-robin CPU scheduling, process management
 - **Game Development**: Turn-based games, player rotation, game loops
 - **Media Players**: Playlist repeat functionality, continuous playback
@@ -3923,7 +3932,7 @@ When to use: round-robin scheduling, circular buffers, cyclic processes, when yo
 - **Embedded Systems**: Circular buffers for sensor data, real-time processing
 - **Database Systems**: Circular replication, distributed database management
 - **Web Servers**: Request routing, server load distribution`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Circular Property**: Last node points to first node, creating a cycle
 2. **Cycle Detection**: Techniques to avoid infinite loops during traversal
 3. **Starting Point Tracking**: Remembering where traversal began
@@ -3931,7 +3940,7 @@ When to use: round-robin scheduling, circular buffers, cyclic processes, when yo
 5. **Insertion Strategies**: Maintaining circularity during modifications
 6. **Memory Management**: Proper cleanup to avoid memory leaks
 7. **Round-Robin Logic**: Understanding cyclic access patterns`,
-    pseudocode: `**Circular Linked List Operations Pseudocode:**
+        pseudocode: `**Circular Linked List Operations Pseudocode:**
 
 ALGORITHM InsertAtBeginning(list, data)
 INPUT: list - circular linked list, data - value to insert
@@ -4028,7 +4037,7 @@ BEGIN
         current = current.next
     WHILE current Ã¢â€°Â  list.head
 END`,
-    implementationCode: `// Comprehensive Circular Linked List Implementation
+        implementationCode: `// Comprehensive Circular Linked List Implementation
 
 class CircularNode {
     constructor(data) {
@@ -4348,58 +4357,58 @@ cList.traverse((data, index) => {
 const [list1, list2] = cList.split();
 console.log('First half:', list1.toArray());
 console.log('Second half:', list2.toArray());`,
-    quizQuestions: [
-      {
-        question: "What is the key difference between a circular linked list and a regular linked list?",
-        options: ["Circular lists use more memory", "Last node points to first node instead of null", "Circular lists are faster", "Circular lists store more data"],
-        correctAnswer: 1,
-        explanation: "In a circular linked list, the last node's next pointer points back to the first node, creating a circular structure instead of terminating with null."
-      },
-      {
-        question: "What is the main challenge when traversing a circular linked list?",
-        options: ["Memory allocation", "Avoiding infinite loops", "Pointer arithmetic", "Data corruption"],
-        correctAnswer: 1,
-        explanation: "The main challenge is avoiding infinite loops since there's no natural termination point (null). You must track the starting point to know when to stop."
-      },
-      {
-        question: "Which termination condition is correct for traversing a circular linked list?",
-        options: ["current != null", "current.next != null", "current != head", "current.next != head"],
-        correctAnswer: 2,
-        explanation: "You should continue until current != head (starting point) to traverse all nodes exactly once in a circular list."
-      },
-      {
-        question: "What is a primary real-world application of circular linked lists?",
-        options: ["File systems", "Round-robin scheduling", "Database indexing", "Memory management"],
-        correctAnswer: 1,
-        explanation: "Round-robin scheduling is a perfect application for circular linked lists, where processes are given CPU time in a circular order."
-      },
-      {
-        question: "When inserting at the head of a circular linked list, what additional step is required?",
-        options: ["Update the size", "Find and update the last node's pointer", "Check for duplicates", "Validate the data"],
-        correctAnswer: 1,
-        explanation: "You must find the last node and update its next pointer to point to the new head, maintaining the circular property."
-      }
-    ]
-  },
+        quizQuestions: [
+            {
+                question: "What is the key difference between a circular linked list and a regular linked list?",
+                options: ["Circular lists use more memory", "Last node points to first node instead of null", "Circular lists are faster", "Circular lists store more data"],
+                correctAnswer: 1,
+                explanation: "In a circular linked list, the last node's next pointer points back to the first node, creating a circular structure instead of terminating with null."
+            },
+            {
+                question: "What is the main challenge when traversing a circular linked list?",
+                options: ["Memory allocation", "Avoiding infinite loops", "Pointer arithmetic", "Data corruption"],
+                correctAnswer: 1,
+                explanation: "The main challenge is avoiding infinite loops since there's no natural termination point (null). You must track the starting point to know when to stop."
+            },
+            {
+                question: "Which termination condition is correct for traversing a circular linked list?",
+                options: ["current != null", "current.next != null", "current != head", "current.next != head"],
+                correctAnswer: 2,
+                explanation: "You should continue until current != head (starting point) to traverse all nodes exactly once in a circular list."
+            },
+            {
+                question: "What is a primary real-world application of circular linked lists?",
+                options: ["File systems", "Round-robin scheduling", "Database indexing", "Memory management"],
+                correctAnswer: 1,
+                explanation: "Round-robin scheduling is a perfect application for circular linked lists, where processes are given CPU time in a circular order."
+            },
+            {
+                question: "When inserting at the head of a circular linked list, what additional step is required?",
+                options: ["Update the size", "Find and update the last node's pointer", "Check for duplicates", "Validate the data"],
+                correctAnswer: 1,
+                explanation: "You must find the last node and update its next pointer to point to the new head, maintaining the circular property."
+            }
+        ]
+    },
 
-  // Stacks & Queues
-  {
-    id: 'stack-operations',
-    title: 'Stack Operations',
-    description: 'LIFO data structure: push, pop, peek, and practical applications',
-    category: 'Stacks & Queues',
-    difficulty: 'beginner',
-    timeComplexity: 'O(1)',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `A Stack is a linear data structure that follows the Last-In-First-Out (LIFO) principle, where elements are added and removed from the same end called the "top" of the stack. Think of it like a stack of plates - you can only add or remove plates from the top.
+    // Stacks & Queues
+    {
+        id: 'stack-operations',
+        title: 'Stack Operations',
+        description: 'LIFO data structure: push, pop, peek, and practical applications',
+        category: 'Stacks & Queues',
+        difficulty: 'beginner',
+        timeComplexity: 'O(1)',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `A Stack is a linear data structure that follows the Last-In-First-Out (LIFO) principle, where elements are added and removed from the same end called the "top" of the stack. Think of it like a stack of plates - you can only add or remove plates from the top.
 
 What it does: stores elements in LIFO order where last added element is first to be removed.
 
 How it works: maintains a top pointer, push adds elements at top, pop removes from top in O(1) time.
 
 When to use: function calls, undo operations, expression evaluation, backtracking algorithms.`,
-    voiceExplanation: `Think of a stack like a stack of dinner plates in a cafeteria. You can only add new plates to the top of the stack, and when someone needs a plate, they take it from the top. You can't pull out a plate from the middle without first removing all the plates above it! This is exactly how a stack data structure works in programming. The "Last In, First Out" rule means the most recently added item is always the first one to be removed. It's like having a very organized pile where you always work from the top. Stacks are perfect for keeping track of things in reverse order - like the "undo" function in your text editor, where the last action you did is the first one that gets undone!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of a stack like a stack of dinner plates in a cafeteria. You can only add new plates to the top of the stack, and when someone needs a plate, they take it from the top. You can't pull out a plate from the middle without first removing all the plates above it! This is exactly how a stack data structure works in programming. The "Last In, First Out" rule means the most recently added item is always the first one to be removed. It's like having a very organized pile where you always work from the top. Stacks are perfect for keeping track of things in reverse order - like the "undo" function in your text editor, where the last action you did is the first one that gets undone!`,
+        realWorldApplications: `**Industry Applications:**
 - **Function Call Management**: Call stack in programming languages for method invocation
 - **Expression Evaluation**: Converting infix to postfix notation, evaluating mathematical expressions
 - **Undo Operations**: Text editors, image editors, browsers (back button functionality)
@@ -4410,7 +4419,7 @@ When to use: function calls, undo operations, expression evaluation, backtrackin
 - **Operating Systems**: Process management, interrupt handling, system call management
 - **Compilers**: Symbol table management, recursive descent parsing
 - **Game Development**: Game state management, AI decision trees, pathfinding algorithms`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **LIFO Principle**: Last In, First Out - the fundamental ordering constraint
 2. **Top Pointer**: Reference to the topmost element for efficient access
 3. **Stack Overflow**: Error when pushing to a full fixed-size stack
@@ -4419,7 +4428,7 @@ When to use: function calls, undo operations, expression evaluation, backtrackin
 6. **Call Stack**: How programming languages manage function calls and returns
 7. **Stack Frame**: Memory allocation unit containing local variables and parameters
 8. **Recursion Relationship**: Natural fit for recursive algorithms and backtracking`,
-    pseudocode: `**Stack Operations Pseudocode:**
+        pseudocode: `**Stack Operations Pseudocode:**
 
 ALGORITHM Push(stack, element)
 INPUT: stack - the stack data structure, element - item to add
@@ -4489,7 +4498,7 @@ BEGIN
     
     RETURN IsEmpty(stack)
 END`,
-    implementationCode: `// Comprehensive Stack Implementation
+        implementationCode: `// Comprehensive Stack Implementation
 
 class Stack {
     constructor(capacity = 100) {
@@ -4760,7 +4769,7 @@ console.log('Evaluate "3 4 + 2 *":', evaluatePostfix('3 4 + 2 *')); // 14
 
 console.log('Next greater [4,5,2,25]:', nextGreaterElement([4, 5, 2, 25])); // [5,25,25,-1]
 console.log('Stock span [100,80,60,70,60,75,85]:', calculateSpan([100, 80, 60, 70, 60, 75, 85])); // [1,1,1,2,1,4,6]`,
-    syntax: `**Stack Operation Patterns:**
+        syntax: `**Stack Operation Patterns:**
 
 1. **Basic Stack Operations:**
    \`\`\`javascript
@@ -4789,8 +4798,8 @@ console.log('Stock span [100,80,60,70,60,75,85]:', calculateSpan([100, 80, 60, 7
        return stack.pop();
    }
    \`\`\``,
-    voiceExplanation_alt: `Think of a stack like a stack of plates in a cafeteria - you can only add or remove plates from the top. This is exactly how a stack data structure works! When you push an element, it goes on top of the stack, just like placing a new plate on the pile. When you pop an element, you take the top plate off, which is always the most recently added one. This "last in, first out" behavior makes stacks perfect for situations where you need to reverse the order of things or keep track of what happened most recently. Imagine the "undo" function in your text editor - every action you take gets pushed onto a stack, and when you hit undo, it pops off the most recent action. Or think about function calls in programming - when one function calls another, the first function gets "paused" and pushed onto a call stack, and when the second function finishes, the first one gets popped back off and continues where it left off.`,
-    keyConcepts_alt: `**Essential Concepts:**
+        voiceExplanation_alt: `Think of a stack like a stack of plates in a cafeteria - you can only add or remove plates from the top. This is exactly how a stack data structure works! When you push an element, it goes on top of the stack, just like placing a new plate on the pile. When you pop an element, you take the top plate off, which is always the most recently added one. This "last in, first out" behavior makes stacks perfect for situations where you need to reverse the order of things or keep track of what happened most recently. Imagine the "undo" function in your text editor - every action you take gets pushed onto a stack, and when you hit undo, it pops off the most recent action. Or think about function calls in programming - when one function calls another, the first function gets "paused" and pushed onto a call stack, and when the second function finishes, the first one gets popped back off and continues where it left off.`,
+        keyConcepts_alt: `**Essential Concepts:**
 1. **LIFO Principle**: Last In, First Out ordering constraint
 2. **Top Pointer**: Reference to the most recently added element
 3. **Stack Overflow**: Error when pushing to a full stack
@@ -4798,7 +4807,7 @@ console.log('Stock span [100,80,60,70,60,75,85]:', calculateSpan([100, 80, 60, 7
 5. **Recursive Nature**: Natural fit for recursive algorithms
 6. **Memory Management**: Stack frames in program execution
 7. **Expression Evaluation**: Converting and evaluating mathematical expressions`,
-    pseudocode_alt: `**Stack Operations Pseudocode:**
+        pseudocode_alt: `**Stack Operations Pseudocode:**
 
 ALGORITHM Push(stack, element)
 INPUT: stack - the stack data structure, element - value to add
@@ -4868,7 +4877,7 @@ BEGIN
     
     RETURN IsEmpty(stack)
 END`,
-    implementationCode_alt: `// Comprehensive Stack Implementation
+        implementationCode_alt: `// Comprehensive Stack Implementation
 
 class Stack {
     constructor(capacity = 100) {
@@ -5102,56 +5111,56 @@ console.log('Postfix:', infixToPostfix('a+b*c')); // abc*+
 console.log('Evaluated:', evaluatePostfix('3 4 + 2 *')); // 14
 console.log('Next Greater:', nextGreaterElement([4, 5, 2, 25])); // [5, 25, 25, -1]
 console.log('Stock Span:', calculateSpan([100, 80, 60, 70, 60, 75, 85])); // [1, 1, 1, 2, 1, 4, 6]`,
-    quizQuestions: [
-      {
-        question: "What does LIFO stand for in the context of stacks?",
-        options: ["Last In, First Out", "Last In, Final Out", "Latest In, First Out", "Limited In, First Out"],
-        correctAnswer: 0,
-        explanation: "LIFO stands for Last In, First Out, meaning the most recently added element is the first one to be removed."
-      },
-      {
-        question: "What is the time complexity of push and pop operations in a stack?",
-        options: ["O(n)", "O(log n)", "O(1)", "O(nÃ‚Â²)"],
-        correctAnswer: 2,
-        explanation: "Both push and pop operations in a stack are O(1) constant time operations since they only affect the top element."
-      },
-      {
-        question: "Which of the following is NOT a typical application of stacks?",
-        options: ["Function call management", "Undo operations", "Breadth-first search", "Expression evaluation"],
-        correctAnswer: 2,
-        explanation: "Breadth-first search typically uses a queue (FIFO), not a stack. Stacks are used for depth-first search."
-      },
-      {
-        question: "What happens when you try to pop from an empty stack?",
-        options: ["Returns null", "Returns 0", "Stack underflow error", "Creates a new element"],
-        correctAnswer: 2,
-        explanation: "Attempting to pop from an empty stack results in a stack underflow error or exception."
-      },
-      {
-        question: "In the balanced parentheses problem, what do you push onto the stack?",
-        options: ["Closing brackets", "Opening brackets", "All brackets", "Nothing"],
-        correctAnswer: 1,
-        explanation: "You push opening brackets onto the stack and pop them when you encounter matching closing brackets."
-      }
-    ]
-  },
-  {
-    id: 'queue-operations',
-    title: 'Queue Operations',
-    description: 'FIFO data structure: enqueue, dequeue, and circular queue',
-    category: 'Stacks & Queues',
-    difficulty: 'beginner',
-    timeComplexity: 'O(1)',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `A Queue is a linear data structure that follows the First-In-First-Out (FIFO) principle, where elements are added at one end (rear/back) and removed from the other end (front). Think of it like a line of people waiting for service - the first person to join the line is the first person to be served.
+        quizQuestions: [
+            {
+                question: "What does LIFO stand for in the context of stacks?",
+                options: ["Last In, First Out", "Last In, Final Out", "Latest In, First Out", "Limited In, First Out"],
+                correctAnswer: 0,
+                explanation: "LIFO stands for Last In, First Out, meaning the most recently added element is the first one to be removed."
+            },
+            {
+                question: "What is the time complexity of push and pop operations in a stack?",
+                options: ["O(n)", "O(log n)", "O(1)", "O(nÃ‚Â²)"],
+                correctAnswer: 2,
+                explanation: "Both push and pop operations in a stack are O(1) constant time operations since they only affect the top element."
+            },
+            {
+                question: "Which of the following is NOT a typical application of stacks?",
+                options: ["Function call management", "Undo operations", "Breadth-first search", "Expression evaluation"],
+                correctAnswer: 2,
+                explanation: "Breadth-first search typically uses a queue (FIFO), not a stack. Stacks are used for depth-first search."
+            },
+            {
+                question: "What happens when you try to pop from an empty stack?",
+                options: ["Returns null", "Returns 0", "Stack underflow error", "Creates a new element"],
+                correctAnswer: 2,
+                explanation: "Attempting to pop from an empty stack results in a stack underflow error or exception."
+            },
+            {
+                question: "In the balanced parentheses problem, what do you push onto the stack?",
+                options: ["Closing brackets", "Opening brackets", "All brackets", "Nothing"],
+                correctAnswer: 1,
+                explanation: "You push opening brackets onto the stack and pop them when you encounter matching closing brackets."
+            }
+        ]
+    },
+    {
+        id: 'queue-operations',
+        title: 'Queue Operations',
+        description: 'FIFO data structure: enqueue, dequeue, and circular queue',
+        category: 'Stacks & Queues',
+        difficulty: 'beginner',
+        timeComplexity: 'O(1)',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `A Queue is a linear data structure that follows the First-In-First-Out (FIFO) principle, where elements are added at one end (rear/back) and removed from the other end (front). Think of it like a line of people waiting for service - the first person to join the line is the first person to be served.
 
 What it does: stores elements in FIFO order where the first added element is the first to be removed.
 
 How it works: maintains front and rear pointers, enqueue adds at rear, dequeue removes from front in O(1) time.
 
 When to use: task scheduling, breadth-first search, handling requests, buffering data streams.`,
-    voiceExplanation: `Picture a queue like a line at a coffee shop. New customers join at the back, and the barista serves from the front. No cutting in line! The person who arrived first is served first. That’s exactly how a queue works in code: enqueue puts an item at the rear, dequeue removes from the front. If the line is empty, you can’t serve anyone (that’s an underflow). If your waiting area is full, you can’t let more people in (that’s overflow). In practice, queues make sure things get handled in the order they arrived — perfect for task scheduling, web requests, and breadth-first searches.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Picture a queue like a line at a coffee shop. New customers join at the back, and the barista serves from the front. No cutting in line! The person who arrived first is served first. That’s exactly how a queue works in code: enqueue puts an item at the rear, dequeue removes from the front. If the line is empty, you can’t serve anyone (that’s an underflow). If your waiting area is full, you can’t let more people in (that’s overflow). In practice, queues make sure things get handled in the order they arrived — perfect for task scheduling, web requests, and breadth-first searches.`,
+        realWorldApplications: `**Industry Applications:**
 - **Operating Systems**: Process scheduling, CPU task management, print job queues
 - **Web Servers**: Request handling, load balancing, connection management
 - **Breadth-First Search**: Graph traversal, shortest path algorithms, level-order processing
@@ -5162,7 +5171,7 @@ When to use: task scheduling, breadth-first search, handling requests, buffering
 - **Database Systems**: Transaction processing, query scheduling, buffer management
 - **Network Protocols**: Message queuing, packet routing, flow control
 - **Real-time Systems**: Event handling, interrupt processing, priority-based scheduling`,
-    example: `// Basic Queue Operations
+        example: `// Basic Queue Operations
 const queue = [];
 
 // Enqueue - add elements to rear
@@ -5181,12 +5190,12 @@ const front = queue[0]; // 20
 
 // Check if empty
 const isEmpty = queue.length === 0; // false`,
-    syntax: `const queue = [];
+        syntax: `const queue = [];
 queue.push(item); // enqueue
 queue.shift(); // dequeue
 queue[0]; // peek front
 queue.length; // size`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **FIFO Principle**: First In, First Out - the fundamental ordering constraint
 2. **Front and Rear Pointers**: References to the beginning and end of the queue
 3. **Circular Implementation**: Reusing array space to prevent false overflow
@@ -5195,7 +5204,7 @@ queue.length; // size`,
 6. **Priority Queues**: Elements have associated priorities for processing order
 7. **Blocking vs Non-blocking**: Thread-safe operations in concurrent environments
 8. **Breadth-First Applications**: Natural fit for level-order processing algorithms`,
-    pseudocode: `**Queue Operations Pseudocode:**
+        pseudocode: `**Queue Operations Pseudocode:**
 
 ALGORITHM Enqueue(queue, element)
 INPUT: queue - the queue data structure, element - item to add
@@ -5273,7 +5282,7 @@ BEGIN
     
     RETURN result
 END`,
-    implementationCode: `// Comprehensive Queue Implementation
+        implementationCode: `// Comprehensive Queue Implementation
 
 class Queue {
     constructor(capacity = 100) {
@@ -5630,7 +5639,7 @@ scheduler.addTask('Critical bug fix', 5);
 scheduler.addTask('Update documentation', 1);
 console.log('\\nProcessing tasks by priority:');
 scheduler.processAllTasks();`,
-    syntax_alt: `**Queue Operation Patterns:**
+        syntax_alt: `**Queue Operation Patterns:**
 
 1. **Basic Queue Operations:**
    \`\`\`javascript
@@ -5672,8 +5681,8 @@ scheduler.processAllTasks();`,
        frontElement() { return this.isEmpty() ? null : this.items[this.front]; }
    }
    \`\`\``,
-    voiceExplanation_alt: `Think of a queue like a line of people waiting at a coffee shop - the first person in line is the first person to get served. This is exactly how a queue data structure works! When you enqueue (add) an element, it goes to the back of the line, just like a new customer joining the queue. When you dequeue (remove) an element, you take the person from the front of the line, who has been waiting the longest. This "first in, first out" behavior makes queues perfect for situations where fairness and order matter. Imagine a printer queue in an office - documents are printed in the order they were submitted, ensuring everyone gets their turn. Or think about breadth-first search in a graph - you explore all neighbors at the current level before moving to the next level, just like serving all customers at the front before helping those who arrived later. Queues are also great for handling tasks in web servers, where requests should be processed in the order they arrive.`,
-    implementationCode_alt: `// Comprehensive Queue Implementation
+        voiceExplanation_alt: `Think of a queue like a line of people waiting at a coffee shop - the first person in line is the first person to get served. This is exactly how a queue data structure works! When you enqueue (add) an element, it goes to the back of the line, just like a new customer joining the queue. When you dequeue (remove) an element, you take the person from the front of the line, who has been waiting the longest. This "first in, first out" behavior makes queues perfect for situations where fairness and order matter. Imagine a printer queue in an office - documents are printed in the order they were submitted, ensuring everyone gets their turn. Or think about breadth-first search in a graph - you explore all neighbors at the current level before moving to the next level, just like serving all customers at the front before helping those who arrived later. Queues are also great for handling tasks in web servers, where requests should be processed in the order they arrive.`,
+        implementationCode_alt: `// Comprehensive Queue Implementation
 
 class Queue {
     constructor(capacity = 100) {
@@ -5969,49 +5978,49 @@ const graph = {
     'F': ['C', 'E']
 };
 console.log('BFS:', breadthFirstSearch(graph, 'A')); // ['A', 'B', 'C', 'D', 'E', 'F']`,
-    quizQuestions: [
-      {
-        question: "What does FIFO stand for in the context of queues?",
-        options: ["First In, First Out", "Fast In, Fast Out", "Final In, First Out", "Fixed In, Flexible Out"],
-        correctAnswer: 0,
-        explanation: "FIFO stands for First In, First Out, meaning the first element added is the first one to be removed."
-      },
-      {
-        question: "Which end of a queue do you add new elements to?",
-        options: ["Front", "Rear", "Middle", "Any position"],
-        correctAnswer: 1,
-        explanation: "In a queue, new elements are added to the rear (back) and removed from the front, maintaining FIFO order."
-      },
-      {
-        question: "What is the main advantage of a circular queue over a simple queue?",
-        options: ["Faster operations", "Space efficiency", "Better sorting", "Easier implementation"],
-        correctAnswer: 1,
-        explanation: "Circular queues efficiently reuse memory space by wrapping the rear pointer back to the beginning when space becomes available."
-      },
-      {
-        question: "Which algorithm commonly uses a queue data structure?",
-        options: ["Depth-first search", "Breadth-first search", "Binary search", "Quick sort"],
-        correctAnswer: 1,
-        explanation: "Breadth-first search (BFS) uses a queue to explore nodes level by level, processing all neighbors before moving to the next level."
-      },
-      {
-        question: "What happens when you try to dequeue from an empty queue?",
-        options: ["Returns null", "Returns 0", "Queue underflow error", "Creates a new element"],
-        correctAnswer: 2,
-        explanation: "Attempting to dequeue from an empty queue results in a queue underflow error or exception."
-      }
-    ]
-  },
-  {
-    id: 'binary-tree',
-    title: 'Binary Tree Fundamentals',
-    description: 'Tree structure with inorder, preorder, postorder traversals and properties',
-    category: 'Trees',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(h)',
-    voiceExplanation: 'Think of a binary tree like a family tree, but with a special rule: each person can have at most two children - a left child and a right child. The tree starts with a single root node at the top, like the oldest ancestor, and branches downward. What makes binary trees fascinating is how you can visit all the family members in different orders. You can visit them inorder by going left child, then parent, then right child - like reading names alphabetically. You can visit preorder by going parent first, then left child, then right child - like introducing the head of household first. Or you can visit postorder by going left child, right child, then parent - like children speaking before their parents. Each traversal method gives you the data in a different sequence, making binary trees incredibly versatile for organizing and retrieving information in various ways.',
-    example: `// Binary Tree Node
+        quizQuestions: [
+            {
+                question: "What does FIFO stand for in the context of queues?",
+                options: ["First In, First Out", "Fast In, Fast Out", "Final In, First Out", "Fixed In, Flexible Out"],
+                correctAnswer: 0,
+                explanation: "FIFO stands for First In, First Out, meaning the first element added is the first one to be removed."
+            },
+            {
+                question: "Which end of a queue do you add new elements to?",
+                options: ["Front", "Rear", "Middle", "Any position"],
+                correctAnswer: 1,
+                explanation: "In a queue, new elements are added to the rear (back) and removed from the front, maintaining FIFO order."
+            },
+            {
+                question: "What is the main advantage of a circular queue over a simple queue?",
+                options: ["Faster operations", "Space efficiency", "Better sorting", "Easier implementation"],
+                correctAnswer: 1,
+                explanation: "Circular queues efficiently reuse memory space by wrapping the rear pointer back to the beginning when space becomes available."
+            },
+            {
+                question: "Which algorithm commonly uses a queue data structure?",
+                options: ["Depth-first search", "Breadth-first search", "Binary search", "Quick sort"],
+                correctAnswer: 1,
+                explanation: "Breadth-first search (BFS) uses a queue to explore nodes level by level, processing all neighbors before moving to the next level."
+            },
+            {
+                question: "What happens when you try to dequeue from an empty queue?",
+                options: ["Returns null", "Returns 0", "Queue underflow error", "Creates a new element"],
+                correctAnswer: 2,
+                explanation: "Attempting to dequeue from an empty queue results in a queue underflow error or exception."
+            }
+        ]
+    },
+    {
+        id: 'binary-tree',
+        title: 'Binary Tree Fundamentals',
+        description: 'Tree structure with inorder, preorder, postorder traversals and properties',
+        category: 'Trees',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(h)',
+        voiceExplanation: 'Think of a binary tree like a family tree, but with a special rule: each person can have at most two children - a left child and a right child. The tree starts with a single root node at the top, like the oldest ancestor, and branches downward. What makes binary trees fascinating is how you can visit all the family members in different orders. You can visit them inorder by going left child, then parent, then right child - like reading names alphabetically. You can visit preorder by going parent first, then left child, then right child - like introducing the head of household first. Or you can visit postorder by going left child, right child, then parent - like children speaking before their parents. Each traversal method gives you the data in a different sequence, making binary trees incredibly versatile for organizing and retrieving information in various ways.',
+        example: `// Binary Tree Node
 class TreeNode {
     constructor(val) {
         this.val = val;
@@ -6042,14 +6051,14 @@ root.left.left = new TreeNode(4);
 root.left.right = new TreeNode(5);
 
 console.log(inorderTraversal(root)); // [4, 2, 5, 1, 3]`,
-    extendedDefinition: `A Binary Tree is a hierarchical data structure where each node has at most two children, referred to as the left child and right child. Unlike linear data structures (arrays, linked lists), trees represent hierarchical relationships and enable efficient searching, insertion, and deletion operations.
+        extendedDefinition: `A Binary Tree is a hierarchical data structure where each node has at most two children, referred to as the left child and right child. Unlike linear data structures (arrays, linked lists), trees represent hierarchical relationships and enable efficient searching, insertion, and deletion operations.
 
 What it does: organizes data hierarchically with each node having at most two children for efficient tree operations.
 
 How it works: uses recursive structure where each node contains data and pointers to left and right children, enabling traversal algorithms.
 
 When to use: expression parsing, file systems, database indexing, decision trees, hierarchical data representation.`,
-    realWorldApplications: `**Industry Applications:**
+        realWorldApplications: `**Industry Applications:**
 - **File Systems**: Directory hierarchies, folder structures, file organization
 - **Database Systems**: B-trees for indexing, query optimization, data retrieval
 - **Compiler Design**: Parse trees, syntax analysis, expression evaluation
@@ -6060,7 +6069,7 @@ When to use: expression parsing, file systems, database indexing, decision trees
 - **Operating Systems**: Process trees, memory management, resource allocation
 - **Web Development**: DOM structure, XML parsing, HTML rendering
 - **Data Compression**: Huffman coding trees, compression algorithms`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Node Structure**: Data field with left and right child pointers
 2. **Tree Height vs Depth**: Understanding vertical measurements in trees
 3. **Parent-Child Relationships**: Hierarchical connections between nodes
@@ -6069,7 +6078,7 @@ When to use: expression parsing, file systems, database indexing, decision trees
 6. **Recursive Nature**: Most tree operations are naturally recursive
 7. **Tree Balance**: Impact on performance and operation complexity
 8. **Complete vs Full Trees**: Different structural properties and their uses`,
-    pseudocode: `**Binary Tree Operations Pseudocode:**
+        pseudocode: `**Binary Tree Operations Pseudocode:**
 
 ALGORITHM CreateNode(data)
 INPUT: data - value to store in node
@@ -6162,7 +6171,7 @@ BEGIN
     
     RETURN 1 + CountNodes(root.left) + CountNodes(root.right)
 END`,
-    implementationCode: `// Comprehensive Binary Tree Implementation
+        implementationCode: `// Comprehensive Binary Tree Implementation
 
 class TreeNode {
     constructor(data) {
@@ -6476,56 +6485,56 @@ tree.printTree();
 // Create from array
 const arrayTree = BinaryTree.fromArray([1, 2, 3, null, 4, 5, 6]);
 console.log('From array:', arrayTree.toArray()); // [1, 2, 3, null, 4, 5, 6]`,
-    quizQuestions: [
-      {
-        question: "What is the maximum number of nodes at level 3 in a binary tree?",
-        options: ["4", "6", "8", "16"],
-        correctAnswer: 2,
-        explanation: "At level i, the maximum number of nodes is 2^i. At level 3: 2^3 = 8 nodes."
-      },
-      {
-        question: "Which traversal method gives nodes in sorted order for a Binary Search Tree?",
-        options: ["Preorder", "Inorder", "Postorder", "Level order"],
-        correctAnswer: 1,
-        explanation: "Inorder traversal (Left Ã¢â€ â€™ Root Ã¢â€ â€™ Right) visits nodes in ascending sorted order for a BST."
-      },
-      {
-        question: "What is the minimum height of a binary tree with 15 nodes?",
-        options: ["3", "4", "5", "6"],
-        correctAnswer: 0,
-        explanation: "Minimum height = Ã¢Å’Å logÃ¢â€šâ€š(n)Ã¢Å’â€¹ = Ã¢Å’Å logÃ¢â€šâ€š(15)Ã¢Å’â€¹ = Ã¢Å’Å 3.9Ã¢Å’â€¹ = 3."
-      },
-      {
-        question: "In which traversal do you process children before the parent?",
-        options: ["Preorder", "Inorder", "Postorder", "Level order"],
-        correctAnswer: 2,
-        explanation: "Postorder traversal processes left child, right child, then parent node."
-      },
-      {
-        question: "What type of binary tree has all levels completely filled except possibly the last?",
-        options: ["Full binary tree", "Perfect binary tree", "Complete binary tree", "Balanced binary tree"],
-        correctAnswer: 2,
-        explanation: "A complete binary tree has all levels filled except possibly the last level, which is filled from left to right."
-      }
-    ]
-  },
-  {
-    id: 'binary-search-tree',
-    title: 'Binary Search Tree',
-    description: 'Efficient BST operations: insert, delete, search with optimal performance',
-    category: 'Trees',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(log n) - O(n)',
-    spaceComplexity: 'O(h)',
-    extendedDefinition: `A Binary Search Tree (BST) is a hierarchical data structure where each node has at most two children, and the tree maintains the BST property: for every node, all values in the left subtree are smaller, and all values in the right subtree are larger.
+        quizQuestions: [
+            {
+                question: "What is the maximum number of nodes at level 3 in a binary tree?",
+                options: ["4", "6", "8", "16"],
+                correctAnswer: 2,
+                explanation: "At level i, the maximum number of nodes is 2^i. At level 3: 2^3 = 8 nodes."
+            },
+            {
+                question: "Which traversal method gives nodes in sorted order for a Binary Search Tree?",
+                options: ["Preorder", "Inorder", "Postorder", "Level order"],
+                correctAnswer: 1,
+                explanation: "Inorder traversal (Left Ã¢â€ â€™ Root Ã¢â€ â€™ Right) visits nodes in ascending sorted order for a BST."
+            },
+            {
+                question: "What is the minimum height of a binary tree with 15 nodes?",
+                options: ["3", "4", "5", "6"],
+                correctAnswer: 0,
+                explanation: "Minimum height = Ã¢Å’Å logÃ¢â€šâ€š(n)Ã¢Å’â€¹ = Ã¢Å’Å logÃ¢â€šâ€š(15)Ã¢Å’â€¹ = Ã¢Å’Å 3.9Ã¢Å’â€¹ = 3."
+            },
+            {
+                question: "In which traversal do you process children before the parent?",
+                options: ["Preorder", "Inorder", "Postorder", "Level order"],
+                correctAnswer: 2,
+                explanation: "Postorder traversal processes left child, right child, then parent node."
+            },
+            {
+                question: "What type of binary tree has all levels completely filled except possibly the last?",
+                options: ["Full binary tree", "Perfect binary tree", "Complete binary tree", "Balanced binary tree"],
+                correctAnswer: 2,
+                explanation: "A complete binary tree has all levels filled except possibly the last level, which is filled from left to right."
+            }
+        ]
+    },
+    {
+        id: 'binary-search-tree',
+        title: 'Binary Search Tree',
+        description: 'Efficient BST operations: insert, delete, search with optimal performance',
+        category: 'Trees',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(log n) - O(n)',
+        spaceComplexity: 'O(h)',
+        extendedDefinition: `A Binary Search Tree (BST) is a hierarchical data structure where each node has at most two children, and the tree maintains the BST property: for every node, all values in the left subtree are smaller, and all values in the right subtree are larger.
 
 What it does: maintains sorted tree structure where left children are smaller and right children are larger than parent.
 
 How it works: uses BST property for efficient search, insert, and delete operations by eliminating half the tree at each step.
 
 When to use: fast searching, maintaining sorted data, range queries, when you need O(log n) operations on dynamic datasets.`,
-    voiceExplanation: `Think of a Binary Search Tree like a perfectly organized filing system where everything has its logical place. Imagine you're the root of the family tree, and everyone to your left in the family has a smaller value than you, and everyone to your right has a larger value. This rule applies to every person in the tree - they're always bigger than everyone on their left and smaller than everyone on their right. This organization makes searching incredibly fast because you can eliminate half the tree with each comparison, just like binary search. When you want to find someone, you start at the top and keep going left if they're smaller or right if they're bigger until you find them. It's like having a perfectly organized filing system where everything has its logical place.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of a Binary Search Tree like a perfectly organized filing system where everything has its logical place. Imagine you're the root of the family tree, and everyone to your left in the family has a smaller value than you, and everyone to your right has a larger value. This rule applies to every person in the tree - they're always bigger than everyone on their left and smaller than everyone on their right. This organization makes searching incredibly fast because you can eliminate half the tree with each comparison, just like binary search. When you want to find someone, you start at the top and keep going left if they're smaller or right if they're bigger until you find them. It's like having a perfectly organized filing system where everything has its logical place.`,
+        realWorldApplications: `**Industry Applications:**
 - **Database Systems**: B-trees for indexing, query optimization, range queries
 - **File Systems**: Directory structures, file organization, metadata storage
 - **Compiler Design**: Symbol tables, syntax trees, expression parsing
@@ -6536,7 +6545,7 @@ When to use: fast searching, maintaining sorted data, range queries, when you ne
 - **Financial Systems**: Order books, price discovery, risk management
 - **Machine Learning**: Decision trees, random forests, feature selection
 - **Graphics**: Scene graphs, ray tracing, 3D rendering pipelines`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **BST Property**: Fundamental ordering constraint that enables efficient operations
 2. **Tree Height**: Determines performance - balanced trees have O(log n) height
 3. **Node Structure**: Each node contains data, left pointer, and right pointer
@@ -6545,7 +6554,7 @@ When to use: fast searching, maintaining sorted data, range queries, when you ne
 6. **Successor/Predecessor**: Finding next/previous elements in sorted order
 7. **Tree Balance**: Understanding when trees become skewed and performance degrades
 8. **Deletion Cases**: Three scenarios - leaf, one child, two children`,
-    pseudocode: `**Binary Search Tree Operations Pseudocode:**
+        pseudocode: `**Binary Search Tree Operations Pseudocode:**
 
 ALGORITHM BSTSearch(root, key)
 INPUT: root node, key to search
@@ -6607,7 +6616,7 @@ BEGIN
     
     RETURN root
 END`,
-    implementationCode: `// Comprehensive Binary Search Tree Implementation
+        implementationCode: `// Comprehensive Binary Search Tree Implementation
 
 class TreeNode {
     constructor(data) {
@@ -6840,7 +6849,7 @@ console.log("Max:", bst.findMax()); // 80
 
 bst.delete(30);
 console.log("After deleting 30:", bst.inorderTraversal()); // [20, 40, 50, 60, 70, 80]`,
-    example: `// Simple BST Implementation
+        example: `// Simple BST Implementation
 class BST {
     constructor() { this.root = null; }
     
@@ -6870,49 +6879,49 @@ class BST {
 const bst2 = new BST();
 bst2.insert(50); bst2.insert(30); bst2.insert(70);
 console.log(bst2.search(30)); // Found`,
-    quizQuestions: [
-      {
-        question: "What is the key property that defines a Binary Search Tree?",
-        options: ["All nodes have exactly two children", "Left subtree values < root < right subtree values", "Tree is always balanced", "Nodes are stored in level order"],
-        correctAnswer: 1,
-        explanation: "The BST property states that for every node, all values in the left subtree are smaller and all values in the right subtree are larger."
-      },
-      {
-        question: "What is the average time complexity for search operations in a BST?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
-        correctAnswer: 1,
-        explanation: "In a balanced BST, search operations take O(log n) time as we eliminate half the tree with each comparison."
-      },
-      {
-        question: "What happens to BST performance when the tree becomes skewed (like a linked list)?",
-        options: ["Performance improves", "Performance stays the same", "Performance degrades to O(n)", "Tree becomes invalid"],
-        correctAnswer: 2,
-        explanation: "When a BST becomes skewed, it essentially becomes a linked list, and operations degrade from O(log n) to O(n)."
-      },
-      {
-        question: "Which case is most complex when deleting a node from a BST?",
-        options: ["Deleting a leaf node", "Deleting a node with one child", "Deleting a node with two children", "All cases are equally complex"],
-        correctAnswer: 2,
-        explanation: "Deleting a node with two children requires finding the inorder successor (or predecessor) and replacing the node's value."
-      },
-      {
-        question: "What does an inorder traversal of a BST produce?",
-        options: ["Random order", "Reverse sorted order", "Sorted order", "Level order"],
-        correctAnswer: 2,
-        explanation: "Inorder traversal of a BST visits nodes in ascending sorted order due to the BST property."
-      }
-    ]
-  },
-  {
-    id: 'heap-operations',
-    title: 'Heap Data Structure',
-    description: 'Min-heap and max-heap operations: insert, delete, heapify',
-    category: 'Trees',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(log n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `A Heap is a specialized tree-based data structure that satisfies the heap property, where parent nodes are either greater than (max-heap) or less than (min-heap) their children. It's commonly implemented as a complete binary tree using an array.`,
-    example: `// Min Heap Implementation
+        quizQuestions: [
+            {
+                question: "What is the key property that defines a Binary Search Tree?",
+                options: ["All nodes have exactly two children", "Left subtree values < root < right subtree values", "Tree is always balanced", "Nodes are stored in level order"],
+                correctAnswer: 1,
+                explanation: "The BST property states that for every node, all values in the left subtree are smaller and all values in the right subtree are larger."
+            },
+            {
+                question: "What is the average time complexity for search operations in a BST?",
+                options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+                correctAnswer: 1,
+                explanation: "In a balanced BST, search operations take O(log n) time as we eliminate half the tree with each comparison."
+            },
+            {
+                question: "What happens to BST performance when the tree becomes skewed (like a linked list)?",
+                options: ["Performance improves", "Performance stays the same", "Performance degrades to O(n)", "Tree becomes invalid"],
+                correctAnswer: 2,
+                explanation: "When a BST becomes skewed, it essentially becomes a linked list, and operations degrade from O(log n) to O(n)."
+            },
+            {
+                question: "Which case is most complex when deleting a node from a BST?",
+                options: ["Deleting a leaf node", "Deleting a node with one child", "Deleting a node with two children", "All cases are equally complex"],
+                correctAnswer: 2,
+                explanation: "Deleting a node with two children requires finding the inorder successor (or predecessor) and replacing the node's value."
+            },
+            {
+                question: "What does an inorder traversal of a BST produce?",
+                options: ["Random order", "Reverse sorted order", "Sorted order", "Level order"],
+                correctAnswer: 2,
+                explanation: "Inorder traversal of a BST visits nodes in ascending sorted order due to the BST property."
+            }
+        ]
+    },
+    {
+        id: 'heap-operations',
+        title: 'Heap Data Structure',
+        description: 'Min-heap and max-heap operations: insert, delete, heapify',
+        category: 'Trees',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(log n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `A Heap is a specialized tree-based data structure that satisfies the heap property, where parent nodes are either greater than (max-heap) or less than (min-heap) their children. It's commonly implemented as a complete binary tree using an array.`,
+        example: `// Min Heap Implementation
 class MinHeap {
     constructor() {
         this.heap = [];
@@ -6963,7 +6972,7 @@ heap.insert(3);
 heap.insert(1);
 heap.insert(4);
 console.log(heap.extractMin()); // 1`,
-    syntax: `**Heap Operation Patterns:**
+        syntax: `**Heap Operation Patterns:**
 
 1. **Insert Element:**
    \`\`\`javascript
@@ -6993,15 +7002,15 @@ console.log(heap.extractMin()); // 1`,
        }
    }
    \`\`\``,
-    voiceExplanation: `Think of a heap like a family tree where parents are always more important than their children, but siblings don't care about each other's rank. In a min-heap, every parent is smaller than their children - imagine a corporate hierarchy where the CEO (root) has the smallest employee ID, and every manager has a smaller ID than their direct reports. When you want to find the most important person (minimum value), you just look at the top! When someone new joins the company, they start at the bottom and bubble up until they find their proper place in the hierarchy. When the CEO leaves, the newest employee temporarily takes their place, but then they sink down to where they belong while someone more qualified rises to fill the leadership role. This constant reorganization ensures that the most important person is always at the top, and you can find them instantly!`,
-    extendedDefinition_alt: `A Heap is a specialized tree-based data structure that satisfies the heap property. It's a complete binary tree where every parent node has a specific relationship with its children, making it perfect for priority-based operations.
+        voiceExplanation: `Think of a heap like a family tree where parents are always more important than their children, but siblings don't care about each other's rank. In a min-heap, every parent is smaller than their children - imagine a corporate hierarchy where the CEO (root) has the smallest employee ID, and every manager has a smaller ID than their direct reports. When you want to find the most important person (minimum value), you just look at the top! When someone new joins the company, they start at the bottom and bubble up until they find their proper place in the hierarchy. When the CEO leaves, the newest employee temporarily takes their place, but then they sink down to where they belong while someone more qualified rises to fill the leadership role. This constant reorganization ensures that the most important person is always at the top, and you can find them instantly!`,
+        extendedDefinition_alt: `A Heap is a specialized tree-based data structure that satisfies the heap property. It's a complete binary tree where every parent node has a specific relationship with its children, making it perfect for priority-based operations.
 
 What it does: maintains heap property where parent nodes are always smaller (min-heap) or larger (max-heap) than their children.
 
 How it works: uses complete binary tree stored in array with parent-child relationships maintained through array indices and heapify operations.
 
 When to use: priority queues, heap sort, graph algorithms like Dijkstra's and Prim's, task scheduling systems.`,
-    realWorldApplications: `**Industry Applications:**
+        realWorldApplications: `**Industry Applications:**
 - **Operating Systems**: Process scheduling, memory management, interrupt handling
 - **Network Systems**: Bandwidth allocation, packet prioritization, QoS management
 - **Database Systems**: Query optimization, index management, buffer pool management
@@ -7012,7 +7021,7 @@ When to use: priority queues, heap sort, graph algorithms like Dijkstra's and Pr
 - **Machine Learning**: Feature selection, model optimization, hyperparameter tuning
 - **Graphics & Rendering**: Z-buffer algorithms, collision detection, animation systems
 - **Embedded Systems**: Real-time task scheduling, resource allocation, power management`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Heap Property**: Fundamental ordering constraint between parent and children
 2. **Complete Binary Tree**: Structural requirement for efficient array representation
 3. **Array Representation**: Index-based parent-child relationships without pointers
@@ -7021,7 +7030,7 @@ When to use: priority queues, heap sort, graph algorithms like Dijkstra's and Pr
 6. **Insertion Process**: Add at end, then bubble up to maintain property
 7. **Deletion Process**: Replace root with last element, then bubble down
 8. **Heap Construction**: Building heap from arbitrary array in O(n) time`,
-    pseudocode: `**Heap Operations Pseudocode:**
+        pseudocode: `**Heap Operations Pseudocode:**
 
 ALGORITHM HeapifyUp(heap, index)
 INPUT: heap array, index of element to bubble up
@@ -7090,7 +7099,7 @@ BEGIN
     
     RETURN minimum
 END`,
-    implementationCode: `// Comprehensive Heap Implementation
+        implementationCode: `// Comprehensive Heap Implementation
 
 class MinHeap {
     constructor() {
@@ -7365,55 +7374,55 @@ pq.enqueue('Medium priority task', 2);
 while (!pq.isEmpty()) {
     console.log('Processing:', pq.dequeue());
 }`,
-    quizQuestions: [
-      {
-        question: "What is the key property that defines a min-heap?",
-        options: ["Every parent node is greater than its children", "Every parent node is less than or equal to its children", "All nodes are in sorted order", "The tree is perfectly balanced"],
-        correctAnswer: 1,
-        explanation: "In a min-heap, every parent node must be less than or equal to its children, ensuring the minimum element is always at the root."
-      },
-      {
-        question: "What is the time complexity of inserting an element into a heap?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
-        correctAnswer: 1,
-        explanation: "Insertion takes O(log n) time because the element may need to bubble up through all levels of the tree, which has height log n."
-      },
-      {
-        question: "In an array representation of a heap, what is the index of the left child of node at index i?",
-        options: ["i + 1", "2i", "2i + 1", "i * 2 - 1"],
-        correctAnswer: 2,
-        explanation: "In zero-indexed array representation, the left child of node at index i is located at index 2i + 1."
-      },
-      {
-        question: "What is the time complexity of building a heap from an arbitrary array?",
-        options: ["O(n)", "O(n log n)", "O(log n)", "O(nÃ‚Â²)"],
-        correctAnswer: 0,
-        explanation: "Building a heap from an array takes O(n) time using the bottom-up heapify approach, which is more efficient than inserting elements one by one."
-      },
-      {
-        question: "Which operation is NOT efficiently supported by a heap?",
-        options: ["Finding minimum/maximum", "Inserting an element", "Searching for an arbitrary element", "Deleting minimum/maximum"],
-        correctAnswer: 2,
-        explanation: "Heaps are not optimized for searching arbitrary elements, which takes O(n) time. They excel at min/max operations and insertions/deletions."
-      }
-    ]
-  },
-  {
-    id: 'tree-inorder-traversal',
-    title: 'Inorder Traversal',
-    description: 'Process nodes in sorted order for BSTs - essential for retrieving data in ascending sequence',
-    category: 'Trees',
-    difficulty: 'beginner',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(h)',
-    extendedDefinition: `Inorder Traversal is a depth-first tree traversal method that visits nodes in the order: Left subtree → Root → Right subtree. This traversal pattern has special significance for Binary Search Trees (BSTs) as it produces elements in sorted ascending order.
+        quizQuestions: [
+            {
+                question: "What is the key property that defines a min-heap?",
+                options: ["Every parent node is greater than its children", "Every parent node is less than or equal to its children", "All nodes are in sorted order", "The tree is perfectly balanced"],
+                correctAnswer: 1,
+                explanation: "In a min-heap, every parent node must be less than or equal to its children, ensuring the minimum element is always at the root."
+            },
+            {
+                question: "What is the time complexity of inserting an element into a heap?",
+                options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+                correctAnswer: 1,
+                explanation: "Insertion takes O(log n) time because the element may need to bubble up through all levels of the tree, which has height log n."
+            },
+            {
+                question: "In an array representation of a heap, what is the index of the left child of node at index i?",
+                options: ["i + 1", "2i", "2i + 1", "i * 2 - 1"],
+                correctAnswer: 2,
+                explanation: "In zero-indexed array representation, the left child of node at index i is located at index 2i + 1."
+            },
+            {
+                question: "What is the time complexity of building a heap from an arbitrary array?",
+                options: ["O(n)", "O(n log n)", "O(log n)", "O(nÃ‚Â²)"],
+                correctAnswer: 0,
+                explanation: "Building a heap from an array takes O(n) time using the bottom-up heapify approach, which is more efficient than inserting elements one by one."
+            },
+            {
+                question: "Which operation is NOT efficiently supported by a heap?",
+                options: ["Finding minimum/maximum", "Inserting an element", "Searching for an arbitrary element", "Deleting minimum/maximum"],
+                correctAnswer: 2,
+                explanation: "Heaps are not optimized for searching arbitrary elements, which takes O(n) time. They excel at min/max operations and insertions/deletions."
+            }
+        ]
+    },
+    {
+        id: 'tree-inorder-traversal',
+        title: 'Inorder Traversal',
+        description: 'Process nodes in sorted order for BSTs - essential for retrieving data in ascending sequence',
+        category: 'Trees',
+        difficulty: 'beginner',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(h)',
+        extendedDefinition: `Inorder Traversal is a depth-first tree traversal method that visits nodes in the order: Left subtree → Root → Right subtree. This traversal pattern has special significance for Binary Search Trees (BSTs) as it produces elements in sorted ascending order.
 
 What it does: visits tree nodes in left-root-right order, producing sorted sequence for BSTs.
 
 How it works: recursively traverses left subtree, processes current node, then traverses right subtree.
 
 When to use: retrieving sorted data from BSTs, validating BST property, finding kth smallest element.`,
-    example: `// Inorder Traversal (Left, Root, Right)
+        example: `// Inorder Traversal (Left, Root, Right)
 function inorderTraversal(root) {
     const result = [];
     
@@ -7453,7 +7462,7 @@ function inorderIterative(root) {
 }
 
 // Example: Tree [1, null, 2, 3] gives [1, 3, 2]`,
-    syntax: `**Inorder Traversal Patterns:**
+        syntax: `**Inorder Traversal Patterns:**
 
 1. **Recursive Inorder:**
    \`\`\`javascript
@@ -7482,23 +7491,23 @@ function inorderIterative(root) {
        return result;
    }
    \`\`\``
-  },
-  {
-    id: 'tree-preorder-traversal',
-    title: 'Preorder Traversal',
-    description: 'Process parent before children - ideal for tree copying and serialization',
-    category: 'Trees',
-    difficulty: 'beginner',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(h)',
-    extendedDefinition: `Preorder Traversal is a depth-first tree traversal method that visits nodes in the order: Root → Left subtree → Right subtree. This "parent-first" approach makes it ideal for operations that need to process a node before its children.
+    },
+    {
+        id: 'tree-preorder-traversal',
+        title: 'Preorder Traversal',
+        description: 'Process parent before children - ideal for tree copying and serialization',
+        category: 'Trees',
+        difficulty: 'beginner',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(h)',
+        extendedDefinition: `Preorder Traversal is a depth-first tree traversal method that visits nodes in the order: Root → Left subtree → Right subtree. This "parent-first" approach makes it ideal for operations that need to process a node before its children.
 
 What it does: visits tree nodes in root-left-right order, processing parent before children for tree operations.
 
 How it works: processes current node first, then recursively traverses left subtree, followed by right subtree.
 
 When to use: tree copying, serialization, expression tree evaluation, file system operations, creating tree structures.`,
-    example: `// Preorder Traversal (Root, Left, Right)
+        example: `// Preorder Traversal (Root, Left, Right)
 function preorderTraversal(root) {
     const result = [];
     
@@ -7533,7 +7542,7 @@ function preorderIterative(root) {
 }
 
 // Example: Tree [1, 2, 3, 4, 5] gives [1, 2, 4, 5, 3]`,
-    syntax: `**Preorder Traversal Patterns:**
+        syntax: `**Preorder Traversal Patterns:**
 
 1. **Recursive Preorder:**
    \`\`\`javascript
@@ -7559,8 +7568,8 @@ function preorderIterative(root) {
        return result;
    }
    \`\`\``,
-    voiceExplanation: `Think of preorder traversal like being a tour guide leading a group through a museum! As a good tour guide, you always introduce each room or exhibit first before taking people to see the details inside. You'd say "Welcome to the Ancient Egypt section!" before exploring the individual artifacts. This is exactly how preorder traversal works - it visits the parent node first (like announcing the room), then explores the left wing (left subtree), and finally the right wing (right subtree). This approach is perfect when you need to establish context or make decisions at the parent level before processing children. It's like reading a book's table of contents - you see the chapter title first, then the main sections, then the subsections. Preorder is ideal for copying trees (you need to create the parent before the children), serializing data structures, or any situation where the parent needs to "set the stage" for its children!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of preorder traversal like being a tour guide leading a group through a museum! As a good tour guide, you always introduce each room or exhibit first before taking people to see the details inside. You'd say "Welcome to the Ancient Egypt section!" before exploring the individual artifacts. This is exactly how preorder traversal works - it visits the parent node first (like announcing the room), then explores the left wing (left subtree), and finally the right wing (right subtree). This approach is perfect when you need to establish context or make decisions at the parent level before processing children. It's like reading a book's table of contents - you see the chapter title first, then the main sections, then the subsections. Preorder is ideal for copying trees (you need to create the parent before the children), serializing data structures, or any situation where the parent needs to "set the stage" for its children!`,
+        realWorldApplications: `**Industry Applications:**
 - **File System Operations**: Directory listing, file tree copying, backup systems
 - **Compiler Design**: Abstract syntax tree processing, code generation, symbol table creation
 - **Database Systems**: Query plan execution, index tree traversal, schema validation
@@ -7571,7 +7580,7 @@ function preorderIterative(root) {
 - **Document Processing**: Document structure analysis, template processing, content management
 - **Artificial Intelligence**: Decision tree evaluation, knowledge base traversal, expert systems
 - **Graphics Processing**: Rendering pipeline, transformation hierarchies, animation systems`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Root-First Processing**: Parent nodes processed before their children
 2. **Top-Down Information Flow**: Context established at parent level flows to children
 3. **Prefix Expression Generation**: Produces prefix notation for expression trees
@@ -7580,7 +7589,7 @@ function preorderIterative(root) {
 6. **Morris Traversal**: Advanced technique for O(1) space complexity using threading
 7. **Tree Copying Pattern**: Standard approach for duplicating tree structures
 8. **Recursive Structure**: Algorithm naturally mirrors the recursive nature of trees`,
-    pseudocode: `**Preorder Traversal Algorithms:**
+        pseudocode: `**Preorder Traversal Algorithms:**
 
 ALGORITHM PreorderRecursive(TreeNode root)
 INPUT: root - root of the tree/subtree
@@ -7624,7 +7633,7 @@ BEGIN
     
     RETURN result
 END`,
-    implementationCode: `// Comprehensive Preorder Traversal Implementation
+        implementationCode: `// Comprehensive Preorder Traversal Implementation
 
 class TreeNode {
     constructor(val, left = null, right = null) {
@@ -7748,56 +7757,56 @@ const serialized = traversal.serialize(root);
 console.log('Serialized tree:', serialized);
 
 console.log('Has path sum 7:', traversal.hasPathSum(root, 7)); // true (1->2->4)`,
-    quizQuestions: [
-      {
-        question: "In which order does preorder traversal visit nodes?",
-        options: ["Left, Root, Right", "Root, Left, Right", "Left, Right, Root", "Right, Root, Left"],
-        correctAnswer: 1,
-        explanation: "Preorder traversal visits nodes in Root-Left-Right order, processing the parent node before its children."
-      },
-      {
-        question: "Why is preorder traversal ideal for tree copying operations?",
-        options: ["It uses less memory", "It's faster than other traversals", "It processes parent before children", "It handles null nodes better"],
-        correctAnswer: 2,
-        explanation: "Preorder traversal processes the parent node first, which is essential for tree copying since you must create the parent node before you can attach children to it."
-      },
-      {
-        question: "What type of notation does preorder traversal produce for expression trees?",
-        options: ["Infix notation", "Postfix notation (Reverse Polish)", "Prefix notation (Polish)", "Binary notation"],
-        correctAnswer: 2,
-        explanation: "Preorder traversal of expression trees produces prefix notation (Polish notation), where operators come before their operands."
-      },
-      {
-        question: "In the iterative implementation of preorder traversal, why do we push the right child before the left child?",
-        options: ["Right child has higher priority", "To maintain left-to-right processing order", "To save memory", "It's a programming convention"],
-        correctAnswer: 1,
-        explanation: "We push the right child first because stacks are LIFO (Last In, First Out). By pushing right first, then left, we ensure the left child is processed before the right child."
-      },
-      {
-        question: "What is a common real-world application of preorder traversal?",
-        options: ["Sorting tree elements", "Finding the shortest path", "File system directory listing", "Binary search in trees"],
-        correctAnswer: 2,
-        explanation: "Preorder traversal is commonly used for file system directory listing, where you list the directory name first, then its contents, maintaining the hierarchical structure."
-      }
-    ]
-  },
-  {
-    id: 'tree-postorder-traversal',
-    title: 'Postorder Traversal',
-    description: 'Left-Right-Root traversal for bottom-up tree processing',
-    category: 'Trees',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(h)',
-    extendedDefinition: `Postorder Traversal is a depth-first tree traversal method that visits nodes in the order: Left subtree → Right subtree → Root. This "children-first" approach ensures that all descendants are processed before their parent, making it essential for operations requiring bottom-up computation.
+        quizQuestions: [
+            {
+                question: "In which order does preorder traversal visit nodes?",
+                options: ["Left, Root, Right", "Root, Left, Right", "Left, Right, Root", "Right, Root, Left"],
+                correctAnswer: 1,
+                explanation: "Preorder traversal visits nodes in Root-Left-Right order, processing the parent node before its children."
+            },
+            {
+                question: "Why is preorder traversal ideal for tree copying operations?",
+                options: ["It uses less memory", "It's faster than other traversals", "It processes parent before children", "It handles null nodes better"],
+                correctAnswer: 2,
+                explanation: "Preorder traversal processes the parent node first, which is essential for tree copying since you must create the parent node before you can attach children to it."
+            },
+            {
+                question: "What type of notation does preorder traversal produce for expression trees?",
+                options: ["Infix notation", "Postfix notation (Reverse Polish)", "Prefix notation (Polish)", "Binary notation"],
+                correctAnswer: 2,
+                explanation: "Preorder traversal of expression trees produces prefix notation (Polish notation), where operators come before their operands."
+            },
+            {
+                question: "In the iterative implementation of preorder traversal, why do we push the right child before the left child?",
+                options: ["Right child has higher priority", "To maintain left-to-right processing order", "To save memory", "It's a programming convention"],
+                correctAnswer: 1,
+                explanation: "We push the right child first because stacks are LIFO (Last In, First Out). By pushing right first, then left, we ensure the left child is processed before the right child."
+            },
+            {
+                question: "What is a common real-world application of preorder traversal?",
+                options: ["Sorting tree elements", "Finding the shortest path", "File system directory listing", "Binary search in trees"],
+                correctAnswer: 2,
+                explanation: "Preorder traversal is commonly used for file system directory listing, where you list the directory name first, then its contents, maintaining the hierarchical structure."
+            }
+        ]
+    },
+    {
+        id: 'tree-postorder-traversal',
+        title: 'Postorder Traversal',
+        description: 'Left-Right-Root traversal for bottom-up tree processing',
+        category: 'Trees',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(h)',
+        extendedDefinition: `Postorder Traversal is a depth-first tree traversal method that visits nodes in the order: Left subtree → Right subtree → Root. This "children-first" approach ensures that all descendants are processed before their parent, making it essential for operations requiring bottom-up computation.
 
 What it does: visits tree nodes in left-right-root order, processing children before their parent node.
 
 How it works: recursively traverses left subtree, then right subtree, finally processes current node ensuring bottom-up computation.
 
 When to use: safe tree deletion, directory size calculation, expression evaluation, dependency resolution, cleanup operations.`,
-    voiceExplanation: `Think of postorder traversal like being a responsible parent cleaning up after your children. Imagine you're organizing a messy house where each room has smaller rooms inside it. In postorder traversal, you always clean up the smallest rooms first, then work your way up to the bigger rooms, and finally clean the main room. This is exactly how postorder works with trees - it visits the left child, then the right child, and only then processes the parent node. This approach is perfect for situations where you need to gather information from children before making decisions about the parent, like calculating the total size of a folder by first calculating the sizes of all files and subfolders inside it. It's also essential for safely deleting tree structures because you must delete all children before deleting the parent to avoid memory leaks.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of postorder traversal like being a responsible parent cleaning up after your children. Imagine you're organizing a messy house where each room has smaller rooms inside it. In postorder traversal, you always clean up the smallest rooms first, then work your way up to the bigger rooms, and finally clean the main room. This is exactly how postorder works with trees - it visits the left child, then the right child, and only then processes the parent node. This approach is perfect for situations where you need to gather information from children before making decisions about the parent, like calculating the total size of a folder by first calculating the sizes of all files and subfolders inside it. It's also essential for safely deleting tree structures because you must delete all children before deleting the parent to avoid memory leaks.`,
+        realWorldApplications: `**Industry Applications:**
 - **File Systems**: Calculate directory sizes by summing file sizes bottom-up
 - **Compiler Design**: Generate postfix notation for expression evaluation
 - **Database Systems**: Process query execution plans from leaves to root
@@ -7808,7 +7817,7 @@ When to use: safe tree deletion, directory size calculation, expression evaluati
 - **Network Protocols**: Tree-based routing table cleanup
 - **Data Compression**: Huffman tree construction and cleanup
 - **Graphics Rendering**: Scene hierarchy processing and cleanup`,
-    example: `// Postorder Traversal (Left, Right, Root)
+        example: `// Postorder Traversal (Left, Right, Root)
 function postorderTraversal(root) {
     const result = [];
     
@@ -7846,7 +7855,7 @@ function postorderIterative(root) {
 }
 
 // Example: Tree [1, 2, 3, 4, 5] gives [4, 5, 2, 3, 1]`,
-    syntax: `**Postorder Traversal Patterns:**
+        syntax: `**Postorder Traversal Patterns:**
 
 1. **Recursive Postorder:**
    \`\`\`javascript
@@ -7872,27 +7881,27 @@ function postorderIterative(root) {
        return stack2.reverse().map(node => node.val);
    }
    \`\`\``,
-    voiceExplanation_alt: `Think of postorder traversal like being a responsible parent cleaning up after a big family gathering! Imagine you're in charge of cleaning up a house where every room has smaller rooms inside it. As a responsible parent, you can't clean a room until all the smaller rooms inside it are completely clean first. So you start with the tiniest rooms (the leaves), clean them thoroughly, then move to slightly bigger rooms, and finally clean the main room. This is exactly how postorder traversal works! You visit the left child's house, clean it completely, then visit the right child's house and clean it completely, and only then do you clean the parent's room. This approach is perfect when you need to make sure all the "children" are taken care of before you handle the "parent" - like calculating the total size of a folder by first calculating the sizes of all files and subfolders inside it, or safely deleting a directory by first deleting all its contents!`
-  },
+        voiceExplanation_alt: `Think of postorder traversal like being a responsible parent cleaning up after a big family gathering! Imagine you're in charge of cleaning up a house where every room has smaller rooms inside it. As a responsible parent, you can't clean a room until all the smaller rooms inside it are completely clean first. So you start with the tiniest rooms (the leaves), clean them thoroughly, then move to slightly bigger rooms, and finally clean the main room. This is exactly how postorder traversal works! You visit the left child's house, clean it completely, then visit the right child's house and clean it completely, and only then do you clean the parent's room. This approach is perfect when you need to make sure all the "children" are taken care of before you handle the "parent" - like calculating the total size of a folder by first calculating the sizes of all files and subfolders inside it, or safely deleting a directory by first deleting all its contents!`
+    },
 
-  // Graphs
-  {
-    id: 'graph-dfs',
-    title: 'Depth First Search',
-    description: 'Graph traversal using DFS with recursive and iterative approaches',
-    category: 'Graphs',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(V + E)',
-    spaceComplexity: 'O(V)',
-    extendedDefinition: `Depth First Search (DFS) is a fundamental graph traversal algorithm that explores as far as possible along each branch before backtracking. It uses a stack-based approach (either explicit stack or recursion stack) to systematically visit all vertices in a graph.
+    // Graphs
+    {
+        id: 'graph-dfs',
+        title: 'Depth First Search',
+        description: 'Graph traversal using DFS with recursive and iterative approaches',
+        category: 'Graphs',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(V + E)',
+        spaceComplexity: 'O(V)',
+        extendedDefinition: `Depth First Search (DFS) is a fundamental graph traversal algorithm that explores as far as possible along each branch before backtracking. It uses a stack-based approach (either explicit stack or recursion stack) to systematically visit all vertices in a graph.
 
 What it does: explores graph by going as deep as possible along each branch before backtracking to explore other branches.
 
 How it works: uses stack (recursion or explicit) to remember vertices, marks visited nodes, backtracks when no unvisited neighbors remain.
 
 When to use: path finding, cycle detection, topological sorting, connected components, maze solving, tree traversals.`,
-    voiceExplanation: `Imagine you're exploring a maze, and you have a simple strategy: always go as deep as possible before turning back. You start at the entrance and pick a path. You keep following that path, making turns when you hit dead ends, always trying to go deeper into the maze. Only when you've exhausted all possibilities in one direction do you backtrack and try a different route. This is exactly how Depth First Search works! It's like having a ball of yarn - you unroll it as you go deeper, and when you hit a dead end, you follow the yarn back to the last intersection and try a different path. DFS is perfect for exploring all possibilities systematically, finding paths between locations, or checking if you can reach a destination. It's the algorithm equivalent of being a thorough explorer who never gives up until every path has been investigated.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Imagine you're exploring a maze, and you have a simple strategy: always go as deep as possible before turning back. You start at the entrance and pick a path. You keep following that path, making turns when you hit dead ends, always trying to go deeper into the maze. Only when you've exhausted all possibilities in one direction do you backtrack and try a different route. This is exactly how Depth First Search works! It's like having a ball of yarn - you unroll it as you go deeper, and when you hit a dead end, you follow the yarn back to the last intersection and try a different path. DFS is perfect for exploring all possibilities systematically, finding paths between locations, or checking if you can reach a destination. It's the algorithm equivalent of being a thorough explorer who never gives up until every path has been investigated.`,
+        realWorldApplications: `**Industry Applications:**
 - **Web Crawling**: Search engines traversing web pages and links
 - **Social Networks**: Finding connections, friend recommendations, influence analysis
 - **Compiler Design**: Syntax analysis, dependency resolution, dead code elimination
@@ -7903,7 +7912,7 @@ When to use: path finding, cycle detection, topological sorting, connected compo
 - **Bioinformatics**: Protein interaction networks, gene regulatory networks
 - **Circuit Design**: Electronic circuit analysis, fault detection, optimization
 - **Project Management**: Task dependency analysis, critical path identification`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Visited Tracking**: Preventing infinite loops by marking visited vertices
 2. **Recursion Stack**: Understanding the implicit stack in recursive DFS
 3. **Backtracking**: Returning to previous vertices when no unvisited neighbors exist
@@ -7912,7 +7921,7 @@ When to use: path finding, cycle detection, topological sorting, connected compo
 6. **Cycle Detection**: Identifying back edges that create cycles
 7. **Topological Ordering**: DFS-based algorithm for DAG vertex ordering
 8. **Time Complexity**: O(V + E) where V is vertices and E is edges`,
-    pseudocode: `**Depth First Search Pseudocode:**
+        pseudocode: `**Depth First Search Pseudocode:**
 
 ALGORITHM DFS(graph, startVertex)
 INPUT: graph representation, starting vertex
@@ -7969,7 +7978,7 @@ BEGIN
     
     RETURN result
 END`,
-    implementationCode: `// Comprehensive Depth First Search Implementation
+        implementationCode: `// Comprehensive Depth First Search Implementation
 
 class Graph {
     constructor(isDirected = false) {
@@ -8256,7 +8265,7 @@ console.log("DFS Iterative:", dfs.dfsIterative('A')); // ['A', 'C', 'E', 'F', 'B
 console.log("Has path A to F:", dfs.hasPath('A', 'F')); // true
 console.log("Path A to F:", dfs.findPath('A', 'F')); // ['A', 'B', 'D', 'F']
 console.log("Connected Components:", dfs.findConnectedComponents());`,
-    example: `// Simple DFS Implementation
+        example: `// Simple DFS Implementation
 function dfs(graph, start, visited = new Set()) {
     visited.add(start);
     console.log(start); // Process vertex
@@ -8279,23 +8288,23 @@ const graph = {
 };
 
 dfs(graph, 'A'); // Output: A B D F C E`
-  },
-  {
-    id: 'graph-bfs',
-    title: 'Breadth First Search',
-    description: 'Level-order graph traversal using BFS with queue implementation',
-    category: 'Graphs',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(V + E)',
-    spaceComplexity: 'O(V)',
-    extendedDefinition: `Breadth-First Search (BFS) is a fundamental graph traversal algorithm that explores vertices level by level, visiting all vertices at distance k before visiting any vertex at distance k+1 from the starting vertex. It uses a queue data structure to maintain the order of exploration.
+    },
+    {
+        id: 'graph-bfs',
+        title: 'Breadth First Search',
+        description: 'Level-order graph traversal using BFS with queue implementation',
+        category: 'Graphs',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(V + E)',
+        spaceComplexity: 'O(V)',
+        extendedDefinition: `Breadth-First Search (BFS) is a fundamental graph traversal algorithm that explores vertices level by level, visiting all vertices at distance k before visiting any vertex at distance k+1 from the starting vertex. It uses a queue data structure to maintain the order of exploration.
 
 What it does: explores graph vertices level by level using queue, guaranteeing shortest path discovery in unweighted graphs.
 
 How it works: starts from source vertex, adds neighbors to queue, processes vertices in FIFO order until all reachable vertices are visited.
 
 When to use: shortest path in unweighted graphs, level-order traversal, connected components, social network analysis.`,
-    example: `// BFS Implementation for Graph
+        example: `// BFS Implementation for Graph
 function bfs(graph, start) {
     const visited = new Set();
     const queue = [start];
@@ -8345,7 +8354,7 @@ function shortestPath(graph, start, end) {
 // Example usage:
 // graph = {0: [1, 2], 1: [0, 3], 2: [0, 4], 3: [1], 4: [2]}
 // bfs(graph, 0) returns [0, 1, 2, 3, 4]`,
-    syntax: `**BFS Patterns:**
+        syntax: `**BFS Patterns:**
 
 1. **Basic BFS Traversal:**
    \`\`\`javascript
@@ -8385,24 +8394,24 @@ function shortestPath(graph, start, end) {
        }
    }
    \`\`\``
-  },
-  {
-    id: 'dijkstra-algorithm',
-    title: 'Dijkstra\'s Algorithm',
-    description: 'Shortest path algorithm for weighted graphs with non-negative edges',
-    category: 'Graphs',
-    difficulty: 'advanced',
-    timeComplexity: 'O((V + E) log V)',
-    spaceComplexity: 'O(V)',
-    extendedDefinition: `Dijkstra's Algorithm is a graph traversal algorithm that finds the shortest path from a source vertex to all other vertices in a weighted graph with non-negative edge weights. It uses a greedy approach, always selecting the unvisited vertex with the smallest known distance.
+    },
+    {
+        id: 'dijkstra-algorithm',
+        title: 'Dijkstra\'s Algorithm',
+        description: 'Shortest path algorithm for weighted graphs with non-negative edges',
+        category: 'Graphs',
+        difficulty: 'advanced',
+        timeComplexity: 'O((V + E) log V)',
+        spaceComplexity: 'O(V)',
+        extendedDefinition: `Dijkstra's Algorithm is a graph traversal algorithm that finds the shortest path from a source vertex to all other vertices in a weighted graph with non-negative edge weights. It uses a greedy approach, always selecting the unvisited vertex with the smallest known distance.
 
 What it does: finds shortest paths from source vertex to all other vertices in weighted graph with non-negative edges.
 
 How it works: uses greedy approach with priority queue, always selecting closest unvisited vertex and relaxing edge weights to update distances.
 
 When to use: GPS navigation, network routing, social networks, game pathfinding, any shortest path problems with non-negative weights.`,
-    voiceExplanation: `Think of Dijkstra's algorithm like a delivery driver with a GPS who's incredibly methodical! Imagine you're a delivery driver starting from your depot, and you need to find the shortest route to every address in the city. You have a GPS that shows you the distance to nearby locations, but you can only see one step ahead. Here's how you'd work: First, you mark your starting depot as "visited" with distance 0. Then you look at all the places you can directly reach from the depot and note their distances. You pick the closest unvisited location and drive there - this becomes your new "known shortest path." From this new location, you update your GPS with any shorter routes you've discovered to other places. You keep repeating this process: always go to the closest unvisited location, update your route information, and mark that location as "fully explored." By the time you've visited everywhere, you'll have found the shortest route from your depot to every single address in the city! That's exactly how Dijkstra's algorithm works - it's like having the most efficient GPS system that guarantees the shortest path.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of Dijkstra's algorithm like a delivery driver with a GPS who's incredibly methodical! Imagine you're a delivery driver starting from your depot, and you need to find the shortest route to every address in the city. You have a GPS that shows you the distance to nearby locations, but you can only see one step ahead. Here's how you'd work: First, you mark your starting depot as "visited" with distance 0. Then you look at all the places you can directly reach from the depot and note their distances. You pick the closest unvisited location and drive there - this becomes your new "known shortest path." From this new location, you update your GPS with any shorter routes you've discovered to other places. You keep repeating this process: always go to the closest unvisited location, update your route information, and mark that location as "fully explored." By the time you've visited everywhere, you'll have found the shortest route from your depot to every single address in the city! That's exactly how Dijkstra's algorithm works - it's like having the most efficient GPS system that guarantees the shortest path.`,
+        realWorldApplications: `**Industry Applications:**
 - **GPS Navigation Systems**: Route planning and real-time traffic optimization
 - **Network Routing Protocols**: Internet packet routing (OSPF, IS-IS protocols)
 - **Social Networks**: Finding degrees of separation, friend recommendations
@@ -8413,7 +8422,7 @@ When to use: GPS navigation, network routing, social networks, game pathfinding,
 - **Urban Planning**: Public transportation route design, emergency services
 - **Financial Networks**: Currency exchange rate optimization, arbitrage detection
 - **Robotics**: Robot navigation, autonomous vehicle path planning`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Greedy Strategy**: Always choose the vertex with minimum distance from unvisited set
 2. **Relaxation**: Update distance if a shorter path is found through current vertex
 3. **Priority Queue**: Efficiently extract minimum distance vertex (Min-Heap)
@@ -8422,7 +8431,7 @@ When to use: GPS navigation, network routing, social networks, game pathfinding,
 6. **Optimal Substructure**: Shortest path contains shortest subpaths
 7. **Distance Array**: Maintains shortest known distance to each vertex
 8. **Path Reconstruction**: Use previous array to trace back actual shortest paths`,
-    pseudocode: `**Dijkstra's Algorithm Pseudocode:**
+        pseudocode: `**Dijkstra's Algorithm Pseudocode:**
 
 ALGORITHM Dijkstra(Graph G, Vertex source)
 INPUT: G - weighted graph with non-negative edges, source - starting vertex
@@ -8475,7 +8484,7 @@ BEGIN
         RETURN "No path exists"
     END IF
 END`,
-    implementationCode: `// Comprehensive Dijkstra's Algorithm Implementation
+        implementationCode: `// Comprehensive Dijkstra's Algorithm Implementation
 
 class MinHeap {
     constructor() {
@@ -8687,55 +8696,55 @@ console.log('\\nAll shortest paths from A:');
 for (const [vertex, info] of allPaths) {
     console.log(\`To \${vertex}: \${info.path ? info.path.join(' -> ') : 'No path'} (distance: \${info.distance})\`);
 }`,
-    quizQuestions: [
-      {
-        question: "What is the key requirement for Dijkstra's algorithm to work correctly?",
-        options: ["Graph must be connected", "Graph must have non-negative edge weights", "Graph must be acyclic", "Graph must be undirected"],
-        correctAnswer: 1,
-        explanation: "Dijkstra's algorithm requires non-negative edge weights. Negative weights can cause the algorithm to produce incorrect results because it assumes that once a vertex is visited, the shortest path to it has been found."
-      },
-      {
-        question: "What data structure is typically used to efficiently implement Dijkstra's algorithm?",
-        options: ["Stack", "Queue", "Priority Queue (Min-Heap)", "Hash Table"],
-        correctAnswer: 2,
-        explanation: "A priority queue (min-heap) is used to efficiently extract the unvisited vertex with the minimum distance, which is crucial for the algorithm's performance."
-      },
-      {
-        question: "What is the time complexity of Dijkstra's algorithm using a binary heap?",
-        options: ["O(V²)", "O(E log V)", "O((V + E) log V)", "O(VE)"],
-        correctAnswer: 2,
-        explanation: "Using a binary heap, Dijkstra's algorithm has O((V + E) log V) time complexity: O(V log V) for extract-min operations and O(E log V) for decrease-key operations."
-      },
-      {
-        question: "What happens when Dijkstra's algorithm encounters a negative edge weight?",
-        options: ["It automatically handles it correctly", "It produces incorrect shortest paths", "It throws an error", "It ignores the negative edge"],
-        correctAnswer: 1,
-        explanation: "Dijkstra's algorithm can produce incorrect results with negative edge weights because it assumes that once a vertex is processed, no shorter path to it can be found later."
-      },
-      {
-        question: "What is the purpose of the 'relaxation' step in Dijkstra's algorithm?",
-        options: ["To remove vertices from the graph", "To update distances if a shorter path is found", "To add new edges to the graph", "To mark vertices as visited"],
-        correctAnswer: 1,
-        explanation: "Relaxation updates the distance to a vertex if a shorter path is discovered through the current vertex, ensuring that we always maintain the shortest known distance to each vertex."
-      }
-    ]
-  },
-  {
-    id: 'bellman-ford',
-    title: 'Bellman-Ford Algorithm',
-    description: 'Shortest path algorithm that handles negative edge weights',
-    category: 'Graphs',
-    difficulty: 'advanced',
-    timeComplexity: 'O(VE)',
-    spaceComplexity: 'O(V)',
-    extendedDefinition: `The Bellman-Ford Algorithm is a single-source shortest path algorithm that can handle graphs with negative edge weights, unlike Dijkstra's algorithm. It works by relaxing all edges repeatedly and can detect negative weight cycles in the graph.
+        quizQuestions: [
+            {
+                question: "What is the key requirement for Dijkstra's algorithm to work correctly?",
+                options: ["Graph must be connected", "Graph must have non-negative edge weights", "Graph must be acyclic", "Graph must be undirected"],
+                correctAnswer: 1,
+                explanation: "Dijkstra's algorithm requires non-negative edge weights. Negative weights can cause the algorithm to produce incorrect results because it assumes that once a vertex is visited, the shortest path to it has been found."
+            },
+            {
+                question: "What data structure is typically used to efficiently implement Dijkstra's algorithm?",
+                options: ["Stack", "Queue", "Priority Queue (Min-Heap)", "Hash Table"],
+                correctAnswer: 2,
+                explanation: "A priority queue (min-heap) is used to efficiently extract the unvisited vertex with the minimum distance, which is crucial for the algorithm's performance."
+            },
+            {
+                question: "What is the time complexity of Dijkstra's algorithm using a binary heap?",
+                options: ["O(V²)", "O(E log V)", "O((V + E) log V)", "O(VE)"],
+                correctAnswer: 2,
+                explanation: "Using a binary heap, Dijkstra's algorithm has O((V + E) log V) time complexity: O(V log V) for extract-min operations and O(E log V) for decrease-key operations."
+            },
+            {
+                question: "What happens when Dijkstra's algorithm encounters a negative edge weight?",
+                options: ["It automatically handles it correctly", "It produces incorrect shortest paths", "It throws an error", "It ignores the negative edge"],
+                correctAnswer: 1,
+                explanation: "Dijkstra's algorithm can produce incorrect results with negative edge weights because it assumes that once a vertex is processed, no shorter path to it can be found later."
+            },
+            {
+                question: "What is the purpose of the 'relaxation' step in Dijkstra's algorithm?",
+                options: ["To remove vertices from the graph", "To update distances if a shorter path is found", "To add new edges to the graph", "To mark vertices as visited"],
+                correctAnswer: 1,
+                explanation: "Relaxation updates the distance to a vertex if a shorter path is discovered through the current vertex, ensuring that we always maintain the shortest known distance to each vertex."
+            }
+        ]
+    },
+    {
+        id: 'bellman-ford',
+        title: 'Bellman-Ford Algorithm',
+        description: 'Shortest path algorithm that handles negative edge weights',
+        category: 'Graphs',
+        difficulty: 'advanced',
+        timeComplexity: 'O(VE)',
+        spaceComplexity: 'O(V)',
+        extendedDefinition: `The Bellman-Ford Algorithm is a single-source shortest path algorithm that can handle graphs with negative edge weights, unlike Dijkstra's algorithm. It works by relaxing all edges repeatedly and can detect negative weight cycles in the graph.
 
 What it does: finds shortest paths from single source to all vertices, handles negative edge weights and detects negative cycles.
 
 How it works: relaxes all edges V-1 times, then checks for negative cycles by attempting one more relaxation round.
 
 When to use: graphs with negative edge weights, currency exchange rates, detecting negative cycles, when Dijkstra cannot be used.`,
-    example: `// Bellman-Ford Algorithm Implementation
+        example: `// Bellman-Ford Algorithm Implementation
 function bellmanFord(graph, source) {
     const V = graph.vertices;
     const distances = new Array(V).fill(Infinity);
@@ -8778,23 +8787,23 @@ const graph = {
 
 const result = bellmanFord(graph, 0);
 console.log(result.distances); // [0, -1, 2, 1, -2]`
-  },
-  {
-    id: 'floyd-warshall',
-    title: 'Floyd-Warshall Algorithm',
-    description: 'All-pairs shortest path algorithm using dynamic programming',
-    category: 'Graphs',
-    difficulty: 'advanced',
-    timeComplexity: 'O(VÃ‚Â³)',
-    spaceComplexity: 'O(VÃ‚Â²)',
-    extendedDefinition: `The Floyd-Warshall Algorithm is a dynamic programming algorithm that finds the shortest paths between all pairs of vertices in a weighted graph. It can handle both positive and negative edge weights (but not negative cycles) and works on both directed and undirected graphs.
+    },
+    {
+        id: 'floyd-warshall',
+        title: 'Floyd-Warshall Algorithm',
+        description: 'All-pairs shortest path algorithm using dynamic programming',
+        category: 'Graphs',
+        difficulty: 'advanced',
+        timeComplexity: 'O(VÃ‚Â³)',
+        spaceComplexity: 'O(VÃ‚Â²)',
+        extendedDefinition: `The Floyd-Warshall Algorithm is a dynamic programming algorithm that finds the shortest paths between all pairs of vertices in a weighted graph. It can handle both positive and negative edge weights (but not negative cycles) and works on both directed and undirected graphs.
 
 What it does: finds shortest paths between all pairs of vertices using dynamic programming with intermediate vertices.
 
 How it works: uses three nested loops to consider each vertex as intermediate point, updating distances if shorter path found.
 
 When to use: dense graphs, all-pairs shortest paths needed, transitive closure, small to medium graphs where O(V³) is acceptable.`,
-    example: `// Floyd-Warshall Algorithm Implementation
+        example: `// Floyd-Warshall Algorithm Implementation
 function floydWarshall(graph) {
     const V = graph.length;
     const dist = Array(V).fill().map(() => Array(V).fill(Infinity));
@@ -8835,23 +8844,23 @@ const graph = [
 const shortestPaths = floydWarshall(graph);
 console.log(shortestPaths);
 // Result: All-pairs shortest distances matrix`,
-  },
-  {
-    id: 'kruskal-algorithm',
-    title: 'Kruskal\'s Algorithm',
-    description: 'Build MST by adding cheapest edges that don\'t create cycles - edge-focused approach',
-    category: 'Graphs',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(E log E)',
-    spaceComplexity: 'O(V)',
-    extendedDefinition: `Kruskal's Algorithm is a greedy algorithm that finds the Minimum Spanning Tree (MST) of a connected, undirected graph by selecting edges in order of increasing weight while avoiding cycles. It uses a Union-Find data structure to efficiently detect cycles.
+    },
+    {
+        id: 'kruskal-algorithm',
+        title: 'Kruskal\'s Algorithm',
+        description: 'Build MST by adding cheapest edges that don\'t create cycles - edge-focused approach',
+        category: 'Graphs',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(E log E)',
+        spaceComplexity: 'O(V)',
+        extendedDefinition: `Kruskal's Algorithm is a greedy algorithm that finds the Minimum Spanning Tree (MST) of a connected, undirected graph by selecting edges in order of increasing weight while avoiding cycles. It uses a Union-Find data structure to efficiently detect cycles.
 
 What it does: builds minimum spanning tree by selecting cheapest edges that don't create cycles using Union-Find structure.
 
 How it works: sorts all edges by weight, iteratively adds cheapest edge that doesn't form cycle until MST is complete.
 
 When to use: sparse graphs, network design, clustering problems, when edge-focused MST approach is preferred over vertex-focused.`,
-    example: `// Kruskal's Algorithm Implementation
+        example: `// Kruskal's Algorithm Implementation
 class UnionFind {
     constructor(n) {
         this.parent = Array.from({length: n}, (_, i) => i);
@@ -8918,23 +8927,23 @@ const edges = [
 const result = kruskalMST(4, edges);
 console.log('MST edges:', result.mst);
 console.log('Total weight:', result.totalWeight); // 6`
-  },
-  {
-    id: 'prim-algorithm',
-    title: 'Prim\'s Algorithm',
-    description: 'Grow MST from starting vertex by adding minimum weight edges - vertex-focused approach',
-    category: 'Graphs',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(E log V)',
-    spaceComplexity: 'O(V)',
-    extendedDefinition: `Prim's Algorithm is a greedy algorithm that finds the Minimum Spanning Tree (MST) by starting from an arbitrary vertex and growing the tree by adding the minimum weight edge that connects a vertex in the MST to a vertex outside the MST.
+    },
+    {
+        id: 'prim-algorithm',
+        title: 'Prim\'s Algorithm',
+        description: 'Grow MST from starting vertex by adding minimum weight edges - vertex-focused approach',
+        category: 'Graphs',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(E log V)',
+        spaceComplexity: 'O(V)',
+        extendedDefinition: `Prim's Algorithm is a greedy algorithm that finds the Minimum Spanning Tree (MST) by starting from an arbitrary vertex and growing the tree by adding the minimum weight edge that connects a vertex in the MST to a vertex outside the MST.
 
 What it does: builds minimum spanning tree by growing from starting vertex, always adding cheapest edge to new vertex.
 
 How it works: starts with arbitrary vertex, uses priority queue to find minimum weight edge to unvisited vertex, repeats until all vertices included.
 
 When to use: dense graphs, when vertex-focused MST approach preferred, graphs represented as adjacency matrix, when starting vertex matters.`,
-    example: `// Prim's Algorithm Implementation
+        example: `// Prim's Algorithm Implementation
 class PriorityQueue {
     constructor() {
         this.heap = [];
@@ -9037,23 +9046,23 @@ const graph = [
 const result = primMST(graph);
 console.log('MST edges:', result.mst);
 console.log('Total weight:', result.totalWeight); // 16`,
-  },
-  {
-    id: 'topological-sort',
-    title: 'Topological Sort',
-    description: 'Linear ordering of vertices in directed acyclic graph',
-    category: 'Graphs',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(V + E)',
-    spaceComplexity: 'O(V)',
-    extendedDefinition: `Topological Sort is a linear ordering of vertices in a Directed Acyclic Graph (DAG) such that for every directed edge (u, v), vertex u comes before vertex v in the ordering. It's only possible for DAGs and has applications in scheduling, dependency resolution, and build systems.
+    },
+    {
+        id: 'topological-sort',
+        title: 'Topological Sort',
+        description: 'Linear ordering of vertices in directed acyclic graph',
+        category: 'Graphs',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(V + E)',
+        spaceComplexity: 'O(V)',
+        extendedDefinition: `Topological Sort is a linear ordering of vertices in a Directed Acyclic Graph (DAG) such that for every directed edge (u, v), vertex u comes before vertex v in the ordering. It's only possible for DAGs and has applications in scheduling, dependency resolution, and build systems.
 
 What it does: creates linear ordering of vertices in DAG where dependencies come before dependents in the sequence.
 
 How it works: uses DFS with post-order traversal or Kahn's algorithm with in-degree counting to ensure dependency constraints.
 
 When to use: task scheduling, course prerequisites, build systems, dependency resolution, compiler optimization, project planning.`,
-    example: `// Topological Sort Implementation (DFS-based)
+        example: `// Topological Sort Implementation (DFS-based)
 function topologicalSortDFS(graph) {
     const visited = new Set();
     const result = [];
@@ -9133,26 +9142,26 @@ const graph = {
 };
 
 console.log(topologicalSortDFS(graph)); // One possible order: ['B', 'A', 'D', 'C', 'E', 'F']`
-  },
+    },
 
-  // Sorting
-  {
-    id: 'bubble-sort',
-    title: 'Bubble Sort',
-    description: 'Simple comparison-based sorting with adjacent element swapping',
-    category: 'Sorting',
-    difficulty: 'beginner',
-    timeComplexity: 'O(nÃ‚Â²)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Bubble Sort is one of the simplest sorting algorithms that works by repeatedly stepping through the list, comparing adjacent elements and swapping them if they're in the wrong order. The algorithm gets its name because smaller elements "bubble" to the beginning of the list, just like air bubbles rising to the surface of water.
+    // Sorting
+    {
+        id: 'bubble-sort',
+        title: 'Bubble Sort',
+        description: 'Simple comparison-based sorting with adjacent element swapping',
+        category: 'Sorting',
+        difficulty: 'beginner',
+        timeComplexity: 'O(nÃ‚Â²)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Bubble Sort is one of the simplest sorting algorithms that works by repeatedly stepping through the list, comparing adjacent elements and swapping them if they're in the wrong order. The algorithm gets its name because smaller elements "bubble" to the beginning of the list, just like air bubbles rising to the surface of water.
 
 What it does: repeatedly compares adjacent elements and swaps them if out of order, making multiple passes until array is sorted.
 
 How it works: larger elements "bubble up" to correct positions through adjacent swaps, with each pass placing one more element in final position.
 
 When to use: educational purposes, small datasets, nearly sorted data, when simplicity is more important than efficiency.`,
-    voiceExplanation: `Think of bubble sort like organizing a line of people by height, but you can only compare and swap people who are standing next to each other! Imagine you're a teacher organizing students for a class photo. You walk along the line from left to right, and whenever you see a taller person standing in front of a shorter person, you ask them to switch places. You keep doing this over and over again. After your first walk through the line, the tallest person will have "bubbled up" to the end, just like a bubble rising to the surface of water. Then you do it again, and the second tallest person bubbles up to the second-to-last position. You keep repeating this process until no more swaps are needed and everyone is perfectly organized by height. It's called bubble sort because the larger elements slowly "bubble" to their correct positions, just like air bubbles rising in a glass of soda!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of bubble sort like organizing a line of people by height, but you can only compare and swap people who are standing next to each other! Imagine you're a teacher organizing students for a class photo. You walk along the line from left to right, and whenever you see a taller person standing in front of a shorter person, you ask them to switch places. You keep doing this over and over again. After your first walk through the line, the tallest person will have "bubbled up" to the end, just like a bubble rising to the surface of water. Then you do it again, and the second tallest person bubbles up to the second-to-last position. You keep repeating this process until no more swaps are needed and everyone is perfectly organized by height. It's called bubble sort because the larger elements slowly "bubble" to their correct positions, just like air bubbles rising in a glass of soda!`,
+        realWorldApplications: `**Industry Applications:**
 - **Educational Systems**: Teaching sorting concepts and algorithm analysis
 - **Embedded Systems**: Simple sorting for small datasets with memory constraints
 - **Testing and Debugging**: Baseline comparison for other sorting algorithms
@@ -9163,7 +9172,7 @@ When to use: educational purposes, small datasets, nearly sorted data, when simp
 - **Microcontrollers**: Resource-constrained environments with tiny datasets
 - **Interview Preparation**: Understanding fundamental sorting principles
 - **Code Golf**: Shortest possible sorting implementation challenges`,
-    example: `// Bubble Sort Implementation
+        example: `// Bubble Sort Implementation
 function bubbleSort(arr) {
     const n = arr.length;
     
@@ -9200,7 +9209,7 @@ console.log("Sorted:", bubbleSort([...numbers]));
 // [34, 25, 12, 22, 64, 11, 90] - 64 > 22, swap
 // [34, 25, 12, 22, 11, 64, 90] - 64 > 11, swap
 // [34, 25, 12, 22, 11, 64, 90] - 64 < 90, no swap`,
-    syntax: `**Bubble Sort Patterns:**
+        syntax: `**Bubble Sort Patterns:**
 
 1. **Basic Bubble Sort:**
    \`\`\`javascript
@@ -9233,8 +9242,8 @@ console.log("Sorted:", bubbleSort([...numbers]));
        return arr;
    }
    \`\`\``,
-    voiceExplanation_alt: `Bubble sort is like organizing books on a shelf by comparing only adjacent books. You start at the left and compare each pair of neighboring books. If the left book is bigger than the right one, you swap them. After one complete pass through all books, the largest book "bubbles up" to the rightmost position. You repeat this process, and each time, the next largest book finds its correct spot. It's called bubble sort because large elements bubble to the top, just like air bubbles rising in water. The algorithm is simple but slow for large collections.`,
-    realWorldApplications_alt: `**Industry Applications:**
+        voiceExplanation_alt: `Bubble sort is like organizing books on a shelf by comparing only adjacent books. You start at the left and compare each pair of neighboring books. If the left book is bigger than the right one, you swap them. After one complete pass through all books, the largest book "bubbles up" to the rightmost position. You repeat this process, and each time, the next largest book finds its correct spot. It's called bubble sort because large elements bubble to the top, just like air bubbles rising in water. The algorithm is simple but slow for large collections.`,
+        realWorldApplications_alt: `**Industry Applications:**
 - **Educational Systems**: Teaching fundamental sorting concepts in computer science courses
 - **Small Dataset Processing**: Sorting small lists where simplicity matters more than efficiency
 - **Embedded Systems**: Simple sorting for microcontrollers with severe memory constraints
@@ -9245,7 +9254,7 @@ console.log("Sorted:", bubbleSort([...numbers]));
 - **IoT Devices**: Lightweight sorting for sensor data with minimal processing power
 - **Prototyping**: Quick implementation for proof-of-concept applications
 - **Legacy Systems**: Maintaining old codebases where bubble sort was historically used`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Adjacent Comparison**: Core operation comparing only neighboring elements
 2. **Bubble Effect**: Largest elements "bubble up" to correct positions each pass
 3. **Pass-by-Pass Reduction**: Each pass reduces the unsorted region by one element
@@ -9254,7 +9263,7 @@ console.log("Sorted:", bubbleSort([...numbers]));
 6. **In-Place Algorithm**: Sorts without requiring additional array space
 7. **Adaptive Potential**: Can be optimized to detect already sorted arrays
 8. **Quadratic Complexity**: Understanding why it's O(nÂ²) in average and worst cases`,
-    pseudocode: `**Bubble Sort Pseudocode:**
+        pseudocode: `**Bubble Sort Pseudocode:**
 
 ALGORITHM BubbleSort(array)
 INPUT: array of comparable elements
@@ -9282,7 +9291,7 @@ BEGIN
     
     RETURN array
 END`,
-    implementationCode: `// Comprehensive Bubble Sort Implementation
+        implementationCode: `// Comprehensive Bubble Sort Implementation
 
 class BubbleSort {
     constructor() {
@@ -9347,56 +9356,56 @@ const testArray = [64, 34, 25, 12, 22, 11, 90];
 console.log("Original:", testArray);
 console.log("Sorted:", bubbleSort.sort(testArray));
 console.log("Statistics:", bubbleSort.getStatistics());`,
-    quizQuestions: [
-      {
-        question: "What is the best-case time complexity of bubble sort with early termination optimization?",
-        options: ["O(1)", "O(n)", "O(n log n)", "O(nÂ²)"],
-        correctAnswer: 1,
-        explanation: "With early termination optimization, bubble sort can detect when the array is already sorted after just one pass, giving it O(n) best-case time complexity."
-      },
-      {
-        question: "Why is bubble sort called 'bubble' sort?",
-        options: ["It creates bubbles in memory", "Large elements 'bubble up' to their correct positions", "It uses a bubble data structure", "It was invented by someone named Bubble"],
-        correctAnswer: 1,
-        explanation: "Bubble sort gets its name because larger elements 'bubble up' to the end of the array through successive comparisons and swaps, similar to air bubbles rising to the surface of water."
-      },
-      {
-        question: "What is the main advantage of bubble sort over other sorting algorithms?",
-        options: ["Fastest performance", "Lowest memory usage", "Simplicity and ease of understanding", "Best for large datasets"],
-        correctAnswer: 2,
-        explanation: "Bubble sort's main advantage is its simplicity and ease of understanding, making it excellent for educational purposes and teaching fundamental sorting concepts."
-      },
-      {
-        question: "Is bubble sort a stable sorting algorithm?",
-        options: ["Yes, it maintains relative order of equal elements", "No, it changes relative order", "Only with specific implementations", "Only for certain data types"],
-        correctAnswer: 0,
-        explanation: "Bubble sort is stable because it only swaps adjacent elements when the left element is strictly greater than the right element, never when they are equal, thus preserving the relative order of equal elements."
-      },
-      {
-        question: "What optimization can significantly improve bubble sort's performance on nearly sorted data?",
-        options: ["Using a different comparison operator", "Early termination when no swaps occur", "Sorting in reverse order", "Using recursion instead of loops"],
-        correctAnswer: 1,
-        explanation: "Early termination optimization stops the algorithm when no swaps occur in a complete pass, indicating the array is sorted. This can reduce time complexity from O(nÂ²) to O(n) for already sorted arrays."
-      }
-    ]
-  },
-  {
-    id: 'merge-sort',
-    title: 'Merge Sort',
-    description: 'Divide and conquer sorting algorithm with guaranteed O(n log n)',
-    category: 'Sorting',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n log n)',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `Merge Sort is a stable, divide-and-conquer sorting algorithm that consistently performs in O(n log n) time regardless of input distribution. It works by recursively dividing the array into smaller subarrays until each contains a single element, then merging these subarrays back together in sorted order.
+        quizQuestions: [
+            {
+                question: "What is the best-case time complexity of bubble sort with early termination optimization?",
+                options: ["O(1)", "O(n)", "O(n log n)", "O(nÂ²)"],
+                correctAnswer: 1,
+                explanation: "With early termination optimization, bubble sort can detect when the array is already sorted after just one pass, giving it O(n) best-case time complexity."
+            },
+            {
+                question: "Why is bubble sort called 'bubble' sort?",
+                options: ["It creates bubbles in memory", "Large elements 'bubble up' to their correct positions", "It uses a bubble data structure", "It was invented by someone named Bubble"],
+                correctAnswer: 1,
+                explanation: "Bubble sort gets its name because larger elements 'bubble up' to the end of the array through successive comparisons and swaps, similar to air bubbles rising to the surface of water."
+            },
+            {
+                question: "What is the main advantage of bubble sort over other sorting algorithms?",
+                options: ["Fastest performance", "Lowest memory usage", "Simplicity and ease of understanding", "Best for large datasets"],
+                correctAnswer: 2,
+                explanation: "Bubble sort's main advantage is its simplicity and ease of understanding, making it excellent for educational purposes and teaching fundamental sorting concepts."
+            },
+            {
+                question: "Is bubble sort a stable sorting algorithm?",
+                options: ["Yes, it maintains relative order of equal elements", "No, it changes relative order", "Only with specific implementations", "Only for certain data types"],
+                correctAnswer: 0,
+                explanation: "Bubble sort is stable because it only swaps adjacent elements when the left element is strictly greater than the right element, never when they are equal, thus preserving the relative order of equal elements."
+            },
+            {
+                question: "What optimization can significantly improve bubble sort's performance on nearly sorted data?",
+                options: ["Using a different comparison operator", "Early termination when no swaps occur", "Sorting in reverse order", "Using recursion instead of loops"],
+                correctAnswer: 1,
+                explanation: "Early termination optimization stops the algorithm when no swaps occur in a complete pass, indicating the array is sorted. This can reduce time complexity from O(nÂ²) to O(n) for already sorted arrays."
+            }
+        ]
+    },
+    {
+        id: 'merge-sort',
+        title: 'Merge Sort',
+        description: 'Divide and conquer sorting algorithm with guaranteed O(n log n)',
+        category: 'Sorting',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n log n)',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `Merge Sort is a stable, divide-and-conquer sorting algorithm that consistently performs in O(n log n) time regardless of input distribution. It works by recursively dividing the array into smaller subarrays until each contains a single element, then merging these subarrays back together in sorted order.
 
 What it does: divides array into smaller parts recursively, then merges them back together in sorted order using divide-and-conquer approach.
 
 How it works: splits array in half until single elements remain, then merges sorted subarrays back together maintaining stability and O(n log n) performance.
 
 When to use: large datasets, stable sorting required, predictable performance needed, external sorting, parallel processing environments.`,
-    voiceExplanation: `Merge sort is like organizing a deck of cards using a divide-and-conquer approach. First, you split the deck into smaller and smaller piles until each pile has just one card. Then you merge these piles back together in sorted order. When merging two sorted piles, you simply compare the top cards and take the smaller one. This process continues until you have one perfectly sorted deck. Merge sort is reliable because it always takes the same amount of time, regardless of how shuffled the original deck was.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Merge sort is like organizing a deck of cards using a divide-and-conquer approach. First, you split the deck into smaller and smaller piles until each pile has just one card. Then you merge these piles back together in sorted order. When merging two sorted piles, you simply compare the top cards and take the smaller one. This process continues until you have one perfectly sorted deck. Merge sort is reliable because it always takes the same amount of time, regardless of how shuffled the original deck was.`,
+        realWorldApplications: `**Industry Applications:**
 - **Database Systems**: External sorting for large datasets, index creation, query processing
 - **Big Data Processing**: MapReduce frameworks, distributed sorting, data warehousing
 - **File Systems**: Sorting directory entries, file metadata, backup systems
@@ -9407,7 +9416,7 @@ When to use: large datasets, stable sorting required, predictable performance ne
 - **Bioinformatics**: DNA sequence analysis, protein folding, genomic data processing
 - **Machine Learning**: Feature sorting, data preprocessing, model training optimization
 - **Operating Systems**: Process scheduling, memory management, resource allocation`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Divide and Conquer**: Recursive problem decomposition strategy
 2. **Stability**: Preserves relative order of equal elements
 3. **Merge Process**: Core operation that combines two sorted arrays
@@ -9416,7 +9425,7 @@ When to use: large datasets, stable sorting required, predictable performance ne
 6. **Time Complexity**: O(n log n) in all cases due to balanced recursion
 7. **Space Complexity**: O(n) auxiliary space for temporary arrays
 8. **External Sorting**: Adaptation for datasets larger than available memory`,
-    pseudocode: `**Merge Sort Pseudocode:**
+        pseudocode: `**Merge Sort Pseudocode:**
 
 ALGORITHM MergeSort(array, left, right)
 INPUT: array to sort, left index, right index
@@ -9471,7 +9480,7 @@ BEGIN
         k = k + 1
     END WHILE
 END`,
-    implementationCode: `// Comprehensive Merge Sort Implementation
+        implementationCode: `// Comprehensive Merge Sort Implementation
 
 class MergeSort {
     // Main merge sort function
@@ -9682,7 +9691,7 @@ console.timeEnd("Merge Sort Recursive");
 console.time("Merge Sort Iterative");
 MergeSort.sortIterative(largeArray);
 console.timeEnd("Merge Sort Iterative");`,
-    example: `// Simple Merge Sort Implementation
+        example: `// Simple Merge Sort Implementation
 function mergeSort(arr) {
     if (arr.length <= 1) return arr;
     
@@ -9711,56 +9720,56 @@ function merge(left, right) {
 // Example usage
 const numbers = [64, 34, 25, 12, 22, 11, 90];
 console.log("Sorted:", mergeSort(numbers)); // [11, 12, 22, 25, 34, 64, 90]`,
-    quizQuestions: [
-      {
-        question: "What is the time complexity of merge sort in all cases (best, average, and worst)?",
-        options: ["O(n)", "O(n log n)", "O(n²)", "O(log n)"],
-        correctAnswer: 1,
-        explanation: "Merge sort consistently performs in O(n log n) time regardless of input distribution because it always divides the array in half and merges in linear time."
-      },
-      {
-        question: "What is the main advantage of merge sort over quick sort?",
-        options: ["Uses less memory", "Faster average performance", "Guaranteed O(n log n) performance", "In-place sorting"],
-        correctAnswer: 2,
-        explanation: "Merge sort's main advantage is its guaranteed O(n log n) performance in all cases, while quick sort can degrade to O(n²) in worst-case scenarios."
-      },
-      {
-        question: "Is merge sort a stable sorting algorithm?",
-        options: ["Yes, it maintains relative order of equal elements", "No, it changes relative order", "Only in certain implementations", "Depends on the input data"],
-        correctAnswer: 0,
-        explanation: "Merge sort is stable because when merging two sorted arrays, equal elements from the left array are always placed before equal elements from the right array."
-      },
-      {
-        question: "What is the space complexity of merge sort?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
-        correctAnswer: 2,
-        explanation: "Merge sort requires O(n) auxiliary space for the temporary arrays used during the merge process, making it not an in-place sorting algorithm."
-      },
-      {
-        question: "In which scenario is merge sort particularly useful?",
-        options: ["When memory is very limited", "When sorting linked lists", "When you need the fastest possible sort", "When sorting small arrays"],
-        correctAnswer: 1,
-        explanation: "Merge sort is particularly useful for sorting linked lists because it doesn't require random access to elements and can efficiently merge linked lists without extra space."
-      }
-    ]
-  },
-  {
-    id: 'quick-sort',
-    title: 'Quick Sort',
-    description: 'Efficient in-place sorting using pivot partitioning',
-    category: 'Sorting',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n log n) - O(nÃ‚Â²)',
-    spaceComplexity: 'O(log n)',
-    extendedDefinition: `Quick Sort is a highly efficient, divide-and-conquer sorting algorithm that works by selecting a 'pivot' element and partitioning the array around it. Elements smaller than the pivot go to the left, larger elements go to the right, then the process is recursively applied to the sub-arrays.
+        quizQuestions: [
+            {
+                question: "What is the time complexity of merge sort in all cases (best, average, and worst)?",
+                options: ["O(n)", "O(n log n)", "O(n²)", "O(log n)"],
+                correctAnswer: 1,
+                explanation: "Merge sort consistently performs in O(n log n) time regardless of input distribution because it always divides the array in half and merges in linear time."
+            },
+            {
+                question: "What is the main advantage of merge sort over quick sort?",
+                options: ["Uses less memory", "Faster average performance", "Guaranteed O(n log n) performance", "In-place sorting"],
+                correctAnswer: 2,
+                explanation: "Merge sort's main advantage is its guaranteed O(n log n) performance in all cases, while quick sort can degrade to O(n²) in worst-case scenarios."
+            },
+            {
+                question: "Is merge sort a stable sorting algorithm?",
+                options: ["Yes, it maintains relative order of equal elements", "No, it changes relative order", "Only in certain implementations", "Depends on the input data"],
+                correctAnswer: 0,
+                explanation: "Merge sort is stable because when merging two sorted arrays, equal elements from the left array are always placed before equal elements from the right array."
+            },
+            {
+                question: "What is the space complexity of merge sort?",
+                options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+                correctAnswer: 2,
+                explanation: "Merge sort requires O(n) auxiliary space for the temporary arrays used during the merge process, making it not an in-place sorting algorithm."
+            },
+            {
+                question: "In which scenario is merge sort particularly useful?",
+                options: ["When memory is very limited", "When sorting linked lists", "When you need the fastest possible sort", "When sorting small arrays"],
+                correctAnswer: 1,
+                explanation: "Merge sort is particularly useful for sorting linked lists because it doesn't require random access to elements and can efficiently merge linked lists without extra space."
+            }
+        ]
+    },
+    {
+        id: 'quick-sort',
+        title: 'Quick Sort',
+        description: 'Efficient in-place sorting using pivot partitioning',
+        category: 'Sorting',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n log n) - O(nÃ‚Â²)',
+        spaceComplexity: 'O(log n)',
+        extendedDefinition: `Quick Sort is a highly efficient, divide-and-conquer sorting algorithm that works by selecting a 'pivot' element and partitioning the array around it. Elements smaller than the pivot go to the left, larger elements go to the right, then the process is recursively applied to the sub-arrays.
 
 What it does: selects pivot element, partitions array around it with smaller elements left and larger right, then recursively sorts sub-arrays.
 
 How it works: uses divide-and-conquer with pivot partitioning to achieve efficient in-place sorting, typically O(n log n) but O(n²) worst-case.
 
 When to use: general-purpose sorting, memory-constrained environments, when average-case performance matters more than worst-case guarantees.`,
-    voiceExplanation: `Quick sort is like organizing books by picking one book as a reference point (called a pivot). You then arrange all smaller books to the left and all larger books to the right of this reference book. Next, you do the same thing with the left group and right group separately. This process continues until all books are sorted. Quick sort is usually very fast, but its speed depends on choosing good reference points. If you consistently pick the smallest or largest book as your reference, it becomes much slower.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Quick sort is like organizing books by picking one book as a reference point (called a pivot). You then arrange all smaller books to the left and all larger books to the right of this reference book. Next, you do the same thing with the left group and right group separately. This process continues until all books are sorted. Quick sort is usually very fast, but its speed depends on choosing good reference points. If you consistently pick the smallest or largest book as your reference, it becomes much slower.`,
+        realWorldApplications: `**Industry Applications:**
 - **Operating Systems**: Process scheduling, memory management, file system operations
 - **Database Systems**: Query optimization, index sorting, join operations
 - **Programming Languages**: Built-in sort functions (C++ std::sort, Java Arrays.sort)
@@ -9771,7 +9780,7 @@ When to use: general-purpose sorting, memory-constrained environments, when aver
 - **Game Development**: Leaderboards, inventory sorting, spatial partitioning
 - **Web Development**: Search result ranking, data pagination, API response sorting
 - **Machine Learning**: Feature selection, data preprocessing, model optimization`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Pivot Selection**: Critical for performance - random, median-of-three, or adaptive strategies
 2. **Partitioning**: Core operation that rearranges elements around the pivot
 3. **In-place Sorting**: Minimizes memory usage by sorting within the original array
@@ -9780,7 +9789,7 @@ When to use: general-purpose sorting, memory-constrained environments, when aver
 6. **Hybrid Approaches**: Switching to insertion sort for small subarrays
 7. **Worst-case Avoidance**: Techniques like randomization and median-of-medians
 8. **Cache Performance**: Excellent spatial locality compared to merge sort`,
-    pseudocode: `**Quick Sort Pseudocode:**
+        pseudocode: `**Quick Sort Pseudocode:**
 
 ALGORITHM QuickSort(array, low, high)
 INPUT: array to sort, low index, high index
@@ -9833,7 +9842,7 @@ BEGIN
         RandomizedQuickSort(array, pivotIndex + 1, high)
     END IF
 END`,
-    implementationCode: `// Comprehensive Quick Sort Implementation
+        implementationCode: `// Comprehensive Quick Sort Implementation
 
 class QuickSort {
     // Standard Quick Sort with last element as pivot
@@ -10104,7 +10113,7 @@ console.timeEnd("Standard Quick Sort");
 console.time("Randomized Quick Sort");
 QuickSort.randomizedSort(largeArray);
 console.timeEnd("Randomized Quick Sort");`,
-    example: `// Simple Quick Sort Implementation
+        example: `// Simple Quick Sort Implementation
 function quickSort(arr, low = 0, high = arr.length - 1) {
     if (low < high) {
         const pivotIndex = partition(arr, low, high);
@@ -10132,56 +10141,56 @@ function partition(arr, low, high) {
 // Example usage
 const numbers = [64, 34, 25, 12, 22, 11, 90];
 console.log("Sorted:", quickSort([...numbers])); // [11, 12, 22, 25, 34, 64, 90]`,
-    quizQuestions: [
-      {
-        question: "What is the worst-case time complexity of quick sort?",
-        options: ["O(n)", "O(n log n)", "O(n²)", "O(log n)"],
-        correctAnswer: 2,
-        explanation: "Quick sort's worst-case time complexity is O(n²), which occurs when the pivot is consistently the smallest or largest element, leading to unbalanced partitions."
-      },
-      {
-        question: "What is the main advantage of quick sort over merge sort?",
-        options: ["Better worst-case performance", "Uses less memory (in-place)", "Always stable", "Simpler implementation"],
-        correctAnswer: 1,
-        explanation: "Quick sort's main advantage is that it sorts in-place, requiring only O(log n) extra space for recursion, while merge sort requires O(n) auxiliary space."
-      },
-      {
-        question: "Which pivot selection strategy helps avoid worst-case performance?",
-        options: ["Always choose first element", "Always choose last element", "Random pivot selection", "Always choose middle element"],
-        correctAnswer: 2,
-        explanation: "Random pivot selection helps avoid worst-case performance by making it unlikely to consistently choose poor pivots, especially on already sorted or reverse-sorted data."
-      },
-      {
-        question: "Is quick sort a stable sorting algorithm?",
-        options: ["Yes, always stable", "No, not stable", "Only with specific implementations", "Depends on pivot choice"],
-        correctAnswer: 1,
-        explanation: "Quick sort is not stable because the partitioning process can change the relative order of equal elements when they are swapped across the pivot."
-      },
-      {
-        question: "What optimization can be applied to quick sort for small subarrays?",
-        options: ["Use bubble sort", "Use insertion sort", "Use selection sort", "Skip sorting"],
-        correctAnswer: 1,
-        explanation: "For small subarrays (typically < 10-15 elements), switching to insertion sort can improve performance because insertion sort is faster for small datasets and has less overhead."
-      }
-    ]
-  },
-  {
-    id: 'heap-sort',
-    title: 'Heap Sort',
-    description: 'Comparison-based sorting using binary heap data structure',
-    category: 'Sorting',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n log n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Heap Sort is an efficient comparison-based sorting algorithm that uses the binary heap data structure. It combines the best features of merge sort (guaranteed O(n log n) performance) and insertion sort (in-place sorting), making it a reliable choice for systems where consistent performance is crucial.
+        quizQuestions: [
+            {
+                question: "What is the worst-case time complexity of quick sort?",
+                options: ["O(n)", "O(n log n)", "O(n²)", "O(log n)"],
+                correctAnswer: 2,
+                explanation: "Quick sort's worst-case time complexity is O(n²), which occurs when the pivot is consistently the smallest or largest element, leading to unbalanced partitions."
+            },
+            {
+                question: "What is the main advantage of quick sort over merge sort?",
+                options: ["Better worst-case performance", "Uses less memory (in-place)", "Always stable", "Simpler implementation"],
+                correctAnswer: 1,
+                explanation: "Quick sort's main advantage is that it sorts in-place, requiring only O(log n) extra space for recursion, while merge sort requires O(n) auxiliary space."
+            },
+            {
+                question: "Which pivot selection strategy helps avoid worst-case performance?",
+                options: ["Always choose first element", "Always choose last element", "Random pivot selection", "Always choose middle element"],
+                correctAnswer: 2,
+                explanation: "Random pivot selection helps avoid worst-case performance by making it unlikely to consistently choose poor pivots, especially on already sorted or reverse-sorted data."
+            },
+            {
+                question: "Is quick sort a stable sorting algorithm?",
+                options: ["Yes, always stable", "No, not stable", "Only with specific implementations", "Depends on pivot choice"],
+                correctAnswer: 1,
+                explanation: "Quick sort is not stable because the partitioning process can change the relative order of equal elements when they are swapped across the pivot."
+            },
+            {
+                question: "What optimization can be applied to quick sort for small subarrays?",
+                options: ["Use bubble sort", "Use insertion sort", "Use selection sort", "Skip sorting"],
+                correctAnswer: 1,
+                explanation: "For small subarrays (typically < 10-15 elements), switching to insertion sort can improve performance because insertion sort is faster for small datasets and has less overhead."
+            }
+        ]
+    },
+    {
+        id: 'heap-sort',
+        title: 'Heap Sort',
+        description: 'Comparison-based sorting using binary heap data structure',
+        category: 'Sorting',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n log n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Heap Sort is an efficient comparison-based sorting algorithm that uses the binary heap data structure. It combines the best features of merge sort (guaranteed O(n log n) performance) and insertion sort (in-place sorting), making it a reliable choice for systems where consistent performance is crucial.
 
 What it does: builds max heap from array, then repeatedly extracts maximum element and places it at end while maintaining heap property.
 
 How it works: transforms array into max heap structure, then swaps root with last element and re-heapifies remaining elements until sorted.
 
 When to use: memory-constrained environments, predictable performance required, real-time systems, embedded systems, priority queue implementations.`,
-    voiceExplanation: `Think of heap sort like organizing a tournament bracket! Imagine you have a bunch of players and you want to find the strongest one. You organize them into a tournament tree where the strongest player always beats weaker ones and rises to the top. In heap sort, you first arrange your numbers into this "tournament tree" structure called a max heap, where the biggest number is always at the top. Then you take the winner (biggest number), put it at the end of your sorted list, and reorganize the remaining players into a new tournament. You keep doing this - take the winner, put them in the sorted area, reorganize the tournament - until everyone has been placed in order from strongest to weakest. It's like running multiple tournament rounds until you have a complete ranking!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of heap sort like organizing a tournament bracket! Imagine you have a bunch of players and you want to find the strongest one. You organize them into a tournament tree where the strongest player always beats weaker ones and rises to the top. In heap sort, you first arrange your numbers into this "tournament tree" structure called a max heap, where the biggest number is always at the top. Then you take the winner (biggest number), put it at the end of your sorted list, and reorganize the remaining players into a new tournament. You keep doing this - take the winner, put them in the sorted area, reorganize the tournament - until everyone has been placed in order from strongest to weakest. It's like running multiple tournament rounds until you have a complete ranking!`,
+        realWorldApplications: `**Industry Applications:**
 - **Operating Systems**: Process scheduling with priority queues, memory management
 - **Embedded Systems**: Sorting with strict memory constraints and predictable performance
 - **Real-Time Systems**: Guaranteed O(n log n) performance for time-critical applications
@@ -10192,7 +10201,7 @@ When to use: memory-constrained environments, predictable performance required, 
 - **Scientific Computing**: Sorting large datasets with memory constraints
 - **Financial Systems**: Priority-based order processing, risk management
 - **Telecommunications**: Call routing with priority levels`,
-    example: `// Heap Sort Implementation
+        example: `// Heap Sort Implementation
 function heapSort(arr) {
     const n = arr.length;
     
@@ -10242,7 +10251,7 @@ const numbers = [12, 11, 13, 5, 6, 7];
 console.log("Original:", numbers);
 console.log("Sorted:", heapSort([...numbers]));
 // Output: [5, 6, 7, 11, 12, 13]`,
-    syntax: `**Heap Sort Patterns:**
+        syntax: `**Heap Sort Patterns:**
 
 1. **Heapify Function:**
    \`\`\`javascript
@@ -10278,8 +10287,8 @@ console.log("Sorted:", heapSort([...numbers]));
        return arr;
    }
    \`\`\``,
-    voiceExplanation_alt: `Heap sort is like organizing a tournament where the winner always moves to the top. First, you arrange all elements into a "heap" - a special tree where parents are always larger than their children. The largest element naturally becomes the root. You then repeatedly take the winner (root), place it in the sorted section, and reorganize the remaining elements to find the next largest. Heap sort is reliable because it always takes the same amount of time, and it sorts in place without needing extra memory.`,
-    realWorldApplications_alt: `**Industry Applications:**
+        voiceExplanation_alt: `Heap sort is like organizing a tournament where the winner always moves to the top. First, you arrange all elements into a "heap" - a special tree where parents are always larger than their children. The largest element naturally becomes the root. You then repeatedly take the winner (root), place it in the sorted section, and reorganize the remaining elements to find the next largest. Heap sort is reliable because it always takes the same amount of time, and it sorts in place without needing extra memory.`,
+        realWorldApplications_alt: `**Industry Applications:**
 - **Operating Systems**: Process scheduling with priority queues, memory management
 - **Database Systems**: Priority-based query processing, index maintenance
 - **Network Systems**: Bandwidth allocation, packet scheduling, QoS management
@@ -10290,7 +10299,7 @@ console.log("Sorted:", heapSort([...numbers]));
 - **Embedded Systems**: Resource-constrained sorting with predictable performance
 - **Financial Systems**: Order book management, risk assessment algorithms
 - **Machine Learning**: Feature selection, model optimization, hyperparameter tuning`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Heap Property**: Parent nodes are always greater (max heap) or smaller (min heap) than children
 2. **Complete Binary Tree**: All levels filled except possibly the last, filled left to right
 3. **Array Representation**: Parent at index i, children at 2i+1 and 2i+2
@@ -10299,7 +10308,7 @@ console.log("Sorted:", heapSort([...numbers]));
 6. **Extract Maximum**: Remove root, replace with last element, then heapify
 7. **In-Place Sorting**: Uses the same array for heap and sorted elements
 8. **Guaranteed Performance**: Always O(n log n) regardless of input distribution`,
-    pseudocode: `**Heap Sort Pseudocode:**
+        pseudocode: `**Heap Sort Pseudocode:**
 
 ALGORITHM HeapSort(array)
 INPUT: array of comparable elements
@@ -10359,7 +10368,7 @@ BEGIN
         Heapify(array, n, i)
     END FOR
 END`,
-    implementationCode: `// Comprehensive Heap Sort Implementation
+        implementationCode: `// Comprehensive Heap Sort Implementation
 
 class HeapSort {
     // Main heap sort function
@@ -10617,56 +10626,56 @@ console.log('Total:', analysis.total);
 console.log('\\n--- Heap Validation ---');
 const heap = [90, 64, 34, 25, 22, 11, 12];
 console.log('Is valid max heap:', HeapSort.isValidHeap(heap));`,
-    quizQuestions: [
-      {
-        question: "What is the time complexity of heap sort in all cases?",
-        options: ["O(n)", "O(n log n)", "O(n²)", "O(log n)"],
-        correctAnswer: 1,
-        explanation: "Heap sort has a consistent O(n log n) time complexity in all cases because building the heap takes O(n) time and extracting n elements takes O(n log n) time."
-      },
-      {
-        question: "What is the main advantage of heap sort over quick sort?",
-        options: ["Uses less memory", "Guaranteed O(n log n) performance", "Stable sorting", "Faster average case"],
-        correctAnswer: 1,
-        explanation: "Heap sort's main advantage is its guaranteed O(n log n) performance regardless of input, while quick sort can degrade to O(n²) in worst-case scenarios."
-      },
-      {
-        question: "In a max heap represented as an array, where are the children of element at index i?",
-        options: ["i+1 and i+2", "2i and 2i+1", "2i+1 and 2i+2", "i/2 and i/2+1"],
-        correctAnswer: 2,
-        explanation: "In a zero-indexed array representation of a heap, the children of element at index i are located at indices 2i+1 (left child) and 2i+2 (right child)."
-      },
-      {
-        question: "Is heap sort a stable sorting algorithm?",
-        options: ["Yes, always stable", "No, not stable", "Only for max heaps", "Depends on implementation"],
-        correctAnswer: 1,
-        explanation: "Heap sort is not stable because the heap operations can change the relative order of equal elements when they are moved during the sorting process."
-      },
-      {
-        question: "What is the space complexity of heap sort?",
-        options: ["O(n)", "O(log n)", "O(1)", "O(n log n)"],
-        correctAnswer: 2,
-        explanation: "Heap sort has O(1) space complexity because it sorts in-place, using only a constant amount of extra space for variables, not counting the input array."
-      }
-    ]
-  },
-  {
-    id: 'insertion-sort',
-    title: 'Insertion Sort',
-    description: 'Build sorted array one element at a time - efficient for small or nearly sorted data',
-    category: 'Sorting',
-    difficulty: 'beginner',
-    timeComplexity: 'O(nÃ‚Â²)',
-    spaceComplexity: 'O(1)',
-    voiceExplanation: `Insertion sort is like sorting playing cards in your hand. You start with one card (already "sorted"), then pick up the next card and insert it in the right position among the cards you've already sorted. You continue this process, always keeping the left portion of your hand sorted while inserting each new card into its correct spot. It's very efficient for small collections or when the cards are already mostly in order.`,
-    extendedDefinition: `Insertion Sort is a simple, intuitive sorting algorithm that builds the final sorted array one element at a time. It works by taking elements from the unsorted portion and inserting them into their correct position in the sorted portion, similar to how you might sort playing cards in your hand.
+        quizQuestions: [
+            {
+                question: "What is the time complexity of heap sort in all cases?",
+                options: ["O(n)", "O(n log n)", "O(n²)", "O(log n)"],
+                correctAnswer: 1,
+                explanation: "Heap sort has a consistent O(n log n) time complexity in all cases because building the heap takes O(n) time and extracting n elements takes O(n log n) time."
+            },
+            {
+                question: "What is the main advantage of heap sort over quick sort?",
+                options: ["Uses less memory", "Guaranteed O(n log n) performance", "Stable sorting", "Faster average case"],
+                correctAnswer: 1,
+                explanation: "Heap sort's main advantage is its guaranteed O(n log n) performance regardless of input, while quick sort can degrade to O(n²) in worst-case scenarios."
+            },
+            {
+                question: "In a max heap represented as an array, where are the children of element at index i?",
+                options: ["i+1 and i+2", "2i and 2i+1", "2i+1 and 2i+2", "i/2 and i/2+1"],
+                correctAnswer: 2,
+                explanation: "In a zero-indexed array representation of a heap, the children of element at index i are located at indices 2i+1 (left child) and 2i+2 (right child)."
+            },
+            {
+                question: "Is heap sort a stable sorting algorithm?",
+                options: ["Yes, always stable", "No, not stable", "Only for max heaps", "Depends on implementation"],
+                correctAnswer: 1,
+                explanation: "Heap sort is not stable because the heap operations can change the relative order of equal elements when they are moved during the sorting process."
+            },
+            {
+                question: "What is the space complexity of heap sort?",
+                options: ["O(n)", "O(log n)", "O(1)", "O(n log n)"],
+                correctAnswer: 2,
+                explanation: "Heap sort has O(1) space complexity because it sorts in-place, using only a constant amount of extra space for variables, not counting the input array."
+            }
+        ]
+    },
+    {
+        id: 'insertion-sort',
+        title: 'Insertion Sort',
+        description: 'Build sorted array one element at a time - efficient for small or nearly sorted data',
+        category: 'Sorting',
+        difficulty: 'beginner',
+        timeComplexity: 'O(nÃ‚Â²)',
+        spaceComplexity: 'O(1)',
+        voiceExplanation: `Insertion sort is like sorting playing cards in your hand. You start with one card (already "sorted"), then pick up the next card and insert it in the right position among the cards you've already sorted. You continue this process, always keeping the left portion of your hand sorted while inserting each new card into its correct spot. It's very efficient for small collections or when the cards are already mostly in order.`,
+        extendedDefinition: `Insertion Sort is a simple, intuitive sorting algorithm that builds the final sorted array one element at a time. It works by taking elements from the unsorted portion and inserting them into their correct position in the sorted portion, similar to how you might sort playing cards in your hand.
 
 What it does: builds sorted array one element at a time by taking each element and inserting it into correct position within already sorted portion.
 
 How it works: starts with first element as sorted, then repeatedly takes next element and shifts larger elements right to insert it correctly.
 
 When to use: small datasets, nearly sorted data, online algorithms, simple implementations, when stability and simplicity are more important than efficiency.`,
-    realWorldApplications: `**Industry Applications:**
+        realWorldApplications: `**Industry Applications:**
 - **Small Dataset Sorting**: Efficient for arrays with < 50 elements
 - **Nearly Sorted Data**: Excellent performance on partially sorted datasets
 - **Hybrid Sorting**: Used as final step in advanced algorithms (Timsort, Introsort)
@@ -10677,7 +10686,7 @@ When to use: small datasets, nearly sorted data, online algorithms, simple imple
 - **Game Development**: Sorting small lists like high scores, inventory items
 - **Database Systems**: Sorting small result sets, maintaining sorted indexes
 - **Graphics Programming**: Sorting vertices, sprites, or UI elements by depth`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Invariant Maintenance**: Left portion always remains sorted throughout execution
 2. **Shifting Strategy**: Elements are shifted right to make space for insertion
 3. **Adaptive Behavior**: Performance improves significantly on nearly sorted data
@@ -10686,7 +10695,7 @@ When to use: small datasets, nearly sorted data, online algorithms, simple imple
 6. **Sentinel Values**: Using sentinel to eliminate boundary checks
 7. **Gap Sequences**: Foundation for Shell sort's gap-based improvements
 8. **Online Processing**: Can process elements as they become available`,
-    pseudocode: `**Insertion Sort Pseudocode:**
+        pseudocode: `**Insertion Sort Pseudocode:**
 
 ALGORITHM InsertionSort(array)
 INPUT: array of comparable elements
@@ -10747,7 +10756,7 @@ BEGIN
     
     RETURN low
 END`,
-    implementationCode: `// Comprehensive Insertion Sort Implementation
+        implementationCode: `// Comprehensive Insertion Sort Implementation
 
 class InsertionSort {
     // Standard insertion sort
@@ -11052,56 +11061,56 @@ console.timeEnd('Insertion Sort');
 console.time('Binary Insertion Sort');
 InsertionSort.binaryInsertionSort(smallArray);
 console.timeEnd('Binary Insertion Sort');`,
-    quizQuestions: [
-      {
-        question: "What is the best-case time complexity of insertion sort?",
-        options: ["O(n)", "O(n log n)", "O(n²)", "O(log n)"],
-        correctAnswer: 0,
-        explanation: "Insertion sort has O(n) best-case time complexity when the array is already sorted, as it only needs to make one comparison per element without any shifts."
-      },
-      {
-        question: "What makes insertion sort particularly suitable for small arrays?",
-        options: ["It has the lowest space complexity", "It has simple implementation with low overhead", "It's always faster than quicksort", "It uses divide and conquer"],
-        correctAnswer: 1,
-        explanation: "Insertion sort is suitable for small arrays because of its simple implementation with low overhead. Despite O(n²) complexity, the constant factors are small, making it efficient for small datasets."
-      },
-      {
-        question: "Is insertion sort a stable sorting algorithm?",
-        options: ["Yes, it maintains relative order of equal elements", "No, it changes relative order", "Only in certain implementations", "Only for numeric data"],
-        correctAnswer: 0,
-        explanation: "Insertion sort is stable because when inserting an element, it's placed after any equal elements already in the sorted portion, maintaining the original relative order."
-      },
-      {
-        question: "How can insertion sort be optimized for finding the insertion position?",
-        options: ["Use quicksort partitioning", "Use binary search", "Use hash tables", "Use merge operation"],
-        correctAnswer: 1,
-        explanation: "Binary insertion sort uses binary search to find the correct insertion position, reducing comparisons from O(n) to O(log n) per element, though shifting still takes O(n) time."
-      },
-      {
-        question: "In which scenario does insertion sort perform best?",
-        options: ["Large random arrays", "Nearly sorted arrays", "Reverse sorted arrays", "Arrays with many duplicates"],
-        correctAnswer: 1,
-        explanation: "Insertion sort performs best on nearly sorted arrays because it can achieve O(n) time complexity when most elements are already in their correct positions, requiring minimal shifts."
-      }
-    ]
-  },
-  {
-    id: 'selection-sort',
-    title: 'Selection Sort',
-    description: 'Find minimum element and swap to correct position - minimizes number of swaps',
-    category: 'Sorting',
-    difficulty: 'beginner',
-    timeComplexity: 'O(nÃ‚Â²)',
-    spaceComplexity: 'O(1)',
-    voiceExplanation: `Selection sort is like organizing your bookshelf by repeatedly finding the shortest book and placing it at the beginning. You scan through all remaining books to find the shortest one, then swap it to the front. Next, you find the shortest book among the remaining ones and place it in the second position. You continue this process until all books are arranged from shortest to tallest. Selection sort minimizes the number of swaps but still takes a lot of time for large collections.`,
-    extendedDefinition: `Selection Sort is a simple comparison-based sorting algorithm that divides the array into sorted and unsorted regions. It repeatedly finds the minimum element from the unsorted region and places it at the beginning of the sorted region, effectively growing the sorted portion one element at a time.
+        quizQuestions: [
+            {
+                question: "What is the best-case time complexity of insertion sort?",
+                options: ["O(n)", "O(n log n)", "O(n²)", "O(log n)"],
+                correctAnswer: 0,
+                explanation: "Insertion sort has O(n) best-case time complexity when the array is already sorted, as it only needs to make one comparison per element without any shifts."
+            },
+            {
+                question: "What makes insertion sort particularly suitable for small arrays?",
+                options: ["It has the lowest space complexity", "It has simple implementation with low overhead", "It's always faster than quicksort", "It uses divide and conquer"],
+                correctAnswer: 1,
+                explanation: "Insertion sort is suitable for small arrays because of its simple implementation with low overhead. Despite O(n²) complexity, the constant factors are small, making it efficient for small datasets."
+            },
+            {
+                question: "Is insertion sort a stable sorting algorithm?",
+                options: ["Yes, it maintains relative order of equal elements", "No, it changes relative order", "Only in certain implementations", "Only for numeric data"],
+                correctAnswer: 0,
+                explanation: "Insertion sort is stable because when inserting an element, it's placed after any equal elements already in the sorted portion, maintaining the original relative order."
+            },
+            {
+                question: "How can insertion sort be optimized for finding the insertion position?",
+                options: ["Use quicksort partitioning", "Use binary search", "Use hash tables", "Use merge operation"],
+                correctAnswer: 1,
+                explanation: "Binary insertion sort uses binary search to find the correct insertion position, reducing comparisons from O(n) to O(log n) per element, though shifting still takes O(n) time."
+            },
+            {
+                question: "In which scenario does insertion sort perform best?",
+                options: ["Large random arrays", "Nearly sorted arrays", "Reverse sorted arrays", "Arrays with many duplicates"],
+                correctAnswer: 1,
+                explanation: "Insertion sort performs best on nearly sorted arrays because it can achieve O(n) time complexity when most elements are already in their correct positions, requiring minimal shifts."
+            }
+        ]
+    },
+    {
+        id: 'selection-sort',
+        title: 'Selection Sort',
+        description: 'Find minimum element and swap to correct position - minimizes number of swaps',
+        category: 'Sorting',
+        difficulty: 'beginner',
+        timeComplexity: 'O(nÃ‚Â²)',
+        spaceComplexity: 'O(1)',
+        voiceExplanation: `Selection sort is like organizing your bookshelf by repeatedly finding the shortest book and placing it at the beginning. You scan through all remaining books to find the shortest one, then swap it to the front. Next, you find the shortest book among the remaining ones and place it in the second position. You continue this process until all books are arranged from shortest to tallest. Selection sort minimizes the number of swaps but still takes a lot of time for large collections.`,
+        extendedDefinition: `Selection Sort is a simple comparison-based sorting algorithm that divides the array into sorted and unsorted regions. It repeatedly finds the minimum element from the unsorted region and places it at the beginning of the sorted region, effectively growing the sorted portion one element at a time.
 
 What it does: repeatedly finds minimum element from unsorted portion and swaps it with first unsorted element to build sorted region.
 
 How it works: scans unsorted region to find smallest element, swaps it to correct position, then repeats with remaining unsorted elements.
 
 When to use: minimizing number of swaps is important, simple implementation needed, small datasets, educational purposes, memory-write expensive operations.`,
-    realWorldApplications: `**Industry Applications:**
+        realWorldApplications: `**Industry Applications:**
 - **Memory-Constrained Systems**: Minimal memory usage for embedded systems
 - **Swap-Expensive Operations**: When moving elements is costly (large objects, disk operations)
 - **Educational Purposes**: Teaching fundamental sorting concepts and algorithm analysis
@@ -11112,7 +11121,7 @@ When to use: minimizing number of swaps is important, simple implementation need
 - **Real-Time Systems**: Predictable behavior for time-critical applications
 - **Graphics Programming**: Sorting small lists of sprites or UI elements
 - **Game Development**: Organizing small collections like player scores or inventory`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Invariant Maintenance**: Left portion always contains smallest elements in sorted order
 2. **Minimum Finding**: Linear search through unsorted portion to find smallest element
 3. **Swap Minimization**: Exactly n-1 swaps regardless of input distribution
@@ -11121,7 +11130,7 @@ When to use: minimizing number of swaps is important, simple implementation need
 6. **Boundary Management**: Clear separation between sorted and unsorted regions
 7. **Comparison Count**: Always makes (n-1) + (n-2) + ... + 1 = n(n-1)/2 comparisons
 8. **Non-Adaptive**: Performance independent of initial array arrangement`,
-    pseudocode: `**Selection Sort Pseudocode:**
+        pseudocode: `**Selection Sort Pseudocode:**
 
 ALGORITHM SelectionSort(array)
 INPUT: array of comparable elements
@@ -11215,7 +11224,7 @@ BEGIN
     
     RETURN array
 END`,
-    implementationCode: `// Comprehensive Selection Sort Implementation
+        implementationCode: `// Comprehensive Selection Sort Implementation
 
 class SelectionSort {
     // Standard selection sort
@@ -11588,56 +11597,56 @@ for (let k = 1; k <= 3; k++) {
 console.log('--- Custom Comparator (Descending) ---');
 const descending = (a, b) => b - a;
 console.log('Descending order:', SelectionSort.sortWithComparator([3, 1, 4, 1, 5], descending));`,
-    quizQuestions: [
-      {
-        question: "What is the main advantage of selection sort over other O(n²) algorithms?",
-        options: ["Faster average performance", "Minimizes number of swaps", "Stable sorting", "Adaptive behavior"],
-        correctAnswer: 1,
-        explanation: "Selection sort's main advantage is that it minimizes the number of swaps, making exactly n-1 swaps regardless of input. This is beneficial when swapping is expensive."
-      },
-      {
-        question: "What is the time complexity of selection sort in all cases?",
-        options: ["O(n)", "O(n log n)", "O(n²)", "Depends on input"],
-        correctAnswer: 2,
-        explanation: "Selection sort always has O(n²) time complexity because it makes n(n-1)/2 comparisons regardless of the input arrangement, unlike adaptive algorithms."
-      },
-      {
-        question: "Is selection sort a stable sorting algorithm?",
-        options: ["Yes, always stable", "No, not stable", "Only with modifications", "Depends on implementation"],
-        correctAnswer: 1,
-        explanation: "Standard selection sort is not stable because swapping can change the relative order of equal elements. However, it can be made stable by shifting elements instead of swapping."
-      },
-      {
-        question: "How many swaps does selection sort make for an array of n elements?",
-        options: ["At most n-1", "Exactly n²", "At most n²", "Depends on input order"],
-        correctAnswer: 0,
-        explanation: "Selection sort makes at most n-1 swaps because it places one element in its correct position per pass, and the last element is automatically in place."
-      },
-      {
-        question: "When might selection sort be preferred over more efficient algorithms?",
-        options: ["For large datasets", "When swapping is expensive", "When stability is required", "For nearly sorted data"],
-        correctAnswer: 1,
-        explanation: "Selection sort is preferred when swapping elements is expensive (e.g., large objects or disk operations) because it minimizes the number of swaps to exactly n-1."
-      }
-    ]
-  },
-  {
-    id: 'counting-sort',
-    title: 'Counting Sort',
-    description: 'Non-comparison integer sorting using counting array',
-    category: 'Sorting',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n + k)',
-    spaceComplexity: 'O(k)',
-    voiceExplanation: `Counting sort is like organizing exam scores by counting how many students got each score. Instead of comparing scores directly, you create a tally chart with all possible scores (0 to 100) and count how many students achieved each score. Then you simply read through your tally chart in order to get the sorted list. This works great when you have a limited range of values, like test scores or ages, and can be much faster than comparison-based sorting.`,
-    extendedDefinition: `Counting Sort is a non-comparison based sorting algorithm that works by counting the occurrences of each distinct element in the input array. It's particularly efficient when the range of possible values (k) is not significantly larger than the number of elements to be sorted (n).
+        quizQuestions: [
+            {
+                question: "What is the main advantage of selection sort over other O(n²) algorithms?",
+                options: ["Faster average performance", "Minimizes number of swaps", "Stable sorting", "Adaptive behavior"],
+                correctAnswer: 1,
+                explanation: "Selection sort's main advantage is that it minimizes the number of swaps, making exactly n-1 swaps regardless of input. This is beneficial when swapping is expensive."
+            },
+            {
+                question: "What is the time complexity of selection sort in all cases?",
+                options: ["O(n)", "O(n log n)", "O(n²)", "Depends on input"],
+                correctAnswer: 2,
+                explanation: "Selection sort always has O(n²) time complexity because it makes n(n-1)/2 comparisons regardless of the input arrangement, unlike adaptive algorithms."
+            },
+            {
+                question: "Is selection sort a stable sorting algorithm?",
+                options: ["Yes, always stable", "No, not stable", "Only with modifications", "Depends on implementation"],
+                correctAnswer: 1,
+                explanation: "Standard selection sort is not stable because swapping can change the relative order of equal elements. However, it can be made stable by shifting elements instead of swapping."
+            },
+            {
+                question: "How many swaps does selection sort make for an array of n elements?",
+                options: ["At most n-1", "Exactly n²", "At most n²", "Depends on input order"],
+                correctAnswer: 0,
+                explanation: "Selection sort makes at most n-1 swaps because it places one element in its correct position per pass, and the last element is automatically in place."
+            },
+            {
+                question: "When might selection sort be preferred over more efficient algorithms?",
+                options: ["For large datasets", "When swapping is expensive", "When stability is required", "For nearly sorted data"],
+                correctAnswer: 1,
+                explanation: "Selection sort is preferred when swapping elements is expensive (e.g., large objects or disk operations) because it minimizes the number of swaps to exactly n-1."
+            }
+        ]
+    },
+    {
+        id: 'counting-sort',
+        title: 'Counting Sort',
+        description: 'Non-comparison integer sorting using counting array',
+        category: 'Sorting',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n + k)',
+        spaceComplexity: 'O(k)',
+        voiceExplanation: `Counting sort is like organizing exam scores by counting how many students got each score. Instead of comparing scores directly, you create a tally chart with all possible scores (0 to 100) and count how many students achieved each score. Then you simply read through your tally chart in order to get the sorted list. This works great when you have a limited range of values, like test scores or ages, and can be much faster than comparison-based sorting.`,
+        extendedDefinition: `Counting Sort is a non-comparison based sorting algorithm that works by counting the occurrences of each distinct element in the input array. It's particularly efficient when the range of possible values (k) is not significantly larger than the number of elements to be sorted (n).
 
 What it does: counts frequency of each distinct element, then uses these counts to place elements directly into correct positions without comparisons.
 
 How it works: creates counting array to tally element frequencies, transforms counts into positions, then builds sorted output array.
 
 When to use: small range of integer values, when O(n + k) is better than O(n log n), stable sorting needed, discrete value sets.`,
-    realWorldApplications: `**Industry Applications:**
+        realWorldApplications: `**Industry Applications:**
 - **Grading Systems**: Sorting student scores, grade distributions, academic rankings
 - **Age Demographics**: Population analysis, census data, demographic studies
 - **Inventory Management**: Sorting items by quantity, stock levels, product codes
@@ -11648,7 +11657,7 @@ When to use: small range of integer values, when O(n + k) is better than O(n log
 - **Financial Systems**: Transaction categorization, risk level sorting
 - **Manufacturing**: Quality control sorting, defect classification
 - **Bioinformatics**: DNA sequence analysis, protein classification`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Range Dependency**: Performance directly tied to the range of input values
 2. **Frequency Counting**: Core technique of tallying element occurrences
 3. **Cumulative Sum**: Converting counts to positions for stable sorting
@@ -11657,7 +11666,7 @@ When to use: small range of integer values, when O(n + k) is better than O(n log
 6. **Memory Trade-off**: Space efficiency vs time efficiency consideration
 7. **Discrete Value Requirement**: Works only with countable, finite value sets
 8. **Preprocessing Optimization**: Range calculation and offset handling`,
-    pseudocode: `**Counting Sort Pseudocode:**
+        pseudocode: `**Counting Sort Pseudocode:**
 
 ALGORITHM CountingSort(array)
 INPUT: array of integers with known range
@@ -11741,7 +11750,7 @@ BEGIN
     
     RETURN output
 END`,
-    implementationCode: `// Comprehensive Counting Sort Implementation
+        implementationCode: `// Comprehensive Counting Sort Implementation
 
 class CountingSort {
     // Standard counting sort with automatic range detection
@@ -12090,56 +12099,56 @@ console.log('--- Custom Key Sorting ---');
 const people = [{name: 'Alice', age: 30}, {name: 'Bob', age: 25}, {name: 'Charlie', age: 35}];
 const sortedByAge = CountingSort.sortWithKey(people, person => person.age, 100);
 console.log('Sorted by age:', sortedByAge.map(p => \`\${p.name}(\${p.age})\`));`,
-    quizQuestions: [
-      {
-        question: "What is the time complexity of counting sort?",
-        options: ["O(n log n)", "O(n²)", "O(n + k)", "O(k log k)"],
-        correctAnswer: 2,
-        explanation: "Counting sort has O(n + k) time complexity, where n is the number of elements and k is the range of input values. It's linear when k is not significantly larger than n."
-      },
-      {
-        question: "When is counting sort most efficient?",
-        options: ["When the range of values is much larger than the number of elements", "When the range of values is similar to the number of elements", "When the array is already sorted", "When all elements are unique"],
-        correctAnswer: 1,
-        explanation: "Counting sort is most efficient when the range of values (k) is similar to or smaller than the number of elements (n), making the O(n + k) complexity close to O(n)."
-      },
-      {
-        question: "Is counting sort a stable sorting algorithm?",
-        options: ["Yes, when implemented properly", "No, never stable", "Only for positive integers", "Depends on the input data"],
-        correctAnswer: 0,
-        explanation: "Counting sort can be stable when implemented properly by processing elements from right to left and using cumulative counts to determine positions, preserving the relative order of equal elements."
-      },
-      {
-        question: "What is the main limitation of counting sort?",
-        options: ["It's slower than comparison-based sorts", "It requires knowing the range of input values", "It can't handle duplicate elements", "It's not stable"],
-        correctAnswer: 1,
-        explanation: "The main limitation of counting sort is that it requires knowing the range of input values beforehand and works only with discrete values, typically integers within a reasonable range."
-      },
-      {
-        question: "What type of sorting algorithm is counting sort?",
-        options: ["Comparison-based", "Non-comparison based", "Divide and conquer", "Greedy algorithm"],
-        correctAnswer: 1,
-        explanation: "Counting sort is a non-comparison based sorting algorithm. It doesn't compare elements directly but instead counts occurrences and uses arithmetic to determine positions."
-      }
-    ]
-  },
-  {
-    id: 'radix-sort',
-    title: 'Radix Sort',
-    description: 'Non-comparison sorting by processing digits',
-    category: 'Sorting',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(d Ãƒâ€" (n + k))',
-    spaceComplexity: 'O(n + k)',
-    voiceExplanation: `Radix sort is like organizing a filing cabinet by employee ID numbers, but you sort by one digit at a time. First, you sort all files by their last digit (0-9), then by their second-to-last digit, and so on. After processing all digit positions, your files are perfectly sorted by ID number. The key insight is that you never compare full numbers - you just look at one digit at a time, making it very efficient for sorting numbers or fixed-length strings.`,
-    extendedDefinition: `Radix Sort is a non-comparison based sorting algorithm that sorts integers by processing individual digits. It processes digits from least significant digit (LSD) to most significant digit (MSD) or vice versa, using a stable sorting algorithm (typically counting sort) as a subroutine for each digit position.
+        quizQuestions: [
+            {
+                question: "What is the time complexity of counting sort?",
+                options: ["O(n log n)", "O(n²)", "O(n + k)", "O(k log k)"],
+                correctAnswer: 2,
+                explanation: "Counting sort has O(n + k) time complexity, where n is the number of elements and k is the range of input values. It's linear when k is not significantly larger than n."
+            },
+            {
+                question: "When is counting sort most efficient?",
+                options: ["When the range of values is much larger than the number of elements", "When the range of values is similar to the number of elements", "When the array is already sorted", "When all elements are unique"],
+                correctAnswer: 1,
+                explanation: "Counting sort is most efficient when the range of values (k) is similar to or smaller than the number of elements (n), making the O(n + k) complexity close to O(n)."
+            },
+            {
+                question: "Is counting sort a stable sorting algorithm?",
+                options: ["Yes, when implemented properly", "No, never stable", "Only for positive integers", "Depends on the input data"],
+                correctAnswer: 0,
+                explanation: "Counting sort can be stable when implemented properly by processing elements from right to left and using cumulative counts to determine positions, preserving the relative order of equal elements."
+            },
+            {
+                question: "What is the main limitation of counting sort?",
+                options: ["It's slower than comparison-based sorts", "It requires knowing the range of input values", "It can't handle duplicate elements", "It's not stable"],
+                correctAnswer: 1,
+                explanation: "The main limitation of counting sort is that it requires knowing the range of input values beforehand and works only with discrete values, typically integers within a reasonable range."
+            },
+            {
+                question: "What type of sorting algorithm is counting sort?",
+                options: ["Comparison-based", "Non-comparison based", "Divide and conquer", "Greedy algorithm"],
+                correctAnswer: 1,
+                explanation: "Counting sort is a non-comparison based sorting algorithm. It doesn't compare elements directly but instead counts occurrences and uses arithmetic to determine positions."
+            }
+        ]
+    },
+    {
+        id: 'radix-sort',
+        title: 'Radix Sort',
+        description: 'Non-comparison sorting by processing digits',
+        category: 'Sorting',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(d Ãƒâ€" (n + k))',
+        spaceComplexity: 'O(n + k)',
+        voiceExplanation: `Radix sort is like organizing a filing cabinet by employee ID numbers, but you sort by one digit at a time. First, you sort all files by their last digit (0-9), then by their second-to-last digit, and so on. After processing all digit positions, your files are perfectly sorted by ID number. The key insight is that you never compare full numbers - you just look at one digit at a time, making it very efficient for sorting numbers or fixed-length strings.`,
+        extendedDefinition: `Radix Sort is a non-comparison based sorting algorithm that sorts integers by processing individual digits. It processes digits from least significant digit (LSD) to most significant digit (MSD) or vice versa, using a stable sorting algorithm (typically counting sort) as a subroutine for each digit position.
 
 What it does: sorts numbers by processing individual digits from least to most significant using stable sorting for each digit position.
 
 How it works: determines maximum digits needed, then repeatedly sorts by each digit position using counting sort while maintaining stability.
 
 When to use: sorting integers, fixed-length strings, when O(d×(n+k)) is better than O(n log n), large datasets with small digit range.`,
-    realWorldApplications: `**Industry Applications:**
+        realWorldApplications: `**Industry Applications:**
 - **Database Systems**: Sorting large integer keys, primary key indexing
 - **Computer Graphics**: Z-buffer sorting, pixel coordinate sorting
 - **Network Systems**: IP address sorting, packet routing tables
@@ -12150,7 +12159,7 @@ When to use: sorting integers, fixed-length strings, when O(d×(n+k)) is better 
 - **Bioinformatics**: DNA sequence sorting, protein ID classification
 - **Gaming**: Player ID sorting, score processing, leaderboard management
 - **Manufacturing**: Serial number sorting, batch processing, quality control`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Digit Extraction**: Efficiently extracting specific digit positions from numbers
 2. **Stable Subroutine**: Using stable sorting (counting sort) for each digit position
 3. **Radix Choice**: Selecting appropriate base (usually 10 for decimal, 2 for binary)
@@ -12159,7 +12168,7 @@ When to use: sorting integers, fixed-length strings, when O(d×(n+k)) is better 
 6. **Memory Management**: Efficient use of auxiliary arrays for digit processing
 7. **Base Optimization**: Choosing optimal radix for performance (often powers of 2)
 8. **String Adaptation**: Extending algorithm to work with fixed-length strings`,
-    pseudocode: `**Radix Sort Pseudocode:**
+        pseudocode: `**Radix Sort Pseudocode:**
 
 ALGORITHM RadixSort(array)
 INPUT: array of non-negative integers
@@ -12247,7 +12256,7 @@ BEGIN
         END IF
     END FOR
 END`,
-    implementationCode: `// Comprehensive Radix Sort Implementation
+        implementationCode: `// Comprehensive Radix Sort Implementation
 
 class RadixSort {
     // Standard LSD (Least Significant Digit) radix sort
@@ -12574,56 +12583,56 @@ console.log('Total steps:', stepDemo.steps.length);
 console.log('--- Performance Analysis ---');
 const perfTest = [1234, 5678, 9012, 3456, 7890];
 console.log('Performance analysis:', RadixSort.analyzePerformance(perfTest));`,
-    quizQuestions: [
-      {
-        question: "What is the time complexity of radix sort?",
-        options: ["O(n log n)", "O(n²)", "O(d × (n + k))", "O(k log k)"],
-        correctAnswer: 2,
-        explanation: "Radix sort has O(d × (n + k)) time complexity, where d is the number of digits, n is the number of elements, and k is the range of each digit (usually 10)."
-      },
-      {
-        question: "What is the key requirement for radix sort to work efficiently?",
-        options: ["Elements must be in random order", "Elements must be integers or fixed-length strings", "Array must be small", "Elements must be unique"],
-        correctAnswer: 1,
-        explanation: "Radix sort requires elements to be integers or fixed-length strings because it processes individual digit/character positions. It cannot work with variable-length data."
-      },
-      {
-        question: "What is the difference between LSD and MSD radix sort?",
-        options: ["LSD is faster than MSD", "LSD processes digits from right to left, MSD from left to right", "LSD uses more memory", "MSD is always stable"],
-        correctAnswer: 1,
-        explanation: "LSD (Least Significant Digit) processes digits from right to left (units, tens, hundreds), while MSD (Most Significant Digit) processes from left to right."
-      },
-      {
-        question: "Is radix sort a stable sorting algorithm?",
-        options: ["Yes, when implemented properly", "No, never stable", "Only LSD version is stable", "Only when using counting sort"],
-        correctAnswer: 0,
-        explanation: "Radix sort is stable when implemented properly using a stable subroutine (like counting sort) for each digit position, preserving the relative order of equal elements."
-      },
-      {
-        question: "When is radix sort most efficient compared to comparison-based algorithms?",
-        options: ["When the number of digits is large", "When the number of digits is small relative to log n", "When elements are already sorted", "When using binary representation"],
-        correctAnswer: 1,
-        explanation: "Radix sort is most efficient when the number of digits (d) is small relative to log n, making O(d × (n + k)) better than O(n log n) comparison-based algorithms."
-      }
-    ]
-  },
-  {
-    id: 'bucket-sort',
-    title: 'Bucket Sort',
-    description: 'Distribute elements into buckets, sort individually, then concatenate - great for uniform data',
-    category: 'Sorting',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n + k)',
-    spaceComplexity: 'O(n + k)',
-    voiceExplanation: `Bucket sort is like organizing a library by first separating books into different sections (A-C, D-F, G-I, etc.), then sorting each section individually. You distribute all books into appropriate buckets based on their first letter, then sort each bucket separately using any method you like. Finally, you collect the books from each bucket in order. This works best when books are evenly distributed across the alphabet - if most books start with 'S', you haven't really helped yourself much!`,
-    extendedDefinition: `Bucket Sort is a distribution-based sorting algorithm that works by distributing elements into a number of buckets, sorting each bucket individually, and then concatenating the sorted buckets. It's most effective when the input is uniformly distributed across the range of possible values.
+        quizQuestions: [
+            {
+                question: "What is the time complexity of radix sort?",
+                options: ["O(n log n)", "O(n²)", "O(d × (n + k))", "O(k log k)"],
+                correctAnswer: 2,
+                explanation: "Radix sort has O(d × (n + k)) time complexity, where d is the number of digits, n is the number of elements, and k is the range of each digit (usually 10)."
+            },
+            {
+                question: "What is the key requirement for radix sort to work efficiently?",
+                options: ["Elements must be in random order", "Elements must be integers or fixed-length strings", "Array must be small", "Elements must be unique"],
+                correctAnswer: 1,
+                explanation: "Radix sort requires elements to be integers or fixed-length strings because it processes individual digit/character positions. It cannot work with variable-length data."
+            },
+            {
+                question: "What is the difference between LSD and MSD radix sort?",
+                options: ["LSD is faster than MSD", "LSD processes digits from right to left, MSD from left to right", "LSD uses more memory", "MSD is always stable"],
+                correctAnswer: 1,
+                explanation: "LSD (Least Significant Digit) processes digits from right to left (units, tens, hundreds), while MSD (Most Significant Digit) processes from left to right."
+            },
+            {
+                question: "Is radix sort a stable sorting algorithm?",
+                options: ["Yes, when implemented properly", "No, never stable", "Only LSD version is stable", "Only when using counting sort"],
+                correctAnswer: 0,
+                explanation: "Radix sort is stable when implemented properly using a stable subroutine (like counting sort) for each digit position, preserving the relative order of equal elements."
+            },
+            {
+                question: "When is radix sort most efficient compared to comparison-based algorithms?",
+                options: ["When the number of digits is large", "When the number of digits is small relative to log n", "When elements are already sorted", "When using binary representation"],
+                correctAnswer: 1,
+                explanation: "Radix sort is most efficient when the number of digits (d) is small relative to log n, making O(d × (n + k)) better than O(n log n) comparison-based algorithms."
+            }
+        ]
+    },
+    {
+        id: 'bucket-sort',
+        title: 'Bucket Sort',
+        description: 'Distribute elements into buckets, sort individually, then concatenate - great for uniform data',
+        category: 'Sorting',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n + k)',
+        spaceComplexity: 'O(n + k)',
+        voiceExplanation: `Bucket sort is like organizing a library by first separating books into different sections (A-C, D-F, G-I, etc.), then sorting each section individually. You distribute all books into appropriate buckets based on their first letter, then sort each bucket separately using any method you like. Finally, you collect the books from each bucket in order. This works best when books are evenly distributed across the alphabet - if most books start with 'S', you haven't really helped yourself much!`,
+        extendedDefinition: `Bucket Sort is a distribution-based sorting algorithm that works by distributing elements into a number of buckets, sorting each bucket individually, and then concatenating the sorted buckets. It's most effective when the input is uniformly distributed across the range of possible values.
 
 What it does: distributes elements into multiple buckets, sorts each bucket individually, then concatenates sorted buckets.
 
 How it works: creates buckets based on value ranges, distributes elements into appropriate buckets, sorts each bucket separately, then combines results.
 
 When to use: uniformly distributed data, floating-point numbers, parallel processing scenarios, large datasets with known ranges.`,
-    realWorldApplications: `**Industry Applications:**
+        realWorldApplications: `**Industry Applications:**
 - **Graphics Processing**: Color quantization, pixel value sorting, image processing
 - **Database Systems**: Range-based indexing, histogram equalization, data partitioning
 - **Network Systems**: Load balancing, traffic distribution, packet classification
@@ -12634,7 +12643,7 @@ When to use: uniformly distributed data, floating-point numbers, parallel proces
 - **Data Analytics**: Histogram generation, data binning, statistical analysis
 - **Telecommunications**: Call duration analysis, bandwidth allocation, usage patterns
 - **Manufacturing**: Quality control sorting, defect classification, batch processing`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Uniform Distribution Assumption**: Algorithm performs best with evenly distributed data
 2. **Bucket Count Selection**: Choosing optimal number of buckets for performance
 3. **Mapping Function**: Determining how to assign elements to buckets
@@ -12643,7 +12652,7 @@ When to use: uniformly distributed data, floating-point numbers, parallel proces
 6. **Range Determination**: Finding min/max values to define bucket boundaries
 7. **Concatenation Order**: Maintaining sorted order when combining buckets
 8. **Adaptive Strategies**: Adjusting algorithm based on data characteristics`,
-    pseudocode: `**Bucket Sort Pseudocode:**
+        pseudocode: `**Bucket Sort Pseudocode:**
 
 ALGORITHM BucketSort(array)
 INPUT: array of elements with known range
@@ -12724,7 +12733,7 @@ BEGIN
     
     RETURN result
 END`,
-    implementationCode: `// Comprehensive Bucket Sort Implementation
+        implementationCode: `// Comprehensive Bucket Sort Implementation
 
 class BucketSort {
     // Standard bucket sort for uniformly distributed data
@@ -13067,58 +13076,58 @@ console.log('Total steps:', stepDemo.steps.length);
 console.log('--- Floating Point Bucket Sort ---');
 const floats = [0.897, 0.565, 0.656, 0.1234, 0.665, 0.3434];
 console.log('Floats sorted:', BucketSort.sortFloats(floats));`,
-    quizQuestions: [
-      {
-        question: "When does bucket sort perform optimally?",
-        options: ["When all elements are identical", "When elements are uniformly distributed", "When the array is already sorted", "When the array is very large"],
-        correctAnswer: 1,
-        explanation: "Bucket sort performs optimally when elements are uniformly distributed across the range, ensuring roughly equal bucket sizes and achieving O(n + k) time complexity."
-      },
-      {
-        question: "What is the worst-case time complexity of bucket sort?",
-        options: ["O(n)", "O(n log n)", "O(n²)", "O(k log k)"],
-        correctAnswer: 2,
-        explanation: "Bucket sort has O(n²) worst-case time complexity when all elements fall into a single bucket, requiring the bucket sorting algorithm to sort all n elements."
-      },
-      {
-        question: "What sorting algorithm is typically used to sort individual buckets?",
-        options: ["Bubble sort", "Insertion sort", "Quick sort", "Any comparison-based algorithm"],
-        correctAnswer: 3,
-        explanation: "Any comparison-based sorting algorithm can be used for individual buckets. The choice depends on bucket size - insertion sort for small buckets, quicksort or mergesort for larger ones."
-      },
-      {
-        question: "Is bucket sort a stable sorting algorithm?",
-        options: ["Yes, always stable", "No, never stable", "Only when using stable bucket sorting", "Depends on input distribution"],
-        correctAnswer: 2,
-        explanation: "Bucket sort is stable only when the algorithm used to sort individual buckets is stable, and elements are processed in their original order during distribution."
-      },
-      {
-        question: "What is the main disadvantage of bucket sort?",
-        options: ["High time complexity", "Requires uniform data distribution", "Not stable", "Cannot handle duplicates"],
-        correctAnswer: 1,
-        explanation: "The main disadvantage is that bucket sort requires uniform data distribution to perform well. With skewed data, most elements may fall into few buckets, degrading performance."
-      }
-    ]
-  },
+        quizQuestions: [
+            {
+                question: "When does bucket sort perform optimally?",
+                options: ["When all elements are identical", "When elements are uniformly distributed", "When the array is already sorted", "When the array is very large"],
+                correctAnswer: 1,
+                explanation: "Bucket sort performs optimally when elements are uniformly distributed across the range, ensuring roughly equal bucket sizes and achieving O(n + k) time complexity."
+            },
+            {
+                question: "What is the worst-case time complexity of bucket sort?",
+                options: ["O(n)", "O(n log n)", "O(n²)", "O(k log k)"],
+                correctAnswer: 2,
+                explanation: "Bucket sort has O(n²) worst-case time complexity when all elements fall into a single bucket, requiring the bucket sorting algorithm to sort all n elements."
+            },
+            {
+                question: "What sorting algorithm is typically used to sort individual buckets?",
+                options: ["Bubble sort", "Insertion sort", "Quick sort", "Any comparison-based algorithm"],
+                correctAnswer: 3,
+                explanation: "Any comparison-based sorting algorithm can be used for individual buckets. The choice depends on bucket size - insertion sort for small buckets, quicksort or mergesort for larger ones."
+            },
+            {
+                question: "Is bucket sort a stable sorting algorithm?",
+                options: ["Yes, always stable", "No, never stable", "Only when using stable bucket sorting", "Depends on input distribution"],
+                correctAnswer: 2,
+                explanation: "Bucket sort is stable only when the algorithm used to sort individual buckets is stable, and elements are processed in their original order during distribution."
+            },
+            {
+                question: "What is the main disadvantage of bucket sort?",
+                options: ["High time complexity", "Requires uniform data distribution", "Not stable", "Cannot handle duplicates"],
+                correctAnswer: 1,
+                explanation: "The main disadvantage is that bucket sort requires uniform data distribution to perform well. With skewed data, most elements may fall into few buckets, degrading performance."
+            }
+        ]
+    },
 
-  // Searching
-  {
-    id: 'linear-search',
-    title: 'Linear Search',
-    description: 'Sequential search through array elements one by one',
-    category: 'Searching',
-    difficulty: 'beginner',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Linear Search, also known as Sequential Search, is the simplest searching algorithm that examines each element of a collection sequentially until the target element is found or the entire collection has been traversed. It works on both sorted and unsorted data structures.
+    // Searching
+    {
+        id: 'linear-search',
+        title: 'Linear Search',
+        description: 'Sequential search through array elements one by one',
+        category: 'Searching',
+        difficulty: 'beginner',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Linear Search, also known as Sequential Search, is the simplest searching algorithm that examines each element of a collection sequentially until the target element is found or the entire collection has been traversed. It works on both sorted and unsorted data structures.
 
 What it does: searches through elements one by one from start to end until target is found or all elements checked.
 
 How it works: starts at first element, compares each element with target, returns index when found or -1 if not present.
 
 When to use: small datasets, unsorted data, simple implementation needed, when data structure doesn't support faster search methods.`,
-    voiceExplanation: `Think of linear search like looking for a specific book on a bookshelf. You start from the leftmost book and check each book one by one, reading the title until you find the book you're looking for. If you reach the end of the shelf without finding it, you know the book isn't there. This is exactly how linear search works - it's like having a methodical person who checks every single item in order, never skipping anything. While it might not be the fastest method for large collections, it's reliable, simple, and works regardless of whether your data is organized or not. It's the "brute force" approach that guarantees you'll find what you're looking for if it exists.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of linear search like looking for a specific book on a bookshelf. You start from the leftmost book and check each book one by one, reading the title until you find the book you're looking for. If you reach the end of the shelf without finding it, you know the book isn't there. This is exactly how linear search works - it's like having a methodical person who checks every single item in order, never skipping anything. While it might not be the fastest method for large collections, it's reliable, simple, and works regardless of whether your data is organized or not. It's the "brute force" approach that guarantees you'll find what you're looking for if it exists.`,
+        realWorldApplications: `**Industry Applications:**
 - **Small Datasets**: Contact lists, small inventories, configuration files
 - **Unsorted Data**: Real-time data streams, log files, user input validation
 - **Database Systems**: Table scans when no index is available, full-text search
@@ -13129,7 +13138,7 @@ When to use: small datasets, unsorted data, simple implementation needed, when d
 - **File Systems**: Searching files in directories, grep-like operations
 - **Quality Assurance**: Test case execution, bug tracking systems
 - **Educational Software**: Simple search features, learning management systems`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Sequential Access**: Examining elements one after another in order
 2. **Early Termination**: Stopping as soon as the target is found
 3. **Exhaustive Search**: Checking all elements if target is not found
@@ -13138,7 +13147,7 @@ When to use: small datasets, unsorted data, simple implementation needed, when d
 6. **Return Strategies**: Returning index, element, or boolean based on requirements
 7. **Multiple Occurrences**: Handling cases where target appears multiple times
 8. **Sentinel Search**: Optimization technique using a sentinel value`,
-    pseudocode: `**Linear Search Pseudocode:**
+        pseudocode: `**Linear Search Pseudocode:**
 
 ALGORITHM LinearSearch(array, target)
 INPUT: array - collection of elements, target - value to search for
@@ -13185,7 +13194,7 @@ BEGIN
         RETURN -1
     END IF
 END`,
-    implementationCode: `class LinearSearch {
+        implementationCode: `class LinearSearch {
     // Basic linear search - returns first occurrence
     static search(array, target) {
         for (let i = 0; i < array.length; i++) {
@@ -13320,39 +13329,39 @@ const users = [
     { id: 3, name: "Charlie", age: 35 }
 ];
 console.log("Find Bob:", LinearSearch.searchObject(users, "name", "Bob"));`,
-    quizQuestions: [
-      {
-        question: "What is the time complexity of linear search in the worst case?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
-        correctAnswer: 2,
-        explanation: "In the worst case, linear search must examine every element in the array, resulting in O(n) time complexity."
-      },
-      {
-        question: "Which statement about linear search is TRUE?",
-        options: ["Requires sorted data", "Only works on arrays", "Can work on unsorted data", "Has O(log n) complexity"],
-        correctAnswer: 2,
-        explanation: "Linear search can work on both sorted and unsorted data, making it very versatile but not always the most efficient."
-      },
-      {
-        question: "What is the best-case time complexity of linear search?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
-        correctAnswer: 0,
-        explanation: "The best case occurs when the target element is the first element in the array, requiring only one comparison - O(1)."
-      },
-      {
-        question: "In which scenario is linear search preferred over binary search?",
-        options: ["Large sorted arrays", "Small unsorted arrays", "Always prefer binary search", "Only for strings"],
-        correctAnswer: 1,
-        explanation: "Linear search is preferred for small unsorted arrays because it doesn't require sorting and has simple implementation."
-      },
-      {
-        question: "What does the sentinel linear search optimization do?",
-        options: ["Sorts the array first", "Eliminates the boundary check in the loop", "Uses binary search internally", "Only works on sorted arrays"],
-        correctAnswer: 1,
-        explanation: "Sentinel search places the target at the end of the array, eliminating the need to check array bounds in each iteration."
-      }
-    ],
-    example: `// Linear Search Implementation
+        quizQuestions: [
+            {
+                question: "What is the time complexity of linear search in the worst case?",
+                options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+                correctAnswer: 2,
+                explanation: "In the worst case, linear search must examine every element in the array, resulting in O(n) time complexity."
+            },
+            {
+                question: "Which statement about linear search is TRUE?",
+                options: ["Requires sorted data", "Only works on arrays", "Can work on unsorted data", "Has O(log n) complexity"],
+                correctAnswer: 2,
+                explanation: "Linear search can work on both sorted and unsorted data, making it very versatile but not always the most efficient."
+            },
+            {
+                question: "What is the best-case time complexity of linear search?",
+                options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+                correctAnswer: 0,
+                explanation: "The best case occurs when the target element is the first element in the array, requiring only one comparison - O(1)."
+            },
+            {
+                question: "In which scenario is linear search preferred over binary search?",
+                options: ["Large sorted arrays", "Small unsorted arrays", "Always prefer binary search", "Only for strings"],
+                correctAnswer: 1,
+                explanation: "Linear search is preferred for small unsorted arrays because it doesn't require sorting and has simple implementation."
+            },
+            {
+                question: "What does the sentinel linear search optimization do?",
+                options: ["Sorts the array first", "Eliminates the boundary check in the loop", "Uses binary search internally", "Only works on sorted arrays"],
+                correctAnswer: 1,
+                explanation: "Sentinel search places the target at the end of the array, eliminating the need to check array bounds in each iteration."
+            }
+        ],
+        example: `// Linear Search Implementation
 function linearSearch(arr, target) {
     for (let i = 0; i < arr.length; i++) {
         if (arr[i] === target) {
@@ -13393,7 +13402,7 @@ console.log(linearSearchAll(duplicates, 3)); // Output: [1, 3, 5]
 
 const users = [{id: 1, name: "Alice"}, {id: 2, name: "Bob"}];
 console.log(linearSearchObject(users, "name", "Bob")); // Output: {id: 2, name: "Bob"}`,
-    syntax: `**Linear Search Patterns:**
+        syntax: `**Linear Search Patterns:**
 
 1. **Basic Linear Search:**
    \`\`\`javascript
@@ -13430,24 +13439,24 @@ console.log(linearSearchObject(users, "name", "Bob")); // Output: {id: 2, name: 
        return (i < arr.length - 1 || last === target) ? i : -1;
    }
    \`\`\``
-  },
-  {
-    id: 'binary-search',
-    title: 'Binary Search',
-    description: 'Efficient search in sorted arrays using divide and conquer',
-    category: 'Searching',
-    difficulty: 'beginner',
-    timeComplexity: 'O(log n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Binary Search is a highly efficient searching algorithm that works on sorted arrays by repeatedly dividing the search interval in half. It compares the target value with the middle element and eliminates half of the remaining elements in each iteration.
+    },
+    {
+        id: 'binary-search',
+        title: 'Binary Search',
+        description: 'Efficient search in sorted arrays using divide and conquer',
+        category: 'Searching',
+        difficulty: 'beginner',
+        timeComplexity: 'O(log n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Binary Search is a highly efficient searching algorithm that works on sorted arrays by repeatedly dividing the search interval in half. It compares the target value with the middle element and eliminates half of the remaining elements in each iteration.
 
 What it does: searches sorted arrays by repeatedly dividing search space in half, comparing target with middle element.
 
 How it works: compares target with middle element, eliminates half the array based on comparison, repeats until found or search space empty.
 
 When to use: large sorted datasets, when O(log n) search time needed, arrays with random access, when data doesn't change frequently.`,
-    voiceExplanation: `Imagine you're looking for a word in a dictionary. Instead of starting from the first page, you open it in the middle. If your word comes before the middle word alphabetically, you know it's in the first half, so you discard the second half. If it comes after, you discard the first half. You repeat this process, always going to the middle of the remaining section, until you find your word. This is exactly how binary search works! Each step eliminates half of the possibilities, making it incredibly fast. For a million items, you'd only need about 20 steps to find what you're looking for, compared to potentially checking all million items with a linear search.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Imagine you're looking for a word in a dictionary. Instead of starting from the first page, you open it in the middle. If your word comes before the middle word alphabetically, you know it's in the first half, so you discard the second half. If it comes after, you discard the first half. You repeat this process, always going to the middle of the remaining section, until you find your word. This is exactly how binary search works! Each step eliminates half of the possibilities, making it incredibly fast. For a million items, you'd only need about 20 steps to find what you're looking for, compared to potentially checking all million items with a linear search.`,
+        realWorldApplications: `**Industry Applications:**
 - **Database Systems**: Index searching, B-tree operations, query optimization
 - **Search Engines**: Ranking algorithms, autocomplete suggestions
 - **Version Control**: Git bisect for finding bug-introducing commits
@@ -13457,7 +13466,7 @@ When to use: large sorted datasets, when O(log n) search time needed, arrays wit
 - **Financial Systems**: Options pricing, risk analysis, algorithmic trading
 - **Game Development**: Pathfinding optimizations, level-of-detail systems
 - **Networking**: Routing tables, load balancing, bandwidth allocation`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Sorted Prerequisite**: Array must be sorted for binary search to work
 2. **Divide and Conquer**: Systematically eliminate half the search space
 3. **Invariant Maintenance**: Target is always within the current search bounds
@@ -13465,7 +13474,7 @@ When to use: large sorted datasets, when O(log n) search time needed, arrays wit
 5. **Integer Overflow**: Safe calculation of middle index: left + (right - left) / 2
 6. **Termination Conditions**: When to stop searching (found vs. not found)
 7. **Variants**: Understanding different types of binary search applications`,
-    pseudocode: `**Binary Search Pseudocode:**
+        pseudocode: `**Binary Search Pseudocode:**
 
 ALGORITHM BinarySearch(array, target)
 INPUT: sorted array, target value to find
@@ -13507,7 +13516,7 @@ BEGIN
         RETURN BinarySearchRecursive(array, target, left, middle - 1)
     END IF
 END`,
-    implementationCode: `// Comprehensive Binary Search Implementation
+        implementationCode: `// Comprehensive Binary Search Implementation
 
 class BinarySearch {
     // Standard Binary Search - Iterative
@@ -13673,7 +13682,7 @@ console.log(BinarySearch.findFirst(duplicateArray, 2)); // 1
 console.log(BinarySearch.findLast(duplicateArray, 2)); // 3
 console.log(BinarySearch.findInsertionPoint(sortedArray, 8)); // 4
 console.log(BinarySearch.searchRotated(rotatedArray, 0)); // 4`,
-    example: `// Basic Binary Search Example
+        example: `// Basic Binary Search Example
 function binarySearch(arr, target) {
     let left = 0, right = arr.length - 1;
     
@@ -13688,56 +13697,56 @@ function binarySearch(arr, target) {
 const numbers = [1, 3, 5, 7, 9, 11, 13, 15];
 console.log(BinarySearch.search(numbers, 7)); // Output: 3
 console.log(BinarySearch.search(numbers, 4)); // Output: -1`,
-    quizQuestions: [
-      {
-        question: "What is the main prerequisite for binary search to work correctly?",
-        options: ["Array must be sorted", "Array must have even length", "Array must contain unique elements", "Array must be of primitive types"],
-        correctAnswer: 0,
-        explanation: "Binary search requires the array to be sorted because it relies on the property that elements are in order to eliminate half the search space."
-      },
-      {
-        question: "What is the time complexity of binary search?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
-        correctAnswer: 1,
-        explanation: "Binary search has O(log n) time complexity because it eliminates half of the remaining elements in each iteration."
-      },
-      {
-        question: "Why should you use 'left + (right - left) / 2' instead of '(left + right) / 2' for calculating mid?",
-        options: ["It's faster", "Prevents integer overflow", "It's more readable", "No difference"],
-        correctAnswer: 1,
-        explanation: "Using 'left + (right - left) / 2' prevents integer overflow that could occur when left + right exceeds the maximum integer value."
-      },
-      {
-        question: "In which scenario would binary search perform poorly compared to linear search?",
-        options: ["Large sorted array", "Small unsorted array", "Array with duplicates", "Array of strings"],
-        correctAnswer: 1,
-        explanation: "Binary search cannot work on unsorted arrays, so you'd need to sort first, making it inefficient for small datasets where linear search would be faster."
-      },
-      {
-        question: "What happens when binary search looks for an element that doesn't exist?",
-        options: ["Returns the closest element", "Returns -1 or null", "Throws an exception", "Returns the middle element"],
-        correctAnswer: 1,
-        explanation: "When the target element is not found, binary search typically returns -1 or null to indicate the element is not present in the array."
-      }
-    ]
-  },
-  {
-    id: 'interpolation-search',
-    title: 'Interpolation Search',
-    description: 'Improved binary search for uniformly distributed data',
-    category: 'Searching',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(log log n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Interpolation Search is an enhanced version of binary search that works optimally on uniformly distributed sorted arrays. Instead of always checking the middle element like binary search, it estimates the position of the target value based on the distribution of values in the array.
+        quizQuestions: [
+            {
+                question: "What is the main prerequisite for binary search to work correctly?",
+                options: ["Array must be sorted", "Array must have even length", "Array must contain unique elements", "Array must be of primitive types"],
+                correctAnswer: 0,
+                explanation: "Binary search requires the array to be sorted because it relies on the property that elements are in order to eliminate half the search space."
+            },
+            {
+                question: "What is the time complexity of binary search?",
+                options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+                correctAnswer: 1,
+                explanation: "Binary search has O(log n) time complexity because it eliminates half of the remaining elements in each iteration."
+            },
+            {
+                question: "Why should you use 'left + (right - left) / 2' instead of '(left + right) / 2' for calculating mid?",
+                options: ["It's faster", "Prevents integer overflow", "It's more readable", "No difference"],
+                correctAnswer: 1,
+                explanation: "Using 'left + (right - left) / 2' prevents integer overflow that could occur when left + right exceeds the maximum integer value."
+            },
+            {
+                question: "In which scenario would binary search perform poorly compared to linear search?",
+                options: ["Large sorted array", "Small unsorted array", "Array with duplicates", "Array of strings"],
+                correctAnswer: 1,
+                explanation: "Binary search cannot work on unsorted arrays, so you'd need to sort first, making it inefficient for small datasets where linear search would be faster."
+            },
+            {
+                question: "What happens when binary search looks for an element that doesn't exist?",
+                options: ["Returns the closest element", "Returns -1 or null", "Throws an exception", "Returns the middle element"],
+                correctAnswer: 1,
+                explanation: "When the target element is not found, binary search typically returns -1 or null to indicate the element is not present in the array."
+            }
+        ]
+    },
+    {
+        id: 'interpolation-search',
+        title: 'Interpolation Search',
+        description: 'Improved binary search for uniformly distributed data',
+        category: 'Searching',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(log log n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Interpolation Search is an enhanced version of binary search that works optimally on uniformly distributed sorted arrays. Instead of always checking the middle element like binary search, it estimates the position of the target value based on the distribution of values in the array.
 
 What it does: estimates target position using linear interpolation formula based on value distribution rather than always checking middle.
 
 How it works: calculates probe position using interpolation formula, compares with target, adjusts search bounds based on result.
 
 When to use: uniformly distributed sorted data, numerical datasets, when O(log log n) performance needed, large datasets with predictable distribution.`,
-    voiceExplanation: `Think of interpolation search like looking up a phone number in a phone book. If you're looking for someone whose name starts with 'M', you don't open the book in the middle - you estimate that 'M' is roughly in the middle and open it there. If you're looking for 'A', you open near the beginning. If you're looking for 'Z', you open near the end. This is exactly how interpolation search works! It makes an educated guess about where your target value should be based on its value relative to the range of values in the array. For uniformly distributed data, this smart guessing can be much faster than binary search's fixed middle-point approach.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of interpolation search like looking up a phone number in a phone book. If you're looking for someone whose name starts with 'M', you don't open the book in the middle - you estimate that 'M' is roughly in the middle and open it there. If you're looking for 'A', you open near the beginning. If you're looking for 'Z', you open near the end. This is exactly how interpolation search works! It makes an educated guess about where your target value should be based on its value relative to the range of values in the array. For uniformly distributed data, this smart guessing can be much faster than binary search's fixed middle-point approach.`,
+        realWorldApplications: `**Industry Applications:**
 - **Database Systems**: Index searching in B+ trees, range queries on sorted columns
 - **Numerical Analysis**: Root finding algorithms, function approximation
 - **Computer Graphics**: Texture mapping, color interpolation, animation curves
@@ -13748,7 +13757,7 @@ When to use: uniformly distributed sorted data, numerical datasets, when O(log l
 - **Game Development**: Physics simulations, pathfinding optimizations
 - **Data Analytics**: Statistical analysis on sorted datasets
 - **Network Protocols**: Timestamp-based packet ordering, bandwidth allocation`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Linear Interpolation**: Estimating position based on value distribution
 2. **Uniform Distribution**: Algorithm works best when data is evenly spaced
 3. **Probe Position**: Calculated position where target is likely to be found
@@ -13757,7 +13766,7 @@ When to use: uniformly distributed sorted data, numerical datasets, when O(log l
 6. **Performance Degradation**: Understanding when algorithm becomes inefficient
 7. **Numerical Stability**: Avoiding division by zero and overflow issues
 8. **Comparison Strategy**: When to prefer over binary search`,
-    pseudocode: `**Interpolation Search Pseudocode:**
+        pseudocode: `**Interpolation Search Pseudocode:**
 
 ALGORITHM InterpolationSearch(array, target)
 INPUT: sorted array, target value to find
@@ -13816,7 +13825,7 @@ BEGIN
         RETURN InterpolationSearchRecursive(array, target, low, pos - 1)
     END IF
 END`,
-    implementationCode: `class InterpolationSearch {
+        implementationCode: `class InterpolationSearch {
     // Standard Interpolation Search - Iterative
     static search(arr, target) {
         let low = 0;
@@ -14016,7 +14025,7 @@ console.log("Search with stats:", InterpolationSearch.searchWithStats(uniformArr
 console.log("Comparison:", InterpolationSearch.compareWithBinary(uniformArray, 70));
 console.log("Is uniform?", InterpolationSearch.isUniformlyDistributed(uniformArray)); // true
 console.log("Is uniform?", InterpolationSearch.isUniformlyDistributed(nonUniformArray)); // false`,
-    example: `// Basic Interpolation Search Example
+        example: `// Basic Interpolation Search Example
 function interpolationSearch(arr, target) {
     let low = 0, high = arr.length - 1;
     
@@ -14056,7 +14065,7 @@ function binarySearch(arr, target) {
 }
 
 console.log("Binary search result:", binarySearch(uniformData, 70)); // Output: 6`,
-    syntax: `**Interpolation Search Patterns:**
+        syntax: `**Interpolation Search Patterns:**
 
 1. **Basic Interpolation Search:**
    \`\`\`javascript
@@ -14096,58 +14105,58 @@ console.log("Binary search result:", binarySearch(uniformData, 70)); // Output: 
        // Continue with interpolation...
    }
    \`\`\``,
-    quizQuestions: [
-      {
-        question: "What is the main advantage of interpolation search over binary search?",
-        options: ["Works on unsorted arrays", "Better performance on uniformly distributed data", "Uses less memory", "Simpler implementation"],
-        correctAnswer: 1,
-        explanation: "Interpolation search can achieve O(log log n) time complexity on uniformly distributed data by making educated guesses about target position, compared to binary search's O(log n)."
-      },
-      {
-        question: "What happens to interpolation search performance on non-uniformly distributed data?",
-        options: ["Becomes O(1)", "Remains O(log log n)", "Degrades to O(n)", "Becomes O(log n)"],
-        correctAnswer: 2,
-        explanation: "On non-uniformly distributed data, interpolation search can degrade to O(n) in the worst case because the position estimates become poor."
-      },
-      {
-        question: "Which formula is used to calculate the probe position in interpolation search?",
-        options: ["(low + high) / 2", "low + (target - arr[low]) / (arr[high] - arr[low]) * (high - low)", "low + 1", "high - 1"],
-        correctAnswer: 1,
-        explanation: "Interpolation search uses linear interpolation: pos = low + [(target - arr[low]) / (arr[high] - arr[low])] * (high - low) to estimate the target position."
-      },
-      {
-        question: "When should you prefer binary search over interpolation search?",
-        options: ["Always", "For non-uniformly distributed data", "For small arrays", "For string data"],
-        correctAnswer: 1,
-        explanation: "Binary search is preferred for non-uniformly distributed data because it guarantees O(log n) performance, while interpolation search can degrade to O(n)."
-      },
-      {
-        question: "What is a critical edge case to handle in interpolation search?",
-        options: ["Empty arrays", "Division by zero when arr[high] = arr[low]", "Negative numbers", "Floating point numbers"],
-        correctAnswer: 1,
-        explanation: "When arr[high] equals arr[low], division by zero occurs in the interpolation formula. The algorithm should fall back to linear search or handle this case specially."
-      }
-    ]
-  },
+        quizQuestions: [
+            {
+                question: "What is the main advantage of interpolation search over binary search?",
+                options: ["Works on unsorted arrays", "Better performance on uniformly distributed data", "Uses less memory", "Simpler implementation"],
+                correctAnswer: 1,
+                explanation: "Interpolation search can achieve O(log log n) time complexity on uniformly distributed data by making educated guesses about target position, compared to binary search's O(log n)."
+            },
+            {
+                question: "What happens to interpolation search performance on non-uniformly distributed data?",
+                options: ["Becomes O(1)", "Remains O(log log n)", "Degrades to O(n)", "Becomes O(log n)"],
+                correctAnswer: 2,
+                explanation: "On non-uniformly distributed data, interpolation search can degrade to O(n) in the worst case because the position estimates become poor."
+            },
+            {
+                question: "Which formula is used to calculate the probe position in interpolation search?",
+                options: ["(low + high) / 2", "low + (target - arr[low]) / (arr[high] - arr[low]) * (high - low)", "low + 1", "high - 1"],
+                correctAnswer: 1,
+                explanation: "Interpolation search uses linear interpolation: pos = low + [(target - arr[low]) / (arr[high] - arr[low])] * (high - low) to estimate the target position."
+            },
+            {
+                question: "When should you prefer binary search over interpolation search?",
+                options: ["Always", "For non-uniformly distributed data", "For small arrays", "For string data"],
+                correctAnswer: 1,
+                explanation: "Binary search is preferred for non-uniformly distributed data because it guarantees O(log n) performance, while interpolation search can degrade to O(n)."
+            },
+            {
+                question: "What is a critical edge case to handle in interpolation search?",
+                options: ["Empty arrays", "Division by zero when arr[high] = arr[low]", "Negative numbers", "Floating point numbers"],
+                correctAnswer: 1,
+                explanation: "When arr[high] equals arr[low], division by zero occurs in the interpolation formula. The algorithm should fall back to linear search or handle this case specially."
+            }
+        ]
+    },
 
-  // Hashing
-  {
-    id: 'hash-table',
-    title: 'Hash Table',
-    description: 'Lightning-fast key-value storage powering databases, caches, and dictionaries',
-    category: 'Hashing',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(1) avg',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `A Hash Table (also known as Hash Map or Dictionary) is a data structure that implements an associative array abstract data type, mapping keys to values using a hash function. It provides extremely fast average-case performance for insertion, deletion, and lookup operations.
+    // Hashing
+    {
+        id: 'hash-table',
+        title: 'Hash Table',
+        description: 'Lightning-fast key-value storage powering databases, caches, and dictionaries',
+        category: 'Hashing',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(1) avg',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `A Hash Table (also known as Hash Map or Dictionary) is a data structure that implements an associative array abstract data type, mapping keys to values using a hash function. It provides extremely fast average-case performance for insertion, deletion, and lookup operations.
 
 What it does: maps keys to values using hash function for O(1) average-case insert, delete, and lookup operations.
 
 How it works: uses hash function to compute array index from key, handles collisions with chaining or open addressing techniques.
 
 When to use: fast key-value lookups needed, implementing dictionaries/maps, caching systems, database indexing, symbol tables.`,
-    voiceExplanation: `Think of a hash table like a magical library with an incredibly smart librarian. When you want to store a book, instead of putting it on any random shelf, the librarian uses a special formula based on the book's title to instantly know exactly which shelf it belongs on. This formula is the hash function - it takes the book's title and converts it into a specific shelf number. When you later want to find that book, you just tell the librarian the title, they apply the same formula, and boom - they know exactly which shelf to check! This is why hash tables are so fast - instead of searching through every shelf like a regular library, the hash table can jump directly to the right location. Sometimes two books might end up assigned to the same shelf (a collision), but our smart librarian handles this by keeping a small basket on each shelf to hold multiple books when needed.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of a hash table like a magical library with an incredibly smart librarian. When you want to store a book, instead of putting it on any random shelf, the librarian uses a special formula based on the book's title to instantly know exactly which shelf it belongs on. This formula is the hash function - it takes the book's title and converts it into a specific shelf number. When you later want to find that book, you just tell the librarian the title, they apply the same formula, and boom - they know exactly which shelf to check! This is why hash tables are so fast - instead of searching through every shelf like a regular library, the hash table can jump directly to the right location. Sometimes two books might end up assigned to the same shelf (a collision), but our smart librarian handles this by keeping a small basket on each shelf to hold multiple books when needed.`,
+        realWorldApplications: `**Industry Applications:**
 - **Database Systems**: Indexing for fast record retrieval, query optimization
 - **Caching Systems**: Redis, Memcached for high-speed data access
 - **Web Development**: Session storage, user authentication, API rate limiting
@@ -14158,7 +14167,7 @@ When to use: fast key-value lookups needed, implementing dictionaries/maps, cach
 - **Operating Systems**: File system metadata, process tables, memory management
 - **Network Protocols**: DNS resolution, routing tables, MAC address tables
 - **Gaming**: Player statistics, leaderboards, inventory management`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Hash Function**: Mathematical function that maps keys to array indices
 2. **Collision Resolution**: Strategies to handle multiple keys mapping to same index
 3. **Load Factor**: Ratio of stored elements to table capacity (affects performance)
@@ -14167,7 +14176,7 @@ When to use: fast key-value lookups needed, implementing dictionaries/maps, cach
 6. **Open Addressing**: Finding alternative slots when collisions occur
 7. **Uniform Distribution**: Good hash functions spread keys evenly across table
 8. **Amortized Analysis**: Average performance over many operations`,
-    pseudocode: `**Hash Table Pseudocode:**
+        pseudocode: `**Hash Table Pseudocode:**
 
 ALGORITHM HashFunction(key, tableSize)
 INPUT: key - the key to hash, tableSize - size of hash table
@@ -14259,7 +14268,7 @@ BEGIN
     
     RETURN hashTable
 END`,
-    implementationCode: `class HashTable {
+        implementationCode: `class HashTable {
     constructor(initialSize = 16) {
         this.size = initialSize;
         this.count = 0;
@@ -14489,7 +14498,7 @@ collisionTest.set("bca", 2);
 collisionTest.set("cab", 3);
 
 console.log("Collision test stats:", collisionTest.getStats());`,
-    example: `// Basic Hash Table Example
+        example: `// Basic Hash Table Example
 class SimpleHashTable {
     constructor(size = 10) {
         this.size = size;
@@ -14546,7 +14555,7 @@ const ht = new SimpleHashTable();
 ht.set("name", "Alice");
 ht.set("age", 25);
 console.log(ht.get("name")); // "Alice"`,
-    syntax: `**Hash Table Patterns:**
+        syntax: `**Hash Table Patterns:**
 
 1. **Basic Hash Function:**
    \`\`\`javascript
@@ -14593,90 +14602,90 @@ console.log(ht.get("name")); // "Alice"`,
        this.table[index] = [key, value];
    }
    \`\`\``,
-    quizQuestions: [
-      {
-        question: "What is the average time complexity of hash table operations (insert, delete, search)?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
-        correctAnswer: 0,
-        explanation: "Hash tables provide O(1) average time complexity for basic operations because the hash function directly computes the storage location, eliminating the need to search through elements."
-      },
-      {
-        question: "What happens when two different keys produce the same hash value?",
-        options: ["The second key overwrites the first", "A collision occurs and must be resolved", "The hash table becomes invalid", "The operation fails"],
-        correctAnswer: 1,
-        explanation: "When two keys hash to the same index, it's called a collision. Hash tables use collision resolution techniques like separate chaining or open addressing to handle this situation."
-      },
-      {
-        question: "What is the load factor of a hash table?",
-        options: ["The maximum number of elements", "The ratio of stored elements to table size", "The number of collisions", "The hash function efficiency"],
-        correctAnswer: 1,
-        explanation: "Load factor is the ratio of the number of stored elements to the total size of the hash table. It affects performance - higher load factors increase collision probability."
-      },
-      {
-        question: "Which collision resolution technique stores multiple values in linked lists at each table slot?",
-        options: ["Linear probing", "Quadratic probing", "Separate chaining", "Double hashing"],
-        correctAnswer: 2,
-        explanation: "Separate chaining handles collisions by maintaining a linked list (or dynamic array) at each table slot to store multiple key-value pairs that hash to the same index."
-      },
-      {
-        question: "What is a key property that a good hash function should have?",
-        options: ["Always return the same value", "Distribute keys uniformly across the table", "Only work with string keys", "Minimize memory usage"],
-        correctAnswer: 1,
-        explanation: "A good hash function should distribute keys uniformly across the hash table to minimize collisions and ensure optimal performance. Uniform distribution reduces clustering and maintains O(1) average performance."
-      }
-    ]
-  },
-  {
-    id: 'hash-chaining',
-    title: 'Separate Chaining',
-    description: 'Handle hash collisions by storing multiple values in linked lists at each slot',
-    category: 'Hashing',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(1) avg',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `Separate Chaining is a collision resolution technique in hash tables where each slot in the hash table contains a linked list (or dynamic array) to store multiple key-value pairs that hash to the same index.
+        quizQuestions: [
+            {
+                question: "What is the average time complexity of hash table operations (insert, delete, search)?",
+                options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+                correctAnswer: 0,
+                explanation: "Hash tables provide O(1) average time complexity for basic operations because the hash function directly computes the storage location, eliminating the need to search through elements."
+            },
+            {
+                question: "What happens when two different keys produce the same hash value?",
+                options: ["The second key overwrites the first", "A collision occurs and must be resolved", "The hash table becomes invalid", "The operation fails"],
+                correctAnswer: 1,
+                explanation: "When two keys hash to the same index, it's called a collision. Hash tables use collision resolution techniques like separate chaining or open addressing to handle this situation."
+            },
+            {
+                question: "What is the load factor of a hash table?",
+                options: ["The maximum number of elements", "The ratio of stored elements to table size", "The number of collisions", "The hash function efficiency"],
+                correctAnswer: 1,
+                explanation: "Load factor is the ratio of the number of stored elements to the total size of the hash table. It affects performance - higher load factors increase collision probability."
+            },
+            {
+                question: "Which collision resolution technique stores multiple values in linked lists at each table slot?",
+                options: ["Linear probing", "Quadratic probing", "Separate chaining", "Double hashing"],
+                correctAnswer: 2,
+                explanation: "Separate chaining handles collisions by maintaining a linked list (or dynamic array) at each table slot to store multiple key-value pairs that hash to the same index."
+            },
+            {
+                question: "What is a key property that a good hash function should have?",
+                options: ["Always return the same value", "Distribute keys uniformly across the table", "Only work with string keys", "Minimize memory usage"],
+                correctAnswer: 1,
+                explanation: "A good hash function should distribute keys uniformly across the hash table to minimize collisions and ensure optimal performance. Uniform distribution reduces clustering and maintains O(1) average performance."
+            }
+        ]
+    },
+    {
+        id: 'hash-chaining',
+        title: 'Separate Chaining',
+        description: 'Handle hash collisions by storing multiple values in linked lists at each slot',
+        category: 'Hashing',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(1) avg',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `Separate Chaining is a collision resolution technique in hash tables where each slot in the hash table contains a linked list (or dynamic array) to store multiple key-value pairs that hash to the same index.
 
 What it does: resolves hash collisions by maintaining linked lists at each table slot to store multiple values with same hash.
 
 How it works: when collision occurs, new key-value pair is added to linked list at that slot, searches traverse the chain to find target.
 
 When to use: high load factor expected, memory not critical, simple implementation preferred, frequent insertions and deletions.`
-  },
-  {
-    id: 'open-addressing',
-    title: 'Open Addressing',
-    description: 'Resolve collisions by finding alternative slots using linear, quadratic, or double hashing',
-    category: 'Hashing',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(1) avg',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Open Addressing is a collision resolution technique in hash tables where all elements are stored directly in the hash table array, and collisions are resolved by probing for alternative empty slots using various strategies.
+    },
+    {
+        id: 'open-addressing',
+        title: 'Open Addressing',
+        description: 'Resolve collisions by finding alternative slots using linear, quadratic, or double hashing',
+        category: 'Hashing',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(1) avg',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Open Addressing is a collision resolution technique in hash tables where all elements are stored directly in the hash table array, and collisions are resolved by probing for alternative empty slots using various strategies.
 
 What it does: resolves hash collisions by finding alternative empty slots in the table using probing sequences instead of chaining.
 
 How it works: when collision occurs, uses probing methods (linear, quadratic, double hashing) to find next available slot for insertion.
 
 When to use: memory efficiency important, cache performance critical, load factor kept low, simple data structures preferred over linked lists.`
-  },
+    },
 
-  // Recursion
-  {
-    id: 'recursion-basics',
-    title: 'Recursion Fundamentals',
-    description: 'Function calling itself with base and recursive cases',
-    category: 'Recursion',
-    difficulty: 'intermediate',
-    timeComplexity: 'Varies',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `Recursion is a fundamental programming technique where a function calls itself to solve a problem by breaking it down into smaller, similar subproblems. It's a powerful paradigm that mirrors mathematical induction and provides elegant solutions to problems that have a recursive structure.
+    // Recursion
+    {
+        id: 'recursion-basics',
+        title: 'Recursion Fundamentals',
+        description: 'Function calling itself with base and recursive cases',
+        category: 'Recursion',
+        difficulty: 'intermediate',
+        timeComplexity: 'Varies',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `Recursion is a fundamental programming technique where a function calls itself to solve a problem by breaking it down into smaller, similar subproblems. It's a powerful paradigm that mirrors mathematical induction and provides elegant solutions to problems that have a recursive structure.
 
 What it does: breaks down complex problems into smaller identical subproblems by having functions call themselves.
 
 How it works: uses base cases to stop recursion and recursive cases that call the function with modified parameters.
 
 When to use: tree traversals, mathematical computations, divide-and-conquer algorithms, backtracking problems.`,
-    voiceExplanation: `Think of recursion like a set of Russian nesting dolls (Matryoshka dolls). When you want to find the tiniest doll inside, you open the outermost doll, then the next one inside, then the next one, and so on, until you reach the tiniest doll that can't be opened further - that's your base case. Then you start putting the dolls back together, one by one, until you have the complete set again. In programming, recursion works the same way: a function keeps calling smaller versions of itself until it reaches the simplest case it can solve directly, then it combines all those solutions back up to solve the original problem.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of recursion like a set of Russian nesting dolls (Matryoshka dolls). When you want to find the tiniest doll inside, you open the outermost doll, then the next one inside, then the next one, and so on, until you reach the tiniest doll that can't be opened further - that's your base case. Then you start putting the dolls back together, one by one, until you have the complete set again. In programming, recursion works the same way: a function keeps calling smaller versions of itself until it reaches the simplest case it can solve directly, then it combines all those solutions back up to solve the original problem.`,
+        realWorldApplications: `**Industry Applications:**
 - **File System Navigation**: Traversing directory structures recursively
 - **Compiler Design**: Parsing nested expressions and syntax trees
 - **Computer Graphics**: Fractal generation, ray tracing, scene graph traversal
@@ -14687,7 +14696,7 @@ When to use: tree traversals, mathematical computations, divide-and-conquer algo
 - **Mathematical Computing**: Numerical integration, solving differential equations
 - **Data Compression**: Huffman coding, recursive data structure compression
 - **Network Protocols**: DNS resolution, routing algorithms`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Base Case**: The condition that stops recursion and provides a direct answer
 2. **Recursive Case**: The part where the function calls itself with modified parameters
 3. **Call Stack**: Memory structure that tracks function calls and local variables
@@ -14696,7 +14705,7 @@ When to use: tree traversals, mathematical computations, divide-and-conquer algo
 6. **Memoization**: Caching results to avoid redundant recursive calculations
 7. **Divide and Conquer**: Breaking problems into smaller subproblems recursively
 8. **Tree Recursion**: Multiple recursive calls creating a tree-like call structure`,
-    pseudocode: `**Recursion Pseudocode:**
+        pseudocode: `**Recursion Pseudocode:**
 
 ALGORITHM BasicRecursion(problem)
 INPUT: problem - the problem to solve recursively
@@ -14782,7 +14791,7 @@ BEGIN
         RETURN BinarySearch(arr, target, mid + 1, high)
     END IF
 END`,
-    implementationCode: `class RecursionExamples {
+        implementationCode: `class RecursionExamples {
     // Basic factorial implementation
     static factorial(n) {
         if (n < 0) throw new Error('Factorial undefined for negative numbers');
@@ -14981,7 +14990,7 @@ RecursionExamples.fibonacci(30);
 const endTime = performance.now();
 console.log('Fibonacci(30) took ' + (endTime - startTime) + ' milliseconds');
 `,
-    example: `// Basic Recursion Examples
+        example: `// Basic Recursion Examples
 
 // 1. Factorial - Classic recursion example
 function factorial(n) {
@@ -15016,7 +15025,7 @@ console.log(factorial(5));    // 120
 console.log(sum(5));          // 15
 console.log(power(2, 3));     // 8
 console.log(arraySum([1, 2, 3, 4])); // 10`,
-    syntax: `**Recursion Patterns:**
+        syntax: `**Recursion Patterns:**
 
 1. **Basic Recursion Template:**
    function recursiveFunction(parameters) {
@@ -15050,90 +15059,90 @@ console.log(arraySum([1, 2, 3, 4])); // 10`,
        if (n === 0) return accumulator;
        return tailRecursive(n - 1, accumulator + n);
    }`,
-    quizQuestions: [
-      {
-        question: "What are the two essential components that every recursive function must have?",
-        options: ["Loop and condition", "Base case and recursive case", "Input and output", "Variables and constants"],
-        correctAnswer: 1,
-        explanation: "Every recursive function must have a base case (stopping condition) to prevent infinite recursion, and a recursive case where the function calls itself with modified parameters."
-      },
-      {
-        question: "What happens if a recursive function doesn't have a proper base case?",
-        options: ["The function runs faster", "Stack overflow error occurs", "The function returns null", "The function becomes iterative"],
-        correctAnswer: 1,
-        explanation: "Without a proper base case, the function will call itself indefinitely, eventually exhausting the call stack and causing a stack overflow error."
-      },
-      {
-        question: "What is tail recursion?",
-        options: ["Recursion that processes the tail of an array", "Recursion where the recursive call is the last operation", "Recursion that runs backwards", "Recursion with multiple base cases"],
-        correctAnswer: 1,
-        explanation: "Tail recursion occurs when the recursive call is the last operation performed in the function. This allows for optimization where the compiler can reuse the current stack frame instead of creating a new one."
-      },
-      {
-        question: "Which data structure is used to manage recursive function calls?",
-        options: ["Queue", "Stack", "Heap", "Array"],
-        correctAnswer: 1,
-        explanation: "The call stack is used to manage recursive function calls. Each recursive call creates a new frame on the stack, and when the base case is reached, the frames are popped off in LIFO order."
-      },
-      {
-        question: "What is the space complexity of a recursive function that makes n recursive calls?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
-        correctAnswer: 2,
-        explanation: "The space complexity is O(n) because each recursive call adds a new frame to the call stack, and with n recursive calls, we need O(n) space to store all the stack frames."
-      }
-    ]
-  },
-  {
-    id: 'tail-recursion',
-    title: 'Tail Recursion',
-    description: 'Optimized recursion where recursive call is the last operation',
-    category: 'Recursion',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Tail Recursion is a special form of recursion where the recursive call is the last operation performed in the function, with no additional computation after the recursive call returns.
+        quizQuestions: [
+            {
+                question: "What are the two essential components that every recursive function must have?",
+                options: ["Loop and condition", "Base case and recursive case", "Input and output", "Variables and constants"],
+                correctAnswer: 1,
+                explanation: "Every recursive function must have a base case (stopping condition) to prevent infinite recursion, and a recursive case where the function calls itself with modified parameters."
+            },
+            {
+                question: "What happens if a recursive function doesn't have a proper base case?",
+                options: ["The function runs faster", "Stack overflow error occurs", "The function returns null", "The function becomes iterative"],
+                correctAnswer: 1,
+                explanation: "Without a proper base case, the function will call itself indefinitely, eventually exhausting the call stack and causing a stack overflow error."
+            },
+            {
+                question: "What is tail recursion?",
+                options: ["Recursion that processes the tail of an array", "Recursion where the recursive call is the last operation", "Recursion that runs backwards", "Recursion with multiple base cases"],
+                correctAnswer: 1,
+                explanation: "Tail recursion occurs when the recursive call is the last operation performed in the function. This allows for optimization where the compiler can reuse the current stack frame instead of creating a new one."
+            },
+            {
+                question: "Which data structure is used to manage recursive function calls?",
+                options: ["Queue", "Stack", "Heap", "Array"],
+                correctAnswer: 1,
+                explanation: "The call stack is used to manage recursive function calls. Each recursive call creates a new frame on the stack, and when the base case is reached, the frames are popped off in LIFO order."
+            },
+            {
+                question: "What is the space complexity of a recursive function that makes n recursive calls?",
+                options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+                correctAnswer: 2,
+                explanation: "The space complexity is O(n) because each recursive call adds a new frame to the call stack, and with n recursive calls, we need O(n) space to store all the stack frames."
+            }
+        ]
+    },
+    {
+        id: 'tail-recursion',
+        title: 'Tail Recursion',
+        description: 'Optimized recursion where recursive call is the last operation',
+        category: 'Recursion',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Tail Recursion is a special form of recursion where the recursive call is the last operation performed in the function, with no additional computation after the recursive call returns.
 
 What it does: optimizes recursive functions by making recursive call the final operation, enabling compiler optimizations for constant space.
 
 How it works: accumulates results in parameters, makes recursive call as last statement, allows reuse of current stack frame.
 
 When to use: deep recursion needed, stack overflow concerns, functional programming, compiler supports tail call optimization.`,
-  },
-  {
-    id: 'fibonacci',
-    title: 'Fibonacci Sequence',
-    description: 'Classic recursive problem with optimization techniques',
-    category: 'Recursion',
-    difficulty: 'beginner',
-    timeComplexity: 'O(2^n)',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `The Fibonacci Sequence is a series of numbers where each number is the sum of the two preceding ones, starting from 0 and 1. It's a classic example used to teach recursion, dynamic programming, and algorithm optimization.
+    },
+    {
+        id: 'fibonacci',
+        title: 'Fibonacci Sequence',
+        description: 'Classic recursive problem with optimization techniques',
+        category: 'Recursion',
+        difficulty: 'beginner',
+        timeComplexity: 'O(2^n)',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `The Fibonacci Sequence is a series of numbers where each number is the sum of the two preceding ones, starting from 0 and 1. It's a classic example used to teach recursion, dynamic programming, and algorithm optimization.
 
 What it does: generates sequence where each number equals sum of two preceding numbers, demonstrates recursive problem-solving patterns.
 
 How it works: uses base cases F(0)=0, F(1)=1, then recursively computes F(n) = F(n-1) + F(n-2) for larger values.
 
 When to use: teaching recursion concepts, demonstrating optimization techniques, mathematical computations, algorithm analysis examples.`,
-  },
+    },
 
-  // Dynamic Programming
-  {
-    id: 'dp-introduction',
-    title: 'DP Introduction',
-    description: 'Breaking problems into overlapping subproblems',
-    category: 'Dynamic Programming',
-    difficulty: 'intermediate',
-    timeComplexity: 'Varies',
-    spaceComplexity: 'Varies',
-    extendedDefinition: `Dynamic Programming (DP) is a powerful algorithmic paradigm that solves complex problems by breaking them down into simpler subproblems and storing the results to avoid redundant calculations. It's particularly effective for optimization problems with overlapping subproblems and optimal substructure.
+    // Dynamic Programming
+    {
+        id: 'dp-introduction',
+        title: 'DP Introduction',
+        description: 'Breaking problems into overlapping subproblems',
+        category: 'Dynamic Programming',
+        difficulty: 'intermediate',
+        timeComplexity: 'Varies',
+        spaceComplexity: 'Varies',
+        extendedDefinition: `Dynamic Programming (DP) is a powerful algorithmic paradigm that solves complex problems by breaking them down into simpler subproblems and storing the results to avoid redundant calculations. It's particularly effective for optimization problems with overlapping subproblems and optimal substructure.
 
 What it does: solves complex problems by breaking them into smaller subproblems and storing solutions to avoid redundant calculations.
 
 How it works: identifies overlapping subproblems and optimal substructure, then uses memoization or tabulation to store and reuse results.
 
 When to use: optimization problems, counting problems, problems with recursive structure where same subproblems appear multiple times.`,
-    voiceExplanation: `Think of Dynamic Programming like solving a giant jigsaw puzzle, but you're really smart about it! Instead of trying random pieces over and over, you organize your approach: you solve small sections first, remember what you've learned, and use that knowledge to solve bigger sections. Imagine you're climbing a staircase and someone asks "how many ways can you reach step 10?" Instead of counting from scratch every time, you remember: "I know there are X ways to reach step 8 and Y ways to reach step 9, so there are X+Y ways to reach step 10!" That's exactly how DP works - it remembers solutions to smaller problems and combines them to solve bigger ones. It's like having a perfect memory that never forgets a solution, making you incredibly efficient at solving complex problems!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of Dynamic Programming like solving a giant jigsaw puzzle, but you're really smart about it! Instead of trying random pieces over and over, you organize your approach: you solve small sections first, remember what you've learned, and use that knowledge to solve bigger sections. Imagine you're climbing a staircase and someone asks "how many ways can you reach step 10?" Instead of counting from scratch every time, you remember: "I know there are X ways to reach step 8 and Y ways to reach step 9, so there are X+Y ways to reach step 10!" That's exactly how DP works - it remembers solutions to smaller problems and combines them to solve bigger ones. It's like having a perfect memory that never forgets a solution, making you incredibly efficient at solving complex problems!`,
+        realWorldApplications: `**Industry Applications:**
 - **Finance**: Portfolio optimization, option pricing, risk management algorithms
 - **Bioinformatics**: DNA sequence alignment, protein folding prediction, phylogenetic analysis
 - **Operations Research**: Resource allocation, scheduling optimization, supply chain management
@@ -15144,7 +15153,7 @@ When to use: optimization problems, counting problems, problems with recursive s
 - **Manufacturing**: Production planning, inventory management, quality control optimization
 - **Transportation**: Route optimization, traffic flow management, logistics planning
 - **Economics**: Market analysis, auction theory, mechanism design`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Overlapping Subproblems**: Same subproblems solved multiple times in naive recursion
 2. **Optimal Substructure**: Optimal solution contains optimal solutions to subproblems
 3. **Memoization**: Top-down approach storing results of function calls
@@ -15153,7 +15162,7 @@ When to use: optimization problems, counting problems, problems with recursive s
 6. **Transition Function**: How to move from one state to another
 7. **Base Cases**: Smallest subproblems that can be solved directly
 8. **Space Optimization**: Reducing memory usage by keeping only necessary previous states`,
-    pseudocode: `**Dynamic Programming Patterns:**
+        pseudocode: `**Dynamic Programming Patterns:**
 
 ALGORITHM Memoization(problem, memo)
 INPUT: problem - the problem instance, memo - storage for computed results
@@ -15244,7 +15253,7 @@ BEGIN
     
     RETURN dp[m][n]
 END`,
-    implementationCode: `// Comprehensive Dynamic Programming Implementation
+        implementationCode: `// Comprehensive Dynamic Programming Implementation
 
 class DynamicProgramming {
     constructor() {
@@ -15568,7 +15577,7 @@ const quizQuestions = [
        return prev1;
    }
    \`\`\``,
-    example: `// Fibonacci with Dynamic Programming
+        example: `// Fibonacci with Dynamic Programming
 function fibonacci(n) {
     const dp = new Array(n + 1);
     dp[0] = 0;
@@ -15595,7 +15604,7 @@ function climbStairs(n) {
 
 console.log(fibonacci(10)); // 55
 console.log(climbStairs(5)); // 8`,
-    syntax: `// Memoization Pattern
+        syntax: `// Memoization Pattern
 const memo = {};
 function dpMemo(n) {
     if (n in memo) return memo[n];
@@ -15612,56 +15621,56 @@ function dpTab(n) {
     }
     return dp[n];
 }`,
-    quizQuestions: [
-      {
-        question: "What are the two key properties required for a problem to be solved using Dynamic Programming?",
-        options: ["Recursion and Iteration", "Overlapping Subproblems and Optimal Substructure", "Memoization and Tabulation", "Top-down and Bottom-up"],
-        correctAnswer: 1,
-        explanation: "Dynamic Programming requires Overlapping Subproblems (same subproblems solved multiple times) and Optimal Substructure (optimal solution contains optimal solutions to subproblems)."
-      },
-      {
-        question: "What is the main difference between Memoization and Tabulation approaches in DP?",
-        options: ["Memoization is faster than Tabulation", "Memoization is top-down, Tabulation is bottom-up", "Memoization uses less memory", "Tabulation is recursive"],
-        correctAnswer: 1,
-        explanation: "Memoization is a top-down approach that starts with the original problem and stores results, while Tabulation is bottom-up, starting with base cases and building up to the solution."
-      },
-      {
-        question: "What is the time complexity improvement of DP Fibonacci compared to naive recursive Fibonacci?",
-        options: ["O(n) vs O(n²)", "O(n) vs O(2ⁿ)", "O(log n) vs O(n)", "O(1) vs O(n)"],
-        correctAnswer: 1,
-        explanation: "Naive recursive Fibonacci has O(2ⁿ) exponential time complexity due to redundant calculations, while DP Fibonacci achieves O(n) linear time by storing intermediate results."
-      },
-      {
-        question: "When should you choose DP over other algorithmic approaches?",
-        options: ["When the problem involves sorting", "When you need constant space complexity", "When the problem has overlapping subproblems and optimal substructure", "When the problem is naturally iterative"],
-        correctAnswer: 2,
-        explanation: "DP is ideal when a problem can be broken into overlapping subproblems with optimal substructure, allowing you to avoid redundant calculations and build optimal solutions from smaller optimal solutions."
-      },
-      {
-        question: "What is the space optimization technique commonly used in DP problems?",
-        options: ["Using recursion instead of iteration", "Keeping only necessary previous states instead of full table", "Using global variables", "Avoiding memoization"],
-        correctAnswer: 1,
-        explanation: "Space optimization in DP involves keeping only the necessary previous states (like previous row in 2D DP) instead of storing the entire table, reducing space complexity from O(n²) to O(n) in many cases."
-      }
-    ]
-  },
-  {
-    id: 'longest-common-subsequence',
-    title: 'Longest Common Subsequence',
-    description: 'Finding the longest subsequence common to two sequences',
-    category: 'Dynamic Programming',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(mn)',
-    spaceComplexity: 'O(mn)',
-    extendedDefinition: `The Longest Common Subsequence (LCS) problem is a classic dynamic programming problem that finds the longest subsequence that appears in both given sequences in the same relative order, but not necessarily contiguous.
+        quizQuestions: [
+            {
+                question: "What are the two key properties required for a problem to be solved using Dynamic Programming?",
+                options: ["Recursion and Iteration", "Overlapping Subproblems and Optimal Substructure", "Memoization and Tabulation", "Top-down and Bottom-up"],
+                correctAnswer: 1,
+                explanation: "Dynamic Programming requires Overlapping Subproblems (same subproblems solved multiple times) and Optimal Substructure (optimal solution contains optimal solutions to subproblems)."
+            },
+            {
+                question: "What is the main difference between Memoization and Tabulation approaches in DP?",
+                options: ["Memoization is faster than Tabulation", "Memoization is top-down, Tabulation is bottom-up", "Memoization uses less memory", "Tabulation is recursive"],
+                correctAnswer: 1,
+                explanation: "Memoization is a top-down approach that starts with the original problem and stores results, while Tabulation is bottom-up, starting with base cases and building up to the solution."
+            },
+            {
+                question: "What is the time complexity improvement of DP Fibonacci compared to naive recursive Fibonacci?",
+                options: ["O(n) vs O(n²)", "O(n) vs O(2ⁿ)", "O(log n) vs O(n)", "O(1) vs O(n)"],
+                correctAnswer: 1,
+                explanation: "Naive recursive Fibonacci has O(2ⁿ) exponential time complexity due to redundant calculations, while DP Fibonacci achieves O(n) linear time by storing intermediate results."
+            },
+            {
+                question: "When should you choose DP over other algorithmic approaches?",
+                options: ["When the problem involves sorting", "When you need constant space complexity", "When the problem has overlapping subproblems and optimal substructure", "When the problem is naturally iterative"],
+                correctAnswer: 2,
+                explanation: "DP is ideal when a problem can be broken into overlapping subproblems with optimal substructure, allowing you to avoid redundant calculations and build optimal solutions from smaller optimal solutions."
+            },
+            {
+                question: "What is the space optimization technique commonly used in DP problems?",
+                options: ["Using recursion instead of iteration", "Keeping only necessary previous states instead of full table", "Using global variables", "Avoiding memoization"],
+                correctAnswer: 1,
+                explanation: "Space optimization in DP involves keeping only the necessary previous states (like previous row in 2D DP) instead of storing the entire table, reducing space complexity from O(n²) to O(n) in many cases."
+            }
+        ]
+    },
+    {
+        id: 'longest-common-subsequence',
+        title: 'Longest Common Subsequence',
+        description: 'Finding the longest subsequence common to two sequences',
+        category: 'Dynamic Programming',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(mn)',
+        spaceComplexity: 'O(mn)',
+        extendedDefinition: `The Longest Common Subsequence (LCS) problem is a classic dynamic programming problem that finds the longest subsequence that appears in both given sequences in the same relative order, but not necessarily contiguous.
 
 What it does: finds longest subsequence common to two sequences maintaining relative order but not requiring contiguous characters.
 
 How it works: uses 2D DP table where dp[i][j] represents LCS length of first i and j characters, builds solution bottom-up.
 
 When to use: sequence comparison needed, version control diffs, bioinformatics alignment, plagiarism detection, text similarity analysis.`,
-    voiceExplanation: `Think of the Longest Common Subsequence like finding the "DNA" that two stories share! Imagine you have two different movie scripts, and you want to find the longest sequence of scenes that appear in both movies in the same order, but not necessarily back-to-back. For example, if Movie A has scenes [A, B, C, D, E] and Movie B has scenes [A, C, E, F, G], the longest common "story thread" would be [A, C, E] - these scenes appear in both movies in the same order! It's like finding the common thread that runs through two different narratives. This is incredibly useful in real life: when comparing DNA sequences to find evolutionary relationships, or when Git compares two versions of a file to show you what changed. The magic is that we don't need the common parts to be consecutive - just in the same relative order!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of the Longest Common Subsequence like finding the "DNA" that two stories share! Imagine you have two different movie scripts, and you want to find the longest sequence of scenes that appear in both movies in the same order, but not necessarily back-to-back. For example, if Movie A has scenes [A, B, C, D, E] and Movie B has scenes [A, C, E, F, G], the longest common "story thread" would be [A, C, E] - these scenes appear in both movies in the same order! It's like finding the common thread that runs through two different narratives. This is incredibly useful in real life: when comparing DNA sequences to find evolutionary relationships, or when Git compares two versions of a file to show you what changed. The magic is that we don't need the common parts to be consecutive - just in the same relative order!`,
+        realWorldApplications: `**Industry Applications:**
 - **Bioinformatics**: DNA sequence alignment, protein structure analysis, phylogenetic tree construction
 - **Software Development**: Version control systems (Git diff), code comparison tools, merge conflict resolution
 - **Data Mining**: Pattern recognition, similarity analysis, data deduplication
@@ -15672,7 +15681,7 @@ When to use: sequence comparison needed, version control diffs, bioinformatics a
 - **Database Systems**: Record matching, data integration, schema mapping
 - **Network Security**: Intrusion detection, malware signature matching
 - **Quality Assurance**: Test case optimization, regression testing, code coverage analysis`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Subsequence vs Substring**: Order matters, but contiguity doesn't for subsequences
 2. **Optimal Substructure**: Solution built from optimal solutions of subproblems
 3. **Overlapping Subproblems**: Same subproblems solved multiple times in naive approach
@@ -15681,7 +15690,7 @@ When to use: sequence comparison needed, version control diffs, bioinformatics a
 6. **Recurrence Relation**: Character match vs mismatch cases
 7. **Backtracking**: Reconstructing the actual LCS from the DP table
 8. **Space Optimization**: Reducing O(mn) space to O(min(m,n)) using rolling arrays`,
-    pseudocode: `**Longest Common Subsequence Algorithms:**
+        pseudocode: `**Longest Common Subsequence Algorithms:**
 
 ALGORITHM LCSLength(X, Y)
 INPUT: X[1..m], Y[1..n] - two sequences
@@ -15795,7 +15804,7 @@ BEGIN
         END IF
     END IF
 END`,
-    implementationCode: `// Comprehensive Longest Common Subsequence Implementation
+        implementationCode: `// Comprehensive Longest Common Subsequence Implementation
 
 class LongestCommonSubsequence {
     constructor() {
@@ -16064,56 +16073,56 @@ const end2 = performance.now();
 console.log(\`Normal DP: \${normalResult}, Time: \${(end1-start1).toFixed(2)}ms\`);
 console.log(\`Space Optimized: \${optimizedResult}, Time: \${(end2-start2).toFixed(2)}ms\`);
 console.log(\`Computations: \${lcs.getComputationCount()}\`);`,
-    quizQuestions: [
-      {
-        question: "What is the key difference between a subsequence and a substring?",
-        options: ["Subsequences must be contiguous, substrings don't", "Substrings must be contiguous, subsequences don't", "They are the same thing", "Subsequences are always longer"],
-        correctAnswer: 1,
-        explanation: "A substring must have contiguous characters, while a subsequence maintains relative order but characters don't need to be adjacent."
-      },
-      {
-        question: "What is the time complexity of the standard LCS dynamic programming solution?",
-        options: ["O(m + n)", "O(mn)", "O(m²n)", "O(2^(m+n))"],
-        correctAnswer: 1,
-        explanation: "The standard DP solution uses a 2D table of size (m+1) × (n+1) and fills each cell once, resulting in O(mn) time complexity."
-      },
-      {
-        question: "In the LCS recurrence relation, what happens when characters don't match?",
-        options: ["We add 1 to the diagonal value", "We take the maximum of left and top values", "We take the minimum of left and top values", "We set the value to 0"],
-        correctAnswer: 1,
-        explanation: "When characters don't match, LCS[i][j] = max(LCS[i-1][j], LCS[i][j-1]) - we take the better of excluding one character from either string."
-      },
-      {
-        question: "How can we optimize the space complexity of LCS from O(mn) to O(min(m,n))?",
-        options: ["Use recursion with memoization", "Use only two rows/columns instead of full table", "Use a hash table", "Use binary search"],
-        correctAnswer: 1,
-        explanation: "We can use rolling arrays - only keeping the current and previous row (or column), reducing space to O(min(m,n))."
-      },
-      {
-        question: "What is a real-world application of LCS?",
-        options: ["Sorting algorithms", "Hash table collisions", "Git diff algorithms", "Binary search optimization"],
-        correctAnswer: 2,
-        explanation: "LCS is used in version control systems like Git to find differences between file versions, showing what lines were added, removed, or unchanged."
-      }
-    ]
-  },
-  {
-    id: 'knapsack-problem',
-    title: '0/1 Knapsack Problem',
-    description: 'Optimization problem with weight and value constraints',
-    category: 'Dynamic Programming',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(nW)',
-    spaceComplexity: 'O(nW)',
-    extendedDefinition: `The 0/1 Knapsack Problem is a classic optimization problem in dynamic programming where you have a knapsack with a weight capacity W and n items, each with a weight and value. The goal is to maximize the total value of items in the knapsack without exceeding the weight capacity, with the constraint that each item can either be taken (1) or not taken (0).
+        quizQuestions: [
+            {
+                question: "What is the key difference between a subsequence and a substring?",
+                options: ["Subsequences must be contiguous, substrings don't", "Substrings must be contiguous, subsequences don't", "They are the same thing", "Subsequences are always longer"],
+                correctAnswer: 1,
+                explanation: "A substring must have contiguous characters, while a subsequence maintains relative order but characters don't need to be adjacent."
+            },
+            {
+                question: "What is the time complexity of the standard LCS dynamic programming solution?",
+                options: ["O(m + n)", "O(mn)", "O(m²n)", "O(2^(m+n))"],
+                correctAnswer: 1,
+                explanation: "The standard DP solution uses a 2D table of size (m+1) × (n+1) and fills each cell once, resulting in O(mn) time complexity."
+            },
+            {
+                question: "In the LCS recurrence relation, what happens when characters don't match?",
+                options: ["We add 1 to the diagonal value", "We take the maximum of left and top values", "We take the minimum of left and top values", "We set the value to 0"],
+                correctAnswer: 1,
+                explanation: "When characters don't match, LCS[i][j] = max(LCS[i-1][j], LCS[i][j-1]) - we take the better of excluding one character from either string."
+            },
+            {
+                question: "How can we optimize the space complexity of LCS from O(mn) to O(min(m,n))?",
+                options: ["Use recursion with memoization", "Use only two rows/columns instead of full table", "Use a hash table", "Use binary search"],
+                correctAnswer: 1,
+                explanation: "We can use rolling arrays - only keeping the current and previous row (or column), reducing space to O(min(m,n))."
+            },
+            {
+                question: "What is a real-world application of LCS?",
+                options: ["Sorting algorithms", "Hash table collisions", "Git diff algorithms", "Binary search optimization"],
+                correctAnswer: 2,
+                explanation: "LCS is used in version control systems like Git to find differences between file versions, showing what lines were added, removed, or unchanged."
+            }
+        ]
+    },
+    {
+        id: 'knapsack-problem',
+        title: '0/1 Knapsack Problem',
+        description: 'Optimization problem with weight and value constraints',
+        category: 'Dynamic Programming',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(nW)',
+        spaceComplexity: 'O(nW)',
+        extendedDefinition: `The 0/1 Knapsack Problem is a classic optimization problem in dynamic programming where you have a knapsack with a weight capacity W and n items, each with a weight and value. The goal is to maximize the total value of items in the knapsack without exceeding the weight capacity, with the constraint that each item can either be taken (1) or not taken (0).
 
 What it does: maximizes value of selected items within weight constraint where each item can only be taken once or not at all.
 
 How it works: uses 2D DP table where dp[i][w] represents maximum value using first i items with weight limit w, builds solution bottom-up.
 
 When to use: resource allocation problems, budget optimization, cargo loading, portfolio selection, any binary choice optimization with constraints.`,
-    voiceExplanation: `Imagine you're going on a camping trip and you have a backpack that can only carry 50 pounds. You have a bunch of items you'd like to take: a tent (heavy but very useful), snacks (light and valuable), a camera (medium weight, high sentimental value), books (heavy, moderate value), etc. The 0/1 Knapsack problem is like being the world's most strategic packer! You can't cut items in half - you either take the whole tent or leave it behind. Your goal is to pack the most valuable combination of complete items without exceeding your 50-pound limit. It's like playing Tetris with values and weights! This problem appears everywhere in real life: when companies decide which projects to fund with a limited budget, when you're choosing which apps to install on your phone with limited storage, or when airlines decide which cargo to load to maximize profit while staying within weight limits.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Imagine you're going on a camping trip and you have a backpack that can only carry 50 pounds. You have a bunch of items you'd like to take: a tent (heavy but very useful), snacks (light and valuable), a camera (medium weight, high sentimental value), books (heavy, moderate value), etc. The 0/1 Knapsack problem is like being the world's most strategic packer! You can't cut items in half - you either take the whole tent or leave it behind. Your goal is to pack the most valuable combination of complete items without exceeding your 50-pound limit. It's like playing Tetris with values and weights! This problem appears everywhere in real life: when companies decide which projects to fund with a limited budget, when you're choosing which apps to install on your phone with limited storage, or when airlines decide which cargo to load to maximize profit while staying within weight limits.`,
+        realWorldApplications: `**Industry Applications:**
 - **Finance**: Portfolio optimization, capital budgeting, investment selection
 - **Logistics**: Cargo loading optimization, shipping container packing
 - **Manufacturing**: Production planning, resource allocation, machine scheduling
@@ -16124,7 +16133,7 @@ When to use: resource allocation problems, budget optimization, cargo loading, p
 - **Healthcare**: Medical equipment allocation, treatment selection optimization
 - **Military**: Equipment selection for missions, supply chain optimization
 - **Gaming**: Character build optimization, inventory management systems`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **0/1 Constraint**: Each item can be taken at most once (binary choice)
 2. **Optimal Substructure**: Optimal solution built from optimal subproblems
 3. **Overlapping Subproblems**: Same subproblems appear multiple times
@@ -16133,7 +16142,7 @@ When to use: resource allocation problems, budget optimization, cargo loading, p
 6. **Choice Decision**: For each item, decide whether to include or exclude
 7. **Backtracking**: Reconstructing which items were selected
 8. **Space Optimization**: Reducing space complexity using 1D array`,
-    pseudocode: `**0/1 Knapsack Algorithms:**
+        pseudocode: `**0/1 Knapsack Algorithms:**
 
 ALGORITHM Knapsack01(weights, values, capacity)
 INPUT: weights[1..n], values[1..n], capacity W
@@ -16233,7 +16242,7 @@ BEGIN
     
     RETURN dp[W]
 END`,
-    implementationCode: `// Comprehensive 0/1 Knapsack Implementation
+        implementationCode: `// Comprehensive 0/1 Knapsack Implementation
 
 class KnapsackSolver {
     constructor() {
@@ -16528,56 +16537,56 @@ const unbounded = knapsack.unboundedKnapsack(coinWeights, coinValues, coinCapaci
 
 console.log(\`0/1 Knapsack: \${bounded}\`);
 console.log(\`Unbounded Knapsack: \${unbounded}\`);`,
-    quizQuestions: [
-      {
-        question: "What is the key difference between 0/1 Knapsack and Fractional Knapsack?",
-        options: ["0/1 uses DP, Fractional uses greedy", "0/1 allows partial items, Fractional doesn't", "0/1 doesn't allow partial items, Fractional does", "They are the same problem"],
-        correctAnswer: 2,
-        explanation: "In 0/1 Knapsack, items must be taken completely or not at all. In Fractional Knapsack, items can be broken into fractions, allowing for a greedy solution."
-      },
-      {
-        question: "What is the time complexity of the standard 0/1 Knapsack DP solution?",
-        options: ["O(n)", "O(W)", "O(nW)", "O(n²W)"],
-        correctAnswer: 2,
-        explanation: "The standard DP solution uses a 2D table of size (n+1) × (W+1) and fills each cell once, resulting in O(nW) time complexity."
-      },
-      {
-        question: "In the 0/1 Knapsack recurrence relation, what do we do when an item's weight exceeds current capacity?",
-        options: ["Include the item anyway", "Skip to the next item", "Take the value from the row above", "Set the value to 0"],
-        correctAnswer: 2,
-        explanation: "When an item's weight exceeds the current capacity, we can't include it, so we take the value from the previous row (without this item)."
-      },
-      {
-        question: "How can we optimize the space complexity of 0/1 Knapsack from O(nW) to O(W)?",
-        options: ["Use recursion", "Use only one row and traverse backwards", "Use a hash table", "Use multiple threads"],
-        correctAnswer: 1,
-        explanation: "We can use only one row (1D array) and traverse backwards to avoid overwriting values we still need, reducing space to O(W)."
-      },
-      {
-        question: "What is a real-world application of the 0/1 Knapsack problem?",
-        options: ["Sorting algorithms", "Graph traversal", "Portfolio optimization", "String matching"],
-        correctAnswer: 2,
-        explanation: "Portfolio optimization is a classic application where you select investments (items) to maximize returns (value) within a budget constraint (capacity)."
-      }
-    ]
-  },
-  {
-    id: 'longest-increasing-subsequence',
-    title: 'Longest Increasing Subsequence',
-    description: 'Finding the longest strictly increasing subsequence',
-    category: 'Dynamic Programming',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n log n)',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `The Longest Increasing Subsequence (LIS) problem finds the longest subsequence of a given sequence where all elements are in strictly increasing order. Unlike the Longest Common Subsequence, LIS works with a single sequence and focuses on maintaining increasing order.
+        quizQuestions: [
+            {
+                question: "What is the key difference between 0/1 Knapsack and Fractional Knapsack?",
+                options: ["0/1 uses DP, Fractional uses greedy", "0/1 allows partial items, Fractional doesn't", "0/1 doesn't allow partial items, Fractional does", "They are the same problem"],
+                correctAnswer: 2,
+                explanation: "In 0/1 Knapsack, items must be taken completely or not at all. In Fractional Knapsack, items can be broken into fractions, allowing for a greedy solution."
+            },
+            {
+                question: "What is the time complexity of the standard 0/1 Knapsack DP solution?",
+                options: ["O(n)", "O(W)", "O(nW)", "O(n²W)"],
+                correctAnswer: 2,
+                explanation: "The standard DP solution uses a 2D table of size (n+1) × (W+1) and fills each cell once, resulting in O(nW) time complexity."
+            },
+            {
+                question: "In the 0/1 Knapsack recurrence relation, what do we do when an item's weight exceeds current capacity?",
+                options: ["Include the item anyway", "Skip to the next item", "Take the value from the row above", "Set the value to 0"],
+                correctAnswer: 2,
+                explanation: "When an item's weight exceeds the current capacity, we can't include it, so we take the value from the previous row (without this item)."
+            },
+            {
+                question: "How can we optimize the space complexity of 0/1 Knapsack from O(nW) to O(W)?",
+                options: ["Use recursion", "Use only one row and traverse backwards", "Use a hash table", "Use multiple threads"],
+                correctAnswer: 1,
+                explanation: "We can use only one row (1D array) and traverse backwards to avoid overwriting values we still need, reducing space to O(W)."
+            },
+            {
+                question: "What is a real-world application of the 0/1 Knapsack problem?",
+                options: ["Sorting algorithms", "Graph traversal", "Portfolio optimization", "String matching"],
+                correctAnswer: 2,
+                explanation: "Portfolio optimization is a classic application where you select investments (items) to maximize returns (value) within a budget constraint (capacity)."
+            }
+        ]
+    },
+    {
+        id: 'longest-increasing-subsequence',
+        title: 'Longest Increasing Subsequence',
+        description: 'Finding the longest strictly increasing subsequence',
+        category: 'Dynamic Programming',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n log n)',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `The Longest Increasing Subsequence (LIS) problem finds the longest subsequence of a given sequence where all elements are in strictly increasing order. Unlike the Longest Common Subsequence, LIS works with a single sequence and focuses on maintaining increasing order.
 
 What it does: finds longest subsequence where elements are in strictly increasing order, maintaining relative positions but not requiring contiguity.
 
 How it works: uses dynamic programming or binary search to build up solutions, checking each element against previous elements to extend sequences.
 
 When to use: sequence analysis, scheduling problems, stock trading analysis, bioinformatics, trend identification in time series data.`,
-    voiceExplanation: `Think of the Longest Increasing Subsequence like watching a mountain climber's elevation over time! Imagine you have a graph showing a hiker's altitude throughout a day - sometimes they go up, sometimes down, sometimes they rest at the same level. The LIS is like finding the longest continuous upward journey they could have taken if they could magically skip the downhill parts! For example, if their elevations were [100, 200, 150, 300, 250, 400], the longest increasing journey would be [100, 200, 300, 400] - they skip the dips but maintain the upward trend. This is super useful in real life: stock traders use it to find the longest period of rising prices, project managers use it to schedule tasks that build on each other, and even dating apps might use it to find people with consistently improving profiles over time! It's like finding the most optimistic story you can tell with your data points.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of the Longest Increasing Subsequence like watching a mountain climber's elevation over time! Imagine you have a graph showing a hiker's altitude throughout a day - sometimes they go up, sometimes down, sometimes they rest at the same level. The LIS is like finding the longest continuous upward journey they could have taken if they could magically skip the downhill parts! For example, if their elevations were [100, 200, 150, 300, 250, 400], the longest increasing journey would be [100, 200, 300, 400] - they skip the dips but maintain the upward trend. This is super useful in real life: stock traders use it to find the longest period of rising prices, project managers use it to schedule tasks that build on each other, and even dating apps might use it to find people with consistently improving profiles over time! It's like finding the most optimistic story you can tell with your data points.`,
+        realWorldApplications: `**Industry Applications:**
 - **Finance**: Stock price trend analysis, portfolio optimization, market timing strategies
 - **Project Management**: Task scheduling, dependency resolution, milestone planning
 - **Bioinformatics**: Gene sequence analysis, protein folding prediction, evolutionary studies
@@ -16588,7 +16597,7 @@ When to use: sequence analysis, scheduling problems, stock trading analysis, bio
 - **Network Optimization**: Bandwidth allocation, traffic flow analysis
 - **Gaming**: Level progression systems, skill development tracking
 - **Education**: Learning path optimization, curriculum sequencing`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Subsequence Property**: Maintains relative order without requiring contiguity
 2. **Strictly Increasing**: Each element must be greater than the previous
 3. **Optimal Substructure**: LIS at position i built from optimal LIS at previous positions
@@ -16597,7 +16606,7 @@ When to use: sequence analysis, scheduling problems, stock trading analysis, bio
 6. **Patience Sorting**: Alternative perspective using card game analogy
 7. **Reconstruction**: Backtracking to find actual LIS elements
 8. **Multiple Solutions**: Different subsequences can have same maximum length`,
-    pseudocode: `**Longest Increasing Subsequence Algorithms:**
+        pseudocode: `**Longest Increasing Subsequence Algorithms:**
 
 ALGORITHM LIS_DP(arr)
 INPUT: array arr[0..n-1]
@@ -16744,7 +16753,7 @@ BEGIN
     
     RETURN totalCount
 END`,
-    implementationCode: `// Comprehensive Longest Increasing Subsequence Implementation
+        implementationCode: `// Comprehensive Longest Increasing Subsequence Implementation
 
 class LongestIncreasingSubsequence {
     constructor() {
@@ -17061,58 +17070,58 @@ const ldsResult = lis.longestDecreasingSubsequence(nums6);
 console.log(\`Array: [\${nums6.join(', ')}]\`);
 console.log(\`LDS: [\${ldsResult.subsequence.join(', ')}]\`);
 console.log(\`Length: \${ldsResult.length}\`);`,
-    quizQuestions: [
-      {
-        question: "What is the time complexity of the optimal LIS algorithm using binary search?",
-        options: ["O(n)", "O(n²)", "O(n log n)", "O(2ⁿ)"],
-        correctAnswer: 2,
-        explanation: "The binary search approach achieves O(n log n) time complexity by maintaining a tails array and using binary search to find insertion positions."
-      },
-      {
-        question: "In the DP approach for LIS, what does dp[i] represent?",
-        options: ["Length of LIS in the entire array", "Length of LIS ending at position i", "Length of LIS starting at position i", "Number of increasing subsequences"],
-        correctAnswer: 1,
-        explanation: "dp[i] represents the length of the longest increasing subsequence that ends at position i, which is key to building the optimal solution."
-      },
-      {
-        question: "What is the key difference between LIS and LCS?",
-        options: ["LIS works with one sequence, LCS with two", "LIS allows equal elements, LCS doesn't", "LIS is always longer than LCS", "They are the same problem"],
-        correctAnswer: 0,
-        explanation: "LIS (Longest Increasing Subsequence) works with a single sequence to find increasing order, while LCS (Longest Common Subsequence) works with two sequences to find common elements."
-      },
-      {
-        question: "In the binary search LIS approach, what does the tails array store?",
-        options: ["All possible subsequences", "The actual LIS elements", "Smallest tail element for each LIS length", "Indices of LIS elements"],
-        correctAnswer: 2,
-        explanation: "The tails array stores tails[i] = smallest tail element of all increasing subsequences of length i+1, enabling efficient binary search."
-      },
-      {
-        question: "What is a real-world application of LIS?",
-        options: ["Hash table implementation", "Stock price trend analysis", "Binary tree balancing", "String compression"],
-        correctAnswer: 1,
-        explanation: "LIS is commonly used in stock price analysis to find the longest period of consistently rising prices, helping identify bullish trends."
-      }
-    ]
-  },
+        quizQuestions: [
+            {
+                question: "What is the time complexity of the optimal LIS algorithm using binary search?",
+                options: ["O(n)", "O(n²)", "O(n log n)", "O(2ⁿ)"],
+                correctAnswer: 2,
+                explanation: "The binary search approach achieves O(n log n) time complexity by maintaining a tails array and using binary search to find insertion positions."
+            },
+            {
+                question: "In the DP approach for LIS, what does dp[i] represent?",
+                options: ["Length of LIS in the entire array", "Length of LIS ending at position i", "Length of LIS starting at position i", "Number of increasing subsequences"],
+                correctAnswer: 1,
+                explanation: "dp[i] represents the length of the longest increasing subsequence that ends at position i, which is key to building the optimal solution."
+            },
+            {
+                question: "What is the key difference between LIS and LCS?",
+                options: ["LIS works with one sequence, LCS with two", "LIS allows equal elements, LCS doesn't", "LIS is always longer than LCS", "They are the same problem"],
+                correctAnswer: 0,
+                explanation: "LIS (Longest Increasing Subsequence) works with a single sequence to find increasing order, while LCS (Longest Common Subsequence) works with two sequences to find common elements."
+            },
+            {
+                question: "In the binary search LIS approach, what does the tails array store?",
+                options: ["All possible subsequences", "The actual LIS elements", "Smallest tail element for each LIS length", "Indices of LIS elements"],
+                correctAnswer: 2,
+                explanation: "The tails array stores tails[i] = smallest tail element of all increasing subsequences of length i+1, enabling efficient binary search."
+            },
+            {
+                question: "What is a real-world application of LIS?",
+                options: ["Hash table implementation", "Stock price trend analysis", "Binary tree balancing", "String compression"],
+                correctAnswer: 1,
+                explanation: "LIS is commonly used in stock price analysis to find the longest period of consistently rising prices, helping identify bullish trends."
+            }
+        ]
+    },
 
-  // Greedy Algorithms
-  {
-    id: 'activity-selection',
-    title: 'Activity Selection',
-    description: 'Selecting maximum number of non-overlapping activities',
-    category: 'Greedy Algorithms',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n log n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `The Activity Selection Problem is a classic greedy algorithm problem where you need to select the maximum number of activities that don't overlap in time. Given a set of activities with start and finish times, the goal is to select the maximum number of activities that can be performed by a single person.
+    // Greedy Algorithms
+    {
+        id: 'activity-selection',
+        title: 'Activity Selection',
+        description: 'Selecting maximum number of non-overlapping activities',
+        category: 'Greedy Algorithms',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n log n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `The Activity Selection Problem is a classic greedy algorithm problem where you need to select the maximum number of activities that don't overlap in time. Given a set of activities with start and finish times, the goal is to select the maximum number of activities that can be performed by a single person.
 
 What it does: selects maximum number of non-overlapping activities from a given set by choosing activities that finish earliest.
 
 How it works: sorts activities by finish time, then greedily selects activities that start after the previous selected activity ends.
 
 When to use: scheduling problems, resource allocation, interval optimization where you want maximum non-overlapping selections.`,
-    voiceExplanation: `Think of the Activity Selection problem like being a super-efficient event coordinator at a busy conference center! You have one main auditorium and a bunch of different events that want to use it - workshops, presentations, meetings, etc. Each event has a start time and end time, and some of them overlap. Your job is to fit in as many events as possible without any conflicts. The brilliant insight of the greedy approach is this: always pick the event that ends the earliest! Why? Because finishing early gives you the most flexibility for future events. It's like being the person who always leaves parties early - you have more time for other activities! This same principle works everywhere: scheduling meetings in your calendar, assigning tasks to workers, booking time slots for anything. The greedy choice of "earliest finish time first" is mathematically proven to give you the maximum number of non-overlapping activities. It's simple, elegant, and optimal!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of the Activity Selection problem like being a super-efficient event coordinator at a busy conference center! You have one main auditorium and a bunch of different events that want to use it - workshops, presentations, meetings, etc. Each event has a start time and end time, and some of them overlap. Your job is to fit in as many events as possible without any conflicts. The brilliant insight of the greedy approach is this: always pick the event that ends the earliest! Why? Because finishing early gives you the most flexibility for future events. It's like being the person who always leaves parties early - you have more time for other activities! This same principle works everywhere: scheduling meetings in your calendar, assigning tasks to workers, booking time slots for anything. The greedy choice of "earliest finish time first" is mathematically proven to give you the maximum number of non-overlapping activities. It's simple, elegant, and optimal!`,
+        realWorldApplications: `**Industry Applications:**
 - **Meeting Scheduling**: Conference room booking, calendar optimization, appointment scheduling
 - **Resource Management**: Machine scheduling, equipment allocation, facility booking
 - **Project Management**: Task scheduling, milestone planning, resource allocation
@@ -17123,7 +17132,7 @@ When to use: scheduling problems, resource allocation, interval optimization whe
 - **Education**: Classroom scheduling, exam timetabling, course planning
 - **Event Management**: Venue booking, speaker scheduling, activity coordination
 - **Cloud Computing**: Job scheduling, resource allocation, server time management`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Greedy Choice Property**: Selecting earliest finishing activity is always optimal
 2. **Optimal Substructure**: Problem can be solved by combining optimal solutions of subproblems
 3. **Interval Scheduling**: Managing overlapping time intervals efficiently
@@ -17132,7 +17141,7 @@ When to use: scheduling problems, resource allocation, interval optimization whe
 6. **Maximization Objective**: Goal is to maximize count, not duration or value
 7. **Single Resource**: One resource (person/room) can handle one activity at a time
 8. **Proof of Correctness**: Mathematical proof that greedy choice leads to optimal solution`,
-    pseudocode: `**Activity Selection Pseudocode:**
+        pseudocode: `**Activity Selection Pseudocode:**
 
 ALGORITHM ActivitySelection(activities)
 INPUT: activities - array of (start, finish) pairs
@@ -17202,7 +17211,7 @@ BEGIN
     
     RETURN dp[n-1]
 END`,
-    example: `// Activity Selection Problem Implementation
+        example: `// Activity Selection Problem Implementation
 function activitySelection(activities) {
     // Sort activities by finish time
     const sorted = activities.map((activity, index) => ({
@@ -17288,7 +17297,7 @@ activities.forEach(act => selector.addActivity(act.name, act.start, act.finish))
 const result = selector.selectActivities();
 console.log('Selected activities:', result.selected.length);
 console.log('Schedule:', selector.getSchedule());`,
-    implementationCode: `// Comprehensive Activity Selection Implementation
+        implementationCode: `// Comprehensive Activity Selection Implementation
 
 class ActivitySelectionSolver {
     constructor() {
@@ -17588,8 +17597,8 @@ console.log('Recursive:', performance.recursive.count, 'activities in', performa
 // Example 3: Statistics
 console.log('\\n3. Problem Statistics:');
 console.log(solver.getStatistics());`,
-// Output: Meeting A: 1-4, Meeting D: 5-7, Meeting E: 8-9`,
-    syntax: `// Activity Selection Pattern
+        // Output: Meeting A: 1-4, Meeting D: 5-7, Meeting E: 8-9`,
+        syntax: `// Activity Selection Pattern
 function activitySelection(activities) {
     // Sort by finish time
     activities.sort((a, b) => a.finish - b.finish);
@@ -17605,55 +17614,55 @@ function activitySelection(activities) {
     }
     return selected;
 }`,
-    quizQuestions: [
-      {
-        question: "What is the key greedy choice in the Activity Selection problem?",
-        options: ["Select activity with earliest start time", "Select activity with earliest finish time", "Select activity with longest duration", "Select activity with highest value"],
-        correctAnswer: 1,
-        explanation: "The greedy choice is to always select the activity that finishes earliest among remaining activities, as this leaves maximum room for future activities."
-      },
-      {
-        question: "What is the time complexity of the Activity Selection algorithm?",
-        options: ["O(n)", "O(n log n)", "O(n²)", "O(2ⁿ)"],
-        correctAnswer: 1,
-        explanation: "The time complexity is O(n log n) due to the initial sorting by finish time. The greedy selection itself is O(n)."
-      },
-      {
-        question: "Why do we sort activities by finish time rather than start time?",
-        options: ["It's easier to implement", "Start time doesn't matter", "Early finish leaves more room for future activities", "It reduces space complexity"],
-        correctAnswer: 2,
-        explanation: "Sorting by finish time ensures that selecting the earliest-finishing activity leaves the maximum amount of time available for scheduling future activities."
-      },
-      {
-        question: "What type of problem structure does Activity Selection exhibit?",
-        options: ["Overlapping subproblems only", "Optimal substructure only", "Both optimal substructure and greedy choice property", "Neither property"],
-        correctAnswer: 2,
-        explanation: "Activity Selection has both optimal substructure (optimal solution contains optimal solutions to subproblems) and the greedy choice property (local optimal choice leads to global optimum)."
-      },
-      {
-        question: "What is a real-world application of the Activity Selection problem?",
-        options: ["Sorting algorithms", "Hash table design", "Conference room scheduling", "Binary tree balancing"],
-        correctAnswer: 2,
-        explanation: "Conference room scheduling is a classic application where you want to schedule the maximum number of non-overlapping meetings in a single room."
-      }
-    ]
-  },
-  {
-    id: 'huffman-coding',
-    title: 'Huffman Coding',
-    description: 'Optimal prefix-free encoding for data compression',
-    category: 'Greedy Algorithms',
-    difficulty: 'advanced',
-    timeComplexity: 'O(n log n)',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `Huffman Coding is a lossless data compression algorithm that uses variable-length prefix codes based on character frequencies. It's a greedy algorithm that builds an optimal prefix-free binary tree where frequently occurring characters get shorter codes and less frequent characters get longer codes.
+        quizQuestions: [
+            {
+                question: "What is the key greedy choice in the Activity Selection problem?",
+                options: ["Select activity with earliest start time", "Select activity with earliest finish time", "Select activity with longest duration", "Select activity with highest value"],
+                correctAnswer: 1,
+                explanation: "The greedy choice is to always select the activity that finishes earliest among remaining activities, as this leaves maximum room for future activities."
+            },
+            {
+                question: "What is the time complexity of the Activity Selection algorithm?",
+                options: ["O(n)", "O(n log n)", "O(n²)", "O(2ⁿ)"],
+                correctAnswer: 1,
+                explanation: "The time complexity is O(n log n) due to the initial sorting by finish time. The greedy selection itself is O(n)."
+            },
+            {
+                question: "Why do we sort activities by finish time rather than start time?",
+                options: ["It's easier to implement", "Start time doesn't matter", "Early finish leaves more room for future activities", "It reduces space complexity"],
+                correctAnswer: 2,
+                explanation: "Sorting by finish time ensures that selecting the earliest-finishing activity leaves the maximum amount of time available for scheduling future activities."
+            },
+            {
+                question: "What type of problem structure does Activity Selection exhibit?",
+                options: ["Overlapping subproblems only", "Optimal substructure only", "Both optimal substructure and greedy choice property", "Neither property"],
+                correctAnswer: 2,
+                explanation: "Activity Selection has both optimal substructure (optimal solution contains optimal solutions to subproblems) and the greedy choice property (local optimal choice leads to global optimum)."
+            },
+            {
+                question: "What is a real-world application of the Activity Selection problem?",
+                options: ["Sorting algorithms", "Hash table design", "Conference room scheduling", "Binary tree balancing"],
+                correctAnswer: 2,
+                explanation: "Conference room scheduling is a classic application where you want to schedule the maximum number of non-overlapping meetings in a single room."
+            }
+        ]
+    },
+    {
+        id: 'huffman-coding',
+        title: 'Huffman Coding',
+        description: 'Optimal prefix-free encoding for data compression',
+        category: 'Greedy Algorithms',
+        difficulty: 'advanced',
+        timeComplexity: 'O(n log n)',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `Huffman Coding is a lossless data compression algorithm that uses variable-length prefix codes based on character frequencies. It's a greedy algorithm that builds an optimal prefix-free binary tree where frequently occurring characters get shorter codes and less frequent characters get longer codes.
 
 What it does: creates optimal variable-length prefix codes for characters based on frequency, achieving maximum compression for given character distribution.
 
 How it works: builds binary tree bottom-up by repeatedly merging two lowest-frequency nodes, assigns codes based on tree paths.
 
 When to use: lossless data compression needed, text compression, file compression algorithms, when character frequencies vary significantly.`,
-    example: `// Huffman Coding Implementation
+        example: `// Huffman Coding Implementation
 class HuffmanNode {
     constructor(char, freq, left = null, right = null) {
         this.char = char;
@@ -17825,23 +17834,23 @@ console.log('Compression ratio:', result.compressionRatio + '%');
 const decoded = huffman.decode(result.encoded);
 console.log('Decoded:', decoded);
 console.log('Match original:', text === decoded);`
-  },
-  {
-    id: 'fractional-knapsack',
-    title: 'Fractional Knapsack',
-    description: 'Greedy approach to knapsack with fractional items',
-    category: 'Greedy Algorithms',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n log n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `The Fractional Knapsack Problem is a greedy algorithm problem where items can be broken into smaller pieces, unlike the 0/1 knapsack problem. Given a knapsack with weight capacity W and items with weights and values, the goal is to maximize the total value by taking fractions of items if necessary.
+    },
+    {
+        id: 'fractional-knapsack',
+        title: 'Fractional Knapsack',
+        description: 'Greedy approach to knapsack with fractional items',
+        category: 'Greedy Algorithms',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n log n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `The Fractional Knapsack Problem is a greedy algorithm problem where items can be broken into smaller pieces, unlike the 0/1 knapsack problem. Given a knapsack with weight capacity W and items with weights and values, the goal is to maximize the total value by taking fractions of items if necessary.
 
 What it does: maximizes knapsack value by allowing fractional items, using greedy approach based on value-to-weight ratio.
 
 How it works: sorts items by value-to-weight ratio descending, greedily takes highest ratio items first, takes fraction of last item if needed.
 
 When to use: items can be divided, continuous optimization problems, resource allocation with divisible resources, approximation for 0/1 knapsack upper bound.`,
-    example: `// Fractional Knapsack Implementation
+        example: `// Fractional Knapsack Implementation
 class Item {
     constructor(value, weight, name = '') {
         this.value = value;
@@ -18001,26 +18010,26 @@ const items = [
 
 const solution = fractionalKnapsack(50, items);
 console.log('\\nSimple solution:', solution.maxValue); // Output: 240`
-  },
+    },
 
-  // Backtracking
-  {
-    id: 'backtracking-intro',
-    title: 'Backtracking Fundamentals',
-    description: 'Master the backtracking algorithmic paradigm for constraint satisfaction problems',
-    category: 'Backtracking',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(b^d)',
-    spaceComplexity: 'O(d)',
-    extendedDefinition: `Backtracking is a systematic method for solving constraint satisfaction problems by incrementally building solutions and abandoning candidates ("backtracking") when they cannot lead to a valid solution.
+    // Backtracking
+    {
+        id: 'backtracking-intro',
+        title: 'Backtracking Fundamentals',
+        description: 'Master the backtracking algorithmic paradigm for constraint satisfaction problems',
+        category: 'Backtracking',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(b^d)',
+        spaceComplexity: 'O(d)',
+        extendedDefinition: `Backtracking is a systematic method for solving constraint satisfaction problems by incrementally building solutions and abandoning candidates ("backtracking") when they cannot lead to a valid solution.
 
 What it does: systematically explores all possible solutions by building them incrementally and abandoning invalid paths.
 
 How it works: makes choices, checks constraints, recurses deeper, and backtracks when hitting dead ends.
 
 When to use: constraint satisfaction problems, puzzle solving, combinatorial optimization, generating permutations/combinations.`,
-    voiceExplanation: `Think of backtracking like exploring a maze with a magical ability to teleport back when you hit a dead end! Imagine you're in a huge maze and you want to find the treasure. You walk forward, making choices at each intersection. If you reach a dead end, instead of being stuck, you magically teleport back to the last intersection and try a different path. That's exactly how backtracking works! It's like having a time machine for your decisions. You make a choice, explore that path completely, and if it doesn't work out, you undo that choice and try something else. This is incredibly powerful for solving puzzles like Sudoku - you fill in a number, see if it leads to a solution, and if not, you erase it and try the next number. It's systematic, thorough, and guarantees you'll find a solution if one exists. The beauty is that you never get permanently stuck - you can always backtrack and try a different approach!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of backtracking like exploring a maze with a magical ability to teleport back when you hit a dead end! Imagine you're in a huge maze and you want to find the treasure. You walk forward, making choices at each intersection. If you reach a dead end, instead of being stuck, you magically teleport back to the last intersection and try a different path. That's exactly how backtracking works! It's like having a time machine for your decisions. You make a choice, explore that path completely, and if it doesn't work out, you undo that choice and try something else. This is incredibly powerful for solving puzzles like Sudoku - you fill in a number, see if it leads to a solution, and if not, you erase it and try the next number. It's systematic, thorough, and guarantees you'll find a solution if one exists. The beauty is that you never get permanently stuck - you can always backtrack and try a different approach!`,
+        realWorldApplications: `**Industry Applications:**
 - **Game Development**: AI for chess, checkers, puzzle games, pathfinding in complex scenarios
 - **Constraint Programming**: Scheduling problems, resource allocation, timetabling systems
 - **Circuit Design**: VLSI layout, routing problems, logic circuit optimization
@@ -18031,7 +18040,7 @@ When to use: constraint satisfaction problems, puzzle solving, combinatorial opt
 - **Cryptography**: Key generation, cryptanalysis, security protocol verification
 - **Network Design**: Topology optimization, routing protocol design, bandwidth allocation
 - **Manufacturing**: Production scheduling, quality control, supply chain optimization`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Decision Tree**: Systematic exploration of all possible solution paths
 2. **Constraint Checking**: Validating partial solutions before proceeding
 3. **Pruning**: Eliminating branches that cannot lead to valid solutions
@@ -18040,7 +18049,7 @@ When to use: constraint satisfaction problems, puzzle solving, combinatorial opt
 6. **Solution Space**: Subset of state space containing valid solutions
 7. **Branch and Bound**: Optimization technique combined with backtracking
 8. **Recursive Structure**: Natural fit for recursive implementation patterns`,
-    pseudocode: `**Backtracking Algorithm Pseudocode:**
+        pseudocode: `**Backtracking Algorithm Pseudocode:**
 
 ALGORITHM Backtrack(solution, level)
 INPUT: solution - partial solution being built, level - current decision level
@@ -18088,7 +18097,7 @@ BEGIN
         END IF
     END FOR
 END`,
-    implementationCode: `// Comprehensive Backtracking Implementation
+        implementationCode: `// Comprehensive Backtracking Implementation
 
 class BacktrackingSolver {
     constructor() {
@@ -18299,7 +18308,7 @@ const perms = solver.generatePermutations([1, 2, 3]);
 console.log(perms);
 
 console.log('\\nStatistics:', solver.getStatistics());`,
-    example: `// Generic Backtracking Template
+        example: `// Generic Backtracking Template
 function backtrack(solution, candidates) {
     // Base case: solution is complete
     if (isComplete(solution)) {
@@ -18349,7 +18358,7 @@ function generateSubsets(nums) {
     backtrack(0);
     return result;
 }`,
-    syntax: `**Backtracking Patterns:**
+        syntax: `**Backtracking Patterns:**
 
 1. **Decision Tree Traversal:**
    \`\`\`javascript
@@ -18389,55 +18398,55 @@ function generateSubsets(nums) {
        return false; // No solution
    }
    \`\`\``,
-    quizQuestions: [
-      {
-        question: "What is the key principle behind backtracking algorithms?",
-        options: ["Always find the optimal solution", "Systematically explore all possibilities and backtrack from dead ends", "Use dynamic programming for optimization", "Employ greedy choices at each step"],
-        correctAnswer: 1,
-        explanation: "Backtracking systematically explores all possible solution paths, making choices and backtracking (undoing choices) when a path cannot lead to a valid solution."
-      },
-      {
-        question: "When should you backtrack in a backtracking algorithm?",
-        options: ["When you find a solution", "When the current partial solution violates constraints", "After exploring all possibilities", "When the recursion depth is too high"],
-        correctAnswer: 1,
-        explanation: "You should backtrack when the current partial solution violates constraints or cannot possibly lead to a valid solution, allowing you to try alternative choices."
-      },
-      {
-        question: "What is the time complexity of backtracking algorithms in the worst case?",
-        options: ["O(n)", "O(n log n)", "O(n²)", "O(b^d) where b is branching factor and d is depth"],
-        correctAnswer: 3,
-        explanation: "Backtracking algorithms have exponential time complexity O(b^d) in the worst case, where b is the branching factor (choices at each level) and d is the maximum depth."
-      },
-      {
-        question: "Which data structure is implicitly used in recursive backtracking?",
-        options: ["Queue", "Stack", "Heap", "Hash table"],
-        correctAnswer: 1,
-        explanation: "Recursive backtracking implicitly uses the call stack to keep track of the current state and enable backtracking to previous decision points."
-      },
-      {
-        question: "What is pruning in the context of backtracking?",
-        options: ["Removing duplicate solutions", "Eliminating branches that cannot lead to valid solutions", "Optimizing memory usage", "Sorting the solution space"],
-        correctAnswer: 1,
-        explanation: "Pruning is the technique of eliminating branches early when it's determined they cannot possibly lead to a valid solution, significantly improving efficiency."
-      }
-    ]
-  },
-  {
-    id: 'n-queens',
-    title: 'N-Queens Problem',
-    description: 'Place N queens on NxN chessboard so no two queens attack each other',
-    category: 'Backtracking',
-    difficulty: 'advanced',
-    timeComplexity: 'O(N!)',
-    spaceComplexity: 'O(NÃ‚Â²)',
-    extendedDefinition: `The N-Queens problem is a classic backtracking problem that demonstrates constraint satisfaction. The goal is to place N queens on an N×N chessboard such that no two queens can attack each other.
+        quizQuestions: [
+            {
+                question: "What is the key principle behind backtracking algorithms?",
+                options: ["Always find the optimal solution", "Systematically explore all possibilities and backtrack from dead ends", "Use dynamic programming for optimization", "Employ greedy choices at each step"],
+                correctAnswer: 1,
+                explanation: "Backtracking systematically explores all possible solution paths, making choices and backtracking (undoing choices) when a path cannot lead to a valid solution."
+            },
+            {
+                question: "When should you backtrack in a backtracking algorithm?",
+                options: ["When you find a solution", "When the current partial solution violates constraints", "After exploring all possibilities", "When the recursion depth is too high"],
+                correctAnswer: 1,
+                explanation: "You should backtrack when the current partial solution violates constraints or cannot possibly lead to a valid solution, allowing you to try alternative choices."
+            },
+            {
+                question: "What is the time complexity of backtracking algorithms in the worst case?",
+                options: ["O(n)", "O(n log n)", "O(n²)", "O(b^d) where b is branching factor and d is depth"],
+                correctAnswer: 3,
+                explanation: "Backtracking algorithms have exponential time complexity O(b^d) in the worst case, where b is the branching factor (choices at each level) and d is the maximum depth."
+            },
+            {
+                question: "Which data structure is implicitly used in recursive backtracking?",
+                options: ["Queue", "Stack", "Heap", "Hash table"],
+                correctAnswer: 1,
+                explanation: "Recursive backtracking implicitly uses the call stack to keep track of the current state and enable backtracking to previous decision points."
+            },
+            {
+                question: "What is pruning in the context of backtracking?",
+                options: ["Removing duplicate solutions", "Eliminating branches that cannot lead to valid solutions", "Optimizing memory usage", "Sorting the solution space"],
+                correctAnswer: 1,
+                explanation: "Pruning is the technique of eliminating branches early when it's determined they cannot possibly lead to a valid solution, significantly improving efficiency."
+            }
+        ]
+    },
+    {
+        id: 'n-queens',
+        title: 'N-Queens Problem',
+        description: 'Place N queens on NxN chessboard so no two queens attack each other',
+        category: 'Backtracking',
+        difficulty: 'advanced',
+        timeComplexity: 'O(N!)',
+        spaceComplexity: 'O(NÃ‚Â²)',
+        extendedDefinition: `The N-Queens problem is a classic backtracking problem that demonstrates constraint satisfaction. The goal is to place N queens on an N×N chessboard such that no two queens can attack each other.
 
 What it does: places N queens on an N×N chessboard ensuring no queen attacks another.
 
 How it works: uses backtracking to try queen placements row by row, checking column and diagonal conflicts.
 
 When to use: constraint satisfaction problems, backtracking algorithm practice, combinatorial optimization.`,
-    example: `function solveNQueens(n) {
+        example: `function solveNQueens(n) {
     const result = [], board = Array(n).fill().map(() => Array(n).fill('.'));
     const cols = new Set(), diag1 = new Set(), diag2 = new Set();
     
@@ -18461,23 +18470,23 @@ When to use: constraint satisfaction problems, backtracking algorithm practice, 
     backtrack(0);
     return result;
 }`
-  },
-  {
-    id: 'sudoku-solver',
-    title: 'Sudoku Solver',
-    description: 'Solve 9x9 Sudoku puzzle using constraint-based backtracking',
-    category: 'Backtracking',
-    difficulty: 'advanced',
-    timeComplexity: 'O(9^(nÃ‚Â²))',
-    spaceComplexity: 'O(nÃ‚Â²)',
-    extendedDefinition: `Sudoku solving demonstrates advanced backtracking with multiple constraint types. Each cell must satisfy three constraints simultaneously: row, column, and 3×3 box uniqueness.
+    },
+    {
+        id: 'sudoku-solver',
+        title: 'Sudoku Solver',
+        description: 'Solve 9x9 Sudoku puzzle using constraint-based backtracking',
+        category: 'Backtracking',
+        difficulty: 'advanced',
+        timeComplexity: 'O(9^(nÃ‚Â²))',
+        spaceComplexity: 'O(nÃ‚Â²)',
+        extendedDefinition: `Sudoku solving demonstrates advanced backtracking with multiple constraint types. Each cell must satisfy three constraints simultaneously: row, column, and 3×3 box uniqueness.
 
 What it does: solves 9×9 Sudoku puzzles by filling empty cells with digits 1-9.
 
 How it works: uses backtracking to try digits 1-9 in each empty cell, checking row, column, and box constraints.
 
 When to use: constraint satisfaction problems, puzzle solving, advanced backtracking practice.`,
-    example: `function solveSudoku(board) {
+        example: `function solveSudoku(board) {
     function isValid(row, col, num) {
         for (let i = 0; i < 9; i++) {
             if (board[row][i] === num || board[i][col] === num) return false;
@@ -18511,23 +18520,23 @@ When to use: constraint satisfaction problems, puzzle solving, advanced backtrac
     
     solve();
 }`
-  },
-  {
-    id: 'maze-solver',
-    title: 'Maze Path Finding',
-    description: 'Find path through maze using backtracking with path visualization',
-    category: 'Backtracking',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(4^(nÃƒâ€”m))',
-    spaceComplexity: 'O(nÃƒâ€”m)',
-    extendedDefinition: `Maze solving showcases backtracking in grid-based problems. The algorithm explores all possible paths from start to destination, backtracking when hitting dead ends.
+    },
+    {
+        id: 'maze-solver',
+        title: 'Maze Path Finding',
+        description: 'Find path through maze using backtracking with path visualization',
+        category: 'Backtracking',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(4^(nÃƒâ€”m))',
+        spaceComplexity: 'O(nÃƒâ€”m)',
+        extendedDefinition: `Maze solving showcases backtracking in grid-based problems. The algorithm explores all possible paths from start to destination, backtracking when hitting dead ends.
 
 What it does: finds a path through a maze from start to destination using backtracking.
 
 How it works: explores all 4 directions from each cell, marking visited cells and backtracking when hitting dead ends.
 
 When to use: pathfinding problems, grid-based navigation, exploring all possible routes.`,
-    example: `function solveMaze(maze) {
+        example: `function solveMaze(maze) {
     const rows = maze.length, cols = maze[0].length;
     const visited = Array(rows).fill().map(() => Array(cols).fill(false));
     const path = [], directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
@@ -18556,23 +18565,23 @@ When to use: pathfinding problems, grid-based navigation, exploring all possible
     
     return backtrack(0, 0, rows - 1, cols - 1) ? path : [];
 }`
-  },
-  {
-    id: 'generate-parentheses',
-    title: 'Generate Valid Parentheses',
-    description: 'Generate all combinations of well-formed parentheses using backtracking',
-    category: 'Backtracking',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(4^n / Ã¢Ë†Å¡n)',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `Generating valid parentheses demonstrates backtracking with constraint validation. We build strings character by character, ensuring validity at each step.
+    },
+    {
+        id: 'generate-parentheses',
+        title: 'Generate Valid Parentheses',
+        description: 'Generate all combinations of well-formed parentheses using backtracking',
+        category: 'Backtracking',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(4^n / Ã¢Ë†Å¡n)',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `Generating valid parentheses demonstrates backtracking with constraint validation. We build strings character by character, ensuring validity at each step.
 
 What it does: generates all combinations of n pairs of well-formed parentheses.
 
 How it works: uses backtracking to build strings character by character, ensuring valid parentheses constraints.
 
 When to use: combinatorial string generation, constraint validation, balanced bracket problems.`,
-    example: `function generateParenthesis(n) {
+        example: `function generateParenthesis(n) {
     const result = [];
     
     function backtrack(current, open, close) {
@@ -18590,23 +18599,23 @@ When to use: combinatorial string generation, constraint validation, balanced br
 }
 
 // Example n=3: ["((()))", "(()())", "(())()", "()(())", "()()()"]`
-  },
-  {
-    id: 'word-search',
-    title: 'Word Search in Grid',
-    description: 'Find if word exists in 2D character grid using backtracking',
-    category: 'Backtracking',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(N Ãƒâ€” 4^L)',
-    spaceComplexity: 'O(L)',
-    extendedDefinition: `Word search in a grid combines backtracking with 2D traversal. We explore all possible paths from each starting position, backtracking when the current path cannot form the target word.
+    },
+    {
+        id: 'word-search',
+        title: 'Word Search in Grid',
+        description: 'Find if word exists in 2D character grid using backtracking',
+        category: 'Backtracking',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(N Ãƒâ€” 4^L)',
+        spaceComplexity: 'O(L)',
+        extendedDefinition: `Word search in a grid combines backtracking with 2D traversal. We explore all possible paths from each starting position, backtracking when the current path cannot form the target word.
 
 What it does: finds if a word exists in a 2D character grid using adjacent cells.
 
 How it works: tries starting from each cell, using DFS with backtracking to explore adjacent paths.
 
 When to use: 2D grid search problems, word puzzles, path finding with constraints.`,
-    example: `function exist(board, word) {
+        example: `function exist(board, word) {
     const rows = board.length, cols = board[0].length;
     const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
     
@@ -18636,23 +18645,23 @@ When to use: 2D grid search problems, word puzzles, path finding with constraint
     }
     return false;
 }`
-  },
-  {
-    id: 'combination-sum',
-    title: 'Combination Sum',
-    description: 'Find all unique combinations that sum to target using backtracking',
-    category: 'Backtracking',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(2^n)',
-    spaceComplexity: 'O(target/min)',
-    extendedDefinition: `Combination Sum problems demonstrate backtracking in combinatorial optimization. We build combinations incrementally, pruning branches that exceed the target sum.
+    },
+    {
+        id: 'combination-sum',
+        title: 'Combination Sum',
+        description: 'Find all unique combinations that sum to target using backtracking',
+        category: 'Backtracking',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(2^n)',
+        spaceComplexity: 'O(target/min)',
+        extendedDefinition: `Combination Sum problems demonstrate backtracking in combinatorial optimization. We build combinations incrementally, pruning branches that exceed the target sum.
 
 What it does: finds all unique combinations of numbers that sum to a target value.
 
 How it works: uses backtracking to build combinations incrementally, pruning branches when sum exceeds target.
 
 When to use: combinatorial optimization, finding all valid combinations, subset sum problems.`,
-    example: `// Combination Sum I (numbers can be reused)
+        example: `// Combination Sum I (numbers can be reused)
 function combinationSum(candidates, target) {
     const result = [];
     candidates.sort((a, b) => a - b); // Sort for optimization
@@ -18700,25 +18709,25 @@ function combinationSum(candidates, target) {
 //       (>7)
 //
 // Valid combinations: [[2,2,3], [7]]`
-  },
+    },
 
-  // Advanced Data Structures
-  {
-    id: 'trie',
-    title: 'Trie (Prefix Tree)',
-    description: 'Tree-like data structure for efficient string operations',
-    category: 'Advanced Data Structures',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(m)',
-    spaceComplexity: 'O(ALPHABET_SIZE × n × m)',
-    extendedDefinition: `A Trie (pronounced "try") or Prefix Tree is a tree-like data structure that stores a dynamic set of strings, where each node represents a single character and paths from root to leaves represent complete words.
+    // Advanced Data Structures
+    {
+        id: 'trie',
+        title: 'Trie (Prefix Tree)',
+        description: 'Tree-like data structure for efficient string operations',
+        category: 'Advanced Data Structures',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(m)',
+        spaceComplexity: 'O(ALPHABET_SIZE × n × m)',
+        extendedDefinition: `A Trie (pronounced "try") or Prefix Tree is a tree-like data structure that stores a dynamic set of strings, where each node represents a single character and paths from root to leaves represent complete words.
 
 What it does: efficiently stores and retrieves strings with shared prefixes, enabling fast prefix-based operations like autocomplete and spell checking.
 
 How it works: each node contains character mappings to children, paths from root represent prefixes, end-of-word flags mark complete strings.
 
 When to use: autocomplete systems, spell checkers, IP routing tables, dictionary implementations, prefix matching, word games.`,
-    example: `// Trie (Prefix Tree) Implementation
+        example: `// Trie (Prefix Tree) Implementation
 class TrieNode {
     constructor() {
         this.children = {};
@@ -18813,7 +18822,7 @@ console.log(trie.search("app"));        // true
 console.log(trie.search("appl"));       // false
 console.log(trie.startsWith("app"));    // true
 console.log(trie.getWordsWithPrefix("app")); // ["app", "apple", "application", "apply"]`,
-    syntax: `**Trie Patterns:**
+        syntax: `**Trie Patterns:**
 
 1. **Basic Trie Node:**
    \`\`\`javascript
@@ -18850,24 +18859,24 @@ console.log(trie.getWordsWithPrefix("app")); // ["app", "apple", "application", 
        return current.isEndOfWord;
    }
    \`\`\``
-  },
-  {
-    id: 'segment-tree',
-    title: 'Segment Tree',
-    description: 'Tree structure for range queries and updates',
-    category: 'Advanced Data Structures',
-    difficulty: 'advanced',
-    timeComplexity: 'O(log n)',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `A Segment Tree is a binary tree data structure used for storing information about array segments in a way that allows answering range queries efficiently.
+    },
+    {
+        id: 'segment-tree',
+        title: 'Segment Tree',
+        description: 'Tree structure for range queries and updates',
+        category: 'Advanced Data Structures',
+        difficulty: 'advanced',
+        timeComplexity: 'O(log n)',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `A Segment Tree is a binary tree data structure used for storing information about array segments in a way that allows answering range queries efficiently.
 
 What it does: efficiently handles range queries and updates on arrays, supporting operations like range sum, minimum, maximum in O(log n) time.
 
 How it works: recursively divides array into segments, stores aggregate information at internal nodes, queries traverse tree to combine relevant segments.
 
 When to use: frequent range queries needed, range updates required, competitive programming, when Fenwick tree limitations are restrictive.`,
-    voiceExplanation: `Think of a Segment Tree like a smart filing system for a massive library! Imagine you're managing a library with millions of books, and people constantly ask questions like "What's the total value of books from shelf 100 to shelf 500?" or "What's the most expensive book between sections A and M?" A naive approach would be to manually check every single book, but that's incredibly slow. A Segment Tree is like having a brilliant organizational system where you pre-calculate and store summary information at different levels. At the top level, you know the total for the entire library. One level down, you know totals for the left half and right half. Keep dividing until you reach individual books. When someone asks a range question, you cleverly combine just the relevant pre-calculated summaries instead of checking every item. It's like having a pyramid of knowledge where each level contains increasingly detailed breakdowns, allowing you to answer any range query lightning-fast!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of a Segment Tree like a smart filing system for a massive library! Imagine you're managing a library with millions of books, and people constantly ask questions like "What's the total value of books from shelf 100 to shelf 500?" or "What's the most expensive book between sections A and M?" A naive approach would be to manually check every single book, but that's incredibly slow. A Segment Tree is like having a brilliant organizational system where you pre-calculate and store summary information at different levels. At the top level, you know the total for the entire library. One level down, you know totals for the left half and right half. Keep dividing until you reach individual books. When someone asks a range question, you cleverly combine just the relevant pre-calculated summaries instead of checking every item. It's like having a pyramid of knowledge where each level contains increasingly detailed breakdowns, allowing you to answer any range query lightning-fast!`,
+        realWorldApplications: `**Industry Applications:**
 - **Database Systems**: Range queries, indexing, OLAP operations, data warehousing
 - **Computer Graphics**: 2D range queries, collision detection, spatial indexing
 - **Computational Geometry**: Range searching, nearest neighbor queries, geometric algorithms
@@ -18878,7 +18887,7 @@ When to use: frequent range queries needed, range updates required, competitive 
 - **Image Processing**: Region-based operations, histogram queries, pixel range analysis
 - **Competitive Programming**: Contest problems, algorithmic challenges, optimization tasks
 - **Real-time Analytics**: Stream processing, sliding window calculations, live dashboards`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Binary Tree Structure**: Complete binary tree with array segments at leaves
 2. **Recursive Decomposition**: Dividing array into smaller segments recursively
 3. **Aggregate Information**: Storing combined data (sum, min, max) at internal nodes
@@ -18887,7 +18896,7 @@ When to use: frequent range queries needed, range updates required, competitive 
 6. **Build Complexity**: O(n) construction time with O(n) space requirements
 7. **Update Propagation**: Efficiently updating parent nodes after modifications
 8. **Range Operations**: Supporting both point updates and range updates efficiently`,
-    pseudocode: `**Segment Tree Pseudocode:**
+        pseudocode: `**Segment Tree Pseudocode:**
 
 ALGORITHM BuildSegmentTree(array, tree, node, start, end)
 INPUT: array - original array, tree - segment tree array, node - current node, start/end - range
@@ -18937,7 +18946,7 @@ BEGIN
         tree[node] = tree[2*node] + tree[2*node+1]
     END IF
 END`,
-    implementationCode: `// Comprehensive Segment Tree Implementation
+        implementationCode: `// Comprehensive Segment Tree Implementation
 
 class SegmentTree {
     constructor(array) {
@@ -19123,7 +19132,7 @@ console.log('Range sum [2, 4]:', segTree.queryRange(2, 4));
 console.log('Tree statistics:', segTree.getStatistics());
 console.log('Tree visualization:');
 segTree.visualizeTree().forEach(level => console.log(level));`,
-    example: `// Segment Tree for Range Sum Queries
+        example: `// Segment Tree for Range Sum Queries
 class SimpleSegmentTree {
     constructor(arr) {
         this.n = arr.length;
@@ -19160,7 +19169,7 @@ class SimpleSegmentTree {
 const arr = [1, 3, 5, 7, 9, 11];
 const st = new SimpleSegmentTree(arr);
 console.log(st.query(1, 3)); // Sum from index 1 to 3: 15`,
-    syntax: `// Segment Tree Pattern
+        syntax: `// Segment Tree Pattern
 class SegmentTree {
     constructor(arr) {
         this.n = arr.length;
@@ -19172,56 +19181,56 @@ class SegmentTree {
     query(left, right) { /* Range query */ }
     update(index, value) { /* Point update */ }
 }`,
-    quizQuestions: [
-      {
-        question: "What is the time complexity of building a segment tree?",
-        options: ["O(log n)", "O(n)", "O(n log n)", "O(n²)"],
-        correctAnswer: 1,
-        explanation: "Building a segment tree takes O(n) time because we visit each node exactly once during the recursive construction process."
-      },
-      {
-        question: "What is the space complexity of a segment tree?",
-        options: ["O(log n)", "O(n)", "O(2n)", "O(4n)"],
-        correctAnswer: 3,
-        explanation: "A segment tree requires O(4n) space in the worst case. While the tree has at most 2n-1 nodes, we typically allocate 4n space for implementation simplicity."
-      },
-      {
-        question: "What is the main advantage of segment trees over simple arrays for range queries?",
-        options: ["Less memory usage", "Faster range queries", "Simpler implementation", "Better cache locality"],
-        correctAnswer: 1,
-        explanation: "Segment trees provide O(log n) range queries compared to O(n) for simple arrays, making them much faster for frequent range operations."
-      },
-      {
-        question: "What is lazy propagation in segment trees?",
-        options: ["A way to build the tree faster", "Delaying updates until they're needed", "A method to reduce space usage", "A technique for parallel processing"],
-        correctAnswer: 1,
-        explanation: "Lazy propagation delays range updates until they're actually needed during queries, improving the efficiency of range update operations from O(n) to O(log n)."
-      },
-      {
-        question: "Which operations can segment trees efficiently support?",
-        options: ["Only range sum queries", "Only point updates", "Both range queries and updates", "Only minimum/maximum queries"],
-        correctAnswer: 2,
-        explanation: "Segment trees efficiently support both range queries (sum, min, max, etc.) and updates (point updates and range updates with lazy propagation), all in O(log n) time."
-      }
-    ]
-  },
-  {
-    id: 'fenwick-tree',
-    title: 'Fenwick Tree (BIT)',
-    description: 'Binary Indexed Tree for prefix sum queries',
-    category: 'Advanced Data Structures',
-    difficulty: 'advanced',
-    timeComplexity: 'O(log n)',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `A Fenwick Tree (Binary Indexed Tree) is a data structure that efficiently calculates prefix sums in O(log n) time and allows updates in O(log n) time.
+        quizQuestions: [
+            {
+                question: "What is the time complexity of building a segment tree?",
+                options: ["O(log n)", "O(n)", "O(n log n)", "O(n²)"],
+                correctAnswer: 1,
+                explanation: "Building a segment tree takes O(n) time because we visit each node exactly once during the recursive construction process."
+            },
+            {
+                question: "What is the space complexity of a segment tree?",
+                options: ["O(log n)", "O(n)", "O(2n)", "O(4n)"],
+                correctAnswer: 3,
+                explanation: "A segment tree requires O(4n) space in the worst case. While the tree has at most 2n-1 nodes, we typically allocate 4n space for implementation simplicity."
+            },
+            {
+                question: "What is the main advantage of segment trees over simple arrays for range queries?",
+                options: ["Less memory usage", "Faster range queries", "Simpler implementation", "Better cache locality"],
+                correctAnswer: 1,
+                explanation: "Segment trees provide O(log n) range queries compared to O(n) for simple arrays, making them much faster for frequent range operations."
+            },
+            {
+                question: "What is lazy propagation in segment trees?",
+                options: ["A way to build the tree faster", "Delaying updates until they're needed", "A method to reduce space usage", "A technique for parallel processing"],
+                correctAnswer: 1,
+                explanation: "Lazy propagation delays range updates until they're actually needed during queries, improving the efficiency of range update operations from O(n) to O(log n)."
+            },
+            {
+                question: "Which operations can segment trees efficiently support?",
+                options: ["Only range sum queries", "Only point updates", "Both range queries and updates", "Only minimum/maximum queries"],
+                correctAnswer: 2,
+                explanation: "Segment trees efficiently support both range queries (sum, min, max, etc.) and updates (point updates and range updates with lazy propagation), all in O(log n) time."
+            }
+        ]
+    },
+    {
+        id: 'fenwick-tree',
+        title: 'Fenwick Tree (BIT)',
+        description: 'Binary Indexed Tree for prefix sum queries',
+        category: 'Advanced Data Structures',
+        difficulty: 'advanced',
+        timeComplexity: 'O(log n)',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `A Fenwick Tree (Binary Indexed Tree) is a data structure that efficiently calculates prefix sums in O(log n) time and allows updates in O(log n) time.
 
 What it does: efficiently maintains cumulative frequency table supporting prefix sum queries and single element updates in logarithmic time.
 
 How it works: uses binary representation of indices to store partial sums, leverages bit manipulation for tree traversal and updates.
 
 When to use: prefix sum queries needed, cumulative frequency tables, range sum queries, when space efficiency important over segment trees.`,
-    voiceExplanation: `Think of a Fenwick Tree like a clever accounting system for a chain of stores! Imagine you're managing 100 stores and need to quickly answer questions like "What's the total sales from store 1 to store 50?" The naive approach would be to add up all individual store sales, which is slow. A Fenwick Tree is like having a smart bookkeeping system that maintains running totals in a very specific pattern. Each "account" in your system doesn't just store one store's data - it stores the sum of a specific range of stores based on a binary pattern. The brilliant insight is using the binary representation of store numbers to determine which ranges each account covers. When you need a prefix sum, you cleverly combine just a few of these pre-calculated accounts using bit manipulation tricks. It's like having a pyramid of partial sums where each level covers different ranges, but organized in such a way that you can get any prefix sum by adding just a few numbers. The magic is in the binary indexing - it's mathematically elegant and incredibly efficient!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of a Fenwick Tree like a clever accounting system for a chain of stores! Imagine you're managing 100 stores and need to quickly answer questions like "What's the total sales from store 1 to store 50?" The naive approach would be to add up all individual store sales, which is slow. A Fenwick Tree is like having a smart bookkeeping system that maintains running totals in a very specific pattern. Each "account" in your system doesn't just store one store's data - it stores the sum of a specific range of stores based on a binary pattern. The brilliant insight is using the binary representation of store numbers to determine which ranges each account covers. When you need a prefix sum, you cleverly combine just a few of these pre-calculated accounts using bit manipulation tricks. It's like having a pyramid of partial sums where each level covers different ranges, but organized in such a way that you can get any prefix sum by adding just a few numbers. The magic is in the binary indexing - it's mathematically elegant and incredibly efficient!`,
+        realWorldApplications: `**Industry Applications:**
 - **Database Systems**: Indexing, range queries, OLAP cubes, data warehousing
 - **Financial Systems**: Portfolio tracking, cumulative returns, risk analysis
 - **Gaming**: Leaderboards, score tracking, ranking systems, achievement progress
@@ -19232,7 +19241,7 @@ When to use: prefix sum queries needed, cumulative frequency tables, range sum q
 - **Competitive Programming**: Contest problems, algorithmic challenges, optimization
 - **Image Processing**: Histogram calculations, pixel intensity analysis, region queries
 - **Social Media**: Engagement metrics, follower counts, activity tracking`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Binary Indexing**: Using binary representation of indices for tree structure
 2. **Partial Sum Storage**: Each node stores sum of specific range based on binary pattern
 3. **Bit Manipulation**: Using bitwise operations for efficient tree traversal
@@ -19241,7 +19250,7 @@ When to use: prefix sum queries needed, cumulative frequency tables, range sum q
 6. **Space Efficiency**: Using only O(n) space compared to segment tree's O(4n)
 7. **LSB Operations**: Leveraging least significant bit for index calculations
 8. **1-based Indexing**: Traditional implementation uses 1-based array indexing`,
-    pseudocode: `**Fenwick Tree Pseudocode:**
+        pseudocode: `**Fenwick Tree Pseudocode:**
 
 ALGORITHM BuildFenwickTree(array)
 INPUT: array - original array of values
@@ -19297,7 +19306,7 @@ BEGIN
     difference = newValue - oldValue
     Update(tree, index, difference)
 END`,
-    implementationCode: `// Comprehensive Fenwick Tree Implementation
+        implementationCode: `// Comprehensive Fenwick Tree Implementation
 
 class FenwickTree {
     constructor(size) {
@@ -19483,7 +19492,7 @@ const ft2d = new FenwickTree2D(4, 4);
 ft2d.update(2, 2, 5);
 ft2d.update(3, 3, 8);
 console.log('2D range query [1,1] to [3,3]:', ft2d.rangeQuery(1, 1, 3, 3));`,
-    example: `// Simple Fenwick Tree for Prefix Sums
+        example: `// Simple Fenwick Tree for Prefix Sums
 class SimpleFenwickTree {
     constructor(size) {
         this.tree = new Array(size + 1).fill(0);
@@ -19520,7 +19529,7 @@ arr.forEach((val, i) => ft.update(i + 1, val));
 
 console.log(ft.prefixSum(4)); // 16 (sum of first 4 elements)
 console.log(ft.rangeSum(3, 6)); // 32 (sum from index 3 to 6)`,
-    syntax: `// Fenwick Tree Pattern
+        syntax: `// Fenwick Tree Pattern
 class FenwickTree {
     constructor(size) {
         this.tree = new Array(size + 1).fill(0);
@@ -19542,56 +19551,56 @@ class FenwickTree {
         return sum;
     }
 }`,
-    quizQuestions: [
-      {
-        question: "What is the key insight behind Fenwick Tree's efficiency?",
-        options: ["Using recursion", "Binary representation of indices", "Hash tables", "Linked lists"],
-        correctAnswer: 1,
-        explanation: "Fenwick Tree uses the binary representation of indices to determine which ranges each tree node covers, enabling O(log n) operations through bit manipulation."
-      },
-      {
-        question: "What does the operation 'index & (-index)' compute in Fenwick Tree?",
-        options: ["Next power of 2", "Least Significant Bit (LSB)", "Most Significant Bit", "Binary complement"],
-        correctAnswer: 1,
-        explanation: "The operation 'index & (-index)' isolates the least significant bit (LSB) of the index, which is crucial for tree traversal in Fenwick Trees."
-      },
-      {
-        question: "What is the space complexity of a Fenwick Tree?",
-        options: ["O(log n)", "O(n)", "O(n log n)", "O(4n)"],
-        correctAnswer: 1,
-        explanation: "Fenwick Tree has O(n) space complexity, making it more space-efficient than segment trees which require O(4n) space."
-      },
-      {
-        question: "Why does Fenwick Tree traditionally use 1-based indexing?",
-        options: ["Easier to understand", "Bit manipulation works better", "Historical reasons", "Faster operations"],
-        correctAnswer: 1,
-        explanation: "1-based indexing is used because bit manipulation operations (like index & (-index)) work more naturally when index 0 is not used, avoiding edge cases."
-      },
-      {
-        question: "What is the main limitation of Fenwick Tree compared to Segment Tree?",
-        options: ["Slower queries", "More memory usage", "Only works for associative operations", "Complex implementation"],
-        correctAnswer: 2,
-        explanation: "Fenwick Tree only works for operations that are associative and have an inverse (like addition), while Segment Trees can handle any associative operation (like min, max, GCD)."
-      }
-    ]
-  },
-  {
-    id: 'union-find',
-    title: 'Union-Find (Disjoint Set)',
-    description: 'Data structure for tracking disjoint sets',
-    category: 'Advanced Data Structures',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(α(n))',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `Union-Find (Disjoint Set Union) is a data structure that keeps track of elements partitioned into disjoint sets and supports union and find operations efficiently.
+        quizQuestions: [
+            {
+                question: "What is the key insight behind Fenwick Tree's efficiency?",
+                options: ["Using recursion", "Binary representation of indices", "Hash tables", "Linked lists"],
+                correctAnswer: 1,
+                explanation: "Fenwick Tree uses the binary representation of indices to determine which ranges each tree node covers, enabling O(log n) operations through bit manipulation."
+            },
+            {
+                question: "What does the operation 'index & (-index)' compute in Fenwick Tree?",
+                options: ["Next power of 2", "Least Significant Bit (LSB)", "Most Significant Bit", "Binary complement"],
+                correctAnswer: 1,
+                explanation: "The operation 'index & (-index)' isolates the least significant bit (LSB) of the index, which is crucial for tree traversal in Fenwick Trees."
+            },
+            {
+                question: "What is the space complexity of a Fenwick Tree?",
+                options: ["O(log n)", "O(n)", "O(n log n)", "O(4n)"],
+                correctAnswer: 1,
+                explanation: "Fenwick Tree has O(n) space complexity, making it more space-efficient than segment trees which require O(4n) space."
+            },
+            {
+                question: "Why does Fenwick Tree traditionally use 1-based indexing?",
+                options: ["Easier to understand", "Bit manipulation works better", "Historical reasons", "Faster operations"],
+                correctAnswer: 1,
+                explanation: "1-based indexing is used because bit manipulation operations (like index & (-index)) work more naturally when index 0 is not used, avoiding edge cases."
+            },
+            {
+                question: "What is the main limitation of Fenwick Tree compared to Segment Tree?",
+                options: ["Slower queries", "More memory usage", "Only works for associative operations", "Complex implementation"],
+                correctAnswer: 2,
+                explanation: "Fenwick Tree only works for operations that are associative and have an inverse (like addition), while Segment Trees can handle any associative operation (like min, max, GCD)."
+            }
+        ]
+    },
+    {
+        id: 'union-find',
+        title: 'Union-Find (Disjoint Set)',
+        description: 'Data structure for tracking disjoint sets',
+        category: 'Advanced Data Structures',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(α(n))',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `Union-Find (Disjoint Set Union) is a data structure that keeps track of elements partitioned into disjoint sets and supports union and find operations efficiently.
 
 What it does: maintains a collection of disjoint sets with efficient union and find operations, supporting dynamic connectivity queries.
 
 How it works: uses parent pointers to represent trees, applies path compression and union by rank optimizations for near-constant time operations.
 
 When to use: connectivity problems, cycle detection in graphs, Kruskal's MST algorithm, dynamic equivalence relations, percolation problems.`,
-    voiceExplanation: `Think of Union-Find like managing friendship groups at a massive social event! Imagine you're organizing a conference with thousands of people, and you need to keep track of who knows whom and which groups of friends belong together. Initially, everyone is in their own group (like being their own best friend). As people meet and become friends, you need to merge their friend groups together. The Union-Find data structure is like having a super-efficient system for this! Each person points to their "group representative" - like the most popular person in their friend circle. When two groups become friends, you simply make one group representative point to the other. The brilliant optimizations are: Path Compression (when asking "who's your group leader?", you make everyone directly point to the top leader for faster future queries) and Union by Rank (always make the smaller group join the larger one to keep the hierarchy flat). It's like having a smart social network that can instantly tell you if two people are connected through any chain of friendships, and can merge friend groups lightning-fast!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of Union-Find like managing friendship groups at a massive social event! Imagine you're organizing a conference with thousands of people, and you need to keep track of who knows whom and which groups of friends belong together. Initially, everyone is in their own group (like being their own best friend). As people meet and become friends, you need to merge their friend groups together. The Union-Find data structure is like having a super-efficient system for this! Each person points to their "group representative" - like the most popular person in their friend circle. When two groups become friends, you simply make one group representative point to the other. The brilliant optimizations are: Path Compression (when asking "who's your group leader?", you make everyone directly point to the top leader for faster future queries) and Union by Rank (always make the smaller group join the larger one to keep the hierarchy flat). It's like having a smart social network that can instantly tell you if two people are connected through any chain of friendships, and can merge friend groups lightning-fast!`,
+        realWorldApplications: `**Industry Applications:**
 - **Network Connectivity**: Computer networks, social networks, internet routing, network reliability
 - **Image Processing**: Connected components, image segmentation, region growing, blob detection
 - **Game Development**: Maze generation, procedural terrain, connected regions, multiplayer matchmaking
@@ -19602,7 +19611,7 @@ When to use: connectivity problems, cycle detection in graphs, Kruskal's MST alg
 - **Geographic Information Systems**: Land parcel management, watershed analysis, route planning
 - **Financial Systems**: Fraud detection, transaction clustering, risk assessment
 - **Distributed Systems**: Consensus algorithms, partition tolerance, failure detection`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Disjoint Sets**: Non-overlapping sets where each element belongs to exactly one set
 2. **Union Operation**: Merging two sets into a single set efficiently
 3. **Find Operation**: Determining which set an element belongs to
@@ -19611,7 +19620,7 @@ When to use: connectivity problems, cycle detection in graphs, Kruskal's MST alg
 6. **Representative Element**: Root element that represents the entire set
 7. **Inverse Ackermann Function**: α(n) - extremely slow-growing function for time complexity
 8. **Dynamic Connectivity**: Efficiently handling connectivity queries in changing graphs`,
-    pseudocode: `**Union-Find Pseudocode:**
+        pseudocode: `**Union-Find Pseudocode:**
 
 ALGORITHM InitializeUnionFind(n)
 INPUT: n - number of elements
@@ -19678,7 +19687,7 @@ BEGIN
     END FOR
     RETURN count
 END`,
-    implementationCode: `// Comprehensive Union-Find Implementation
+        implementationCode: `// Comprehensive Union-Find Implementation
 
 class UnionFind {
     constructor(n) {
@@ -19934,7 +19943,7 @@ const edges = [
 ];
 
 console.log('MST edges:', kruskalMST(edges, 4));`,
-    example: `// Simple Union-Find Implementation
+        example: `// Simple Union-Find Implementation
 class SimpleUnionFind {
     constructor(n) {
         this.parent = Array.from({length: n}, (_, i) => i);
@@ -19976,7 +19985,7 @@ uf.union(0, 1);
 uf.union(2, 3);
 console.log(uf.connected(0, 1)); // true
 console.log(uf.connected(0, 2)); // false`,
-    syntax: `// Union-Find Pattern
+        syntax: `// Union-Find Pattern
 class UnionFind {
     constructor(n) {
         this.parent = Array.from({length: n}, (_, i) => i);
@@ -19993,56 +20002,56 @@ class UnionFind {
     union(x, y) { /* Union by rank */ }
     connected(x, y) { return this.find(x) === this.find(y); }
 }`,
-    quizQuestions: [
-      {
-        question: "What is the time complexity of Union-Find operations with both path compression and union by rank?",
-        options: ["O(1)", "O(log n)", "O(α(n))", "O(n)"],
-        correctAnswer: 2,
-        explanation: "With both optimizations, Union-Find operations have O(α(n)) time complexity, where α is the inverse Ackermann function, which is effectively constant for all practical purposes."
-      },
-      {
-        question: "What is the purpose of path compression in Union-Find?",
-        options: ["Reduce memory usage", "Flatten tree structure during find operations", "Speed up union operations", "Prevent cycles"],
-        correctAnswer: 1,
-        explanation: "Path compression flattens the tree structure during find operations by making nodes point directly to the root, significantly improving future find operations."
-      },
-      {
-        question: "In union by rank, which tree becomes the subtree of the other?",
-        options: ["Larger tree becomes subtree of smaller", "Smaller tree becomes subtree of larger", "Always the left tree", "Random choice"],
-        correctAnswer: 1,
-        explanation: "In union by rank, the tree with smaller rank (height) becomes a subtree of the tree with larger rank, helping to keep the overall tree height small."
-      },
-      {
-        question: "What is a key application of Union-Find in graph algorithms?",
-        options: ["Shortest path finding", "Topological sorting", "Cycle detection and MST algorithms", "Graph coloring"],
-        correctAnswer: 2,
-        explanation: "Union-Find is crucial for cycle detection in undirected graphs and is used in Kruskal's algorithm for finding Minimum Spanning Trees."
-      },
-      {
-        question: "What does the inverse Ackermann function α(n) represent in Union-Find complexity?",
-        options: ["Worst-case height of trees", "Number of operations", "Extremely slow-growing function", "Space complexity"],
-        correctAnswer: 2,
-        explanation: "α(n) is the inverse Ackermann function, which grows extremely slowly. For all practical values of n (even larger than the number of atoms in the universe), α(n) ≤ 5."
-      }
-    ]
-  },
-  {
-    id: 'avl-tree',
-    title: 'AVL Tree',
-    description: 'Strictly height-balanced BST ensuring O(log n) operations through rotations',
-    category: 'Advanced Data Structures',
-    difficulty: 'advanced',
-    timeComplexity: 'O(log n)',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `An AVL Tree is a self-balancing binary search tree where the height difference between left and right subtrees of any node is at most 1.
+        quizQuestions: [
+            {
+                question: "What is the time complexity of Union-Find operations with both path compression and union by rank?",
+                options: ["O(1)", "O(log n)", "O(α(n))", "O(n)"],
+                correctAnswer: 2,
+                explanation: "With both optimizations, Union-Find operations have O(α(n)) time complexity, where α is the inverse Ackermann function, which is effectively constant for all practical purposes."
+            },
+            {
+                question: "What is the purpose of path compression in Union-Find?",
+                options: ["Reduce memory usage", "Flatten tree structure during find operations", "Speed up union operations", "Prevent cycles"],
+                correctAnswer: 1,
+                explanation: "Path compression flattens the tree structure during find operations by making nodes point directly to the root, significantly improving future find operations."
+            },
+            {
+                question: "In union by rank, which tree becomes the subtree of the other?",
+                options: ["Larger tree becomes subtree of smaller", "Smaller tree becomes subtree of larger", "Always the left tree", "Random choice"],
+                correctAnswer: 1,
+                explanation: "In union by rank, the tree with smaller rank (height) becomes a subtree of the tree with larger rank, helping to keep the overall tree height small."
+            },
+            {
+                question: "What is a key application of Union-Find in graph algorithms?",
+                options: ["Shortest path finding", "Topological sorting", "Cycle detection and MST algorithms", "Graph coloring"],
+                correctAnswer: 2,
+                explanation: "Union-Find is crucial for cycle detection in undirected graphs and is used in Kruskal's algorithm for finding Minimum Spanning Trees."
+            },
+            {
+                question: "What does the inverse Ackermann function α(n) represent in Union-Find complexity?",
+                options: ["Worst-case height of trees", "Number of operations", "Extremely slow-growing function", "Space complexity"],
+                correctAnswer: 2,
+                explanation: "α(n) is the inverse Ackermann function, which grows extremely slowly. For all practical values of n (even larger than the number of atoms in the universe), α(n) ≤ 5."
+            }
+        ]
+    },
+    {
+        id: 'avl-tree',
+        title: 'AVL Tree',
+        description: 'Strictly height-balanced BST ensuring O(log n) operations through rotations',
+        category: 'Advanced Data Structures',
+        difficulty: 'advanced',
+        timeComplexity: 'O(log n)',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `An AVL Tree is a self-balancing binary search tree where the height difference between left and right subtrees of any node is at most 1.
 
 What it does: maintains strict height balance through rotations, guaranteeing O(log n) worst-case performance for all operations.
 
 How it works: tracks balance factor for each node, performs single or double rotations when balance factor exceeds ±1 after insertions/deletions.
 
 When to use: guaranteed O(log n) performance needed, frequent lookups with occasional updates, real-time systems requiring predictable performance.`,
-    voiceExplanation: `Think of an AVL Tree like a perfectionist gymnast on a balance beam! Imagine you're coaching a gymnast who is absolutely obsessed with perfect balance - they can't tolerate even the slightest wobble. An AVL Tree is like this gymnast, but for organizing data. Every time you add or remove data (like adding weight to one side), the tree immediately checks: "Am I still perfectly balanced?" If any part becomes more than 1 level taller than its partner, it performs elegant rotations - like a gymnast doing spins to redistribute weight and restore perfect balance. The beauty is in the precision: it never lets any branch get too heavy compared to its sibling. This obsessive balancing means you're guaranteed lightning-fast searches, insertions, and deletions every single time - no worst-case scenarios where one side becomes a long, slow chain. It's like having a self-organizing filing cabinet that automatically rearranges itself to keep everything perfectly accessible, no matter what you add or remove!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of an AVL Tree like a perfectionist gymnast on a balance beam! Imagine you're coaching a gymnast who is absolutely obsessed with perfect balance - they can't tolerate even the slightest wobble. An AVL Tree is like this gymnast, but for organizing data. Every time you add or remove data (like adding weight to one side), the tree immediately checks: "Am I still perfectly balanced?" If any part becomes more than 1 level taller than its partner, it performs elegant rotations - like a gymnast doing spins to redistribute weight and restore perfect balance. The beauty is in the precision: it never lets any branch get too heavy compared to its sibling. This obsessive balancing means you're guaranteed lightning-fast searches, insertions, and deletions every single time - no worst-case scenarios where one side becomes a long, slow chain. It's like having a self-organizing filing cabinet that automatically rearranges itself to keep everything perfectly accessible, no matter what you add or remove!`,
+        realWorldApplications: `**Industry Applications:**
 - **Database Systems**: Index structures, B+ tree alternatives, query optimization
 - **Computer Graphics**: Spatial indexing, collision detection, 3D scene management
 - **Operating Systems**: Process scheduling, memory management, file system indexing
@@ -20053,7 +20062,7 @@ When to use: guaranteed O(log n) performance needed, frequent lookups with occas
 - **Financial Systems**: High-frequency trading, risk management, transaction processing
 - **Scientific Computing**: Computational geometry, simulation data structures
 - **Machine Learning**: Decision trees, feature indexing, model optimization`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Balance Factor**: Height difference between left and right subtrees (-1, 0, or 1)
 2. **Height Balance Property**: |height(left) - height(right)| ≤ 1 for all nodes
 3. **Rotations**: Single (LL, RR) and double (LR, RL) rotations for rebalancing
@@ -20062,7 +20071,7 @@ When to use: guaranteed O(log n) performance needed, frequent lookups with occas
 6. **Height Tracking**: Each node maintains height information for balance calculations
 7. **Rotation Types**: Left rotation, right rotation, left-right, right-left rotations
 8. **Strict Balancing**: More rigid than Red-Black trees but guarantees better worst-case performance`,
-    pseudocode: `**AVL Tree Pseudocode:**
+        pseudocode: `**AVL Tree Pseudocode:**
 
 ALGORITHM GetHeight(node)
 INPUT: node - tree node
@@ -20176,7 +20185,7 @@ BEGIN
     
     RETURN root
 END`,
-    implementationCode: `// Comprehensive AVL Tree Implementation
+        implementationCode: `// Comprehensive AVL Tree Implementation
 
 class AVLNode {
     constructor(key, value = null) {
@@ -20477,7 +20486,7 @@ console.log('Search 35:', avl.search(35) ? 'Found' : 'Not found');
 avl.delete(30);
 console.log('After deleting 30:');
 avl.visualize().forEach(line => console.log(line));`,
-    example: `// Simple AVL Tree Implementation
+        example: `// Simple AVL Tree Implementation
 class SimpleAVLTree {
     constructor() {
         this.root = null;
@@ -20556,7 +20565,7 @@ class SimpleAVLTree {
 const avl = new SimpleAVLTree();
 [10, 20, 30, 40, 50, 25].forEach(key => avl.insert(key));
 console.log('AVL tree created with automatic balancing');`,
-    syntax: `// AVL Tree Pattern
+        syntax: `// AVL Tree Pattern
 class AVLTree {
     insert(key) {
         this.root = this._insert(this.root, key);
@@ -20570,72 +20579,72 @@ class AVLTree {
     rotateLeft(x) { /* RR rotation */ }
     getBalance(node) { return height(left) - height(right); }
 }`,
-    quizQuestions: [
-      {
-        question: "What is the maximum allowed balance factor in an AVL tree?",
-        options: ["0", "1", "2", "log n"],
-        correctAnswer: 1,
-        explanation: "AVL trees maintain the balance factor (height difference between left and right subtrees) within the range [-1, 0, 1]. If it exceeds ±1, rotations are performed to restore balance."
-      },
-      {
-        question: "Which rotation is needed for a Left-Right (LR) imbalance?",
-        options: ["Single left rotation", "Single right rotation", "Left rotation then right rotation", "Right rotation then left rotation"],
-        correctAnswer: 2,
-        explanation: "For LR imbalance, we first perform a left rotation on the left child, then a right rotation on the root. This converts the LR case to LL case, then fixes it."
-      },
-      {
-        question: "What is the worst-case time complexity for search in an AVL tree?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
-        correctAnswer: 1,
-        explanation: "AVL trees guarantee O(log n) worst-case time complexity for all operations (search, insert, delete) due to strict height balancing."
-      },
-      {
-        question: "How does AVL tree height compare to a regular BST in worst case?",
-        options: ["Same height", "AVL is always shorter", "AVL can be taller", "No relationship"],
-        correctAnswer: 1,
-        explanation: "AVL trees maintain height close to log n, while unbalanced BSTs can degrade to O(n) height. AVL trees are always more balanced and shorter in worst case."
-      },
-      {
-        question: "What information does each AVL tree node typically store?",
-        options: ["Only key and children", "Key, children, and height", "Key, children, and color", "Key, children, and parent"],
-        correctAnswer: 1,
-        explanation: "AVL tree nodes store key, left/right children pointers, and height information. Height is needed to efficiently calculate balance factors during operations."
-      }
-    ]
-  },
-  {
-    id: 'red-black-tree',
-    title: 'Red-Black Tree',
-    description: 'Balanced BST using node colors and rotation rules - used in many standard libraries',
-    category: 'Advanced Data Structures',
-    difficulty: 'advanced',
-    timeComplexity: 'O(log n)',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `A Red-Black Tree is a self-balancing binary search tree where each node has a color (red or black) and follows specific coloring rules to maintain balance.
+        quizQuestions: [
+            {
+                question: "What is the maximum allowed balance factor in an AVL tree?",
+                options: ["0", "1", "2", "log n"],
+                correctAnswer: 1,
+                explanation: "AVL trees maintain the balance factor (height difference between left and right subtrees) within the range [-1, 0, 1]. If it exceeds ±1, rotations are performed to restore balance."
+            },
+            {
+                question: "Which rotation is needed for a Left-Right (LR) imbalance?",
+                options: ["Single left rotation", "Single right rotation", "Left rotation then right rotation", "Right rotation then left rotation"],
+                correctAnswer: 2,
+                explanation: "For LR imbalance, we first perform a left rotation on the left child, then a right rotation on the root. This converts the LR case to LL case, then fixes it."
+            },
+            {
+                question: "What is the worst-case time complexity for search in an AVL tree?",
+                options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+                correctAnswer: 1,
+                explanation: "AVL trees guarantee O(log n) worst-case time complexity for all operations (search, insert, delete) due to strict height balancing."
+            },
+            {
+                question: "How does AVL tree height compare to a regular BST in worst case?",
+                options: ["Same height", "AVL is always shorter", "AVL can be taller", "No relationship"],
+                correctAnswer: 1,
+                explanation: "AVL trees maintain height close to log n, while unbalanced BSTs can degrade to O(n) height. AVL trees are always more balanced and shorter in worst case."
+            },
+            {
+                question: "What information does each AVL tree node typically store?",
+                options: ["Only key and children", "Key, children, and height", "Key, children, and color", "Key, children, and parent"],
+                correctAnswer: 1,
+                explanation: "AVL tree nodes store key, left/right children pointers, and height information. Height is needed to efficiently calculate balance factors during operations."
+            }
+        ]
+    },
+    {
+        id: 'red-black-tree',
+        title: 'Red-Black Tree',
+        description: 'Balanced BST using node colors and rotation rules - used in many standard libraries',
+        category: 'Advanced Data Structures',
+        difficulty: 'advanced',
+        timeComplexity: 'O(log n)',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `A Red-Black Tree is a self-balancing binary search tree where each node has a color (red or black) and follows specific coloring rules to maintain balance.
 
 What it does: maintains approximate balance using color properties and rotations, ensuring O(log n) operations with fewer rotations than AVL trees.
 
 How it works: enforces red-black properties through coloring rules, uses rotations and recoloring during insertions and deletions to maintain balance.
 
 When to use: frequent insertions/deletions, standard library implementations, when balance maintenance cost should be minimized, general-purpose balanced BST.`,
-    voiceExplanation: `Think of Red-Black Trees like traffic lights! Each intersection (node) has a red or black light. The rules are simple: no two red lights can be adjacent, and every path from downtown to suburbs passes through the same number of red lights. This creates natural balance with fewer adjustments than AVL trees.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of Red-Black Trees like traffic lights! Each intersection (node) has a red or black light. The rules are simple: no two red lights can be adjacent, and every path from downtown to suburbs passes through the same number of red lights. This creates natural balance with fewer adjustments than AVL trees.`,
+        realWorldApplications: `**Industry Applications:**
 - **Standard Libraries**: C++ std::map, Java TreeMap, .NET SortedDictionary
 - **Database Systems**: MySQL indexing, PostgreSQL B-trees
 - **Operating Systems**: Linux process scheduling, memory management
 - **Compilers**: Symbol tables, syntax trees
 - **Game Development**: Scene graphs, spatial indexing`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Node Coloring**: Red or black nodes with specific rules
 2. **Red-Black Properties**: No adjacent red nodes, equal black height
 3. **Rotations**: Left/right rotations for rebalancing
 4. **Insertion Fixup**: Restore properties after insertion
 5. **Deletion Fixup**: Complex rebalancing after deletion`,
-    pseudocode: `**Red-Black Tree Insert:**
+        pseudocode: `**Red-Black Tree Insert:**
 1. Standard BST insertion with RED color
 2. Fix violations using rotations and recoloring
 3. Ensure root is BLACK`,
-    implementationCode: `class RBNode {
+        implementationCode: `class RBNode {
     constructor(key) {
         this.key = key;
         this.color = 'RED';
@@ -20682,10 +20691,10 @@ class RedBlackTree {
         this.root.color = 'BLACK';
     }
 }`,
-    example: `const rbt = new RedBlackTree();
+        example: `const rbt = new RedBlackTree();
 [10, 5, 15, 3, 7].forEach(key => rbt.insert(key));
 console.log('Balanced red-black tree created');`,
-    syntax: `// Red-Black Tree Pattern
+        syntax: `// Red-Black Tree Pattern
 class RedBlackTree {
     insert(key) {
         // 1. BST insertion with RED color
@@ -20693,56 +20702,56 @@ class RedBlackTree {
         // 3. Maintain red-black properties
     }
 }`,
-    quizQuestions: [
-      {
-        question: "What is the key property that differentiates Red-Black trees from other BSTs?",
-        options: ["Height balancing", "Node coloring with specific rules", "Rotation frequency", "Memory usage"],
-        correctAnswer: 1,
-        explanation: "Red-Black trees use node coloring (red/black) with specific rules: no adjacent red nodes and equal black height on all paths."
-      },
-      {
-        question: "Why do Red-Black trees perform fewer rotations than AVL trees?",
-        options: ["They're unbalanced", "Less strict balancing rules", "Different insertion method", "No rotations needed"],
-        correctAnswer: 1,
-        explanation: "Red-Black trees have less strict balancing requirements than AVL trees, allowing some imbalance but guaranteeing no path is more than twice as long as another."
-      },
-      {
-        question: "Which standard libraries commonly use Red-Black trees?",
-        options: ["Only academic implementations", "C++ std::map and Java TreeMap", "Database systems only", "Graphics libraries"],
-        correctAnswer: 1,
-        explanation: "Red-Black trees are widely used in standard libraries like C++ std::map/set and Java TreeMap/TreeSet due to their efficient insertion/deletion performance."
-      }
-    ]
-  },
-  {
-    id: 'b-tree',
-    title: 'B-Tree',
-    description: 'Multi-way search tree optimized for disk storage and database indexing',
-    category: 'Advanced Data Structures',
-    difficulty: 'advanced',
-    timeComplexity: 'O(log n)',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `A B-Tree is a self-balancing multi-way search tree optimized for systems that read and write large blocks of data, commonly used in databases and file systems.
+        quizQuestions: [
+            {
+                question: "What is the key property that differentiates Red-Black trees from other BSTs?",
+                options: ["Height balancing", "Node coloring with specific rules", "Rotation frequency", "Memory usage"],
+                correctAnswer: 1,
+                explanation: "Red-Black trees use node coloring (red/black) with specific rules: no adjacent red nodes and equal black height on all paths."
+            },
+            {
+                question: "Why do Red-Black trees perform fewer rotations than AVL trees?",
+                options: ["They're unbalanced", "Less strict balancing rules", "Different insertion method", "No rotations needed"],
+                correctAnswer: 1,
+                explanation: "Red-Black trees have less strict balancing requirements than AVL trees, allowing some imbalance but guaranteeing no path is more than twice as long as another."
+            },
+            {
+                question: "Which standard libraries commonly use Red-Black trees?",
+                options: ["Only academic implementations", "C++ std::map and Java TreeMap", "Database systems only", "Graphics libraries"],
+                correctAnswer: 1,
+                explanation: "Red-Black trees are widely used in standard libraries like C++ std::map/set and Java TreeMap/TreeSet due to their efficient insertion/deletion performance."
+            }
+        ]
+    },
+    {
+        id: 'b-tree',
+        title: 'B-Tree',
+        description: 'Multi-way search tree optimized for disk storage and database indexing',
+        category: 'Advanced Data Structures',
+        difficulty: 'advanced',
+        timeComplexity: 'O(log n)',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `A B-Tree is a self-balancing multi-way search tree optimized for systems that read and write large blocks of data, commonly used in databases and file systems.
 
 What it does: maintains sorted data in multi-way tree structure optimized for disk I/O, minimizing expensive disk accesses through high branching factor.
 
 How it works: stores multiple keys per node, maintains balance through splitting and merging nodes, keeps all leaves at same level.
 
 When to use: database indexing, file systems, external storage systems, when minimizing disk I/O is critical, large datasets that don't fit in memory.`,
-    voiceExplanation: `Think of B-Trees like a super-efficient library system! Instead of storing one book per shelf (like binary trees), each shelf holds multiple books sorted alphabetically. When you need more space, you split the shelf in half and promote the middle book to the upper level. This minimizes trips between floors (disk reads) - perfect for databases where each "floor visit" is expensive!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of B-Trees like a super-efficient library system! Instead of storing one book per shelf (like binary trees), each shelf holds multiple books sorted alphabetically. When you need more space, you split the shelf in half and promote the middle book to the upper level. This minimizes trips between floors (disk reads) - perfect for databases where each "floor visit" is expensive!`,
+        realWorldApplications: `**Industry Applications:**
 - **Database Systems**: MySQL InnoDB, PostgreSQL indexes, Oracle B+ trees
 - **File Systems**: NTFS, ext4, HFS+ directory structures
 - **Storage Systems**: SSDs, hard drives, distributed databases
 - **Search Engines**: Index structures, document retrieval
 - **Big Data**: Hadoop, Cassandra, MongoDB indexing`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Multi-way Nodes**: Each node contains multiple keys and children
 2. **Balanced Height**: All leaves at the same level
 3. **Node Splitting**: Split full nodes during insertion
 4. **Node Merging**: Combine sparse nodes during deletion
 5. **Disk Optimization**: Minimize expensive disk I/O operations`,
-    pseudocode: `**B-Tree Operations:**
+        pseudocode: `**B-Tree Operations:**
 INSERT(key):
 1. Find leaf node for insertion
 2. If leaf not full, insert key
@@ -20754,7 +20763,7 @@ SEARCH(key):
 2. Binary search within node
 3. Follow appropriate child pointer
 4. Repeat until key found or leaf reached`,
-    implementationCode: `class BTreeNode {
+        implementationCode: `class BTreeNode {
     constructor(degree, isLeaf = false) {
         this.degree = degree;
         this.keys = [];
@@ -20846,10 +20855,10 @@ class BTree {
         parent.children.splice(index + 1, 0, newNode);
     }
 }`,
-    example: `const btree = new BTree(3); // Degree 3 B-Tree
+        example: `const btree = new BTree(3); // Degree 3 B-Tree
 [10, 20, 5, 6, 12, 30, 7, 17].forEach(key => btree.insert(key));
 console.log('B-Tree optimized for disk storage');`,
-    syntax: `// B-Tree Pattern
+        syntax: `// B-Tree Pattern
 class BTree {
     insert(key) {
         // 1. Find insertion point
@@ -20857,56 +20866,56 @@ class BTree {
         // 3. Maintain balance
     }
 }`,
-    quizQuestions: [
-      {
-        question: "What is the main advantage of B-Trees over binary search trees?",
-        options: ["Faster search", "Multiple keys per node reducing disk I/O", "Less memory usage", "Simpler implementation"],
-        correctAnswer: 1,
-        explanation: "B-Trees store multiple keys per node, which reduces the number of disk reads needed - crucial for database and file system performance."
-      },
-      {
-        question: "When does a B-Tree node split?",
-        options: ["When it's half full", "When it reaches maximum capacity", "Randomly", "Never"],
-        correctAnswer: 1,
-        explanation: "B-Tree nodes split when they reach maximum capacity (2*degree-1 keys), promoting the middle key to the parent level."
-      },
-      {
-        question: "Why are B-Trees particularly suitable for databases?",
-        options: ["They use less memory", "They minimize expensive disk I/O operations", "They're easier to implement", "They support only integers"],
-        correctAnswer: 1,
-        explanation: "B-Trees are designed to minimize disk I/O by storing multiple keys per node, making them ideal for database systems where disk access is the bottleneck."
-      }
-    ]
-  },
-  {
-    id: 'splay-tree',
-    title: 'Splay Tree',
-    description: 'Self-optimizing BST that moves frequently accessed nodes to the root',
-    category: 'Advanced Data Structures',
-    difficulty: 'advanced',
-    timeComplexity: 'O(log n) amortized',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `A Splay Tree is a self-adjusting binary search tree that moves recently accessed elements to the root through splaying operations.
+        quizQuestions: [
+            {
+                question: "What is the main advantage of B-Trees over binary search trees?",
+                options: ["Faster search", "Multiple keys per node reducing disk I/O", "Less memory usage", "Simpler implementation"],
+                correctAnswer: 1,
+                explanation: "B-Trees store multiple keys per node, which reduces the number of disk reads needed - crucial for database and file system performance."
+            },
+            {
+                question: "When does a B-Tree node split?",
+                options: ["When it's half full", "When it reaches maximum capacity", "Randomly", "Never"],
+                correctAnswer: 1,
+                explanation: "B-Tree nodes split when they reach maximum capacity (2*degree-1 keys), promoting the middle key to the parent level."
+            },
+            {
+                question: "Why are B-Trees particularly suitable for databases?",
+                options: ["They use less memory", "They minimize expensive disk I/O operations", "They're easier to implement", "They support only integers"],
+                correctAnswer: 1,
+                explanation: "B-Trees are designed to minimize disk I/O by storing multiple keys per node, making them ideal for database systems where disk access is the bottleneck."
+            }
+        ]
+    },
+    {
+        id: 'splay-tree',
+        title: 'Splay Tree',
+        description: 'Self-optimizing BST that moves frequently accessed nodes to the root',
+        category: 'Advanced Data Structures',
+        difficulty: 'advanced',
+        timeComplexity: 'O(log n) amortized',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `A Splay Tree is a self-adjusting binary search tree that moves recently accessed elements to the root through splaying operations.
 
 What it does: optimizes for locality of reference by moving accessed nodes to root, providing excellent performance for non-uniform access patterns.
 
 How it works: performs splay operation after each access, uses rotations to move target node to root, naturally adapts to access patterns.
 
 When to use: temporal locality in access patterns, caching applications, when recently accessed items likely to be accessed again, simple implementation preferred.`,
-    voiceExplanation: `Think of Splay Trees like a smart bookshelf that automatically reorganizes itself! Every time you grab a book, the shelf magically moves that book to eye level (the root) for easy access next time. If you're reading a series, the current book stays at the top. This "splaying" makes frequently accessed items super fast to find - perfect for caches and systems with predictable access patterns!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of Splay Trees like a smart bookshelf that automatically reorganizes itself! Every time you grab a book, the shelf magically moves that book to eye level (the root) for easy access next time. If you're reading a series, the current book stays at the top. This "splaying" makes frequently accessed items super fast to find - perfect for caches and systems with predictable access patterns!`,
+        realWorldApplications: `**Industry Applications:**
 - **Caching Systems**: LRU caches, web browsers, memory management
 - **Compilers**: Symbol tables with locality, parser optimization
 - **Database Systems**: Buffer pools, query optimization
 - **Operating Systems**: Page replacement, file system caches
 - **Network Systems**: Routing caches, DNS lookups`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Splaying Operation**: Move accessed node to root via rotations
 2. **Temporal Locality**: Recently accessed items likely accessed again
 3. **Self-Optimization**: Tree adapts to access patterns automatically
 4. **Amortized Analysis**: Average performance over sequence of operations
 5. **Simple Implementation**: No balance factors or colors needed`,
-    pseudocode: `**Splay Tree Operations:**
+        pseudocode: `**Splay Tree Operations:**
 SPLAY(node):
 1. While node is not root:
    - Perform zig, zig-zig, or zig-zag rotation
@@ -20921,7 +20930,7 @@ SEARCH(key):
 INSERT(key):
 1. Standard BST insertion
 2. Splay the new node to root`,
-    implementationCode: `class SplayNode {
+        implementationCode: `class SplayNode {
     constructor(key, value = null) {
         this.key = key;
         this.value = value;
@@ -21102,14 +21111,14 @@ class SplayTree {
         }
     }
 }`,
-    example: `const splay = new SplayTree();
+        example: `const splay = new SplayTree();
 [10, 5, 15, 3, 7, 12, 18].forEach(key => splay.insert(key));
 
 // Accessing 7 multiple times - it stays near root
 splay.search(7);
 splay.search(7);
 console.log('Splay tree adapts to access patterns');`,
-    syntax: `// Splay Tree Pattern
+        syntax: `// Splay Tree Pattern
 class SplayTree {
     search(key) {
         // 1. Standard BST search
@@ -21117,46 +21126,46 @@ class SplayTree {
         // 3. Return result
     }
 }`,
-    quizQuestions: [
-      {
-        question: "What happens when you access a node in a Splay Tree?",
-        options: ["Nothing changes", "Node moves to root via splaying", "Tree rebalances completely", "Node gets deleted"],
-        correctAnswer: 1,
-        explanation: "Splay Trees move the accessed node to the root through a series of rotations called splaying, optimizing for future access."
-      },
-      {
-        question: "What type of applications benefit most from Splay Trees?",
-        options: ["Random access patterns", "Applications with temporal locality", "Write-heavy workloads", "Memory-constrained systems"],
-        correctAnswer: 1,
-        explanation: "Splay Trees excel when there's temporal locality - recently accessed items are likely to be accessed again soon."
-      },
-      {
-        question: "What is the time complexity of Splay Tree operations?",
-        options: ["O(1)", "O(log n) worst case", "O(log n) amortized", "O(n)"],
-        correctAnswer: 2,
-        explanation: "Splay Tree operations have O(log n) amortized time complexity, meaning the average over a sequence of operations is logarithmic."
-      }
-    ]
-  },
+        quizQuestions: [
+            {
+                question: "What happens when you access a node in a Splay Tree?",
+                options: ["Nothing changes", "Node moves to root via splaying", "Tree rebalances completely", "Node gets deleted"],
+                correctAnswer: 1,
+                explanation: "Splay Trees move the accessed node to the root through a series of rotations called splaying, optimizing for future access."
+            },
+            {
+                question: "What type of applications benefit most from Splay Trees?",
+                options: ["Random access patterns", "Applications with temporal locality", "Write-heavy workloads", "Memory-constrained systems"],
+                correctAnswer: 1,
+                explanation: "Splay Trees excel when there's temporal locality - recently accessed items are likely to be accessed again soon."
+            },
+            {
+                question: "What is the time complexity of Splay Tree operations?",
+                options: ["O(1)", "O(log n) worst case", "O(log n) amortized", "O(n)"],
+                correctAnswer: 2,
+                explanation: "Splay Tree operations have O(log n) amortized time complexity, meaning the average over a sequence of operations is logarithmic."
+            }
+        ]
+    },
 
-  // Two Pointers
-  {
-    id: 'two-pointers-intro',
-    title: 'Two Pointers Technique',
-    description: 'Master the fundamental two pointers pattern for array and string problems',
-    category: 'Two Pointers',
-    difficulty: 'beginner',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `The Two Pointers technique is a powerful algorithmic pattern that uses two pointers to traverse data structures, typically arrays or strings, from different positions. This technique is particularly effective for problems involving sorted arrays, palindromes, or finding pairs/triplets.
+    // Two Pointers
+    {
+        id: 'two-pointers-intro',
+        title: 'Two Pointers Technique',
+        description: 'Master the fundamental two pointers pattern for array and string problems',
+        category: 'Two Pointers',
+        difficulty: 'beginner',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `The Two Pointers technique is a powerful algorithmic pattern that uses two pointers to traverse data structures, typically arrays or strings, from different positions. This technique is particularly effective for problems involving sorted arrays, palindromes, or finding pairs/triplets.
 
 What it does: uses two pointers moving in coordinated patterns to solve problems efficiently without nested loops.
 
 How it works: pointers start at different positions and move based on problem conditions, eliminating redundant comparisons.
 
 When to use: sorted arrays, palindrome checking, finding pairs/triplets, cycle detection, merging operations.`,
-    voiceExplanation: `Think of Two Pointers like a synchronized dance between two partners! Imagine you're at opposite ends of a dance floor (array) and need to meet in the middle to solve a problem. One dancer starts from the left, another from the right, and they move toward each other following specific choreography rules. Sometimes they move at the same speed, sometimes one waits for the other, but they're always coordinated! This elegant dance eliminates the need for clunky nested loops - instead of checking every possible pair individually (which would be like having everyone dance with everyone), our two dancers intelligently navigate the floor, making smart decisions about where to step next based on what they find. It's like having GPS for algorithm efficiency!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of Two Pointers like a synchronized dance between two partners! Imagine you're at opposite ends of a dance floor (array) and need to meet in the middle to solve a problem. One dancer starts from the left, another from the right, and they move toward each other following specific choreography rules. Sometimes they move at the same speed, sometimes one waits for the other, but they're always coordinated! This elegant dance eliminates the need for clunky nested loops - instead of checking every possible pair individually (which would be like having everyone dance with everyone), our two dancers intelligently navigate the floor, making smart decisions about where to step next based on what they find. It's like having GPS for algorithm efficiency!`,
+        realWorldApplications: `**Industry Applications:**
 - **Database Systems**: Query optimization, index scanning, range queries
 - **Search Engines**: Document similarity, duplicate detection, ranking algorithms
 - **Social Networks**: Friend suggestions, mutual connections, relationship analysis
@@ -21167,7 +21176,7 @@ When to use: sorted arrays, palindrome checking, finding pairs/triplets, cycle d
 - **Network Security**: Intrusion detection, pattern matching, anomaly detection
 - **Image Processing**: Feature matching, object detection, similarity analysis
 - **Bioinformatics**: DNA sequence alignment, protein folding, genetic analysis`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Pointer Positioning**: Strategic placement of pointers based on problem requirements
 2. **Movement Patterns**: Coordinated pointer movement (converging, same direction, different speeds)
 3. **Termination Conditions**: When to stop the algorithm (pointers meet, cross, or reach boundaries)
@@ -21176,7 +21185,7 @@ When to use: sorted arrays, palindrome checking, finding pairs/triplets, cycle d
 6. **Sorted Array Advantage**: Leveraging sorted properties for efficient pointer movement
 7. **Multiple Variants**: Different patterns for different problem types (two sum, three sum, palindromes)
 8. **Time Complexity**: Linear time O(n) instead of quadratic O(n²) nested loops`,
-    pseudocode: `**Two Pointers Algorithm Patterns:**
+        pseudocode: `**Two Pointers Algorithm Patterns:**
 
 ALGORITHM TwoPointersConverging(array, target)
 INPUT: sorted array, target value
@@ -21235,7 +21244,7 @@ BEGIN
     
     RETURN true
 END`,
-    implementationCode: `// Comprehensive Two Pointers Implementation
+        implementationCode: `// Comprehensive Two Pointers Implementation
 
 class TwoPointersToolkit {
     // Pattern 1: Converging Two Pointers (for sorted arrays)
@@ -21454,39 +21463,39 @@ console.log(\`Max water area for heights [\${heights}]:\`,
 
 // Run all demonstrations
 TwoPointersToolkit.demonstratePatterns();`,
-    quizQuestions: [
-      {
-        question: "What is the main advantage of using Two Pointers technique over nested loops?",
-        options: ["Uses less memory", "Reduces time complexity from O(n²) to O(n)", "Easier to implement", "Works with unsorted arrays"],
-        correctAnswer: 1,
-        explanation: "Two Pointers technique reduces time complexity from O(n²) to O(n) by eliminating the need for nested loops, making algorithms significantly more efficient."
-      },
-      {
-        question: "In the converging two pointers pattern, when do you move the left pointer?",
-        options: ["Always move left first", "When current sum is less than target", "When current sum equals target", "Randomly"],
-        correctAnswer: 1,
-        explanation: "In converging two pointers (like Two Sum), you move the left pointer when the current sum is less than the target, as you need a larger value to reach the target."
-      },
-      {
-        question: "Which type of arrays work best with the converging two pointers technique?",
-        options: ["Unsorted arrays", "Sorted arrays", "Arrays with duplicates only", "Empty arrays"],
-        correctAnswer: 1,
-        explanation: "Sorted arrays work best with converging two pointers because the sorted property allows you to make intelligent decisions about which pointer to move based on the current sum."
-      },
-      {
-        question: "What is the space complexity of most two pointers algorithms?",
-        options: ["O(n)", "O(log n)", "O(1)", "O(n²)"],
-        correctAnswer: 2,
-        explanation: "Most two pointers algorithms achieve O(1) space complexity because they only use a constant amount of extra space (the two pointers), regardless of input size."
-      },
-      {
-        question: "In the palindrome checking pattern, when do the pointers stop moving?",
-        options: ["When they find a mismatch", "When left pointer >= right pointer", "After n iterations", "When they reach the middle"],
-        correctAnswer: 1,
-        explanation: "In palindrome checking, pointers stop when left >= right, meaning they've either met in the middle or crossed over, indicating the entire string has been checked."
-      }
-    ],
-    example: `// Two Sum in Sorted Array
+        quizQuestions: [
+            {
+                question: "What is the main advantage of using Two Pointers technique over nested loops?",
+                options: ["Uses less memory", "Reduces time complexity from O(n²) to O(n)", "Easier to implement", "Works with unsorted arrays"],
+                correctAnswer: 1,
+                explanation: "Two Pointers technique reduces time complexity from O(n²) to O(n) by eliminating the need for nested loops, making algorithms significantly more efficient."
+            },
+            {
+                question: "In the converging two pointers pattern, when do you move the left pointer?",
+                options: ["Always move left first", "When current sum is less than target", "When current sum equals target", "Randomly"],
+                correctAnswer: 1,
+                explanation: "In converging two pointers (like Two Sum), you move the left pointer when the current sum is less than the target, as you need a larger value to reach the target."
+            },
+            {
+                question: "Which type of arrays work best with the converging two pointers technique?",
+                options: ["Unsorted arrays", "Sorted arrays", "Arrays with duplicates only", "Empty arrays"],
+                correctAnswer: 1,
+                explanation: "Sorted arrays work best with converging two pointers because the sorted property allows you to make intelligent decisions about which pointer to move based on the current sum."
+            },
+            {
+                question: "What is the space complexity of most two pointers algorithms?",
+                options: ["O(n)", "O(log n)", "O(1)", "O(n²)"],
+                correctAnswer: 2,
+                explanation: "Most two pointers algorithms achieve O(1) space complexity because they only use a constant amount of extra space (the two pointers), regardless of input size."
+            },
+            {
+                question: "In the palindrome checking pattern, when do the pointers stop moving?",
+                options: ["When they find a mismatch", "When left pointer >= right pointer", "After n iterations", "When they reach the middle"],
+                correctAnswer: 1,
+                explanation: "In palindrome checking, pointers stop when left >= right, meaning they've either met in the middle or crossed over, indicating the entire string has been checked."
+            }
+        ],
+        example: `// Two Sum in Sorted Array
 function twoSum(nums, target) {
     let left = 0, right = nums.length - 1;
     
@@ -21509,7 +21518,7 @@ function twoSum(nums, target) {
 // Step 1: left=0(2), right=3(15), sum=17 > 9, right--
 // Step 2: left=0(2), right=2(11), sum=13 > 9, right--  
 // Step 3: left=0(2), right=1(7), sum=9 = 9, found!`,
-    syntax: `**Two Pointers Patterns:**
+        syntax: `**Two Pointers Patterns:**
 
 1. **Opposite Direction (Converging):**
    \`\`\`javascript
@@ -21537,24 +21546,24 @@ function twoSum(nums, target) {
        fast = fast.next.next;
    }
    \`\`\``
-  },
-  {
-    id: 'two-sum',
-    title: 'Two Sum Problem',
-    description: 'Find two numbers that add up to target using two pointers approach',
-    category: 'Two Pointers',
-    difficulty: 'beginner',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `The Two Sum problem is a classic example of the two pointers technique. Given a sorted array and a target sum, find two numbers that add up to the target.
+    },
+    {
+        id: 'two-sum',
+        title: 'Two Sum Problem',
+        description: 'Find two numbers that add up to target using two pointers approach',
+        category: 'Two Pointers',
+        difficulty: 'beginner',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `The Two Sum problem is a classic example of the two pointers technique. Given a sorted array and a target sum, find two numbers that add up to the target.
 
 What it does: finds two numbers in a sorted array that sum to a specific target value.
 
 How it works: uses two pointers starting from opposite ends, moving them inward based on sum comparison with target.
 
 When to use: sorted arrays, finding pairs with specific sum, avoiding O(n²) brute force approach.`,
-    voiceExplanation: `Think of the Two Sum problem like two people standing at opposite ends of a line of numbers, trying to find the perfect pair that adds up to your target. One person starts at the smallest number (left end), and another starts at the largest number (right end). They work together like a team - if their combined numbers are too small, the left person moves to a bigger number. If their sum is too big, the right person moves to a smaller number. They keep moving toward each other until they find the exact pair that adds up to the target, or until they meet in the middle and realize no such pair exists. This dance-like coordination is much smarter than checking every possible pair individually!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of the Two Sum problem like two people standing at opposite ends of a line of numbers, trying to find the perfect pair that adds up to your target. One person starts at the smallest number (left end), and another starts at the largest number (right end). They work together like a team - if their combined numbers are too small, the left person moves to a bigger number. If their sum is too big, the right person moves to a smaller number. They keep moving toward each other until they find the exact pair that adds up to the target, or until they meet in the middle and realize no such pair exists. This dance-like coordination is much smarter than checking every possible pair individually!`,
+        realWorldApplications: `**Industry Applications:**
 - **Financial Systems**: Finding transactions that sum to specific amounts, budget balancing
 - **E-commerce**: Product bundling, discount calculations, price matching
 - **Gaming**: Resource allocation, inventory management, achievement systems
@@ -21565,7 +21574,7 @@ When to use: sorted arrays, finding pairs with specific sum, avoiding O(n²) bru
 - **Social Networks**: Friend matching, compatibility scores, recommendation systems
 - **Quality Control**: Error detection, anomaly identification, threshold monitoring
 - **Scientific Computing**: Experimental data analysis, hypothesis testing, model validation`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Two Pointers Pattern**: Using left and right pointers moving toward each other
 2. **Sorted Array Requirement**: Algorithm only works on sorted data
 3. **Sum Comparison Logic**: Moving pointers based on current sum vs target
@@ -21574,7 +21583,7 @@ When to use: sorted arrays, finding pairs with specific sum, avoiding O(n²) bru
 6. **Early Termination**: Stop as soon as valid pair is found
 7. **Edge Cases**: Empty arrays, no valid pairs, duplicate values
 8. **Index vs Value**: Returning indices vs actual values based on requirements`,
-    pseudocode: `**Two Sum Algorithm Pseudocode:**
+        pseudocode: `**Two Sum Algorithm Pseudocode:**
 
 ALGORITHM TwoSumSorted(array, target)
 INPUT: sorted array of integers, target sum value
@@ -21616,7 +21625,7 @@ BEGIN
     
     RETURN []  // No valid pair found
 END`,
-    implementationCode: `// Comprehensive Two Sum Implementation
+        implementationCode: `// Comprehensive Two Sum Implementation
 
 class TwoSumSolver {
     // Two Sum for sorted array - O(n) time, O(1) space
@@ -21785,39 +21794,39 @@ console.log('All pairs that sum to 4:',
 // Closest sum
 console.log('Closest sum to 10:', 
             TwoSumSolver.twoSumClosest([1, 3, 4, 7, 10], 10)); // indices of 3 and 7`,
-    quizQuestions: [
-      {
-        question: "What is the time complexity of the two pointers approach for Two Sum on a sorted array?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
-        correctAnswer: 2,
-        explanation: "The two pointers approach visits each element at most once, making it O(n) time complexity."
-      },
-      {
-        question: "Why does the Two Sum two pointers approach only work on sorted arrays?",
-        options: ["It doesn't work on sorted arrays", "Sorting makes it faster", "We need predictable movement direction", "It reduces space complexity"],
-        correctAnswer: 2,
-        explanation: "We need sorted arrays to make predictable decisions about which pointer to move based on whether the current sum is too large or too small."
-      },
-      {
-        question: "In the two pointers Two Sum approach, when do we move the left pointer?",
-        options: ["When sum equals target", "When sum is greater than target", "When sum is less than target", "Always move left first"],
-        correctAnswer: 2,
-        explanation: "We move the left pointer (to a larger value) when the current sum is less than the target, as we need to increase the sum."
-      },
-      {
-        question: "What is the space complexity of the two pointers Two Sum approach?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
-        correctAnswer: 0,
-        explanation: "The two pointers approach uses only constant extra space for the left and right pointer variables, making it O(1) space complexity."
-      },
-      {
-        question: "For unsorted arrays, what data structure is commonly used for Two Sum in O(n) time?",
-        options: ["Array", "Stack", "Hash Map", "Queue"],
-        correctAnswer: 2,
-        explanation: "Hash Map allows O(1) lookup of complements, enabling O(n) time complexity for unsorted arrays by storing seen values and their indices."
-      }
-    ],
-    example: `function twoSum(numbers, target) {
+        quizQuestions: [
+            {
+                question: "What is the time complexity of the two pointers approach for Two Sum on a sorted array?",
+                options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+                correctAnswer: 2,
+                explanation: "The two pointers approach visits each element at most once, making it O(n) time complexity."
+            },
+            {
+                question: "Why does the Two Sum two pointers approach only work on sorted arrays?",
+                options: ["It doesn't work on sorted arrays", "Sorting makes it faster", "We need predictable movement direction", "It reduces space complexity"],
+                correctAnswer: 2,
+                explanation: "We need sorted arrays to make predictable decisions about which pointer to move based on whether the current sum is too large or too small."
+            },
+            {
+                question: "In the two pointers Two Sum approach, when do we move the left pointer?",
+                options: ["When sum equals target", "When sum is greater than target", "When sum is less than target", "Always move left first"],
+                correctAnswer: 2,
+                explanation: "We move the left pointer (to a larger value) when the current sum is less than the target, as we need to increase the sum."
+            },
+            {
+                question: "What is the space complexity of the two pointers Two Sum approach?",
+                options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+                correctAnswer: 0,
+                explanation: "The two pointers approach uses only constant extra space for the left and right pointer variables, making it O(1) space complexity."
+            },
+            {
+                question: "For unsorted arrays, what data structure is commonly used for Two Sum in O(n) time?",
+                options: ["Array", "Stack", "Hash Map", "Queue"],
+                correctAnswer: 2,
+                explanation: "Hash Map allows O(1) lookup of complements, enabling O(n) time complexity for unsorted arrays by storing seen values and their indices."
+            }
+        ],
+        example: `function twoSum(numbers, target) {
     let left = 0, right = numbers.length - 1;
     
     while (left < right) {
@@ -21831,24 +21840,24 @@ console.log('Closest sum to 10:',
 
 // Example: [2, 7, 11, 15], target = 9
 // left=0, right=1: sum = 2+7 = 9 Ã¢Å“â€œ`
-  },
-  {
-    id: 'three-sum',
-    title: 'Three Sum Problem',
-    description: 'Find all unique triplets that sum to zero using two pointers technique',
-    category: 'Two Pointers',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(nÃ‚Â²)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `The Three Sum problem extends the two pointers technique to find triplets. Given an array, find all unique triplets that sum to zero (or a target).
+    },
+    {
+        id: 'three-sum',
+        title: 'Three Sum Problem',
+        description: 'Find all unique triplets that sum to zero using two pointers technique',
+        category: 'Two Pointers',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(nÃ‚Â²)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `The Three Sum problem extends the two pointers technique to find triplets. Given an array, find all unique triplets that sum to zero (or a target).
 
 What it does: finds all unique triplets in an array that sum to zero using two pointers technique.
 
 How it works: sorts array, fixes one element, then uses two pointers on remaining elements to find valid triplets.
 
 When to use: triplet sum problems, three-element combinations, extending two-sum solutions, avoiding duplicate results.`,
-    voiceExplanation: `Think of the Three Sum problem like organizing a dinner party where you need exactly three people whose ages add up to zero (or any target). Imagine you have a list of people with different ages, some positive, some negative. First, you'd sort them by age to make things organized. Then, you'd pick one person as the "anchor" and try to find two others whose ages, when combined with the anchor's age, give you exactly zero. Here's the clever part: once you've chosen your anchor person, finding the other two becomes a Two Sum problem! You use two pointers - one starting from the person right after your anchor (younger ages) and another from the oldest person. If the three ages add up to more than zero, you need someone younger, so you move the right pointer. If it's less than zero, you need someone older, so you move the left pointer. The key insight is avoiding duplicates - if you've already considered someone of a particular age as an anchor, skip others with the same age. This transforms a potentially O(n³) brute force approach into an elegant O(n²) solution.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of the Three Sum problem like organizing a dinner party where you need exactly three people whose ages add up to zero (or any target). Imagine you have a list of people with different ages, some positive, some negative. First, you'd sort them by age to make things organized. Then, you'd pick one person as the "anchor" and try to find two others whose ages, when combined with the anchor's age, give you exactly zero. Here's the clever part: once you've chosen your anchor person, finding the other two becomes a Two Sum problem! You use two pointers - one starting from the person right after your anchor (younger ages) and another from the oldest person. If the three ages add up to more than zero, you need someone younger, so you move the right pointer. If it's less than zero, you need someone older, so you move the left pointer. The key insight is avoiding duplicates - if you've already considered someone of a particular age as an anchor, skip others with the same age. This transforms a potentially O(n³) brute force approach into an elegant O(n²) solution.`,
+        realWorldApplications: `**Industry Applications:**
 - **Financial Trading**: Finding three assets that hedge each other (sum to zero risk)
 - **Chemistry**: Balancing chemical equations with three reactants
 - **Resource Allocation**: Distributing three types of resources to achieve balance
@@ -21859,7 +21868,7 @@ When to use: triplet sum problems, three-element combinations, extending two-sum
 - **Manufacturing**: Three-component mixtures achieving target properties
 - **Network Routing**: Three-path routing for load balancing
 - **Machine Learning**: Feature triplet selection for model optimization`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Sorting Prerequisite**: Array must be sorted for two-pointer technique to work
 2. **Anchor Element**: Fix one element, solve Two Sum for remaining elements
 3. **Duplicate Avoidance**: Skip duplicate anchors and pointer values to ensure uniqueness
@@ -21867,7 +21876,7 @@ When to use: triplet sum problems, three-element combinations, extending two-sum
 5. **O(n²) Optimization**: Reduces from O(n³) brute force to efficient solution
 6. **Triple Pointer Management**: Coordinate three pointers (anchor, left, right)
 7. **Boundary Conditions**: Handle edge cases with fewer than 3 elements`,
-    pseudocode: `**Three Sum Algorithm:**
+        pseudocode: `**Three Sum Algorithm:**
 
 ALGORITHM ThreeSum(array, target)
 INPUT: array - array of integers, target - target sum (usually 0)
@@ -21914,7 +21923,7 @@ BEGIN
     
     RETURN result
 END`,
-    implementationCode: `// Comprehensive Three Sum Implementation
+        implementationCode: `// Comprehensive Three Sum Implementation
 
 class ThreeSumSolver {
     // Main three sum algorithm - O(n²) time, O(1) extra space
@@ -22032,39 +22041,39 @@ const nums = [-1, 0, 1, 2, -1, -4];
 console.log(ThreeSumSolver.threeSum(nums)); // [[-1,-1,2],[-1,0,1]]
 console.log(ThreeSumSolver.threeSumClosest(nums, 1)); // 2
 console.log(ThreeSumSolver.countThreeSum(nums)); // 2`,
-    quizQuestions: [
-      {
-        question: "Why must the array be sorted before applying the three sum algorithm?",
-        options: ["To improve time complexity", "To enable two-pointer technique", "To avoid duplicates", "To handle negative numbers"],
-        correctAnswer: 1,
-        explanation: "Sorting enables the two-pointer technique by creating a predictable order where we can move pointers based on sum comparison."
-      },
-      {
-        question: "What is the time complexity of the optimized three sum algorithm?",
-        options: ["O(n)", "O(n²)", "O(n³)", "O(n log n)"],
-        correctAnswer: 1,
-        explanation: "The algorithm has O(n²) time complexity: O(n log n) for sorting + O(n²) for the nested loops with two pointers."
-      },
-      {
-        question: "How do we avoid duplicate triplets in the three sum solution?",
-        options: ["Use a HashSet", "Skip duplicate anchor and pointer values", "Sort the result", "Use three nested loops"],
-        correctAnswer: 1,
-        explanation: "We skip duplicate values for the anchor element and both pointers to ensure unique triplets without extra space."
-      },
-      {
-        question: "When should we move the left pointer in the two-pointer phase?",
-        options: ["When sum is too large", "When sum is too small", "When sum equals target", "Always move left first"],
-        correctAnswer: 1,
-        explanation: "Move the left pointer when the current sum is smaller than the target to increase the sum."
-      },
-      {
-        question: "What is a real-world application of the three sum problem?",
-        options: ["Binary search", "Finding three assets that hedge each other", "Sorting algorithms", "Hash table implementation"],
-        correctAnswer: 1,
-        explanation: "In financial trading, three sum helps find three assets whose combined risk or return equals a target value."
-      }
-    ],
-    syntax: `// Three Sum Pattern
+        quizQuestions: [
+            {
+                question: "Why must the array be sorted before applying the three sum algorithm?",
+                options: ["To improve time complexity", "To enable two-pointer technique", "To avoid duplicates", "To handle negative numbers"],
+                correctAnswer: 1,
+                explanation: "Sorting enables the two-pointer technique by creating a predictable order where we can move pointers based on sum comparison."
+            },
+            {
+                question: "What is the time complexity of the optimized three sum algorithm?",
+                options: ["O(n)", "O(n²)", "O(n³)", "O(n log n)"],
+                correctAnswer: 1,
+                explanation: "The algorithm has O(n²) time complexity: O(n log n) for sorting + O(n²) for the nested loops with two pointers."
+            },
+            {
+                question: "How do we avoid duplicate triplets in the three sum solution?",
+                options: ["Use a HashSet", "Skip duplicate anchor and pointer values", "Sort the result", "Use three nested loops"],
+                correctAnswer: 1,
+                explanation: "We skip duplicate values for the anchor element and both pointers to ensure unique triplets without extra space."
+            },
+            {
+                question: "When should we move the left pointer in the two-pointer phase?",
+                options: ["When sum is too large", "When sum is too small", "When sum equals target", "Always move left first"],
+                correctAnswer: 1,
+                explanation: "Move the left pointer when the current sum is smaller than the target to increase the sum."
+            },
+            {
+                question: "What is a real-world application of the three sum problem?",
+                options: ["Binary search", "Finding three assets that hedge each other", "Sorting algorithms", "Hash table implementation"],
+                correctAnswer: 1,
+                explanation: "In financial trading, three sum helps find three assets whose combined risk or return equals a target value."
+            }
+        ],
+        syntax: `// Three Sum Pattern
 function threeSum(nums, target = 0) {
     nums.sort((a, b) => a - b);
     const result = [];
@@ -22086,7 +22095,7 @@ function threeSum(nums, target = 0) {
     }
     return result;
 }`,
-    example: `function threeSum(nums) {
+        example: `function threeSum(nums) {
     const result = [];
     nums.sort((a, b) => a - b);
     
@@ -22107,24 +22116,24 @@ function threeSum(nums, target = 0) {
     }
     return result;
 }`
-  },
-  {
-    id: 'container-water',
-    title: 'Container With Most Water',
-    description: 'Find container that holds maximum water using two pointers optimization',
-    category: 'Two Pointers',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `The Container With Most Water problem demonstrates the power of two pointers in optimization problems. Given heights of vertical lines, find two lines that form a container holding the maximum water.
+    },
+    {
+        id: 'container-water',
+        title: 'Container With Most Water',
+        description: 'Find container that holds maximum water using two pointers optimization',
+        category: 'Two Pointers',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `The Container With Most Water problem demonstrates the power of two pointers in optimization problems. Given heights of vertical lines, find two lines that form a container holding the maximum water.
 
 What it does: finds two lines that form a container holding the maximum amount of water using two pointers.
 
 How it works: starts with widest container, then moves the pointer at the shorter line inward to potentially find larger areas.
 
 When to use: optimization problems with two elements, area/volume maximization, two-pointer technique applications.`,
-    voiceExplanation: `Think of the Container With Most Water problem like finding the best swimming pool you can create with a bunch of vertical walls. Imagine you have a row of walls of different heights, and you want to pick two walls to hold the maximum amount of water between them. The water level will be limited by the shorter wall (water would spill over), and the width is the distance between the walls. Here's the brilliant insight: start with the widest possible container (first and last walls). Now, which wall should you move? If you move the taller wall inward, you're guaranteed to get a smaller area because the width decreases and the water level is still limited by the shorter wall. But if you move the shorter wall inward, you might find a taller wall that could hold more water! It's like being a smart architect - you always try to replace the limiting factor (the shorter wall) to potentially improve your design. This greedy approach ensures you never miss the optimal solution while checking each wall only once.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of the Container With Most Water problem like finding the best swimming pool you can create with a bunch of vertical walls. Imagine you have a row of walls of different heights, and you want to pick two walls to hold the maximum amount of water between them. The water level will be limited by the shorter wall (water would spill over), and the width is the distance between the walls. Here's the brilliant insight: start with the widest possible container (first and last walls). Now, which wall should you move? If you move the taller wall inward, you're guaranteed to get a smaller area because the width decreases and the water level is still limited by the shorter wall. But if you move the shorter wall inward, you might find a taller wall that could hold more water! It's like being a smart architect - you always try to replace the limiting factor (the shorter wall) to potentially improve your design. This greedy approach ensures you never miss the optimal solution while checking each wall only once.`,
+        realWorldApplications: `**Industry Applications:**
 - **Civil Engineering**: Designing water reservoirs and retention ponds for maximum capacity
 - **Architecture**: Optimizing building layouts for maximum enclosed area
 - **Manufacturing**: Container design for shipping and storage optimization
@@ -22135,7 +22144,7 @@ When to use: optimization problems with two elements, area/volume maximization, 
 - **Resource Management**: Optimizing warehouse space utilization
 - **Network Design**: Maximizing bandwidth between network nodes
 - **Financial Modeling**: Portfolio optimization for maximum return within constraints`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Greedy Strategy**: Always move the pointer at the shorter line to potentially find better solutions
 2. **Area Calculation**: Area = min(height[left], height[right]) × (right - left)
 3. **Optimal Substructure**: Moving the taller line cannot improve the solution
@@ -22143,7 +22152,7 @@ When to use: optimization problems with two elements, area/volume maximization, 
 5. **Width vs Height Trade-off**: Decreasing width must be compensated by increasing height
 6. **Linear Time Solution**: Each element is visited at most once
 7. **No Backtracking**: Greedy choice ensures we never need to reconsider previous decisions`,
-    pseudocode: `**Container With Most Water Algorithm:**
+        pseudocode: `**Container With Most Water Algorithm:**
 
 ALGORITHM MaxArea(heights)
 INPUT: heights - array of positive integers representing wall heights
@@ -22176,7 +22185,7 @@ BEGIN
     
     RETURN maxArea
 END`,
-    implementationCode: `// Comprehensive Container With Most Water Implementation
+        implementationCode: `// Comprehensive Container With Most Water Implementation
 
 class ContainerSolver {
     // Main algorithm - O(n) time, O(1) space
@@ -22296,39 +22305,39 @@ console.log(ContainerSolver.maxArea(heights)); // 49
 console.log(ContainerSolver.maxAreaWithIndices(heights)); // {area: 49, leftIndex: 1, rightIndex: 8}
 console.log(ContainerSolver.calculateArea(heights, 1, 8)); // 49
 console.log(ContainerSolver.maxHeightContainer(heights)); // 56`,
-    quizQuestions: [
-      {
-        question: "Why do we always move the pointer at the shorter line in the container problem?",
-        options: ["To increase width", "To potentially find a taller line", "To decrease complexity", "To avoid infinite loops"],
-        correctAnswer: 1,
-        explanation: "Moving the shorter line might lead to a taller line, potentially increasing area. Moving the taller line guarantees a smaller or equal area."
-      },
-      {
-        question: "What is the time complexity of the optimal container with most water algorithm?",
-        options: ["O(1)", "O(n)", "O(n²)", "O(n log n)"],
-        correctAnswer: 1,
-        explanation: "The two-pointer approach visits each element at most once, resulting in O(n) time complexity."
-      },
-      {
-        question: "How is the area of a container calculated?",
-        options: ["max(height[left], height[right]) × width", "min(height[left], height[right]) × width", "(height[left] + height[right]) × width", "height[left] × height[right]"],
-        correctAnswer: 1,
-        explanation: "Area is limited by the shorter wall (minimum height) multiplied by the distance between the walls."
-      },
-      {
-        question: "What happens if we start with pointers at positions other than the ends?",
-        options: ["Algorithm still works", "We might miss the optimal solution", "Time complexity increases", "Space complexity increases"],
-        correctAnswer: 1,
-        explanation: "Starting from the ends ensures we consider the widest possible containers first and don't miss any optimal solutions."
-      },
-      {
-        question: "What is a real-world application of the container problem?",
-        options: ["Sorting arrays", "Designing water reservoirs for maximum capacity", "Binary tree traversal", "Hash table implementation"],
-        correctAnswer: 1,
-        explanation: "The container problem directly applies to designing water storage systems, reservoirs, and other capacity optimization problems."
-      }
-    ],
-    syntax: `// Container With Most Water Pattern
+        quizQuestions: [
+            {
+                question: "Why do we always move the pointer at the shorter line in the container problem?",
+                options: ["To increase width", "To potentially find a taller line", "To decrease complexity", "To avoid infinite loops"],
+                correctAnswer: 1,
+                explanation: "Moving the shorter line might lead to a taller line, potentially increasing area. Moving the taller line guarantees a smaller or equal area."
+            },
+            {
+                question: "What is the time complexity of the optimal container with most water algorithm?",
+                options: ["O(1)", "O(n)", "O(n²)", "O(n log n)"],
+                correctAnswer: 1,
+                explanation: "The two-pointer approach visits each element at most once, resulting in O(n) time complexity."
+            },
+            {
+                question: "How is the area of a container calculated?",
+                options: ["max(height[left], height[right]) × width", "min(height[left], height[right]) × width", "(height[left] + height[right]) × width", "height[left] × height[right]"],
+                correctAnswer: 1,
+                explanation: "Area is limited by the shorter wall (minimum height) multiplied by the distance between the walls."
+            },
+            {
+                question: "What happens if we start with pointers at positions other than the ends?",
+                options: ["Algorithm still works", "We might miss the optimal solution", "Time complexity increases", "Space complexity increases"],
+                correctAnswer: 1,
+                explanation: "Starting from the ends ensures we consider the widest possible containers first and don't miss any optimal solutions."
+            },
+            {
+                question: "What is a real-world application of the container problem?",
+                options: ["Sorting arrays", "Designing water reservoirs for maximum capacity", "Binary tree traversal", "Hash table implementation"],
+                correctAnswer: 1,
+                explanation: "The container problem directly applies to designing water storage systems, reservoirs, and other capacity optimization problems."
+            }
+        ],
+        syntax: `// Container With Most Water Pattern
 function maxArea(heights) {
     let left = 0, right = heights.length - 1;
     let maxArea = 0;
@@ -22343,7 +22352,7 @@ function maxArea(heights) {
     
     return maxArea;
 }`,
-    example: `function maxArea(height) {
+        example: `function maxArea(height) {
     let left = 0, right = height.length - 1, maxWater = 0;
     
     while (left < right) {
@@ -22358,24 +22367,24 @@ function maxArea(heights) {
 
 // Example: [1,8,6,2,5,4,8,3,7]
 // Max area = 49 (between heights 8 and 7)`
-  },
-  {
-    id: 'remove-duplicates',
-    title: 'Remove Duplicates from Sorted Array',
-    description: 'Remove duplicates in-place from sorted array using two pointers',
-    category: 'Two Pointers',
-    difficulty: 'beginner',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `This problem showcases the same-direction two pointers technique. We use one pointer to track the position for unique elements and another to scan through the array.
+    },
+    {
+        id: 'remove-duplicates',
+        title: 'Remove Duplicates from Sorted Array',
+        description: 'Remove duplicates in-place from sorted array using two pointers',
+        category: 'Two Pointers',
+        difficulty: 'beginner',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `This problem showcases the same-direction two pointers technique. We use one pointer to track the position for unique elements and another to scan through the array.
 
 What it does: removes duplicate elements from sorted array in-place while maintaining relative order of unique elements.
 
 How it works: uses slow pointer to track unique element position, fast pointer scans array, overwrites duplicates with unique elements.
 
 When to use: in-place array modification needed, sorted array deduplication, memory-constrained environments, two pointers pattern practice.`,
-    voiceExplanation: `Think of removing duplicates like organizing a bookshelf where you want only one copy of each book. Imagine you have a sorted shelf with multiple copies of the same books scattered throughout. You use two bookmarks: a "slow" bookmark that points to where the next unique book should go, and a "fast" bookmark that scans through all the books. The fast bookmark moves through every book on the shelf. When it finds a book that's different from the one at the slow bookmark, you know you've found a new unique book! You then move the slow bookmark forward and place this new unique book there. It's like having a librarian (fast pointer) who scans the entire shelf and a organizer (slow pointer) who arranges unique books in the front section. By the end, all unique books are neatly arranged at the beginning of the shelf, and you know exactly how many unique books you have. This technique works because the array is already sorted, so all duplicates are grouped together.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of removing duplicates like organizing a bookshelf where you want only one copy of each book. Imagine you have a sorted shelf with multiple copies of the same books scattered throughout. You use two bookmarks: a "slow" bookmark that points to where the next unique book should go, and a "fast" bookmark that scans through all the books. The fast bookmark moves through every book on the shelf. When it finds a book that's different from the one at the slow bookmark, you know you've found a new unique book! You then move the slow bookmark forward and place this new unique book there. It's like having a librarian (fast pointer) who scans the entire shelf and a organizer (slow pointer) who arranges unique books in the front section. By the end, all unique books are neatly arranged at the beginning of the shelf, and you know exactly how many unique books you have. This technique works because the array is already sorted, so all duplicates are grouped together.`,
+        realWorldApplications: `**Industry Applications:**
 - **Database Systems**: Removing duplicate records from sorted query results
 - **Data Processing**: Cleaning datasets with duplicate entries in ETL pipelines
 - **File Systems**: Deduplicating sorted file lists and directory contents
@@ -22386,7 +22395,7 @@ When to use: in-place array modification needed, sorted array deduplication, mem
 - **Financial Systems**: Removing duplicate transactions from sorted records
 - **Inventory Management**: Cleaning sorted inventory lists with duplicate SKUs
 - **Data Warehousing**: Maintaining data quality in sorted dimension tables`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Same-Direction Two Pointers**: Both pointers move in the same direction (left to right)
 2. **Slow-Fast Pointer Pattern**: Slow tracks position for unique elements, fast scans array
 3. **In-Place Modification**: Modifies array without using extra space
@@ -22394,7 +22403,7 @@ When to use: in-place array modification needed, sorted array deduplication, mem
 5. **Overwriting Strategy**: Overwrites duplicates with unique elements found later
 6. **Length Tracking**: Returns new length of array with unique elements
 7. **Stable Operation**: Maintains relative order of unique elements`,
-    pseudocode: `**Remove Duplicates Algorithm:**
+        pseudocode: `**Remove Duplicates Algorithm:**
 
 ALGORITHM RemoveDuplicates(sortedArray)
 INPUT: sortedArray - sorted array with possible duplicates
@@ -22417,7 +22426,7 @@ BEGIN
     // Return length of unique elements
     RETURN slow + 1
 END`,
-    implementationCode: `// Comprehensive Remove Duplicates Implementation
+        implementationCode: `// Comprehensive Remove Duplicates Implementation
 
 class DuplicateRemover {
     // Remove all duplicates - keep only unique elements
@@ -22504,39 +22513,39 @@ class DuplicateRemover {
 const nums1 = [0, 0, 1, 1, 1, 2, 2, 3, 3, 4];
 console.log(DuplicateRemover.removeDuplicates([...nums1])); // 5
 console.log(DuplicateRemover.getUniqueElements(nums1)); // [0,1,2,3,4]`,
-    quizQuestions: [
-      {
-        question: "Why does the remove duplicates algorithm work only on sorted arrays?",
-        options: ["To improve time complexity", "Because duplicates are adjacent in sorted arrays", "To reduce space complexity", "To handle negative numbers"],
-        correctAnswer: 1,
-        explanation: "In sorted arrays, all duplicate elements are grouped together, making it easy to detect and skip them with a simple comparison."
-      },
-      {
-        question: "What is the time complexity of the two-pointer remove duplicates algorithm?",
-        options: ["O(1)", "O(n)", "O(n²)", "O(n log n)"],
-        correctAnswer: 1,
-        explanation: "The algorithm makes a single pass through the array with both pointers, resulting in O(n) time complexity."
-      },
-      {
-        question: "What is the space complexity of the in-place remove duplicates algorithm?",
-        options: ["O(1)", "O(n)", "O(log n)", "O(n²)"],
-        correctAnswer: 0,
-        explanation: "The algorithm modifies the array in-place using only two pointer variables, requiring O(1) extra space."
-      },
-      {
-        question: "In the slow-fast pointer pattern, when do we increment the slow pointer?",
-        options: ["Always after fast pointer moves", "Only when we find a unique element", "At the beginning of each iteration", "Only at the end"],
-        correctAnswer: 1,
-        explanation: "We increment the slow pointer only when the fast pointer finds an element different from the current slow element."
-      },
-      {
-        question: "What is a real-world application of removing duplicates from sorted arrays?",
-        options: ["Binary search", "Removing duplicate records from sorted database query results", "Hash table implementation", "Tree traversal"],
-        correctAnswer: 1,
-        explanation: "Database systems frequently need to remove duplicate records from sorted query results to maintain data quality."
-      }
-    ],
-    syntax: `// Remove Duplicates Pattern
+        quizQuestions: [
+            {
+                question: "Why does the remove duplicates algorithm work only on sorted arrays?",
+                options: ["To improve time complexity", "Because duplicates are adjacent in sorted arrays", "To reduce space complexity", "To handle negative numbers"],
+                correctAnswer: 1,
+                explanation: "In sorted arrays, all duplicate elements are grouped together, making it easy to detect and skip them with a simple comparison."
+            },
+            {
+                question: "What is the time complexity of the two-pointer remove duplicates algorithm?",
+                options: ["O(1)", "O(n)", "O(n²)", "O(n log n)"],
+                correctAnswer: 1,
+                explanation: "The algorithm makes a single pass through the array with both pointers, resulting in O(n) time complexity."
+            },
+            {
+                question: "What is the space complexity of the in-place remove duplicates algorithm?",
+                options: ["O(1)", "O(n)", "O(log n)", "O(n²)"],
+                correctAnswer: 0,
+                explanation: "The algorithm modifies the array in-place using only two pointer variables, requiring O(1) extra space."
+            },
+            {
+                question: "In the slow-fast pointer pattern, when do we increment the slow pointer?",
+                options: ["Always after fast pointer moves", "Only when we find a unique element", "At the beginning of each iteration", "Only at the end"],
+                correctAnswer: 1,
+                explanation: "We increment the slow pointer only when the fast pointer finds an element different from the current slow element."
+            },
+            {
+                question: "What is a real-world application of removing duplicates from sorted arrays?",
+                options: ["Binary search", "Removing duplicate records from sorted database query results", "Hash table implementation", "Tree traversal"],
+                correctAnswer: 1,
+                explanation: "Database systems frequently need to remove duplicate records from sorted query results to maintain data quality."
+            }
+        ],
+        syntax: `// Remove Duplicates Pattern
 function removeDuplicates(nums) {
     if (nums.length <= 1) return nums.length;
     
@@ -22549,7 +22558,7 @@ function removeDuplicates(nums) {
     }
     return slow + 1;
 }`,
-    example: `function removeDuplicates(nums) {
+        example: `function removeDuplicates(nums) {
     if (nums.length <= 1) return nums.length;
     
     let slow = 0;
@@ -22563,23 +22572,23 @@ function removeDuplicates(nums) {
 }
 
 // Example: [0,0,1,1,1,2,2,3,3,4] Ã¢â€ â€™ [0,1,2,3,4,...], length=5`
-  },
-  {
-    id: 'palindrome-check',
-    title: 'Palindrome Verification',
-    description: 'Check if string is palindrome using two pointers from both ends',
-    category: 'Two Pointers',
-    difficulty: 'beginner',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Palindrome checking is a perfect example of the converging two pointers technique. We compare characters from both ends moving towards the center.
+    },
+    {
+        id: 'palindrome-check',
+        title: 'Palindrome Verification',
+        description: 'Check if string is palindrome using two pointers from both ends',
+        category: 'Two Pointers',
+        difficulty: 'beginner',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Palindrome checking is a perfect example of the converging two pointers technique. We compare characters from both ends moving towards the center.
 
 What it does: checks if a string reads the same forwards and backwards using two-pointer comparison.
 
 How it works: uses two pointers starting from both ends, moving inward while comparing characters until they meet.
 
 When to use: text validation, string processing, finding palindromic patterns in data.`,
-    example: `function isPalindrome(s) {
+        example: `function isPalindrome(s) {
     const cleaned = s.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
     let left = 0, right = cleaned.length - 1;
     
@@ -22591,30 +22600,30 @@ When to use: text validation, string processing, finding palindromic patterns in
 }
 
 // Example: "A man, a plan, a canal: Panama" Ã¢â€ â€™ true`,
-    syntax: `let left = 0, right = s.length - 1;
+        syntax: `let left = 0, right = s.length - 1;
 while (left < right) {
     if (s[left] !== s[right]) return false;
     left++; right--;
 }
 return true;`,
-  },
-  {
-    id: 'merge-sorted-arrays',
-    title: 'Merge Two Sorted Arrays',
-    description: 'Merge two sorted arrays in-place using two pointers technique',
-    category: 'Two Pointers',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(m + n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Merging sorted arrays demonstrates the power of two pointers in combining data structures. The key insight is to merge from the end to avoid overwriting elements.
+    },
+    {
+        id: 'merge-sorted-arrays',
+        title: 'Merge Two Sorted Arrays',
+        description: 'Merge two sorted arrays in-place using two pointers technique',
+        category: 'Two Pointers',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(m + n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Merging sorted arrays demonstrates the power of two pointers in combining data structures. The key insight is to merge from the end to avoid overwriting elements.
 
 What it does: combines two sorted arrays into one sorted array in-place, maintaining sorted order throughout the process.
 
 How it works: uses three pointers starting from end, compares elements from both arrays, places larger element at end position.
 
 When to use: merging sorted data structures, merge sort implementation, combining sorted lists, in-place array operations.`,
-    voiceExplanation: `Think of merging sorted arrays like combining two organized lines of people by height. Imagine you have two lines of people, both already sorted by height from shortest to tallest, and you want to merge them into one line while keeping everyone sorted. The clever trick is to start from the back! Picture yourself as an organizer standing at the end of a long empty space. You look at the tallest person from each line and pick the taller one to place at the very end of your new combined line. Then you look at the next tallest available people and repeat. It's like being a smart event coordinator who works backwards - by starting from the end, you never have to worry about moving people around or losing their spots. This backwards approach is brilliant because you're filling empty spaces and never overwriting anyone who still needs to be compared. By the time you're done, everyone is perfectly arranged in one sorted line!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of merging sorted arrays like combining two organized lines of people by height. Imagine you have two lines of people, both already sorted by height from shortest to tallest, and you want to merge them into one line while keeping everyone sorted. The clever trick is to start from the back! Picture yourself as an organizer standing at the end of a long empty space. You look at the tallest person from each line and pick the taller one to place at the very end of your new combined line. Then you look at the next tallest available people and repeat. It's like being a smart event coordinator who works backwards - by starting from the end, you never have to worry about moving people around or losing their spots. This backwards approach is brilliant because you're filling empty spaces and never overwriting anyone who still needs to be compared. By the time you're done, everyone is perfectly arranged in one sorted line!`,
+        realWorldApplications: `**Industry Applications:**
 - **Database Systems**: Merging sorted result sets from multiple queries or partitions
 - **Data Processing**: Combining sorted data streams in ETL pipelines
 - **File Systems**: Merging sorted directory listings and file indexes
@@ -22625,7 +22634,7 @@ When to use: merging sorted data structures, merge sort implementation, combinin
 - **Log Analysis**: Merging sorted log files from multiple servers by timestamp
 - **Data Warehousing**: Combining sorted dimension tables during data integration
 - **Machine Learning**: Merging sorted feature vectors from different data sources`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Backward Merging**: Start from the end to avoid overwriting unprocessed elements
 2. **Three-Pointer Technique**: Track positions in both arrays and the merge destination
 3. **In-Place Operation**: Merge without requiring additional array space
@@ -22633,7 +22642,7 @@ When to use: merging sorted data structures, merge sort implementation, combinin
 5. **Comparison Strategy**: Always place the larger element at the current merge position
 6. **Remaining Elements**: Handle leftover elements from the second array
 7. **Space Optimization**: Utilizes existing empty space in the first array`,
-    pseudocode: `**Merge Sorted Arrays Algorithm:**
+        pseudocode: `**Merge Sorted Arrays Algorithm:**
 
 ALGORITHM MergeSortedArrays(nums1, m, nums2, n)
 INPUT: nums1 - first sorted array with extra space, m - size of nums1 data
@@ -22665,7 +22674,7 @@ BEGIN
     
     // Note: remaining elements in nums1 are already in correct position
 END`,
-    implementationCode: `// Comprehensive Merge Sorted Arrays Implementation
+        implementationCode: `// Comprehensive Merge Sorted Arrays Implementation
 
 class ArrayMerger {
     // Main merge algorithm - O(m + n) time, O(1) space
@@ -22788,39 +22797,39 @@ console.log(ArrayMerger.mergeToNewArray(arr1, arr2)); // [1, 2, 3, 4, 5, 6]
 
 const multipleArrays = [[1, 4, 7], [2, 5, 8], [3, 6, 9]];
 console.log(ArrayMerger.mergeKSorted(multipleArrays)); // [1, 2, 3, 4, 5, 6, 7, 8, 9]`,
-    quizQuestions: [
-      {
-        question: "Why do we merge sorted arrays from the end rather than the beginning?",
-        options: ["To improve time complexity", "To avoid overwriting unprocessed elements", "To handle negative numbers", "To reduce space complexity"],
-        correctAnswer: 1,
-        explanation: "Merging from the end ensures we fill empty spaces without overwriting elements that still need to be compared."
-      },
-      {
-        question: "What is the time complexity of merging two sorted arrays of sizes m and n?",
-        options: ["O(m)", "O(n)", "O(m + n)", "O(m × n)"],
-        correctAnswer: 2,
-        explanation: "We need to examine each element from both arrays exactly once, resulting in O(m + n) time complexity."
-      },
-      {
-        question: "In the merge algorithm, what happens to remaining elements from the first array?",
-        options: ["They need to be copied", "They are already in correct position", "They need to be sorted", "They should be ignored"],
-        correctAnswer: 1,
-        explanation: "Remaining elements from the first array are already in their correct positions since we're merging in-place."
-      },
-      {
-        question: "How many pointers do we need for the in-place merge algorithm?",
-        options: ["Two pointers", "Three pointers", "Four pointers", "One pointer"],
-        correctAnswer: 1,
-        explanation: "We need three pointers: one for each array's current position and one for the merge destination position."
-      },
-      {
-        question: "What is a real-world application of merging sorted arrays?",
-        options: ["Binary search", "Merging sorted result sets from multiple database queries", "Hash table implementation", "Tree traversal"],
-        correctAnswer: 1,
-        explanation: "Database systems frequently merge sorted result sets from multiple queries or partitions to provide unified results."
-      }
-    ],
-    syntax: `// Merge Sorted Arrays Pattern
+        quizQuestions: [
+            {
+                question: "Why do we merge sorted arrays from the end rather than the beginning?",
+                options: ["To improve time complexity", "To avoid overwriting unprocessed elements", "To handle negative numbers", "To reduce space complexity"],
+                correctAnswer: 1,
+                explanation: "Merging from the end ensures we fill empty spaces without overwriting elements that still need to be compared."
+            },
+            {
+                question: "What is the time complexity of merging two sorted arrays of sizes m and n?",
+                options: ["O(m)", "O(n)", "O(m + n)", "O(m × n)"],
+                correctAnswer: 2,
+                explanation: "We need to examine each element from both arrays exactly once, resulting in O(m + n) time complexity."
+            },
+            {
+                question: "In the merge algorithm, what happens to remaining elements from the first array?",
+                options: ["They need to be copied", "They are already in correct position", "They need to be sorted", "They should be ignored"],
+                correctAnswer: 1,
+                explanation: "Remaining elements from the first array are already in their correct positions since we're merging in-place."
+            },
+            {
+                question: "How many pointers do we need for the in-place merge algorithm?",
+                options: ["Two pointers", "Three pointers", "Four pointers", "One pointer"],
+                correctAnswer: 1,
+                explanation: "We need three pointers: one for each array's current position and one for the merge destination position."
+            },
+            {
+                question: "What is a real-world application of merging sorted arrays?",
+                options: ["Binary search", "Merging sorted result sets from multiple database queries", "Hash table implementation", "Tree traversal"],
+                correctAnswer: 1,
+                explanation: "Database systems frequently merge sorted result sets from multiple queries or partitions to provide unified results."
+            }
+        ],
+        syntax: `// Merge Sorted Arrays Pattern
 function merge(nums1, m, nums2, n) {
     let i = m - 1, j = n - 1, k = m + n - 1;
     
@@ -22831,7 +22840,7 @@ function merge(nums1, m, nums2, n) {
     
     while (j >= 0) nums1[k--] = nums2[j--];
 }`,
-    example: `function merge(nums1, m, nums2, n) {
+        example: `function merge(nums1, m, nums2, n) {
     let i = m - 1, j = n - 1, k = m + n - 1;
     
     while (i >= 0 && j >= 0) {
@@ -22843,26 +22852,26 @@ function merge(nums1, m, nums2, n) {
 }
 
 // Example: [1,2,3,0,0,0] + [2,5,6] Ã¢â€ â€™ [1,2,2,3,5,6]`
-  },
+    },
 
-  // Sliding Window
-  {
-    id: 'sliding-window-basics',
-    title: 'Sliding Window Technique',
-    description: 'Master the sliding window pattern for array and string problems',
-    category: 'Sliding Window',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `The Sliding Window technique is a powerful algorithmic pattern that maintains a subset of data (window) that slides through a larger dataset. It's particularly effective for problems involving contiguous subarrays or substrings, transforming brute force O(n²) or O(n³) solutions into efficient O(n) algorithms.
+    // Sliding Window
+    {
+        id: 'sliding-window-basics',
+        title: 'Sliding Window Technique',
+        description: 'Master the sliding window pattern for array and string problems',
+        category: 'Sliding Window',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `The Sliding Window technique is a powerful algorithmic pattern that maintains a subset of data (window) that slides through a larger dataset. It's particularly effective for problems involving contiguous subarrays or substrings, transforming brute force O(n²) or O(n³) solutions into efficient O(n) algorithms.
 
 What it does: maintains moving window over data structure to efficiently process contiguous elements, avoiding redundant calculations.
 
 How it works: expands window by moving right pointer, contracts by moving left pointer, maintains window properties throughout traversal.
 
 When to use: contiguous subarray/substring problems, fixed or variable window size, optimization from O(n²) to O(n), pattern matching.`,
-    voiceExplanation: `Think of the Sliding Window technique like looking through a moving window on a train. Imagine you're on a train with a window that can expand or shrink, and you're trying to find the most interesting view. Instead of stopping at every single spot and looking around (which would be slow), you keep the window moving smoothly along the track. When you see something interesting, you might expand the window to see more, or shrink it to focus on the best part. The brilliant thing is that you never have to go backwards - you just slide the window forward, always building on what you've already seen. This is exactly how sliding window algorithms work: they maintain a "window" of elements and slide it through the data, expanding when conditions are good and contracting when they're not, all while keeping track of the best result they've found so far.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of the Sliding Window technique like looking through a moving window on a train. Imagine you're on a train with a window that can expand or shrink, and you're trying to find the most interesting view. Instead of stopping at every single spot and looking around (which would be slow), you keep the window moving smoothly along the track. When you see something interesting, you might expand the window to see more, or shrink it to focus on the best part. The brilliant thing is that you never have to go backwards - you just slide the window forward, always building on what you've already seen. This is exactly how sliding window algorithms work: they maintain a "window" of elements and slide it through the data, expanding when conditions are good and contracting when they're not, all while keeping track of the best result they've found so far.`,
+        realWorldApplications: `**Industry Applications:**
 - **Network Traffic Analysis**: Monitoring bandwidth usage, detecting anomalies in data streams
 - **Financial Systems**: Moving averages, stock price analysis, risk assessment windows
 - **Video Streaming**: Buffer management, quality adaptation, frame rate optimization
@@ -22873,7 +22882,7 @@ When to use: contiguous subarray/substring problems, fixed or variable window si
 - **Text Processing**: Pattern matching, spell checking, natural language processing
 - **Image Processing**: Convolution operations, feature detection, noise reduction
 - **Machine Learning**: Feature extraction, time series analysis, data preprocessing`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Window Boundaries**: Left and right pointers defining current window scope
 2. **Window Expansion**: Moving right pointer to include more elements
 3. **Window Contraction**: Moving left pointer to exclude elements and maintain validity
@@ -22882,7 +22891,7 @@ When to use: contiguous subarray/substring problems, fixed or variable window si
 6. **Sliding Mechanism**: Continuous movement without backtracking
 7. **Fixed vs Variable**: Different patterns for fixed-size vs dynamic windows
 8. **State Tracking**: Maintaining additional data structures for window properties`,
-    pseudocode: `**Sliding Window Algorithm Patterns:**
+        pseudocode: `**Sliding Window Algorithm Patterns:**
 
 ALGORITHM FixedSizeWindow(array, windowSize)
 INPUT: array of elements, fixed window size k
@@ -22964,7 +22973,7 @@ BEGIN
     
     RETURN result
 END`,
-    implementationCode: `// Comprehensive Sliding Window Implementation
+        implementationCode: `// Comprehensive Sliding Window Implementation
 
 class SlidingWindowSolver {
     // Fixed Size Window - Maximum sum of k consecutive elements
@@ -23210,39 +23219,39 @@ console.log('Minimum window containing "ABC" in "ADOBECODEBANC":',
 
 // Run all demonstrations
 SlidingWindowSolver.demonstratePatterns();`,
-    quizQuestions: [
-      {
-        question: "What is the main advantage of the sliding window technique over brute force approaches?",
-        options: ["Uses less memory", "Reduces time complexity from O(n²) to O(n)", "Easier to implement", "Works with unsorted data"],
-        correctAnswer: 1,
-        explanation: "Sliding window technique reduces time complexity from O(n²) or O(n³) to O(n) by avoiding redundant calculations and reusing previous computations."
-      },
-      {
-        question: "In a variable-size sliding window, when do you typically expand the window?",
-        options: ["When the window is invalid", "When adding the next element maintains validity", "Always expand first", "When the window is empty"],
-        correctAnswer: 1,
-        explanation: "In variable-size sliding window, you expand by adding the next element, then contract if the window becomes invalid, maintaining the window properties throughout."
-      },
-      {
-        question: "What data structure is commonly used with sliding window for tracking maximum elements?",
-        options: ["Stack", "Queue", "Deque (Double-ended queue)", "Hash Map"],
-        correctAnswer: 2,
-        explanation: "Deque (Double-ended queue) is used for sliding window maximum problems because it allows efficient addition/removal from both ends to maintain decreasing order."
-      },
-      {
-        question: "In a fixed-size sliding window, how do you move from one window to the next?",
-        options: ["Recalculate everything", "Remove leftmost element and add rightmost element", "Sort the new window", "Use binary search"],
-        correctAnswer: 1,
-        explanation: "In fixed-size sliding window, you efficiently move by removing the leftmost element and adding the new rightmost element, avoiding recalculation of the entire window."
-      },
-      {
-        question: "Which type of problems are best suited for sliding window technique?",
-        options: ["Sorting problems", "Contiguous subarray/substring problems", "Graph traversal", "Tree problems"],
-        correctAnswer: 1,
-        explanation: "Sliding window is ideal for contiguous subarray/substring problems where you need to find optimal windows of elements, such as maximum sum, longest substring, etc."
-      }
-    ],
-    example: `// Sliding Window Technique Examples
+        quizQuestions: [
+            {
+                question: "What is the main advantage of the sliding window technique over brute force approaches?",
+                options: ["Uses less memory", "Reduces time complexity from O(n²) to O(n)", "Easier to implement", "Works with unsorted data"],
+                correctAnswer: 1,
+                explanation: "Sliding window technique reduces time complexity from O(n²) or O(n³) to O(n) by avoiding redundant calculations and reusing previous computations."
+            },
+            {
+                question: "In a variable-size sliding window, when do you typically expand the window?",
+                options: ["When the window is invalid", "When adding the next element maintains validity", "Always expand first", "When the window is empty"],
+                correctAnswer: 1,
+                explanation: "In variable-size sliding window, you expand by adding the next element, then contract if the window becomes invalid, maintaining the window properties throughout."
+            },
+            {
+                question: "What data structure is commonly used with sliding window for tracking maximum elements?",
+                options: ["Stack", "Queue", "Deque (Double-ended queue)", "Hash Map"],
+                correctAnswer: 2,
+                explanation: "Deque (Double-ended queue) is used for sliding window maximum problems because it allows efficient addition/removal from both ends to maintain decreasing order."
+            },
+            {
+                question: "In a fixed-size sliding window, how do you move from one window to the next?",
+                options: ["Recalculate everything", "Remove leftmost element and add rightmost element", "Sort the new window", "Use binary search"],
+                correctAnswer: 1,
+                explanation: "In fixed-size sliding window, you efficiently move by removing the leftmost element and adding the new rightmost element, avoiding recalculation of the entire window."
+            },
+            {
+                question: "Which type of problems are best suited for sliding window technique?",
+                options: ["Sorting problems", "Contiguous subarray/substring problems", "Graph traversal", "Tree problems"],
+                correctAnswer: 1,
+                explanation: "Sliding window is ideal for contiguous subarray/substring problems where you need to find optimal windows of elements, such as maximum sum, longest substring, etc."
+            }
+        ],
+        example: `// Sliding Window Technique Examples
 
 // 1. Fixed Size Window - Maximum sum of k elements
 function maxSumSubarray(arr, k) {
@@ -23372,24 +23381,24 @@ console.log(lengthOfLongestSubstring("abcabcbb")); // 3
 const sw = new SlidingWindow();
 console.log(sw.maxInFixedWindow([1, 3, -1, -3, 5, 3, 6, 7], 3)); // [3, 3, 5, 5, 6, 7]
 console.log(sw.minWindow("ADOBECODEBANC", "ABC")); // "BANC"`
-  },
-  {
-    id: 'sliding-window-maximum',
-    title: 'Sliding Window Maximum',
-    description: 'Find maximum in all subarrays of size k using deque optimization',
-    category: 'Sliding Window',
-    difficulty: 'advanced',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(k)',
-    extendedDefinition: `The Sliding Window Maximum problem finds the maximum element in every subarray of size k in an array. This is a classic application of the sliding window technique combined with a deque (double-ended queue) data structure for optimal performance.
+    },
+    {
+        id: 'sliding-window-maximum',
+        title: 'Sliding Window Maximum',
+        description: 'Find maximum in all subarrays of size k using deque optimization',
+        category: 'Sliding Window',
+        difficulty: 'advanced',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(k)',
+        extendedDefinition: `The Sliding Window Maximum problem finds the maximum element in every subarray of size k in an array. This is a classic application of the sliding window technique combined with a deque (double-ended queue) data structure for optimal performance.
 
 What it does: finds maximum element in every sliding window of size k, maintaining efficient access to maximum across all windows.
 
 How it works: uses deque to store indices in decreasing order of values, removes outdated indices, maintains maximum at front.
 
 When to use: sliding window maximum queries, stock price analysis, real-time data monitoring, competitive programming problems.`,
-    voiceExplanation: `Think of the Sliding Window Maximum problem like being a security guard monitoring a row of buildings through a moving window. Imagine you're in a helicopter with a spotlight that can only illuminate 3 buildings at a time, and you need to report the tallest building in your spotlight as you move along. The naive approach would be to look at all 3 buildings every time you move - but that's inefficient! Instead, you use a clever trick: you keep a list of "potential tallest buildings" in decreasing order of height. When you see a new building, you remove any shorter buildings from your list because they can never be the tallest while this new taller building is in view. You also remove buildings that are now too far behind your spotlight. The brilliant part is that the first building in your list is always the tallest in your current view! It's like having a smart assistant who maintains a ranked list of candidates, automatically removing those who can't possibly win, so you always know the winner instantly.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of the Sliding Window Maximum problem like being a security guard monitoring a row of buildings through a moving window. Imagine you're in a helicopter with a spotlight that can only illuminate 3 buildings at a time, and you need to report the tallest building in your spotlight as you move along. The naive approach would be to look at all 3 buildings every time you move - but that's inefficient! Instead, you use a clever trick: you keep a list of "potential tallest buildings" in decreasing order of height. When you see a new building, you remove any shorter buildings from your list because they can never be the tallest while this new taller building is in view. You also remove buildings that are now too far behind your spotlight. The brilliant part is that the first building in your list is always the tallest in your current view! It's like having a smart assistant who maintains a ranked list of candidates, automatically removing those who can't possibly win, so you always know the winner instantly.`,
+        realWorldApplications: `**Industry Applications:**
 - **Stock Trading**: Finding maximum price in sliding time windows for technical analysis
 - **Network Monitoring**: Tracking peak bandwidth usage over time intervals
 - **Gaming**: Finding highest score in recent game sessions or leaderboard windows
@@ -23400,7 +23409,7 @@ When to use: sliding window maximum queries, stock price analysis, real-time dat
 - **Real-time Analytics**: Computing maximum values in streaming data windows
 - **Quality Control**: Monitoring peak defect rates in manufacturing time windows
 - **Financial Risk**: Calculating maximum drawdown in portfolio performance windows`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Deque Data Structure**: Double-ended queue for efficient front/back operations
 2. **Monotonic Deque**: Maintaining decreasing order of elements for quick maximum access
 3. **Index Storage**: Storing array indices rather than values for position tracking
@@ -23408,7 +23417,7 @@ When to use: sliding window maximum queries, stock price analysis, real-time dat
 5. **Amortized O(n) Time**: Each element added and removed at most once
 6. **Space-Time Tradeoff**: O(k) space for O(n) time complexity optimization
 7. **Sliding Technique**: Efficiently processing overlapping subarrays`,
-    pseudocode: `**Sliding Window Maximum Algorithm:**
+        pseudocode: `**Sliding Window Maximum Algorithm:**
 
 ALGORITHM SlidingWindowMaximum(array, k)
 INPUT: array - input array, k - window size
@@ -23443,7 +23452,7 @@ BEGIN
     
     RETURN result
 END`,
-    implementationCode: `// Comprehensive Sliding Window Maximum Implementation
+        implementationCode: `// Comprehensive Sliding Window Maximum Implementation
 
 class SlidingWindowMaximum {
     // Main deque-based algorithm - O(n) time, O(k) space
@@ -23590,39 +23599,39 @@ const k = 3;
 console.log('Maximum:', SlidingWindowMaximum.maxSlidingWindow(nums, k)); // [3, 3, 5, 5, 6, 7]
 console.log('Minimum:', SlidingWindowMaximum.minSlidingWindow(nums, k)); // [-1, -3, -3, -3, 3, 3]
 console.log('Detailed:', SlidingWindowMaximum.maxSlidingWindowDetailed(nums, k));`,
-    quizQuestions: [
-      {
-        question: "Why do we use a deque instead of a simple array for sliding window maximum?",
-        options: ["To save memory", "For efficient front and back operations", "To handle negative numbers", "To improve readability"],
-        correctAnswer: 1,
-        explanation: "Deque allows efficient O(1) insertion/deletion at both ends, essential for maintaining the monotonic property and window boundaries."
-      },
-      {
-        question: "What is the time complexity of the optimized sliding window maximum algorithm?",
-        options: ["O(n*k)", "O(n log k)", "O(n)", "O(k)"],
-        correctAnswer: 2,
-        explanation: "Each element is added and removed from the deque at most once, resulting in amortized O(n) time complexity."
-      },
-      {
-        question: "In the deque, what order do we maintain for the elements?",
-        options: ["Increasing order of values", "Decreasing order of values", "Increasing order of indices", "Random order"],
-        correctAnswer: 1,
-        explanation: "We maintain decreasing order of values so the maximum element is always at the front of the deque."
-      },
-      {
-        question: "When do we remove elements from the front of the deque?",
-        options: ["When they are smaller than current element", "When they are outside the current window", "When the deque is full", "Never"],
-        correctAnswer: 1,
-        explanation: "We remove elements from the front when their indices are outside the current sliding window (i.e., <= i - k)."
-      },
-      {
-        question: "What is a real-world application of sliding window maximum?",
-        options: ["Sorting arrays", "Finding maximum stock price in sliding time windows", "Binary tree traversal", "Hash table implementation"],
-        correctAnswer: 1,
-        explanation: "Stock trading systems use sliding window maximum to analyze peak prices over specific time intervals for technical analysis."
-      }
-    ],
-    syntax: `// Sliding Window Maximum Pattern
+        quizQuestions: [
+            {
+                question: "Why do we use a deque instead of a simple array for sliding window maximum?",
+                options: ["To save memory", "For efficient front and back operations", "To handle negative numbers", "To improve readability"],
+                correctAnswer: 1,
+                explanation: "Deque allows efficient O(1) insertion/deletion at both ends, essential for maintaining the monotonic property and window boundaries."
+            },
+            {
+                question: "What is the time complexity of the optimized sliding window maximum algorithm?",
+                options: ["O(n*k)", "O(n log k)", "O(n)", "O(k)"],
+                correctAnswer: 2,
+                explanation: "Each element is added and removed from the deque at most once, resulting in amortized O(n) time complexity."
+            },
+            {
+                question: "In the deque, what order do we maintain for the elements?",
+                options: ["Increasing order of values", "Decreasing order of values", "Increasing order of indices", "Random order"],
+                correctAnswer: 1,
+                explanation: "We maintain decreasing order of values so the maximum element is always at the front of the deque."
+            },
+            {
+                question: "When do we remove elements from the front of the deque?",
+                options: ["When they are smaller than current element", "When they are outside the current window", "When the deque is full", "Never"],
+                correctAnswer: 1,
+                explanation: "We remove elements from the front when their indices are outside the current sliding window (i.e., <= i - k)."
+            },
+            {
+                question: "What is a real-world application of sliding window maximum?",
+                options: ["Sorting arrays", "Finding maximum stock price in sliding time windows", "Binary tree traversal", "Hash table implementation"],
+                correctAnswer: 1,
+                explanation: "Stock trading systems use sliding window maximum to analyze peak prices over specific time intervals for technical analysis."
+            }
+        ],
+        syntax: `// Sliding Window Maximum Pattern
 function maxSlidingWindow(nums, k) {
     const result = [], deque = [];
     
@@ -23641,7 +23650,7 @@ function maxSlidingWindow(nums, k) {
     
     return result;
 }`,
-    example: `// Sliding Window Maximum Implementation
+        example: `// Sliding Window Maximum Implementation
 function slidingWindowMaximum(nums, k) {
     if (nums.length === 0 || k === 0) return [];
     
@@ -23744,24 +23753,24 @@ console.log(slidingWindowMaximum(nums, k)); // [3, 3, 5, 5, 6, 7]
 const swm = new SlidingWindowMax();
 const detailed = swm.findMaximums(nums, k);
 console.log('Detailed results:', detailed);`
-  },
-  {
-    id: 'longest-substring',
-    title: 'Longest Substring Problems',
-    description: 'Find longest substring without repeating characters and variations',
-    category: 'Sliding Window',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(min(m,n))',
-    extendedDefinition: `The Longest Substring Without Repeating Characters problem is a classic variable-size sliding window problem that finds the length of the longest substring that contains all unique characters.
+    },
+    {
+        id: 'longest-substring',
+        title: 'Longest Substring Problems',
+        description: 'Find longest substring without repeating characters and variations',
+        category: 'Sliding Window',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(min(m,n))',
+        extendedDefinition: `The Longest Substring Without Repeating Characters problem is a classic variable-size sliding window problem that finds the length of the longest substring that contains all unique characters.
 
 What it does: finds longest contiguous substring with all unique characters using variable-size sliding window approach.
 
 How it works: expands window with right pointer, contracts with left pointer when duplicates found, tracks characters with set/map.
 
 When to use: unique character substring problems, text analysis, data deduplication, sliding window pattern practice.`,
-    voiceExplanation: `Think of the Longest Substring problem like reading a book with a special rule: you can only remember a certain number of unique words at a time, and you want to find the longest passage where every word is different. Imagine you're reading with two bookmarks - a "start" bookmark and an "end" bookmark. You move the end bookmark forward, word by word, adding each new word to your memory. But here's the catch: if you encounter a word you've already seen in your current passage, you have to move your start bookmark forward until that duplicate word is no longer in your memory! It's like having a sliding window of attention that automatically adjusts its size. When you find duplicates, the window shrinks from the left. When all words are unique, the window grows to the right. Throughout this process, you keep track of the longest unique passage you've found. This technique is brilliant because it ensures you never miss the optimal solution while only scanning the text once!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of the Longest Substring problem like reading a book with a special rule: you can only remember a certain number of unique words at a time, and you want to find the longest passage where every word is different. Imagine you're reading with two bookmarks - a "start" bookmark and an "end" bookmark. You move the end bookmark forward, word by word, adding each new word to your memory. But here's the catch: if you encounter a word you've already seen in your current passage, you have to move your start bookmark forward until that duplicate word is no longer in your memory! It's like having a sliding window of attention that automatically adjusts its size. When you find duplicates, the window shrinks from the left. When all words are unique, the window grows to the right. Throughout this process, you keep track of the longest unique passage you've found. This technique is brilliant because it ensures you never miss the optimal solution while only scanning the text once!`,
+        realWorldApplications: `**Industry Applications:**
 - **Text Processing**: Finding longest unique character sequences in documents
 - **Data Compression**: Identifying patterns for efficient encoding algorithms
 - **Password Validation**: Ensuring password complexity with unique character requirements
@@ -23772,7 +23781,7 @@ When to use: unique character substring problems, text analysis, data deduplicat
 - **Game Development**: Generating unique character combinations for procedural content
 - **Data Quality**: Detecting and handling duplicate entries in streaming data
 - **Machine Learning**: Feature extraction from text with unique character constraints`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Variable-Size Window**: Window expands and contracts based on duplicate detection
 2. **Two-Pointer Technique**: Left and right pointers define current window boundaries
 3. **Hash Set/Map Usage**: Efficient character tracking and duplicate detection
@@ -23780,7 +23789,7 @@ When to use: unique character substring problems, text analysis, data deduplicat
 5. **Window Expansion**: Move right pointer to explore new characters
 6. **Optimal Substructure**: Current window state builds on previous valid states
 7. **Linear Time Complexity**: Each character visited at most twice (once by each pointer)`,
-    pseudocode: `**Longest Substring Without Repeating Characters:**
+        pseudocode: `**Longest Substring Without Repeating Characters:**
 
 ALGORITHM LongestUniqueSubstring(string)
 INPUT: string - input string to analyze
@@ -23832,7 +23841,7 @@ BEGIN
     
     RETURN maxLength
 END`,
-    implementationCode: `// Comprehensive Longest Substring Implementation
+        implementationCode: `// Comprehensive Longest Substring Implementation
 
 class LongestSubstringProblems {
     // Main algorithm - longest substring without repeating characters
@@ -24012,39 +24021,39 @@ console.log(LongestSubstringProblems.lengthOfLongestSubstring("abcabcbb")); // 3
 console.log(LongestSubstringProblems.findLongestSubstring("pwwkew")); // {length: 3, substring: "wke", ...}
 console.log(LongestSubstringProblems.longestSubstringWithKDistinct("eceba", 2)); // 3
 console.log(LongestSubstringProblems.minWindow("ADOBECODEBANC", "ABC")); // "BANC"`,
-    quizQuestions: [
-      {
-        question: "What data structure is most efficient for tracking characters in the sliding window?",
-        options: ["Array", "Hash Set or Hash Map", "Linked List", "Stack"],
-        correctAnswer: 1,
-        explanation: "Hash Set provides O(1) lookup, insertion, and deletion for character tracking, making it ideal for this problem."
-      },
-      {
-        question: "When do we move the left pointer in the sliding window?",
-        options: ["Always after moving right pointer", "When we find a duplicate character", "At the end of iteration", "Never"],
-        correctAnswer: 1,
-        explanation: "We move the left pointer when we encounter a duplicate character to maintain the unique character constraint."
-      },
-      {
-        question: "What is the time complexity of the optimized longest substring algorithm?",
-        options: ["O(n²)", "O(n log n)", "O(n)", "O(1)"],
-        correctAnswer: 2,
-        explanation: "Each character is visited at most twice (once by right pointer, once by left pointer), resulting in O(n) time complexity."
-      },
-      {
-        question: "In the optimized approach, what do we store in the hash map?",
-        options: ["Character frequencies", "Character and its last seen index", "Only characters", "Window boundaries"],
-        correctAnswer: 1,
-        explanation: "We store each character and its most recent index to efficiently jump the left pointer when duplicates are found."
-      },
-      {
-        question: "What is a real-world application of longest substring problems?",
-        options: ["Sorting algorithms", "Finding unique DNA sequences without repeating nucleotides", "Binary tree traversal", "Graph shortest path"],
-        correctAnswer: 1,
-        explanation: "Bioinformatics uses longest substring algorithms to find unique DNA/RNA sequences without repeating nucleotides for genetic analysis."
-      }
-    ],
-    syntax: `// Longest Substring Pattern
+        quizQuestions: [
+            {
+                question: "What data structure is most efficient for tracking characters in the sliding window?",
+                options: ["Array", "Hash Set or Hash Map", "Linked List", "Stack"],
+                correctAnswer: 1,
+                explanation: "Hash Set provides O(1) lookup, insertion, and deletion for character tracking, making it ideal for this problem."
+            },
+            {
+                question: "When do we move the left pointer in the sliding window?",
+                options: ["Always after moving right pointer", "When we find a duplicate character", "At the end of iteration", "Never"],
+                correctAnswer: 1,
+                explanation: "We move the left pointer when we encounter a duplicate character to maintain the unique character constraint."
+            },
+            {
+                question: "What is the time complexity of the optimized longest substring algorithm?",
+                options: ["O(n²)", "O(n log n)", "O(n)", "O(1)"],
+                correctAnswer: 2,
+                explanation: "Each character is visited at most twice (once by right pointer, once by left pointer), resulting in O(n) time complexity."
+            },
+            {
+                question: "In the optimized approach, what do we store in the hash map?",
+                options: ["Character frequencies", "Character and its last seen index", "Only characters", "Window boundaries"],
+                correctAnswer: 1,
+                explanation: "We store each character and its most recent index to efficiently jump the left pointer when duplicates are found."
+            },
+            {
+                question: "What is a real-world application of longest substring problems?",
+                options: ["Sorting algorithms", "Finding unique DNA sequences without repeating nucleotides", "Binary tree traversal", "Graph shortest path"],
+                correctAnswer: 1,
+                explanation: "Bioinformatics uses longest substring algorithms to find unique DNA/RNA sequences without repeating nucleotides for genetic analysis."
+            }
+        ],
+        syntax: `// Longest Substring Pattern
 function lengthOfLongestSubstring(s) {
     const charSet = new Set();
     let left = 0, maxLength = 0;
@@ -24059,7 +24068,7 @@ function lengthOfLongestSubstring(s) {
     
     return maxLength;
 }`,
-    example: `// Longest Substring Without Repeating Characters
+        example: `// Longest Substring Without Repeating Characters
 function lengthOfLongestSubstring(s) {
     const charSet = new Set();
     let left = 0;
@@ -24193,26 +24202,26 @@ const ls = new LongestSubstring();
 console.log(ls.findLongestUnique("pwwkew")); // {length: 3, substring: "wke", startIndex: 2}
 console.log(ls.longestWithKDistinct("eceba", 2)); // 3 ("ece")
 console.log(ls.minWindow("ADOBECODEBANC", "ABC")); // "BANC"`
-  },
+    },
 
-  // Bit Manipulation
-  {
-    id: 'bit-basics',
-    title: 'Bit Manipulation Basics',
-    description: 'Basic bitwise operations: AND, OR, XOR, NOT, shifts',
-    category: 'Bit Manipulation',
-    difficulty: 'beginner',
-    timeComplexity: 'O(1)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Bit Manipulation involves performing operations directly on the binary representation of numbers. It's one of the most efficient ways to perform certain calculations and is fundamental in computer science for optimization and low-level programming.
+    // Bit Manipulation
+    {
+        id: 'bit-basics',
+        title: 'Bit Manipulation Basics',
+        description: 'Basic bitwise operations: AND, OR, XOR, NOT, shifts',
+        category: 'Bit Manipulation',
+        difficulty: 'beginner',
+        timeComplexity: 'O(1)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Bit Manipulation involves performing operations directly on the binary representation of numbers. It's one of the most efficient ways to perform certain calculations and is fundamental in computer science for optimization and low-level programming.
 
 What it does: performs operations directly on binary digits using bitwise operators like AND, OR, XOR, NOT, and bit shifts.
 
 How it works: treats numbers as sequences of bits and applies logical operations bit by bit to achieve desired results.
 
 When to use: optimization problems, checking powers of two, finding unique elements, generating subsets, low-level programming.`,
-    voiceExplanation: `Think of bit manipulation like working with a row of light switches, where each switch can be either ON (1) or OFF (0). Imagine you have a control panel with 8 switches representing the number 5, which looks like: OFF-OFF-OFF-OFF-OFF-1-OFF-1 (that's 00000101 in binary). Now, bit operations are like having different tools to manipulate these switches. The AND operation is like a strict security guard - both switches must be ON for the result to be ON. The OR operation is like a welcoming host - if either switch is ON, the result is ON. XOR is like a picky eater - it only likes when switches are different (one ON, one OFF). The NOT operation is like a rebel - it flips every single switch to the opposite state. Bit shifts are like sliding the entire pattern left or right - shifting left doubles the number (like adding a zero at the end), while shifting right halves it (like removing the last digit). These operations are incredibly fast because computers are literally built to do them!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of bit manipulation like working with a row of light switches, where each switch can be either ON (1) or OFF (0). Imagine you have a control panel with 8 switches representing the number 5, which looks like: OFF-OFF-OFF-OFF-OFF-1-OFF-1 (that's 00000101 in binary). Now, bit operations are like having different tools to manipulate these switches. The AND operation is like a strict security guard - both switches must be ON for the result to be ON. The OR operation is like a welcoming host - if either switch is ON, the result is ON. XOR is like a picky eater - it only likes when switches are different (one ON, one OFF). The NOT operation is like a rebel - it flips every single switch to the opposite state. Bit shifts are like sliding the entire pattern left or right - shifting left doubles the number (like adding a zero at the end), while shifting right halves it (like removing the last digit). These operations are incredibly fast because computers are literally built to do them!`,
+        realWorldApplications: `**Industry Applications:**
 - **Computer Graphics**: Color manipulation, alpha blending, pixel operations
 - **Cryptography**: Encryption algorithms, hash functions, random number generation
 - **Database Systems**: Bitmap indexes, compression algorithms, bloom filters
@@ -24223,7 +24232,7 @@ When to use: optimization problems, checking powers of two, finding unique eleme
 - **Compiler Design**: Code optimization, register allocation, instruction encoding
 - **Data Compression**: Huffman coding, LZ algorithms, bit-level packing
 - **Machine Learning**: Feature hashing, dimensionality reduction, neural network optimization`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Binary Representation**: Understanding how numbers are stored as sequences of bits
 2. **Bitwise Operators**: AND (&), OR (|), XOR (^), NOT (~), Left Shift (<<), Right Shift (>>)
 3. **Bit Positions**: Each bit has a position (0-indexed from right), representing powers of 2
@@ -24231,7 +24240,7 @@ When to use: optimization problems, checking powers of two, finding unique eleme
 5. **Bit Masks**: Using specific bit patterns to isolate or modify certain bits
 6. **Bit Tricks**: Efficient algorithms using bitwise operations (power of 2, even/odd checks)
 7. **Performance Benefits**: Bitwise operations are among the fastest CPU instructions`,
-    pseudocode: `**Bit Manipulation Algorithms:**
+        pseudocode: `**Bit Manipulation Algorithms:**
 
 ALGORITHM CheckEvenOdd(number)
 INPUT: number - integer to check
@@ -24277,7 +24286,7 @@ BEGIN
     END WHILE
     RETURN count
 END`,
-    implementationCode: `// Comprehensive Bit Manipulation Implementation
+        implementationCode: `// Comprehensive Bit Manipulation Implementation
 
 class BitManipulation {
     // Basic bitwise operations demonstration
@@ -24426,39 +24435,39 @@ console.log(BitManipulation.setBit(5, 1)); // 7 (101 -> 111)
 console.log(BitManipulation.countSetBits(7)); // 3
 console.log(BitManipulation.generateSubsets([1, 2, 3])); // All subsets
 console.log(BitManipulation.findSingleNumber([2, 1, 2, 3, 1])); // 3`,
-    quizQuestions: [
-      {
-        question: "What does the expression (n & 1) check?",
-        options: ["If n is positive", "If n is even or odd", "If n is a power of 2", "If n is zero"],
-        correctAnswer: 1,
-        explanation: "The expression (n & 1) checks the least significant bit. If it's 0, the number is even; if it's 1, the number is odd."
-      },
-      {
-        question: "What is the result of 5 ^ 3 (5 XOR 3)?",
-        options: ["8", "6", "2", "15"],
-        correctAnswer: 1,
-        explanation: "5 in binary is 101, 3 in binary is 011. XOR gives 110, which is 6 in decimal."
-      },
-      {
-        question: "How do you check if a number n is a power of 2?",
-        options: ["n & 1 == 0", "n > 0 && (n & (n-1)) == 0", "n % 2 == 0", "n << 1 == n"],
-        correctAnswer: 1,
-        explanation: "A power of 2 has exactly one bit set. The expression (n & (n-1)) removes the rightmost set bit, so it equals 0 only for powers of 2."
-      },
-      {
-        question: "What does left shift (<<) operation do to a number?",
-        options: ["Divides by 2", "Multiplies by 2", "Adds 1", "Subtracts 1"],
-        correctAnswer: 1,
-        explanation: "Left shift by 1 position multiplies the number by 2. Each left shift by n positions multiplies by 2^n."
-      },
-      {
-        question: "What is a real-world application of bit manipulation?",
-        options: ["Sorting arrays", "Color manipulation in computer graphics", "Binary tree traversal", "Linked list operations"],
-        correctAnswer: 1,
-        explanation: "Computer graphics extensively uses bit manipulation for color operations, alpha blending, and pixel-level manipulations."
-      }
-    ],
-    syntax: `// Basic Bitwise Operators
+        quizQuestions: [
+            {
+                question: "What does the expression (n & 1) check?",
+                options: ["If n is positive", "If n is even or odd", "If n is a power of 2", "If n is zero"],
+                correctAnswer: 1,
+                explanation: "The expression (n & 1) checks the least significant bit. If it's 0, the number is even; if it's 1, the number is odd."
+            },
+            {
+                question: "What is the result of 5 ^ 3 (5 XOR 3)?",
+                options: ["8", "6", "2", "15"],
+                correctAnswer: 1,
+                explanation: "5 in binary is 101, 3 in binary is 011. XOR gives 110, which is 6 in decimal."
+            },
+            {
+                question: "How do you check if a number n is a power of 2?",
+                options: ["n & 1 == 0", "n > 0 && (n & (n-1)) == 0", "n % 2 == 0", "n << 1 == n"],
+                correctAnswer: 1,
+                explanation: "A power of 2 has exactly one bit set. The expression (n & (n-1)) removes the rightmost set bit, so it equals 0 only for powers of 2."
+            },
+            {
+                question: "What does left shift (<<) operation do to a number?",
+                options: ["Divides by 2", "Multiplies by 2", "Adds 1", "Subtracts 1"],
+                correctAnswer: 1,
+                explanation: "Left shift by 1 position multiplies the number by 2. Each left shift by n positions multiplies by 2^n."
+            },
+            {
+                question: "What is a real-world application of bit manipulation?",
+                options: ["Sorting arrays", "Color manipulation in computer graphics", "Binary tree traversal", "Linked list operations"],
+                correctAnswer: 1,
+                explanation: "Computer graphics extensively uses bit manipulation for color operations, alpha blending, and pixel-level manipulations."
+            }
+        ],
+        syntax: `// Basic Bitwise Operators
 a & b    // AND - both bits must be 1
 a | b    // OR - at least one bit must be 1
 a ^ b    // XOR - bits must be different
@@ -24473,7 +24482,7 @@ num | (1 << i)     // Set bit at position i
 num & ~(1 << i)    // Clear bit at position i
 num ^ (1 << i)     // Toggle bit at position i
 (num & (1 << i)) !== 0  // Check if bit i is set`,
-    example: `// Bit Manipulation Basics
+        example: `// Bit Manipulation Basics
 
 // Basic Bitwise Operations
 function bitwiseOperations() {
@@ -24545,7 +24554,7 @@ console.log(isPowerOfTwo(8));  // true
 console.log(setBit(5, 1));     // 7 (101 -> 111)
 console.log(clearBit(7, 1));   // 5 (111 -> 101)
 console.log(countSetBits(7));  // 3`,
-    syntax_alt: `**Bit Manipulation Patterns:**
+        syntax_alt: `**Bit Manipulation Patterns:**
 
 1. **Basic Operations:**
    \`\`\`javascript
@@ -24588,7 +24597,7 @@ console.log(countSetBits(7));  // 3`,
    // Check if bit i is set
    (num & (1 << i)) !== 0
    \`\`\``,
-    syntax_alt2: `// Basic Bitwise Operators
+        syntax_alt2: `// Basic Bitwise Operators
 a & b    // AND
 a | b    // OR  
 a ^ b    // XOR
@@ -24601,24 +24610,24 @@ n & 1 === 0        // Check even
 n & (n-1) === 0    // Check power of 2
 num | (1 << i)     // Set bit i
 num & ~(1 << i)    // Clear bit i`,
-  },
-  {
-    id: 'count-set-bits',
-    title: 'Count Set Bits',
-    description: 'Count number of 1s in binary representation',
-    category: 'Bit Manipulation',
-    difficulty: 'beginner',
-    timeComplexity: 'O(log n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Counting Set Bits (also known as Population Count or Hamming Weight) is a fundamental bit manipulation operation that counts the number of 1s in the binary representation of a number. This operation has numerous applications in computer science and optimization.
+    },
+    {
+        id: 'count-set-bits',
+        title: 'Count Set Bits',
+        description: 'Count number of 1s in binary representation',
+        category: 'Bit Manipulation',
+        difficulty: 'beginner',
+        timeComplexity: 'O(log n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Counting Set Bits (also known as Population Count or Hamming Weight) is a fundamental bit manipulation operation that counts the number of 1s in the binary representation of a number. This operation has numerous applications in computer science and optimization.
 
 What it does: counts number of 1-bits in binary representation of integer, fundamental operation for bit manipulation algorithms.
 
 How it works: uses bit operations like n&1 to check bits, or Brian Kernighan's algorithm n&(n-1) to clear rightmost set bit.
 
 When to use: bit manipulation problems, cryptography, error correction codes, optimization algorithms, competitive programming.`,
-    voiceExplanation: `Think of counting set bits like counting the number of lights that are turned ON in a row of light switches. Imagine you have a binary number like 1011 (which is 11 in decimal) - this represents 4 light switches where the 1st, 3rd, and 4th switches are ON, and the 2nd switch is OFF. Your job is to count how many switches are ON. The naive approach is like walking down the row and checking each switch one by one - "Is this switch ON? Yes, count it. Is the next switch ON? No, skip it." But there's a brilliant trick called Brian Kernighan's algorithm! It's like having a magic wand that can turn OFF the rightmost ON switch with each wave. The magic formula is n & (n-1). Each time you use this formula, one light goes out, and you count how many times you had to wave the wand until all lights are OFF. This is much faster because you only check the switches that are actually ON, not every single switch in the row!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of counting set bits like counting the number of lights that are turned ON in a row of light switches. Imagine you have a binary number like 1011 (which is 11 in decimal) - this represents 4 light switches where the 1st, 3rd, and 4th switches are ON, and the 2nd switch is OFF. Your job is to count how many switches are ON. The naive approach is like walking down the row and checking each switch one by one - "Is this switch ON? Yes, count it. Is the next switch ON? No, skip it." But there's a brilliant trick called Brian Kernighan's algorithm! It's like having a magic wand that can turn OFF the rightmost ON switch with each wave. The magic formula is n & (n-1). Each time you use this formula, one light goes out, and you count how many times you had to wave the wand until all lights are OFF. This is much faster because you only check the switches that are actually ON, not every single switch in the row!`,
+        realWorldApplications: `**Industry Applications:**
 - **Cryptography**: Calculating Hamming distance for error detection and correction
 - **Database Systems**: Bitmap indexes for fast query processing and data compression
 - **Network Security**: Analyzing bit patterns in network packets and intrusion detection
@@ -24629,7 +24638,7 @@ When to use: bit manipulation problems, cryptography, error correction codes, op
 - **Bioinformatics**: DNA sequence analysis and genetic algorithm implementations
 - **Game Development**: Collision detection masks and state management optimization
 - **Hardware Design**: Circuit optimization and FPGA programming for embedded systems`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Hamming Weight**: Technical term for the count of set bits in binary representation
 2. **Brian Kernighan's Algorithm**: Efficient O(k) approach where k is number of set bits
 3. **Bit Manipulation Tricks**: Using n&(n-1) to clear rightmost set bit efficiently
@@ -24637,7 +24646,7 @@ When to use: bit manipulation problems, cryptography, error correction codes, op
 5. **Parallel Bit Counting**: Divide-and-conquer approach for constant-time counting
 6. **Performance Trade-offs**: Time vs space complexity in different counting approaches
 7. **Applications in Algorithms**: Foundation for many advanced bit manipulation techniques`,
-    pseudocode: `**Count Set Bits Algorithms:**
+        pseudocode: `**Count Set Bits Algorithms:**
 
 ALGORITHM CountSetBitsNaive(number)
 INPUT: number - integer to count bits in
@@ -24693,7 +24702,7 @@ BEGIN
     number = number + (number >> 16)
     RETURN number & 0x3F
 END`,
-    implementationCode: `// Comprehensive Count Set Bits Implementation
+        implementationCode: `// Comprehensive Count Set Bits Implementation
 
 class SetBitCounter {
     constructor() {
@@ -24845,39 +24854,39 @@ console.log(SetBitCounter.countSetBitsBrianKernighan(12));  // 2 (binary: 1100)
 console.log(counter.comparePerformance(255));  // Performance comparison
 console.log(counter.findNumbersWithKBits(15, 2));  // Numbers ≤ 15 with exactly 2 set bits
 console.log(counter.hammingDistance(5, 3));  // Hamming distance between 5 and 3`,
-    quizQuestions: [
-      {
-        question: "What is the time complexity of Brian Kernighan's algorithm for counting set bits?",
-        options: ["O(log n)", "O(k) where k is number of set bits", "O(n)", "O(1)"],
-        correctAnswer: 1,
-        explanation: "Brian Kernighan's algorithm runs in O(k) time where k is the number of set bits, because it only loops for each set bit, not for each bit position."
-      },
-      {
-        question: "What does the operation n & (n-1) accomplish?",
-        options: ["Sets the rightmost bit", "Clears the rightmost set bit", "Counts all bits", "Shifts bits left"],
-        correctAnswer: 1,
-        explanation: "The operation n & (n-1) clears the rightmost set bit. This is the key insight behind Brian Kernighan's algorithm."
-      },
-      {
-        question: "For the number 12 (binary: 1100), how many set bits are there?",
-        options: ["1", "2", "3", "4"],
-        correctAnswer: 1,
-        explanation: "The binary representation of 12 is 1100, which has exactly 2 set bits (two 1s)."
-      },
-      {
-        question: "What is the space complexity of the lookup table approach for counting set bits?",
-        options: ["O(1)", "O(log n)", "O(256)", "O(n)"],
-        correctAnswer: 2,
-        explanation: "The lookup table approach uses O(256) space to precompute the bit counts for all 8-bit numbers (0-255)."
-      },
-      {
-        question: "What is a real-world application of counting set bits?",
-        options: ["Sorting arrays", "Calculating Hamming distance in error correction codes", "Binary tree traversal", "Hash table implementation"],
-        correctAnswer: 1,
-        explanation: "Counting set bits is fundamental for calculating Hamming distance, which is crucial in error detection and correction codes used in data transmission."
-      }
-    ],
-    syntax: `// Count Set Bits Patterns
+        quizQuestions: [
+            {
+                question: "What is the time complexity of Brian Kernighan's algorithm for counting set bits?",
+                options: ["O(log n)", "O(k) where k is number of set bits", "O(n)", "O(1)"],
+                correctAnswer: 1,
+                explanation: "Brian Kernighan's algorithm runs in O(k) time where k is the number of set bits, because it only loops for each set bit, not for each bit position."
+            },
+            {
+                question: "What does the operation n & (n-1) accomplish?",
+                options: ["Sets the rightmost bit", "Clears the rightmost set bit", "Counts all bits", "Shifts bits left"],
+                correctAnswer: 1,
+                explanation: "The operation n & (n-1) clears the rightmost set bit. This is the key insight behind Brian Kernighan's algorithm."
+            },
+            {
+                question: "For the number 12 (binary: 1100), how many set bits are there?",
+                options: ["1", "2", "3", "4"],
+                correctAnswer: 1,
+                explanation: "The binary representation of 12 is 1100, which has exactly 2 set bits (two 1s)."
+            },
+            {
+                question: "What is the space complexity of the lookup table approach for counting set bits?",
+                options: ["O(1)", "O(log n)", "O(256)", "O(n)"],
+                correctAnswer: 2,
+                explanation: "The lookup table approach uses O(256) space to precompute the bit counts for all 8-bit numbers (0-255)."
+            },
+            {
+                question: "What is a real-world application of counting set bits?",
+                options: ["Sorting arrays", "Calculating Hamming distance in error correction codes", "Binary tree traversal", "Hash table implementation"],
+                correctAnswer: 1,
+                explanation: "Counting set bits is fundamental for calculating Hamming distance, which is crucial in error detection and correction codes used in data transmission."
+            }
+        ],
+        syntax: `// Count Set Bits Patterns
 // Method 1: Naive approach
 function countSetBits(n) {
     let count = 0;
@@ -24902,7 +24911,7 @@ function countSetBitsBK(n) {
 function countSetBitsBuiltIn(n) {
     return n.toString(2).split('1').length - 1;
 }`,
-    example: `// Count Set Bits Implementation
+        example: `// Count Set Bits Implementation
 // Method 1: Naive approach - check each bit
 function countSetBitsNaive(n) {
     let count = 0;
@@ -25031,24 +25040,24 @@ console.log(countSetBitsBK(12));    // 2 (binary: 1100)
 const analyzer = new SetBitAnalyzer();
 console.log(analyzer.analyzeNumber(255)); // Compare all methods
 console.log(analyzer.findNumbersWithKBits(15, 2)); // Numbers ≤ 15 with exactly 2 set bits`
-  },
-  {
-    id: 'power-of-two',
-    title: 'Power of Two Check',
-    description: 'Check if number is power of 2 using bit manipulation',
-    category: 'Bit Manipulation',
-    difficulty: 'beginner',
-    timeComplexity: 'O(1)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Checking if a number is a power of two is a classic bit manipulation problem that can be solved elegantly using the property that powers of two have exactly one bit set in their binary representation.
+    },
+    {
+        id: 'power-of-two',
+        title: 'Power of Two Check',
+        description: 'Check if number is power of 2 using bit manipulation',
+        category: 'Bit Manipulation',
+        difficulty: 'beginner',
+        timeComplexity: 'O(1)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Checking if a number is a power of two is a classic bit manipulation problem that can be solved elegantly using the property that powers of two have exactly one bit set in their binary representation.
 
 What it does: determines if given positive integer is power of two using efficient bit manipulation trick.
 
 How it works: uses n & (n-1) == 0 property where powers of two have single bit set, subtracting 1 flips all bits after it.
 
 When to use: optimization problems, memory allocation, hash table sizing, binary tree problems, competitive programming.`,
-    voiceExplanation: `Think of checking if a number is a power of two like identifying perfect binary patterns. Imagine you have a row of light switches where only one switch can be ON at a time to represent a power of two. For example, 8 in binary is 1000 - just one switch ON in the 4th position. The brilliant insight is this: when you subtract 1 from a power of two, something magical happens! Take 8 (1000) minus 1, which gives you 7 (0111). Notice how all the bits after the single ON bit get flipped? Now, when you AND these two numbers together (1000 & 0111), you get 0000 - all zeros! This happens because the single ON bit in the original number aligns with a OFF bit in the (n-1) number. It's like having a perfect lock and key mechanism. If the number isn't a power of two, it has multiple ON switches, so when you subtract 1 and AND them together, you won't get all zeros. This elegant trick lets you check power of two in just one operation!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of checking if a number is a power of two like identifying perfect binary patterns. Imagine you have a row of light switches where only one switch can be ON at a time to represent a power of two. For example, 8 in binary is 1000 - just one switch ON in the 4th position. The brilliant insight is this: when you subtract 1 from a power of two, something magical happens! Take 8 (1000) minus 1, which gives you 7 (0111). Notice how all the bits after the single ON bit get flipped? Now, when you AND these two numbers together (1000 & 0111), you get 0000 - all zeros! This happens because the single ON bit in the original number aligns with a OFF bit in the (n-1) number. It's like having a perfect lock and key mechanism. If the number isn't a power of two, it has multiple ON switches, so when you subtract 1 and AND them together, you won't get all zeros. This elegant trick lets you check power of two in just one operation!`,
+        realWorldApplications: `**Industry Applications:**
 - **Memory Management**: Operating systems use power-of-2 memory allocation for efficiency
 - **Hash Table Sizing**: Hash tables perform best when size is power of 2 for modulo operations
 - **Graphics Programming**: Texture dimensions in games must be powers of 2 for GPU optimization
@@ -25059,7 +25068,7 @@ When to use: optimization problems, memory allocation, hash table sizing, binary
 - **File Systems**: Block sizes and cluster sizes in file systems for optimal performance
 - **Cryptography**: Key sizes and block sizes in encryption algorithms
 - **Embedded Systems**: Hardware registers and memory addressing schemes`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Binary Representation**: Powers of 2 have exactly one bit set (1, 10, 100, 1000...)
 2. **Bit Manipulation Trick**: n & (n-1) == 0 for powers of 2 (excluding 0)
 3. **Edge Case Handling**: Zero and negative numbers are not powers of 2
@@ -25067,7 +25076,7 @@ When to use: optimization problems, memory allocation, hash table sizing, binary
 5. **Performance Optimization**: O(1) time complexity vs O(log n) division approach
 6. **Bit Pattern Recognition**: Understanding how subtraction affects binary representation
 7. **Practical Applications**: Memory alignment, hash table sizing, algorithm optimization`,
-    pseudocode: `**Power of Two Check Algorithm:**
+        pseudocode: `**Power of Two Check Algorithm:**
 
 ALGORITHM IsPowerOfTwo(number)
 INPUT: number - integer to check
@@ -25113,7 +25122,7 @@ BEGIN
     
     RETURN number + 1
 END`,
-    implementationCode: `// Comprehensive Power of Two Implementation
+        implementationCode: `// Comprehensive Power of Two Implementation
 
 class PowerOfTwoChecker {
     // Main algorithm - check if number is power of 2
@@ -25280,39 +25289,39 @@ console.log(PowerOfTwoChecker.isPowerOfTwo(6));  // false
 console.log(PowerOfTwoChecker.nextPowerOfTwo(10)); // 16
 console.log(PowerOfTwoChecker.generatePowersOfTwo(100)); // All powers of 2 ≤ 100
 console.log(PowerOfTwoChecker.comparePerformance(1024)); // Performance comparison`,
-    quizQuestions: [
-      {
-        question: "What is the key insight behind the n & (n-1) == 0 check for powers of 2?",
-        options: ["It counts the number of bits", "Powers of 2 have exactly one bit set", "It performs division by 2", "It checks for even numbers"],
-        correctAnswer: 1,
-        explanation: "Powers of 2 have exactly one bit set in their binary representation. The operation n & (n-1) clears this single bit, resulting in 0."
-      },
-      {
-        question: "Which of these numbers is a power of 2?",
-        options: ["6", "12", "16", "18"],
-        correctAnswer: 2,
-        explanation: "16 is 2^4, which has binary representation 10000 - exactly one bit set."
-      },
-      {
-        question: "What happens when you subtract 1 from a power of 2 in binary?",
-        options: ["Nothing changes", "All bits after the set bit become 1", "The number becomes 0", "It becomes negative"],
-        correctAnswer: 1,
-        explanation: "Subtracting 1 from a power of 2 flips all the bits after (and including) the single set bit, creating a pattern that ANDs to 0 with the original."
-      },
-      {
-        question: "Why is 0 not considered a power of 2?",
-        options: ["It has no bits set", "It's not positive", "2^k is never 0 for any real k", "All of the above"],
-        correctAnswer: 3,
-        explanation: "0 is not a power of 2 because: it has no bits set, it's not positive, and mathematically 2^k is never 0 for any real exponent k."
-      },
-      {
-        question: "What is a real-world application of power of 2 checking?",
-        options: ["Sorting algorithms", "Hash table sizing for optimal performance", "Binary tree height calculation", "String matching"],
-        correctAnswer: 1,
-        explanation: "Hash tables perform optimally when their size is a power of 2, as it allows for efficient modulo operations using bitwise AND."
-      }
-    ],
-    syntax: `// Power of Two Check Pattern
+        quizQuestions: [
+            {
+                question: "What is the key insight behind the n & (n-1) == 0 check for powers of 2?",
+                options: ["It counts the number of bits", "Powers of 2 have exactly one bit set", "It performs division by 2", "It checks for even numbers"],
+                correctAnswer: 1,
+                explanation: "Powers of 2 have exactly one bit set in their binary representation. The operation n & (n-1) clears this single bit, resulting in 0."
+            },
+            {
+                question: "Which of these numbers is a power of 2?",
+                options: ["6", "12", "16", "18"],
+                correctAnswer: 2,
+                explanation: "16 is 2^4, which has binary representation 10000 - exactly one bit set."
+            },
+            {
+                question: "What happens when you subtract 1 from a power of 2 in binary?",
+                options: ["Nothing changes", "All bits after the set bit become 1", "The number becomes 0", "It becomes negative"],
+                correctAnswer: 1,
+                explanation: "Subtracting 1 from a power of 2 flips all the bits after (and including) the single set bit, creating a pattern that ANDs to 0 with the original."
+            },
+            {
+                question: "Why is 0 not considered a power of 2?",
+                options: ["It has no bits set", "It's not positive", "2^k is never 0 for any real k", "All of the above"],
+                correctAnswer: 3,
+                explanation: "0 is not a power of 2 because: it has no bits set, it's not positive, and mathematically 2^k is never 0 for any real exponent k."
+            },
+            {
+                question: "What is a real-world application of power of 2 checking?",
+                options: ["Sorting algorithms", "Hash table sizing for optimal performance", "Binary tree height calculation", "String matching"],
+                correctAnswer: 1,
+                explanation: "Hash tables perform optimally when their size is a power of 2, as it allows for efficient modulo operations using bitwise AND."
+            }
+        ],
+        syntax: `// Power of Two Check Pattern
 function isPowerOfTwo(n) {
     return n > 0 && (n & (n - 1)) === 0;
 }
@@ -25333,7 +25342,7 @@ function nextPowerOfTwo(n) {
 function hasOneBitSet(n) {
     return n > 0 && (n & (n - 1)) === 0;
 }`,
-    example: `// Power of Two Check Examples
+        example: `// Power of Two Check Examples
 function isPowerOfTwo(n) {
     return n > 0 && (n & (n - 1)) === 0;
 }
@@ -25342,24 +25351,24 @@ console.log(isPowerOfTwo(1));   // true  (2^0)
 console.log(isPowerOfTwo(8));   // true  (2^3)
 console.log(isPowerOfTwo(6));   // false
 console.log(isPowerOfTwo(16));  // true  (2^4)`
-  },
-  {
-    id: 'single-number',
-    title: 'Single Number',
-    description: 'Find single number in array where others appear twice',
-    category: 'Bit Manipulation',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `The Single Number problem finds the unique element in an array where every other element appears exactly twice, using the XOR operation's self-canceling property.
+    },
+    {
+        id: 'single-number',
+        title: 'Single Number',
+        description: 'Find single number in array where others appear twice',
+        category: 'Bit Manipulation',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `The Single Number problem finds the unique element in an array where every other element appears exactly twice, using the XOR operation's self-canceling property.
 
 What it does: finds single unique number in array where all other numbers appear exactly twice using XOR properties.
 
 How it works: XORs all numbers together, identical numbers cancel out (a ⊕ a = 0), leaving only the unique number.
 
 When to use: finding unique elements, bit manipulation practice, space-efficient solutions, when hash tables not allowed.`,
-    voiceExplanation: `Think of the Single Number problem like finding the one person who doesn't have a twin at a party. Imagine everyone at the party has an identical twin except for one person. The brilliant insight is using XOR operation, which acts like a magical cancellation machine! Picture XOR as a special handshake: when two identical people (twins) shake hands with XOR, they completely disappear - it's like they cancel each other out (a ⊕ a = 0). But when someone shakes hands with "nothing" (0), they remain unchanged (a ⊕ 0 = a). So here's the magic: if you make everyone at the party shake hands with each other using XOR, all the twins will cancel out and disappear, leaving only the unique person standing! It doesn't matter what order they shake hands - XOR is commutative and associative. This elegant solution works in O(n) time with O(1) space, making it incredibly efficient compared to using hash tables or sorting.`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of the Single Number problem like finding the one person who doesn't have a twin at a party. Imagine everyone at the party has an identical twin except for one person. The brilliant insight is using XOR operation, which acts like a magical cancellation machine! Picture XOR as a special handshake: when two identical people (twins) shake hands with XOR, they completely disappear - it's like they cancel each other out (a ⊕ a = 0). But when someone shakes hands with "nothing" (0), they remain unchanged (a ⊕ 0 = a). So here's the magic: if you make everyone at the party shake hands with each other using XOR, all the twins will cancel out and disappear, leaving only the unique person standing! It doesn't matter what order they shake hands - XOR is commutative and associative. This elegant solution works in O(n) time with O(1) space, making it incredibly efficient compared to using hash tables or sorting.`,
+        realWorldApplications: `**Industry Applications:**
 - **Error Detection**: Finding corrupted data in transmission where duplicates indicate integrity
 - **Database Deduplication**: Identifying unique records in datasets with paired entries
 - **Memory Management**: Finding memory leaks where objects should be allocated/deallocated in pairs
@@ -25370,7 +25379,7 @@ When to use: finding unique elements, bit manipulation practice, space-efficient
 - **Financial Systems**: Identifying unmatched transactions in double-entry bookkeeping
 - **Data Validation**: Finding inconsistencies in mirrored or backup systems
 - **Hardware Testing**: Identifying faulty components in redundant systems`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **XOR Properties**: Self-canceling (a ⊕ a = 0), identity (a ⊕ 0 = a), commutative, associative
 2. **Bit Manipulation Elegance**: Using mathematical properties for algorithmic solutions
 3. **Space Optimization**: O(1) space complexity vs O(n) hash table approach
@@ -25378,7 +25387,7 @@ When to use: finding unique elements, bit manipulation practice, space-efficient
 5. **Mathematical Foundation**: XOR as addition in GF(2) finite field
 6. **Problem Variations**: Extensions to finding elements appearing odd number of times
 7. **Practical Constraints**: Works when exactly one element appears once, others appear even times`,
-    pseudocode: `**Single Number Algorithm:**
+        pseudocode: `**Single Number Algorithm:**
 
 ALGORITHM FindSingleNumber(array)
 INPUT: array - array where all elements appear twice except one
@@ -25435,7 +25444,7 @@ BEGIN
     
     RETURN [first, second]
 END`,
-    implementationCode: `// Comprehensive Single Number Implementation
+        implementationCode: `// Comprehensive Single Number Implementation
 
 class SingleNumberSolver {
     // Main algorithm - find single number where others appear twice
@@ -25647,39 +25656,39 @@ console.log('Test case:', testCase);
 console.log('Solution:', SingleNumberSolver.singleNumber(testCase.array));
 
 console.log(SingleNumberSolver.demonstrateXOR([4, 1, 2, 1, 2])); // Step-by-step XOR`,
-    quizQuestions: [
-      {
-        question: "What is the key property of XOR that makes the single number algorithm work?",
-        options: ["XOR is commutative", "XOR is associative", "a ⊕ a = 0 (self-canceling)", "All of the above"],
-        correctAnswer: 3,
-        explanation: "All XOR properties are essential: self-canceling eliminates pairs, while commutative and associative properties allow any order of operations."
-      },
-      {
-        question: "What is the result of 5 ⊕ 3 ⊕ 5?",
-        options: ["0", "3", "5", "8"],
-        correctAnswer: 1,
-        explanation: "5 ⊕ 3 ⊕ 5 = (5 ⊕ 5) ⊕ 3 = 0 ⊕ 3 = 3. The two 5s cancel each other out, leaving 3."
-      },
-      {
-        question: "What is the space complexity of the XOR approach for finding a single number?",
-        options: ["O(n)", "O(log n)", "O(1)", "O(n²)"],
-        correctAnswer: 2,
-        explanation: "The XOR approach uses only one variable to store the result, requiring O(1) constant space."
-      },
-      {
-        question: "Why doesn't the order of XOR operations matter in this algorithm?",
-        options: ["XOR is commutative and associative", "XOR is distributive", "XOR is reflexive", "XOR is symmetric"],
-        correctAnswer: 0,
-        explanation: "XOR is both commutative (a ⊕ b = b ⊕ a) and associative ((a ⊕ b) ⊕ c = a ⊕ (b ⊕ c)), allowing any order of operations."
-      },
-      {
-        question: "What is a real-world application of the single number algorithm?",
-        options: ["Sorting arrays", "Finding corrupted data in transmission systems", "Binary tree traversal", "Hash table implementation"],
-        correctAnswer: 1,
-        explanation: "The algorithm is used in error detection systems where data corruption can be identified by finding unpaired or unique elements in transmitted data."
-      }
-    ],
-    syntax: `// Single Number Pattern
+        quizQuestions: [
+            {
+                question: "What is the key property of XOR that makes the single number algorithm work?",
+                options: ["XOR is commutative", "XOR is associative", "a ⊕ a = 0 (self-canceling)", "All of the above"],
+                correctAnswer: 3,
+                explanation: "All XOR properties are essential: self-canceling eliminates pairs, while commutative and associative properties allow any order of operations."
+            },
+            {
+                question: "What is the result of 5 ⊕ 3 ⊕ 5?",
+                options: ["0", "3", "5", "8"],
+                correctAnswer: 1,
+                explanation: "5 ⊕ 3 ⊕ 5 = (5 ⊕ 5) ⊕ 3 = 0 ⊕ 3 = 3. The two 5s cancel each other out, leaving 3."
+            },
+            {
+                question: "What is the space complexity of the XOR approach for finding a single number?",
+                options: ["O(n)", "O(log n)", "O(1)", "O(n²)"],
+                correctAnswer: 2,
+                explanation: "The XOR approach uses only one variable to store the result, requiring O(1) constant space."
+            },
+            {
+                question: "Why doesn't the order of XOR operations matter in this algorithm?",
+                options: ["XOR is commutative and associative", "XOR is distributive", "XOR is reflexive", "XOR is symmetric"],
+                correctAnswer: 0,
+                explanation: "XOR is both commutative (a ⊕ b = b ⊕ a) and associative ((a ⊕ b) ⊕ c = a ⊕ (b ⊕ c)), allowing any order of operations."
+            },
+            {
+                question: "What is a real-world application of the single number algorithm?",
+                options: ["Sorting arrays", "Finding corrupted data in transmission systems", "Binary tree traversal", "Hash table implementation"],
+                correctAnswer: 1,
+                explanation: "The algorithm is used in error detection systems where data corruption can be identified by finding unpaired or unique elements in transmitted data."
+            }
+        ],
+        syntax: `// Single Number Pattern
 function singleNumber(nums) {
     let result = 0;
     for (let num of nums) {
@@ -25705,7 +25714,7 @@ function singleNumberII(nums) {
     }
     return [first, second];
 }`,
-    example: `// Single Number Examples
+        example: `// Single Number Examples
 function singleNumber(nums) {
     let result = 0;
     for (let num of nums) {
@@ -25717,24 +25726,24 @@ function singleNumber(nums) {
 console.log(singleNumber([2, 2, 1]));       // 1
 console.log(singleNumber([4, 1, 2, 1, 2])); // 4
 console.log(singleNumber([1]));             // 1`
-  },
-  {
-    id: 'bit-subset',
-    title: 'Generate All Subsets',
-    description: 'Generate all subsets using bit manipulation',
-    category: 'Bit Manipulation',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(2^n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Generating all subsets using bit manipulation leverages the fact that each subset can be represented by a binary number where each bit indicates whether an element is included.
+    },
+    {
+        id: 'bit-subset',
+        title: 'Generate All Subsets',
+        description: 'Generate all subsets using bit manipulation',
+        category: 'Bit Manipulation',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(2^n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Generating all subsets using bit manipulation leverages the fact that each subset can be represented by a binary number where each bit indicates whether an element is included.
 
 What it does: generates all possible subsets of given set using bit patterns to represent element inclusion/exclusion.
 
 How it works: iterates through numbers 0 to 2^n-1, uses each bit position to determine if corresponding element is in subset.
 
 When to use: subset enumeration problems, combinatorial generation, backtracking alternatives, when memory efficiency important.`,
-    voiceExplanation: `Think of generating all subsets like having a magical decision-making machine for a group of friends going to a party. Imagine you have 3 friends: Alice, Bob, and Charlie. For each friend, you have a simple yes/no decision: invite them or not. The brilliant insight is that every possible combination of decisions can be represented by a binary number! Picture this: if you have 3 friends, you need 3 bits. The number 5 in binary is 101, which means "invite Alice (1st bit), don't invite Bob (0 in 2nd bit), invite Charlie (1 in 3rd bit)." By counting from 0 to 7 (which is 2^3 - 1), you get all possible combinations: 000 (invite nobody), 001 (just Charlie), 010 (just Bob), 011 (Bob and Charlie), and so on. Each bit position corresponds to one friend, and each number from 0 to 2^n-1 represents a unique subset. It's like having a systematic way to explore every possible guest list without missing any combination or repeating any!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of generating all subsets like having a magical decision-making machine for a group of friends going to a party. Imagine you have 3 friends: Alice, Bob, and Charlie. For each friend, you have a simple yes/no decision: invite them or not. The brilliant insight is that every possible combination of decisions can be represented by a binary number! Picture this: if you have 3 friends, you need 3 bits. The number 5 in binary is 101, which means "invite Alice (1st bit), don't invite Bob (0 in 2nd bit), invite Charlie (1 in 3rd bit)." By counting from 0 to 7 (which is 2^3 - 1), you get all possible combinations: 000 (invite nobody), 001 (just Charlie), 010 (just Bob), 011 (Bob and Charlie), and so on. Each bit position corresponds to one friend, and each number from 0 to 2^n-1 represents a unique subset. It's like having a systematic way to explore every possible guest list without missing any combination or repeating any!`,
+        realWorldApplications: `**Industry Applications:**
 - **Feature Selection**: Machine learning algorithms selecting optimal feature combinations
 - **Test Case Generation**: Creating all possible test scenarios for software validation
 - **Configuration Management**: Generating all possible system configuration combinations
@@ -25745,7 +25754,7 @@ When to use: subset enumeration problems, combinatorial generation, backtracking
 - **Resource Allocation**: Exploring all possible resource assignment combinations
 - **Cryptographic Analysis**: Brute force key space exploration in security testing
 - **Bioinformatics**: Generating all possible gene combination patterns for analysis`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Binary Representation Mapping**: Each bit position maps to one element in the original set
 2. **Exponential Growth**: 2^n total subsets for n elements (including empty set)
 3. **Bit Checking**: Using (i & (1 << j)) to check if j-th element should be included
@@ -25753,7 +25762,7 @@ When to use: subset enumeration problems, combinatorial generation, backtracking
 5. **Space Efficiency**: O(1) extra space for generation (excluding output storage)
 6. **Mathematical Foundation**: Bijection between subsets and binary representations
 7. **Combinatorial Completeness**: Generates all 2^n possible subsets without duplicates`,
-    pseudocode: `**Generate All Subsets Algorithm:**
+        pseudocode: `**Generate All Subsets Algorithm:**
 
 ALGORITHM GenerateAllSubsets(set)
 INPUT: set - array of n elements
@@ -25821,7 +25830,7 @@ BEGIN
     currentSubset.removeLast()
     GenerateSubsetsRecursive(set, index + 1, currentSubset, allSubsets)
 END`,
-    implementationCode: `// Comprehensive Subset Generation Implementation
+        implementationCode: `// Comprehensive Subset Generation Implementation
 
 class SubsetGenerator {
     // Main bit manipulation approach - O(2^n) time, O(1) extra space
@@ -26051,39 +26060,39 @@ console.log(SubsetGenerator.generateSubsetsWithSum([1, 2, 3, 4], 5));
 
 console.log(SubsetGenerator.demonstrateBitPatterns(['A', 'B', 'C']));
 // Educational bit pattern demonstration`,
-    quizQuestions: [
-      {
-        question: "How many subsets does a set with n elements have?",
-        options: ["n", "n²", "2^n", "n!"],
-        correctAnswer: 2,
-        explanation: "A set with n elements has 2^n subsets, including the empty set and the set itself. Each element can either be included or excluded."
-      },
-      {
-        question: "In bit manipulation subset generation, what does the binary number 101 represent for the set [A, B, C]?",
-        options: ["[A, C]", "[B]", "[A, B]", "[B, C]"],
-        correctAnswer: 0,
-        explanation: "101 in binary means include 1st element (A), exclude 2nd element (B), include 3rd element (C), giving subset [A, C]."
-      },
-      {
-        question: "What is the time complexity of generating all subsets using bit manipulation?",
-        options: ["O(n)", "O(n²)", "O(2^n)", "O(n!)"],
-        correctAnswer: 2,
-        explanation: "We need to generate 2^n subsets, and for each subset we check n bits, resulting in O(n × 2^n) = O(2^n) time complexity."
-      },
-      {
-        question: "What bit operation checks if the j-th element should be included in subset i?",
-        options: ["i | (1 << j)", "i & (1 << j)", "i ^ (1 << j)", "i >> j"],
-        correctAnswer: 1,
-        explanation: "The operation i & (1 << j) checks if the j-th bit is set in i, determining if the j-th element should be included."
-      },
-      {
-        question: "What is a real-world application of subset generation?",
-        options: ["Sorting algorithms", "Feature selection in machine learning", "Binary tree traversal", "Hash table implementation"],
-        correctAnswer: 1,
-        explanation: "Machine learning uses subset generation for feature selection, exploring all possible combinations of features to find optimal sets."
-      }
-    ],
-    syntax: `// Generate All Subsets Pattern
+        quizQuestions: [
+            {
+                question: "How many subsets does a set with n elements have?",
+                options: ["n", "n²", "2^n", "n!"],
+                correctAnswer: 2,
+                explanation: "A set with n elements has 2^n subsets, including the empty set and the set itself. Each element can either be included or excluded."
+            },
+            {
+                question: "In bit manipulation subset generation, what does the binary number 101 represent for the set [A, B, C]?",
+                options: ["[A, C]", "[B]", "[A, B]", "[B, C]"],
+                correctAnswer: 0,
+                explanation: "101 in binary means include 1st element (A), exclude 2nd element (B), include 3rd element (C), giving subset [A, C]."
+            },
+            {
+                question: "What is the time complexity of generating all subsets using bit manipulation?",
+                options: ["O(n)", "O(n²)", "O(2^n)", "O(n!)"],
+                correctAnswer: 2,
+                explanation: "We need to generate 2^n subsets, and for each subset we check n bits, resulting in O(n × 2^n) = O(2^n) time complexity."
+            },
+            {
+                question: "What bit operation checks if the j-th element should be included in subset i?",
+                options: ["i | (1 << j)", "i & (1 << j)", "i ^ (1 << j)", "i >> j"],
+                correctAnswer: 1,
+                explanation: "The operation i & (1 << j) checks if the j-th bit is set in i, determining if the j-th element should be included."
+            },
+            {
+                question: "What is a real-world application of subset generation?",
+                options: ["Sorting algorithms", "Feature selection in machine learning", "Binary tree traversal", "Hash table implementation"],
+                correctAnswer: 1,
+                explanation: "Machine learning uses subset generation for feature selection, exploring all possible combinations of features to find optimal sets."
+            }
+        ],
+        syntax: `// Generate All Subsets Pattern
 function generateSubsets(nums) {
     const n = nums.length;
     const subsets = [];
@@ -26110,7 +26119,7 @@ function isBitSet(i, j) {
 function countSubsets(n) {
     return 1 << n; // 2^n
 }`,
-    example: `// Generate All Subsets Examples
+        example: `// Generate All Subsets Examples
 function generateSubsets(nums) {
     const n = nums.length;
     const subsets = [];
@@ -26134,25 +26143,25 @@ function generateSubsets(nums) {
 
 console.log(generateSubsets([1, 2]));     // [[], [1], [2], [1,2]]
 console.log(generateSubsets([1, 2, 3])); // [[], [1], [2], [1,2], [3], [1,3], [2,3], [1,2,3]]`
-  },
+    },
 
-  // Mathematical Algorithms
-  {
-    id: 'mathematical-algorithms-intro',
-    title: 'Mathematical Algorithms Overview',
-    description: 'Foundation of computational mathematics in algorithm design and optimization',
-    category: 'Mathematical Algorithms',
-    difficulty: 'intermediate',
-    timeComplexity: 'Varies',
-    spaceComplexity: 'Varies',
-    extendedDefinition: `Mathematical algorithms form the backbone of computational problem-solving, combining mathematical theory with efficient algorithmic techniques. These algorithms solve numerical problems, optimize computations, and provide foundations for cryptography, graphics, and scientific computing.
+    // Mathematical Algorithms
+    {
+        id: 'mathematical-algorithms-intro',
+        title: 'Mathematical Algorithms Overview',
+        description: 'Foundation of computational mathematics in algorithm design and optimization',
+        category: 'Mathematical Algorithms',
+        difficulty: 'intermediate',
+        timeComplexity: 'Varies',
+        spaceComplexity: 'Varies',
+        extendedDefinition: `Mathematical algorithms form the backbone of computational problem-solving, combining mathematical theory with efficient algorithmic techniques. These algorithms solve numerical problems, optimize computations, and provide foundations for cryptography, graphics, and scientific computing.
 
 What it does: applies mathematical principles to solve computational problems efficiently, covering number theory, combinatorics, and optimization.
 
 How it works: leverages mathematical properties like modular arithmetic, fast exponentiation, and algorithmic optimization to reduce complexity.
 
 When to use: cryptography applications, scientific computing, graphics programming, competitive programming, when mathematical insight can optimize solutions.`,
-    example: `// Fast Exponentiation
+        example: `// Fast Exponentiation
 function fastPower(base, exp, mod = null) {
     let result = 1;
     while (exp > 0) {
@@ -26180,7 +26189,7 @@ function sieveOfEratosthenes(n) {
     }
     return isPrime.map((prime, index) => prime ? index : null).filter(num => num !== null);
 }`,
-    syntax: `**Mathematical Algorithm Patterns:**
+        syntax: `**Mathematical Algorithm Patterns:**
 
 1. **Iterative Mathematical Operations:**
    \`\`\`javascript
@@ -26212,8 +26221,8 @@ function sieveOfEratosthenes(n) {
        return ((a % MOD) + (b % MOD)) % MOD;
    }
    \`\`\``,
-    voiceExplanation: `Think of mathematical algorithms like having a powerful toolkit for solving numerical puzzles that appear everywhere in computer science. Imagine you're a digital architect who needs to build secure systems, create stunning graphics, or solve complex optimization problems. Mathematical algorithms are your specialized tools! Picture fast exponentiation like having a super-efficient calculator that can compute 2^1000 without breaking a sweat - instead of multiplying 2 by itself 1000 times, it uses clever shortcuts by repeatedly squaring and combining results. Number theory algorithms are like having a master locksmith's tools - they help you understand the fundamental properties of numbers, find greatest common divisors, and work with prime numbers that form the backbone of internet security. Modular arithmetic is like working with a clock - numbers wrap around at a certain point, which is incredibly useful for keeping calculations manageable and preventing overflow. These aren't just abstract math concepts - they're the secret ingredients that make your credit card transactions secure, your video games run smoothly, and your search algorithms lightning-fast!`,
-    realWorldApplications: `**Industry Applications:**
+        voiceExplanation: `Think of mathematical algorithms like having a powerful toolkit for solving numerical puzzles that appear everywhere in computer science. Imagine you're a digital architect who needs to build secure systems, create stunning graphics, or solve complex optimization problems. Mathematical algorithms are your specialized tools! Picture fast exponentiation like having a super-efficient calculator that can compute 2^1000 without breaking a sweat - instead of multiplying 2 by itself 1000 times, it uses clever shortcuts by repeatedly squaring and combining results. Number theory algorithms are like having a master locksmith's tools - they help you understand the fundamental properties of numbers, find greatest common divisors, and work with prime numbers that form the backbone of internet security. Modular arithmetic is like working with a clock - numbers wrap around at a certain point, which is incredibly useful for keeping calculations manageable and preventing overflow. These aren't just abstract math concepts - they're the secret ingredients that make your credit card transactions secure, your video games run smoothly, and your search algorithms lightning-fast!`,
+        realWorldApplications: `**Industry Applications:**
 - **Cryptography**: RSA encryption, elliptic curve cryptography, digital signatures
 - **Computer Graphics**: 3D transformations, ray tracing, procedural generation
 - **Game Development**: Physics simulations, random number generation, AI algorithms
@@ -26224,7 +26233,7 @@ function sieveOfEratosthenes(n) {
 - **Compiler Design**: Optimization algorithms, code generation, register allocation
 - **Image Processing**: Fourier transforms, compression algorithms, filter design
 - **Artificial Intelligence**: Optimization algorithms, neural network training, genetic algorithms`,
-    keyConcepts: `**Essential Concepts:**
+        keyConcepts: `**Essential Concepts:**
 1. **Number Theory**: GCD, LCM, prime numbers, modular arithmetic, Euclidean algorithm
 2. **Fast Exponentiation**: Binary exponentiation, modular exponentiation, matrix exponentiation
 3. **Combinatorics**: Permutations, combinations, binomial coefficients, Catalan numbers
@@ -26232,7 +26241,7 @@ function sieveOfEratosthenes(n) {
 5. **Modular Arithmetic**: Properties of modular operations, modular inverse, Chinese Remainder Theorem
 6. **Prime Algorithms**: Sieve of Eratosthenes, primality testing, factorization
 7. **Mathematical Induction**: Proving algorithm correctness and analyzing complexity`,
-    pseudocode: `**Mathematical Algorithm Patterns:**
+        pseudocode: `**Mathematical Algorithm Patterns:**
 
 ALGORITHM FastExponentiation(base, exponent, modulus)
 INPUT: base - number to raise, exponent - power, modulus - optional mod value
@@ -26289,7 +26298,7 @@ BEGIN
     
     RETURN primes
 END`,
-    implementationCode: `// Comprehensive Mathematical Algorithms Toolkit
+        implementationCode: `// Comprehensive Mathematical Algorithms Toolkit
 
 class MathematicalAlgorithms {
     // Fast Exponentiation - O(log n) time
@@ -26467,39 +26476,39 @@ console.log(MathematicalAlgorithms.gcd(48, 18)); // 6
 console.log(MathematicalAlgorithms.sieveOfEratosthenes(30)); // [2,3,5,7,11,13,17,19,23,29]
 console.log(MathematicalAlgorithms.binomialCoefficient(10, 3)); // 120
 console.log(MathematicalAlgorithms.fibonacciMatrix(10)); // 55`,
-    quizQuestions: [
-      {
-        question: "What is the time complexity of the fast exponentiation algorithm?",
-        options: ["O(n)", "O(log n)", "O(n log n)", "O(n²)"],
-        correctAnswer: 1,
-        explanation: "Fast exponentiation uses binary representation of the exponent, halving the exponent in each iteration, resulting in O(log n) time complexity."
-      },
-      {
-        question: "What is the result of gcd(48, 18) using the Euclidean algorithm?",
-        options: ["2", "6", "9", "12"],
-        correctAnswer: 1,
-        explanation: "Using the Euclidean algorithm: gcd(48,18) = gcd(18,12) = gcd(12,6) = gcd(6,0) = 6."
-      },
-      {
-        question: "What is the time complexity of the Sieve of Eratosthenes?",
-        options: ["O(n)", "O(n log n)", "O(n log log n)", "O(n²)"],
-        correctAnswer: 2,
-        explanation: "The Sieve of Eratosthenes has O(n log log n) time complexity due to the harmonic series in the nested loop structure."
-      },
-      {
-        question: "In modular arithmetic, what is (a + b) mod m equivalent to?",
-        options: ["(a mod m + b mod m) mod m", "a mod m + b mod m", "(a + b) mod (m + m)", "a mod b + m"],
-        correctAnswer: 0,
-        explanation: "The modular addition property states that (a + b) mod m = ((a mod m) + (b mod m)) mod m."
-      },
-      {
-        question: "What is a real-world application of mathematical algorithms?",
-        options: ["Sorting arrays", "RSA encryption in cybersecurity", "Binary tree traversal", "Linked list operations"],
-        correctAnswer: 1,
-        explanation: "RSA encryption relies heavily on mathematical algorithms like fast exponentiation, prime number generation, and modular arithmetic for secure communication."
-      }
-    ],
-    syntax_alt: `// Mathematical Algorithm Patterns
+        quizQuestions: [
+            {
+                question: "What is the time complexity of the fast exponentiation algorithm?",
+                options: ["O(n)", "O(log n)", "O(n log n)", "O(n²)"],
+                correctAnswer: 1,
+                explanation: "Fast exponentiation uses binary representation of the exponent, halving the exponent in each iteration, resulting in O(log n) time complexity."
+            },
+            {
+                question: "What is the result of gcd(48, 18) using the Euclidean algorithm?",
+                options: ["2", "6", "9", "12"],
+                correctAnswer: 1,
+                explanation: "Using the Euclidean algorithm: gcd(48,18) = gcd(18,12) = gcd(12,6) = gcd(6,0) = 6."
+            },
+            {
+                question: "What is the time complexity of the Sieve of Eratosthenes?",
+                options: ["O(n)", "O(n log n)", "O(n log log n)", "O(n²)"],
+                correctAnswer: 2,
+                explanation: "The Sieve of Eratosthenes has O(n log log n) time complexity due to the harmonic series in the nested loop structure."
+            },
+            {
+                question: "In modular arithmetic, what is (a + b) mod m equivalent to?",
+                options: ["(a mod m + b mod m) mod m", "a mod m + b mod m", "(a + b) mod (m + m)", "a mod b + m"],
+                correctAnswer: 0,
+                explanation: "The modular addition property states that (a + b) mod m = ((a mod m) + (b mod m)) mod m."
+            },
+            {
+                question: "What is a real-world application of mathematical algorithms?",
+                options: ["Sorting arrays", "RSA encryption in cybersecurity", "Binary tree traversal", "Linked list operations"],
+                correctAnswer: 1,
+                explanation: "RSA encryption relies heavily on mathematical algorithms like fast exponentiation, prime number generation, and modular arithmetic for secure communication."
+            }
+        ],
+        syntax_alt: `// Mathematical Algorithm Patterns
 
 // Fast Exponentiation
 function fastPower(base, exp, mod) {
@@ -26522,23 +26531,23 @@ function gcd(a, b) {
 const MOD = 1000000007;
 function modAdd(a, b) { return ((a % MOD) + (b % MOD)) % MOD; }
 function modMul(a, b) { return ((a % MOD) * (b % MOD)) % MOD; }`
-  },
-  {
-    id: 'number-theory-basics',
-    title: 'Number Theory Fundamentals',
-    description: 'Essential number theory concepts: GCD, LCM, prime numbers, and divisibility',
-    category: 'Mathematical Algorithms',
-    difficulty: 'beginner',
-    timeComplexity: 'O(log min(a,b))',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Number theory provides fundamental tools for algorithmic problem-solving. These concepts appear frequently in competitive programming, cryptography, and optimization problems.
+    },
+    {
+        id: 'number-theory-basics',
+        title: 'Number Theory Fundamentals',
+        description: 'Essential number theory concepts: GCD, LCM, prime numbers, and divisibility',
+        category: 'Mathematical Algorithms',
+        difficulty: 'beginner',
+        timeComplexity: 'O(log min(a,b))',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Number theory provides fundamental tools for algorithmic problem-solving. These concepts appear frequently in competitive programming, cryptography, and optimization problems.
 
 What it does: provides mathematical tools for GCD, LCM, prime testing, and modular arithmetic operations.
 
 How it works: uses algorithms like Euclidean method for GCD, sieve methods for primes, and modular arithmetic for efficient calculations.
 
 When to use: cryptography, competitive programming, fraction operations, hash functions, mathematical optimization problems.`,
-    example: `// GCD using Euclidean Algorithm
+        example: `// GCD using Euclidean Algorithm
 function gcd(a, b) {
     while (b !== 0) [a, b] = [b, a % b];
     return a;
@@ -26570,31 +26579,31 @@ function primeFactors(n) {
     if (n > 2) factors.push(n);
     return factors;
 }`,
-    keyConcepts: `**Essential Concepts:**\n1. Euclidean algorithm for GCD (iterative modulo)\n2. LCM via lcm(a,b) = |ab| / gcd(a,b)\n3. Primes and trial division up to √n\n4. Sieve of Eratosthenes for generating primes\n5. Prime factorization and multiplicity`,
-    pseudocode: `ALGORITHM EuclidGCD(a, b)\nBEGIN\n  while b != 0 do\n    (a, b) <- (b, a mod b)\n  return a\nEND`,
-    implementationCode: `// TS helpers for GCD/LCM/prime
+        keyConcepts: `**Essential Concepts:**\n1. Euclidean algorithm for GCD (iterative modulo)\n2. LCM via lcm(a,b) = |ab| / gcd(a,b)\n3. Primes and trial division up to √n\n4. Sieve of Eratosthenes for generating primes\n5. Prime factorization and multiplicity`,
+        pseudocode: `ALGORITHM EuclidGCD(a, b)\nBEGIN\n  while b != 0 do\n    (a, b) <- (b, a mod b)\n  return a\nEND`,
+        implementationCode: `// TS helpers for GCD/LCM/prime
 export function gcdNT(a: number, b: number): number { a = Math.abs(a); b = Math.abs(b); while (b !== 0) { [a, b] = [b, a % b]; } return a; }
 export function lcmNT(a: number, b: number): number { if (a === 0 || b === 0) return 0; return Math.abs(a / gcdNT(a, b) * b); }
 export function isPrimeNT(n: number): boolean { if (n < 2) return false; if (n % 2 === 0) return n === 2; for (let i = 3; i * i <= n; i += 2) if (n % i === 0) return false; return true; }
 export function sieveNT(n: number): number[] { const isPrime = new Array(n+1).fill(true); isPrime[0]=isPrime[1]=false; for (let p=2; p*p<=n; p++){ if (isPrime[p]) for (let m=p*p; m<=n; m+=p) isPrime[m]=false; } return isPrime.map((v,i)=>v?i:-1).filter(x=>x!==-1); }`,
-    voiceExplanation: `Think of GCD like repeatedly exchanging change: you replace the larger number with the remainder until nothing is left—what remains is the greatest common divisor. For primes, the sieve is like crossing off multiples on a number line until only the prime “loners” remain.`
-  },
-  {
-    id: 'prime-algorithms',
-    title: 'Prime Number Algorithms',
-    description: 'Efficient algorithms for prime generation, testing, and factorization',
-    category: 'Mathematical Algorithms',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n log log n)',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `Prime number algorithms are crucial for cryptography, number theory, and optimization problems. Different algorithms serve different purposes based on the problem requirements.
+        voiceExplanation: `Think of GCD like repeatedly exchanging change: you replace the larger number with the remainder until nothing is left—what remains is the greatest common divisor. For primes, the sieve is like crossing off multiples on a number line until only the prime “loners” remain.`
+    },
+    {
+        id: 'prime-algorithms',
+        title: 'Prime Number Algorithms',
+        description: 'Efficient algorithms for prime generation, testing, and factorization',
+        category: 'Mathematical Algorithms',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n log log n)',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `Prime number algorithms are crucial for cryptography, number theory, and optimization problems. Different algorithms serve different purposes based on the problem requirements.
 
 What it does: efficiently tests primality, generates prime numbers, and performs prime factorization using various mathematical algorithms.
 
 How it works: uses Sieve of Eratosthenes for generation, trial division for testing, optimizations like checking only up to √n.
 
 When to use: cryptography applications, number theory problems, RSA encryption, mathematical computations, competitive programming.`,
-    example: `// Sieve of Eratosthenes
+        example: `// Sieve of Eratosthenes
 function sieveOfEratosthenes(n) {
     const isPrime = Array(n + 1).fill(true);
     isPrime[0] = isPrime[1] = false;
@@ -26630,9 +26639,9 @@ function primeFactorization(n) {
     if (n > 2) factors.set(n, 1);
     return factors;
 }`,
-    keyConcepts: `**Essential Concepts:**\n1. Sieve of Eratosthenes for prime generation up to n\n2. Trial division up to √n; 6k±1 optimization\n3. Prime factorization as multiset of primes\n4. Applications in cryptography and hashing\n5. Complexity: O(n log log n) for sieve`,
-    pseudocode: `ALGORITHM Sieve(n)\nBEGIN\n  isPrime[0] <- false; isPrime[1] <- false\n  for p from 2 to floor(sqrt(n)) do\n    if isPrime[p] then\n      for m from p*p to n step p do isPrime[m] <- false\n  return { i | isPrime[i] = true }\nEND`,
-    implementationCode: `// TS-ready helpers
+        keyConcepts: `**Essential Concepts:**\n1. Sieve of Eratosthenes for prime generation up to n\n2. Trial division up to √n; 6k±1 optimization\n3. Prime factorization as multiset of primes\n4. Applications in cryptography and hashing\n5. Complexity: O(n log log n) for sieve`,
+        pseudocode: `ALGORITHM Sieve(n)\nBEGIN\n  isPrime[0] <- false; isPrime[1] <- false\n  for p from 2 to floor(sqrt(n)) do\n    if isPrime[p] then\n      for m from p*p to n step p do isPrime[m] <- false\n  return { i | isPrime[i] = true }\nEND`,
+        implementationCode: `// TS-ready helpers
 export function sievePrimes(n: number): number[] {
   const isPrime = new Array(n + 1).fill(true);
   isPrime[0] = isPrime[1] = false;
@@ -26651,24 +26660,24 @@ export function factorize(n: number): Map<number, number> {
   if (n > 2) f.set(n, (f.get(n) || 0) + 1);
   return f;
 }`,
-    voiceExplanation: `Imagine lining up numbers from 2 to n and crossing out multiples like stamping “taken” slots on a parking lot. The unmarked spots are primes. For testing one number, you only need to check divisors up to its square root, mostly around numbers of the form 6k±1.`
-  },
-  {
-    id: 'fast-exponentiation',
-    title: 'Fast Exponentiation (Binary Exponentiation)',
-    description: 'Compute a^n efficiently using binary exponentiation and modular arithmetic',
-    category: 'Mathematical Algorithms',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(log n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Fast exponentiation, also known as binary exponentiation or exponentiation by squaring, computes a^n in O(log n) time instead of the naive O(n) approach.
+        voiceExplanation: `Imagine lining up numbers from 2 to n and crossing out multiples like stamping “taken” slots on a parking lot. The unmarked spots are primes. For testing one number, you only need to check divisors up to its square root, mostly around numbers of the form 6k±1.`
+    },
+    {
+        id: 'fast-exponentiation',
+        title: 'Fast Exponentiation (Binary Exponentiation)',
+        description: 'Compute a^n efficiently using binary exponentiation and modular arithmetic',
+        category: 'Mathematical Algorithms',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(log n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Fast exponentiation, also known as binary exponentiation or exponentiation by squaring, computes a^n in O(log n) time instead of the naive O(n) approach.
 
 What it does: computes large powers efficiently using binary representation of exponent, reducing time complexity from O(n) to O(log n).
 
 How it works: uses divide-and-conquer approach, squares base when exponent is even, multiplies by base when odd, processes binary digits.
 
 When to use: large power computations, modular exponentiation in cryptography, matrix exponentiation, competitive programming, RSA encryption.`,
-    example: `// Iterative Binary Exponentiation
+        example: `// Iterative Binary Exponentiation
 function fastPower(base, exp, mod = null) {
     let result = 1;
     base = mod ? (base % mod) : base;
@@ -26690,10 +26699,10 @@ function fastPowerRecursive(base, exp, mod = null) {
 }
 
 // Example: fastPower(2, 10) = 1024`
-    ,
-    keyConcepts: `**Essential Concepts:**\n1. Binary representation of exponent drives squaring and multiply steps\n2. Exponentiation by squaring yields O(log n) multiplies\n3. Modular multiplication keeps values bounded (avoid overflow)\n4. Handles large powers and moduli (e.g., cryptography)`,
-    pseudocode: `ALGORITHM BinaryExponentiation(a, n, m OPTIONAL)\nINPUT: base a, exponent n, optional modulus m\nOUTPUT: a^n (mod m if provided)\nBEGIN\n  result <- 1\n  if m is provided then a <- a mod m\n  while n > 0 do\n    if (n mod 2 = 1) then\n      result <- (m ? (result * a) mod m : result * a)\n    end if\n    a <- (m ? (a * a) mod m : a * a)\n    n <- floor(n / 2)\n  end while\n  return result\nEND`,
-    implementationCode: `// Production-ready implementation (TypeScript friendly)
+        ,
+        keyConcepts: `**Essential Concepts:**\n1. Binary representation of exponent drives squaring and multiply steps\n2. Exponentiation by squaring yields O(log n) multiplies\n3. Modular multiplication keeps values bounded (avoid overflow)\n4. Handles large powers and moduli (e.g., cryptography)`,
+        pseudocode: `ALGORITHM BinaryExponentiation(a, n, m OPTIONAL)\nINPUT: base a, exponent n, optional modulus m\nOUTPUT: a^n (mod m if provided)\nBEGIN\n  result <- 1\n  if m is provided then a <- a mod m\n  while n > 0 do\n    if (n mod 2 = 1) then\n      result <- (m ? (result * a) mod m : result * a)\n    end if\n    a <- (m ? (a * a) mod m : a * a)\n    n <- floor(n / 2)\n  end while\n  return result\nEND`,
+        implementationCode: `// Production-ready implementation (TypeScript friendly)
 export function binPow(base: number, exp: number, mod?: number): number {
   let a = mod !== undefined ? ((base % mod) + mod) % mod : base;
   let e = exp >>> 0; // ensure non-negative integer
@@ -26709,24 +26718,24 @@ export function binPow(base: number, exp: number, mod?: number): number {
 // Example usage
 // console.log(binPow(2, 10)); // 1024
 // console.log(binPow(2, 10, 1000000007)); // 1024`,
-    voiceExplanation: `Imagine climbing a staircase where each step doubles your height, and sometimes you add your current height to the answer when the step number is odd. That’s binary exponentiation: we square (double height) every step, and only multiply into the result when the current bit of the exponent is 1. This clever bit-by-bit process finishes in logarithmic time.`
-  },
-  {
-    id: 'modular-arithmetic',
-    title: 'Modular Arithmetic',
-    description: 'Master modular arithmetic operations and their applications in algorithms',
-    category: 'Mathematical Algorithms',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(1) - O(log n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Modular arithmetic is arithmetic for integers where numbers "wrap around" after reaching a certain value (the modulus). It's essential for handling large numbers, cryptography, and competitive programming.
+        voiceExplanation: `Imagine climbing a staircase where each step doubles your height, and sometimes you add your current height to the answer when the step number is odd. That’s binary exponentiation: we square (double height) every step, and only multiply into the result when the current bit of the exponent is 1. This clever bit-by-bit process finishes in logarithmic time.`
+    },
+    {
+        id: 'modular-arithmetic',
+        title: 'Modular Arithmetic',
+        description: 'Master modular arithmetic operations and their applications in algorithms',
+        category: 'Mathematical Algorithms',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(1) - O(log n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Modular arithmetic is arithmetic for integers where numbers "wrap around" after reaching a certain value (the modulus). It's essential for handling large numbers, cryptography, and competitive programming.
 
 What it does: performs arithmetic operations on integers with results constrained to a specific range by wrapping around at the modulus value.
 
 How it works: uses properties like (a+b) mod m = ((a mod m) + (b mod m)) mod m to break complex calculations into manageable parts.
 
 When to use: cryptography, hash functions, large number computations, competitive programming, random number generation, preventing integer overflow.`,
-    example: `// Modular Arithmetic Operations
+        example: `// Modular Arithmetic Operations
 const MOD = 1000000007;
 
 function modAdd(a, b, mod = MOD) { return ((a % mod) + (b % mod)) % mod; }
@@ -26750,10 +26759,10 @@ function modInverse(a, mod = MOD) {
 function modDivide(a, b, mod = MOD) {
     return modMultiply(a, modInverse(b, mod), mod);
 }`
-    ,
-    keyConcepts: `**Essential Concepts:**\n1. Congruences and equivalence classes mod m\n2. Modular addition/multiplication/division rules\n3. Modular inverse (exists if gcd(a, m) = 1)\n4. Fast modular exponentiation (binary exponentiation)\n5. Fermat’s little theorem and CRT for optimizations`,
-    pseudocode: `ALGORITHM ModInverse(a, m) USING ExtendedGCD\nINPUT: integer a, modulus m\nOUTPUT: a^{-1} mod m if it exists\nBEGIN\n  (g, x, y) <- extended_gcd(a, m)\n  if g != 1 then return "no inverse"\n  else return (x mod m + m) mod m\nEND`,
-    implementationCode: `// Modular arithmetic helpers
+        ,
+        keyConcepts: `**Essential Concepts:**\n1. Congruences and equivalence classes mod m\n2. Modular addition/multiplication/division rules\n3. Modular inverse (exists if gcd(a, m) = 1)\n4. Fast modular exponentiation (binary exponentiation)\n5. Fermat’s little theorem and CRT for optimizations`,
+        pseudocode: `ALGORITHM ModInverse(a, m) USING ExtendedGCD\nINPUT: integer a, modulus m\nOUTPUT: a^{-1} mod m if it exists\nBEGIN\n  (g, x, y) <- extended_gcd(a, m)\n  if g != 1 then return "no inverse"\n  else return (x mod m + m) mod m\nEND`,
+        implementationCode: `// Modular arithmetic helpers
 export const MOD = 1000000007;
 export function modAdd(a: number, b: number, mod: number = MOD): number { return ((a % mod) + (b % mod)) % mod; }
 export function modSub(a: number, b: number, mod: number = MOD): number { return ((a % mod) - (b % mod) + mod) % mod; }
@@ -26778,24 +26787,24 @@ export function modInv(a: number, mod: number = MOD): number {
   return (r.x % mod + mod) % mod;
 }
 export function modDiv(a: number, b: number, mod: number = MOD): number { return modMul(a, modInv(b, mod), mod); }`,
-    voiceExplanation: `Think of a clock with m hours: after hitting m, you wrap back to 0. Modular arithmetic is clock math for integers. Adding, multiplying, and even dividing (when an inverse exists) all happen on this wrap-around clock, which keeps numbers small and safe for big computations.`
-  },
-  {
-    id: 'combinatorics',
-    title: 'Combinatorics and Counting',
-    description: 'Permutations, combinations, and advanced counting techniques',
-    category: 'Mathematical Algorithms',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(n) - O(n!)',
-    spaceComplexity: 'O(n)',
-    extendedDefinition: `Combinatorics deals with counting, arrangement, and selection of objects. It's fundamental to probability, algorithm analysis, and optimization problems.
+        voiceExplanation: `Think of a clock with m hours: after hitting m, you wrap back to 0. Modular arithmetic is clock math for integers. Adding, multiplying, and even dividing (when an inverse exists) all happen on this wrap-around clock, which keeps numbers small and safe for big computations.`
+    },
+    {
+        id: 'combinatorics',
+        title: 'Combinatorics and Counting',
+        description: 'Permutations, combinations, and advanced counting techniques',
+        category: 'Mathematical Algorithms',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(n) - O(n!)',
+        spaceComplexity: 'O(n)',
+        extendedDefinition: `Combinatorics deals with counting, arrangement, and selection of objects. It's fundamental to probability, algorithm analysis, and optimization problems.
 
 What it does: provides mathematical techniques for counting arrangements, selections, and combinations of objects.
 
 How it works: uses formulas like nPr for permutations, nCr for combinations, and principles like inclusion-exclusion for complex counting.
 
 When to use: probability calculations, algorithm analysis, optimization problems, generating arrangements and selections.`,
-    example: `// Permutations nPr = n!/(n-r)!
+        example: `// Permutations nPr = n!/(n-r)!
 function permutation(n, r) {
     if (r > n || r < 0) return 0;
     let result = 1;
@@ -26828,10 +26837,10 @@ function catalanNumber(n) {
 }
 
 // Example: combination(10, 3) = 120, catalanNumber(4) = 14`
-    ,
-    keyConcepts: `**Essential Concepts:**\n1. Factorials, permutations (nPr), combinations (nCr)\n2. Pascal’s triangle and dynamic programming for nCr\n3. Catalan numbers and combinatorial structures\n4. Inclusion–exclusion for overlapping sets\n5. Stars and bars for partitions`,
-    pseudocode: `ALGORITHM nCr(n, r) via DP\nBEGIN\n  if r > n return 0\n  create dp[0..n][0..r]\n  for i in 0..n:\n    for j in 0..min(i,r):\n      if j == 0 or j == i: dp[i][j] <- 1\n      else dp[i][j] <- dp[i-1][j-1] + dp[i-1][j]\n  return dp[n][r]\nEND`,
-    implementationCode: `// Practical utilities for combinatorics
+        ,
+        keyConcepts: `**Essential Concepts:**\n1. Factorials, permutations (nPr), combinations (nCr)\n2. Pascal’s triangle and dynamic programming for nCr\n3. Catalan numbers and combinatorial structures\n4. Inclusion–exclusion for overlapping sets\n5. Stars and bars for partitions`,
+        pseudocode: `ALGORITHM nCr(n, r) via DP\nBEGIN\n  if r > n return 0\n  create dp[0..n][0..r]\n  for i in 0..n:\n    for j in 0..min(i,r):\n      if j == 0 or j == i: dp[i][j] <- 1\n      else dp[i][j] <- dp[i-1][j-1] + dp[i-1][j]\n  return dp[n][r]\nEND`,
+        implementationCode: `// Practical utilities for combinatorics
 export function nCr(n: number, r: number): number {
   if (r < 0 || r > n) return 0;
   r = Math.min(r, n - r);
@@ -26850,24 +26859,24 @@ export function catalan(n: number): number {
   }
   return dp[n];
 }`,
-    voiceExplanation: `Combinatorics is like counting how many outfits you can make from shirts and pants. Permutations care about order (shirt then pants), combinations don’t. With tools like Pascal’s triangle and Catalan numbers, we can count surprisingly complex structures without listing them all.`
-  },
-  {
-    id: 'fibonacci-algorithms',
-    title: 'Fibonacci and Linear Recurrences',
-    description: 'Efficient algorithms for Fibonacci sequence and linear recurrence relations',
-    category: 'Mathematical Algorithms',
-    difficulty: 'intermediate',
-    timeComplexity: 'O(log n)',
-    spaceComplexity: 'O(1)',
-    extendedDefinition: `Fibonacci sequence and linear recurrences appear frequently in algorithm problems. While the naive recursive approach is O(2^n), several optimizations can reduce this to O(log n).
+        voiceExplanation: `Combinatorics is like counting how many outfits you can make from shirts and pants. Permutations care about order (shirt then pants), combinations don’t. With tools like Pascal’s triangle and Catalan numbers, we can count surprisingly complex structures without listing them all.`
+    },
+    {
+        id: 'fibonacci-algorithms',
+        title: 'Fibonacci and Linear Recurrences',
+        description: 'Efficient algorithms for Fibonacci sequence and linear recurrence relations',
+        category: 'Mathematical Algorithms',
+        difficulty: 'intermediate',
+        timeComplexity: 'O(log n)',
+        spaceComplexity: 'O(1)',
+        extendedDefinition: `Fibonacci sequence and linear recurrences appear frequently in algorithm problems. While the naive recursive approach is O(2^n), several optimizations can reduce this to O(log n).
 
 What it does: efficiently computes Fibonacci numbers and solves linear recurrence relations using optimized mathematical techniques.
 
 How it works: uses dynamic programming for O(n), fast doubling or matrix exponentiation for O(log n), or mathematical identities for direct calculation.
 
 When to use: Fibonacci calculations, counting problems like stairs/tiling, recurrence relation optimization, competitive programming, mathematical modeling.`,
-    example: `// Dynamic Programming Approach O(n)
+        example: `// Dynamic Programming Approach O(n)
 function fibonacciDP(n) {
     if (n <= 1) return n;
     let prev2 = 0, prev1 = 1;
@@ -26914,9 +26923,9 @@ function fibFastDoubling(n) {
     return f(n)[0];
 }
 `,
-    keyConcepts: `**Essential Concepts:**\n1. Recurrence F(n) = F(n-1) + F(n-2) with F(0)=0, F(1)=1\n2. DP (tabulation) yields O(n) time, O(1) space with rolling variables\n3. Matrix exponentiation and fast doubling compute in O(log n)\n4. Overflow handling with big integers or modulo arithmetic\n5. Linear recurrences extend Fibonacci techniques`,
-    pseudocode: `ALGORITHM FastDoublingFib(n)\nBEGIN\n  function FD(k):\n    if k = 0 return (0, 1)\n    (a, b) <- FD(floor(k/2))  // a=F(k), b=F(k+1)\n    c <- a * (2*b - a)\n    d <- a*a + b*b\n    if k even return (c, d) else return (d, c + d)\n  return FD(n).first\nEND`,
-    implementationCode: `// Production-ready Fibonacci implementations
+        keyConcepts: `**Essential Concepts:**\n1. Recurrence F(n) = F(n-1) + F(n-2) with F(0)=0, F(1)=1\n2. DP (tabulation) yields O(n) time, O(1) space with rolling variables\n3. Matrix exponentiation and fast doubling compute in O(log n)\n4. Overflow handling with big integers or modulo arithmetic\n5. Linear recurrences extend Fibonacci techniques`,
+        pseudocode: `ALGORITHM FastDoublingFib(n)\nBEGIN\n  function FD(k):\n    if k = 0 return (0, 1)\n    (a, b) <- FD(floor(k/2))  // a=F(k), b=F(k+1)\n    c <- a * (2*b - a)\n    d <- a*a + b*b\n    if k even return (c, d) else return (d, c + d)\n  return FD(n).first\nEND`,
+        implementationCode: `// Production-ready Fibonacci implementations
 export function fibDP(n: number): number {
   if (n <= 1) return n;
   let a = 0, b = 1;
@@ -26938,8 +26947,8 @@ export function fibFastDoubling(n: number): number {
   return fd(n)[0];
 }
 `,
-    voiceExplanation: `Think of Fibonacci like climbing stairs: each step count is the sum of the previous two ways. The fast-doubling method jumps many steps at once using math identities, so instead of walking one step at a time, we leap in powers of two—finishing in logarithmic time.`
-  }
+        voiceExplanation: `Think of Fibonacci like climbing stairs: each step count is the sum of the previous two ways. The fast-doubling method jumps many steps at once using math identities, so instead of walking one step at a time, we leap in powers of two—finishing in logarithmic time.`
+    }
 ]
 
 

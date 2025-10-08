@@ -322,6 +322,7 @@ export function MathematicalVisualizer() {
   };
 
   const currentStepData = steps[currentStep];
+  const currentStepText = currentStepData?.description || '';
 
   return (
     <div className="space-y-6">

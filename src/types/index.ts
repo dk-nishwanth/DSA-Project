@@ -15,6 +15,15 @@ export interface Topic {
   commonMistakes?: string;
   realWorldApplications?: string;
   relatedTopics?: string[];
+  // Alternative/extended content properties
+  voiceExplanation_alt?: string;
+  keyConcepts_alt?: string;
+  pseudocode_alt?: string;
+  implementationCode_alt?: string;
+  syntax_alt?: string;
+  syntax_alt2?: string;
+  extendedDefinition_alt?: string;
+  realWorldApplications_alt?: string;
 }
 
 export interface QuizQuestion {

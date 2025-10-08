@@ -135,7 +135,6 @@ import { HeapOperationsVisualizer } from '@/components/visualizer/heap-operation
 import { RecursionFundamentalsUniqueViz } from '@/components/visualizer/recursion-fundamentals-unique-viz';
 import { TailRecursionUniqueViz } from '@/components/visualizer/tail-recursion-unique-viz';
 import { FibonacciRecursionUniqueViz } from '@/components/visualizer/fibonacci-recursion-unique-viz';
-// import { SubarrayProblemsUniqueViz } from '@/components/visualizer/subarray-problems-unique-viz';
 import { InorderTraversalUniqueViz } from '@/components/visualizer/inorder-traversal-unique-viz';
 import { PreorderTraversalUniqueViz } from '@/components/visualizer/preorder-traversal-unique-viz';
 import { PostorderTraversalUniqueViz } from '@/components/visualizer/postorder-traversal-unique-viz';
@@ -676,6 +675,7 @@ export default function TopicDetail() {
         return <TrappingRainWaterVisualizer />;
 
       // Hashing
+      case 'hash-table':
       case 'hash-table-basics':
         return <HashTableVisualizer />;
       case 'hash-functions':
