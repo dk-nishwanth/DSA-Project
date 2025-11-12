@@ -10,6 +10,7 @@ import { NotificationProvider } from "@/contexts/notification-context";
 import { AuthProvider } from "@/contexts/auth-context";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { ProtectedRoute, AdminRoute } from "@/components/auth/protected-route";
+import { Analytics } from "@vercel/analytics/react";
 import Dashboard from "./pages/Dashboard";
 import TopicDetail from "./pages/TopicDetail";
 import NotFound from "./pages/NotFound";
@@ -60,6 +61,7 @@ const App = () => (
             <TooltipProvider>
               <Toaster />
               <Sonner />
+              <Analytics />
               <BrowserRouter>
           <Routes>
             {/* Authentication Routes */}
